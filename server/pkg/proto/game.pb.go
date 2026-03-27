@@ -916,6 +916,8 @@ type NpcMotion struct {
 	Position      *Vec2                  `protobuf:"bytes,4,opt,name=position,proto3" json:"position,omitempty"`
 	Destination   *Vec2                  `protobuf:"bytes,5,opt,name=destination,proto3" json:"destination,omitempty"`
 	Speed         int32                  `protobuf:"varint,6,opt,name=speed,proto3" json:"speed,omitempty"`
+	Name          string                 `protobuf:"bytes,7,opt,name=name,proto3" json:"name,omitempty"`
+	NpcType       int32                  `protobuf:"varint,8,opt,name=npc_type,json=npcType,proto3" json:"npc_type,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -988,6 +990,20 @@ func (x *NpcMotion) GetDestination() *Vec2 {
 func (x *NpcMotion) GetSpeed() int32 {
 	if x != nil {
 		return x.Speed
+	}
+	return 0
+}
+
+func (x *NpcMotion) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *NpcMotion) GetNpcType() int32 {
+	if x != nil {
+		return x.NpcType
 	}
 	return 0
 }
@@ -1756,14 +1772,16 @@ const file_game_proto_rawDesc = "" +
 	"\x06action\x18\x06 \x01(\x05R\x06action\x12\x16\n" +
 	"\x06status\x18\a \x01(\x05R\x06status\"+\n" +
 	"\fNpcDisappear\x12\x1b\n" +
-	"\tobject_id\x18\x01 \x01(\x05R\bobjectId\"\xd2\x01\n" +
+	"\tobject_id\x18\x01 \x01(\x05R\bobjectId\"\x81\x02\n" +
 	"\tNpcMotion\x12\x1b\n" +
 	"\tobject_id\x18\x01 \x01(\x05R\bobjectId\x12\x16\n" +
 	"\x06action\x18\x02 \x01(\x05R\x06action\x12\x1c\n" +
 	"\tdirection\x18\x03 \x01(\x05R\tdirection\x12*\n" +
 	"\bposition\x18\x04 \x01(\v2\x0e.hbonline.Vec2R\bposition\x120\n" +
 	"\vdestination\x18\x05 \x01(\v2\x0e.hbonline.Vec2R\vdestination\x12\x14\n" +
-	"\x05speed\x18\x06 \x01(\x05R\x05speed\"<\n" +
+	"\x05speed\x18\x06 \x01(\x05R\x05speed\x12\x12\n" +
+	"\x04name\x18\a \x01(\tR\x04name\x12\x19\n" +
+	"\bnpc_type\x18\b \x01(\x05R\anpcType\"<\n" +
 	"\fNotification\x12\x18\n" +
 	"\amessage\x18\x01 \x01(\tR\amessage\x12\x12\n" +
 	"\x04type\x18\x02 \x01(\x05R\x04type\"x\n" +

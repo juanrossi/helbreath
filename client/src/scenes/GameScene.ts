@@ -16,15 +16,38 @@ import * as Proto from '../network/Protocol';
 import { HBMap, TILE_SIZE } from '../game/assets/HBMap';
 import { GameAsset } from '../game/objects/GameAsset';
 import { AnimationType } from '../game/objects/GameAsset';
-import { DEPTH_MULTIPLIER } from '../Config';
+import {
+  DEPTH_MULTIPLIER,
+  HIGH_DEPTH,
+  DEFAULT_MOVEMENT_SPEED,
+  MOVEMENT_COMMAND_THROTTLE_MS,
+  IDLE_ANIMATION_FPS,
+  WALK_DURATION_MULTIPLIER,
+  ATTACK_COOLDOWN_MS,
+  KNOCKBACK_DURATION_MS,
+  PLAYER_STUNLOCK_DURATION_MS,
+  PLAYER_HEALTH_BAR_WIDTH,
+  PLAYER_HEALTH_BAR_HEIGHT,
+  movementDurationFromSpeed,
+  animationFpsFromSpeed,
+} from '../Config';
 import {
   PlayerState,
   HUMAN_SPRITESHEET_BASE,
   ARMOUR_SPRITESHEET_BASE,
   PLAYER_ANIMATION_FRAME_COUNT,
   getHumanSpriteName,
+  isOneShotState,
+  isMovementState,
   type GearConfig,
 } from '../game/PlayerAppearanceManager';
+import { SoundManager } from '../audio/SoundManager';
+import { MusicManager } from '../audio/MusicManager';
+import { SoundTracker } from '../audio/SoundTracker';
+import { PLAYER_WALKING, PLAYER_RUNNING, PLAYER_MELEE_ATTACK, PLAYER_CAST, TAKE_DAMAGE_BLADE } from '../audio/SoundFileNames';
+import { showDamageNumber } from '../game/effects/FloatingText';
+import { WeatherManager } from '../game/effects/WeatherManager';
+import { getAssetByKey } from '../constants/Assets';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -121,10 +144,6 @@ interface GroundItemDisplay {
 const DIR_DX = [0, 0, 1, 1, 1, 0, -1, -1, -1];
 const DIR_DY = [0, -1, -1, 0, 1, 1, 1, 0, -1];
 
-const WALK_SPEED = 490; // ms per tile
-const RUN_SPEED = 350;  // ms per tile
-const MOVE_THROTTLE = 100; // ms between mouse direction checks
-
 // ---------------------------------------------------------------------------
 // GameScene
 // ---------------------------------------------------------------------------
@@ -155,12 +174,51 @@ export class GameScene extends Phaser.Scene {
   private moveTargetX = 0;
   private moveTargetY = 0;
   private moveStartTime = 0;
-  private moveDuration = WALK_SPEED;
+  private moveDuration = movementDurationFromSpeed(DEFAULT_MOVEMENT_SPEED);
+
+  // Movement speed (0-100 slider, affects animation fps and tile duration)
+  private movementSpeed = DEFAULT_MOVEMENT_SPEED;
 
   // Mouse movement
   private isMouseDown = false;
   private lastMoveTime = 0;
   private isRunning = false;
+
+  // Tile occupancy tracking (dynamic: objectId -> {x,y})
+  private tileOccupancy: Map<string, number> = new Map();
+
+  // Knockback state
+  private knockbackActive = false;
+  private knockbackStartTime = 0;
+  private knockbackStartX = 0;
+  private knockbackStartY = 0;
+  private knockbackTargetX = 0;
+  private knockbackTargetY = 0;
+
+  // Stunlock
+  private stunlockEndTime = 0;
+
+  // Ghost trail (single persistent sprite, repositioned each frame)
+  private ghostSprite: Phaser.GameObjects.Sprite | null = null;
+
+  // Sound system
+  private soundManager!: SoundManager;
+  private musicManager!: MusicManager;
+  private soundTracker!: SoundTracker;
+
+  // Weather
+  private weatherManager!: WeatherManager;
+
+  // Debug mode
+  private debugMode = false;
+  private debugOverlay: Phaser.GameObjects.Text | null = null;
+  private debugGridGraphics: Phaser.GameObjects.Graphics | null = null;
+  private debugBlockedGraphics: Phaser.GameObjects.Graphics | null = null;
+  private showBlockedCells = false;
+  private showGrid = false;
+
+  // Player health bar (in-world)
+  private playerHealthBar: Phaser.GameObjects.Graphics | null = null;
 
   // Map
   private mapWidth = 0;
@@ -189,7 +247,7 @@ export class GameScene extends Phaser.Scene {
 
   // Combat
   private lastAttackTime = 0;
-  private attackCooldown = 800; // ms between attacks
+  private attackCooldown = ATTACK_COOLDOWN_MS;
 
   // Chat
   private chatBubbles: { text: Phaser.GameObjects.Text; expiry: number; objectId: number }[] = [];
@@ -334,14 +392,18 @@ export class GameScene extends Phaser.Scene {
     this.cameras.main.scrollY = this.visualY - this.cameras.main.height / 2 + TILE_SIZE / 2;
 
     // Mouse input for movement and combat
+    // Left-click: attack NPC if one is nearby under cursor, otherwise move
+    // Right-click: also attacks (legacy)
     this.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
       if (this.isDead) return;
       if (pointer.rightButtonDown()) {
-        // Right-click: attack nearest NPC
         this.handleAttackClick(pointer);
       } else if (pointer.leftButtonDown()) {
-        this.isMouseDown = true;
-        this.handleMouseMove(pointer);
+        // Check if clicking on or near an NPC first
+        if (!this.tryAttackNPCAtPointer(pointer)) {
+          this.isMouseDown = true;
+          this.handleMouseMove(pointer);
+        }
       }
     });
     this.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
@@ -361,6 +423,18 @@ export class GameScene extends Phaser.Scene {
     // Shift key for run toggle
     this.input.keyboard!.on('keydown-SHIFT', () => { this.isRunning = true; });
     this.input.keyboard!.on('keyup-SHIFT', () => { this.isRunning = false; });
+
+    // Initialize sound system
+    this.soundManager = new SoundManager(this);
+    this.musicManager = new MusicManager(this);
+    this.soundTracker = new SoundTracker(this.soundManager);
+    this.weatherManager = new WeatherManager(this, this.soundManager);
+
+    // Play map music on enter
+    const mapAsset = getAssetByKey(this.currentMapName.toLowerCase().replace(/\.amd$/i, ''));
+    if (mapAsset?.music) {
+      this.musicManager.playMapMusic(mapAsset.music);
+    }
 
     // Network handlers
     this.msgHandler.on(Proto.MSG_MOTION_EVENT, (evt: MotionEvent) => this.onMotionEvent(evt));
@@ -410,15 +484,26 @@ export class GameScene extends Phaser.Scene {
     this.input.keyboard!.on('keydown-P', () => this.toggleParty());
     this.input.keyboard!.on('keydown-J', () => this.toggleQuests());
 
+    // Debug shortcuts
+    this.input.keyboard!.on('keydown-F12', () => this.toggleDebugMode());
+    this.input.keyboard!.on('keydown-F10', () => { if (this.debugMode) this.toggleBlockedCells(); });
+    this.input.keyboard!.on('keydown-F9', () => { if (this.debugMode) this.toggleGridDisplay(); });
+
     // Chat UI
     this.createChatUI();
     this.createHUD(pd);
 
     // Minimap
     this.createMinimap();
+
+    // Player health bar (in-world)
+    this.playerHealthBar = this.add.graphics();
   }
 
   update(time: number, delta: number): void {
+    // Update knockback visual interpolation
+    this.updateKnockback(time);
+
     // Update smooth movement interpolation for local player
     this.updateLocalMovement(time);
 
@@ -428,6 +513,8 @@ export class GameScene extends Phaser.Scene {
 
     // Update entity positions
     this.updateLocalPlayerPosition();
+    this.updatePlayerHealthBar();
+    this.updateGhostTrail();
     for (const rp of this.remotePlayers.values()) {
       this.updateRemoteMovement(rp, time);
       this.updateRemotePlayerPosition(rp);
@@ -438,6 +525,15 @@ export class GameScene extends Phaser.Scene {
       this.updateNPCMovement(npcEntity, time);
       this.updateNPCPosition(npcEntity);
     }
+
+    // Update weather
+    this.weatherManager.update(delta);
+
+    // Show player names only on mouse hover
+    this.updateNameHover();
+
+    // Update debug overlay
+    if (this.debugMode) this.updateDebugOverlay();
 
     // Update minimap player dot
     this.updateMinimapDot();
@@ -451,11 +547,11 @@ export class GameScene extends Phaser.Scene {
       }
       // Update bubble position to follow moving entities
       if (cb.objectId === this.playerObjectId) {
-        cb.text.setPosition(this.visualX + TILE_SIZE / 2, this.visualY - 20);
+        cb.text.setPosition(this.visualX + TILE_SIZE / 2, this.visualY - 55);
       } else {
         const rp = this.remotePlayers.get(cb.objectId);
         if (rp) {
-          cb.text.setPosition(rp.visualX + TILE_SIZE / 2, rp.visualY - 20);
+          cb.text.setPosition(rp.visualX + TILE_SIZE / 2, rp.visualY - 55);
         }
       }
       return true;
@@ -529,6 +625,12 @@ export class GameScene extends Phaser.Scene {
     this.currentMapName = mapName;
     this.loadMap(mapName);
 
+    // Switch music for new map
+    const newMapAsset = getAssetByKey(mapName.toLowerCase().replace(/\.amd$/i, ''));
+    if (newMapAsset?.music) {
+      this.musicManager.playMapMusic(newMapAsset.music);
+    }
+
     // Update player position
     if (pos) {
       this.tileX = pos.x;
@@ -601,10 +703,10 @@ export class GameScene extends Phaser.Scene {
 
     this.setPlayerAssetsPosition(this.playerAssets, this.visualX, this.visualY, this.tileY);
 
-    this.playerNameText = this.add.text(this.visualX + TILE_SIZE / 2, this.visualY - 4, this.playerName, {
+    this.playerNameText = this.add.text(this.visualX + TILE_SIZE / 2, this.visualY - 45, this.playerName, {
       fontSize: '10px', color: '#ffffff',
       stroke: '#000000', strokeThickness: 2,
-    }).setOrigin(0.5, 1).setDepth(this.tileY * DEPTH_MULTIPLIER + 50);
+    }).setOrigin(0.5, 1).setDepth(this.tileY * DEPTH_MULTIPLIER + 50).setVisible(false);
 
     this.playerState = state;
   }
@@ -683,16 +785,38 @@ export class GameScene extends Phaser.Scene {
     }
   }
 
+  /**
+   * Calculates the animation frame rate for the current movement state.
+   * Movement states use speed-derived FPS; one-shot and idle use fixed rates.
+   */
+  private getAnimationFps(state: PlayerState): number {
+    if (isMovementState(state)) {
+      let fps = animationFpsFromSpeed(this.movementSpeed);
+      // Walk mode uses half the frame rate
+      if (state === PlayerState.WalkPeace || state === PlayerState.WalkCombat) {
+        fps = fps / WALK_DURATION_MULTIPLIER;
+      }
+      return fps;
+    }
+    if (state === PlayerState.MeleeAttack || state === PlayerState.BowAttack) {
+      return 15; // attack animations play faster
+    }
+    return IDLE_ANIMATION_FPS;
+  }
+
   private updatePlayerAnimation(assets: PlayerAssets, state: PlayerState, direction: number): void {
     const gear = assets.gear;
     const framesPerDirection = PLAYER_ANIMATION_FRAME_COUNT[state] ?? 8;
     const isFemale = gear.human === 'ww' || gear.human === 'yw' || gear.human === 'bw';
+    const fps = this.getAnimationFps(state);
+    const isOneShot = isOneShotState(state);
+    const repeat = isOneShot ? 0 : undefined;
 
     if (assets.layers[0]) {
       const bodySheetIndex = HUMAN_SPRITESHEET_BASE[state] + direction;
       const bodyAnimKey = `${gear.human}-${bodySheetIndex}`;
       assets.layers[0].playAnimationWithDirection(
-        bodyAnimKey, 0, 10, undefined, undefined, framesPerDirection, AnimationType.FullFrame,
+        bodyAnimKey, 0, fps, undefined, repeat, framesPerDirection, AnimationType.FullFrame,
       );
     }
 
@@ -701,7 +825,7 @@ export class GameScene extends Phaser.Scene {
       const hairSheetIndex = (gear.hairStyleIndex ?? 0) * 12 + ARMOUR_SPRITESHEET_BASE[state];
       const hairAnimKey = `${hairSprite}-${hairSheetIndex}`;
       assets.layers[1].playAnimationWithDirection(
-        hairAnimKey, direction, 10, undefined, undefined, framesPerDirection, AnimationType.DirectionalSubFrame,
+        hairAnimKey, direction, fps, undefined, repeat, framesPerDirection, AnimationType.DirectionalSubFrame,
       );
     }
 
@@ -710,8 +834,20 @@ export class GameScene extends Phaser.Scene {
       const underwearSheetIndex = (gear.underwearColorIndex ?? 0) * 12 + ARMOUR_SPRITESHEET_BASE[state];
       const underwearAnimKey = `${underwearSprite}-${underwearSheetIndex}`;
       assets.layers[2].playAnimationWithDirection(
-        underwearAnimKey, direction, 10, undefined, undefined, framesPerDirection, AnimationType.DirectionalSubFrame,
+        underwearAnimKey, direction, fps, undefined, repeat, framesPerDirection, AnimationType.DirectionalSubFrame,
       );
+    }
+
+    // Update additional equipment layers (3+) if present
+    for (let i = 3; i < assets.layers.length; i++) {
+      // Equipment layers beyond body/hair/underwear use directional sub-frames
+      const layer = assets.layers[i];
+      const currentAnim = layer.sprite?.anims?.currentAnim;
+      if (currentAnim) {
+        layer.playAnimationWithDirection(
+          currentAnim.key, direction, fps, undefined, repeat, framesPerDirection, AnimationType.DirectionalSubFrame,
+        );
+      }
     }
   }
 
@@ -782,14 +918,14 @@ export class GameScene extends Phaser.Scene {
   private updateLocalPlayerPosition(): void {
     if (!this.playerAssets) return;
     this.setPlayerAssetsPosition(this.playerAssets, this.visualX, this.visualY, this.tileY);
-    this.playerNameText.setPosition(this.visualX + TILE_SIZE / 2, this.visualY - 4);
+    this.playerNameText.setPosition(this.visualX + TILE_SIZE / 2, this.visualY - 45);
     this.playerNameText.setDepth(this.tileY * DEPTH_MULTIPLIER + 50);
   }
 
   private updateRemotePlayerPosition(rp: RemotePlayer): void {
     if (!rp.assets) return;
     this.setPlayerAssetsPosition(rp.assets, rp.visualX, rp.visualY, rp.tileY);
-    rp.nameText.setPosition(rp.visualX + TILE_SIZE / 2, rp.visualY - 4);
+    rp.nameText.setPosition(rp.visualX + TILE_SIZE / 2, rp.visualY - 45);
     rp.nameText.setDepth(rp.tileY * DEPTH_MULTIPLIER + 50);
   }
 
@@ -797,11 +933,48 @@ export class GameScene extends Phaser.Scene {
   // Mouse-based movement
   // ---------------------------------------------------------------------------
 
+  /**
+   * Returns true if the player is currently able to move.
+   * Blocked by: attacking, casting, stunlocked, dead, knockback, already moving.
+   */
+  private canMove(): boolean {
+    if (this.isMoving) return false;
+    if (this.isDead) return false;
+    if (this.knockbackActive) return false;
+    if (this.isStunlocked()) return false;
+    // Block during one-shot animations
+    if (this.playerState === PlayerState.MeleeAttack) return false;
+    if (this.playerState === PlayerState.BowAttack) return false;
+    if (this.playerState === PlayerState.Cast) return false;
+    if (this.playerState === PlayerState.TakeDamage) return false;
+    if (this.playerState === PlayerState.TakeDamageWithKnockback) return false;
+    if (this.playerState === PlayerState.Die) return false;
+    return true;
+  }
+
+  /**
+   * Returns true if the player can attack right now.
+   */
+  private canAttack(): boolean {
+    if (this.isDead) return false;
+    if (this.isStunlocked()) return false;
+    if (this.knockbackActive) return false;
+    if (this.playerState === PlayerState.Cast) return false;
+    return true;
+  }
+
+  /**
+   * Returns true if the player is currently stunlocked.
+   */
+  private isStunlocked(): boolean {
+    return this.time.now < this.stunlockEndTime;
+  }
+
   private handleMouseMove(pointer: Phaser.Input.Pointer): void {
-    if (this.isMoving) return; // wait for current move to finish
+    if (!this.canMove()) return;
 
     const now = this.time.now;
-    if (now - this.lastMoveTime < MOVE_THROTTLE) return;
+    if (now - this.lastMoveTime < MOVEMENT_COMMAND_THROTTLE_MS) return;
 
     // Get mouse world position
     const worldPoint = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
@@ -844,13 +1017,25 @@ export class GameScene extends Phaser.Scene {
 
     if (!this.isWalkable(newX, newY)) return;
 
+    // Check dynamic tile occupancy
+    if (this.isTileOccupied(newX, newY)) return;
+
     const oldDir = this.playerDirection;
     this.playerDirection = dir;
     this.lastMoveTime = time;
 
-    const speed = this.isRunning ? RUN_SPEED : WALK_SPEED;
+    // Calculate speed from slider value
+    let speed = movementDurationFromSpeed(this.movementSpeed);
     const action = this.isRunning ? 2 : 1;
     const animState = this.isRunning ? PlayerState.Run : PlayerState.WalkPeace;
+
+    // Walk mode doubles duration
+    if (!this.isRunning) {
+      speed = speed * WALK_DURATION_MULTIPLIER;
+    }
+
+    // Update tile occupancy
+    this.freeTileOccupancy(this.tileX, this.tileY, this.playerObjectId);
 
     // Start smooth interpolation
     this.moveStartX = this.visualX;
@@ -864,6 +1049,7 @@ export class GameScene extends Phaser.Scene {
     // Update tile position immediately (client-side prediction)
     this.tileX = newX;
     this.tileY = newY;
+    this.markTileOccupied(newX, newY, this.playerObjectId);
 
     // Update animation
     const spriteDir = dir - 1;
@@ -871,6 +1057,11 @@ export class GameScene extends Phaser.Scene {
       this.playerState = animState;
       this.updatePlayerAnimation(this.playerAssets, animState, spriteDir);
     }
+
+    // Play movement sound (one-shot per step, not looped)
+    this.soundTracker.stopAll();
+    const soundKey = this.isRunning ? PLAYER_RUNNING : PLAYER_WALKING;
+    this.soundManager.playOnce(soundKey);
 
     // Send to server
     this.msgHandler.sendMessage(Proto.MSG_MOTION_REQUEST, {
@@ -882,9 +1073,10 @@ export class GameScene extends Phaser.Scene {
     // Set idle timer
     if (this.idleTimer) clearTimeout(this.idleTimer);
     this.idleTimer = setTimeout(() => {
-      if ((this.playerState === PlayerState.WalkPeace || this.playerState === PlayerState.Run) && this.playerAssets) {
+      if (isMovementState(this.playerState) && this.playerAssets) {
         this.playerState = PlayerState.IdlePeace;
         this.updatePlayerAnimation(this.playerAssets, PlayerState.IdlePeace, this.playerDirection - 1);
+        this.soundTracker.stopAll();
       }
     }, speed + 200);
   }
@@ -896,6 +1088,292 @@ export class GameScene extends Phaser.Scene {
     const bitIdx = idx % 8;
     if (byteIdx >= this.collisionGrid.length) return false;
     return (this.collisionGrid[byteIdx] & (1 << bitIdx)) === 0;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Tile Occupancy
+  // ---------------------------------------------------------------------------
+
+  private tileKey(x: number, y: number): string {
+    return `${x},${y}`;
+  }
+
+  private markTileOccupied(x: number, y: number, objectId: number): void {
+    this.tileOccupancy.set(this.tileKey(x, y), objectId);
+  }
+
+  private freeTileOccupancy(x: number, y: number, objectId: number): void {
+    const key = this.tileKey(x, y);
+    if (this.tileOccupancy.get(key) === objectId) {
+      this.tileOccupancy.delete(key);
+    }
+  }
+
+  private isTileOccupied(x: number, y: number): boolean {
+    return this.tileOccupancy.has(this.tileKey(x, y));
+  }
+
+  // ---------------------------------------------------------------------------
+  // Knockback
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Applies knockback to the local player: instantly moves tile position 1 cell away
+   * from the attacker direction, then visually interpolates over KNOCKBACK_DURATION_MS.
+   */
+  private applyKnockback(_attackerX: number, _attackerY: number): void {
+    if (this.isDead) return;
+
+    // Don't move the player — knockback is cosmetic only.
+    // Moving the client without server agreement causes desync
+    // (NPC chases server position, becomes invisible to client).
+
+    // Apply brief stunlock and play damage animation
+    this.stunlockEndTime = this.time.now + PLAYER_STUNLOCK_DURATION_MS;
+    this.isMoving = false;
+
+    if (this.playerAssets && this.playerState !== PlayerState.Die) {
+      this.playerState = PlayerState.TakeDamage;
+      this.updatePlayerAnimation(this.playerAssets, PlayerState.TakeDamage, this.playerDirection - 1);
+      setTimeout(() => {
+        if (this.playerState === PlayerState.TakeDamage && this.playerAssets) {
+          this.playerState = PlayerState.IdlePeace;
+          this.updatePlayerAnimation(this.playerAssets, PlayerState.IdlePeace, this.playerDirection - 1);
+        }
+      }, 300);
+    }
+  }
+
+  /**
+   * Updates the knockback visual interpolation each frame.
+   */
+  private updateKnockback(time: number): void {
+    if (!this.knockbackActive) return;
+
+    const elapsed = time - this.knockbackStartTime;
+    const t = Math.min(elapsed / KNOCKBACK_DURATION_MS, 1);
+
+    this.visualX = this.knockbackStartX + (this.knockbackTargetX - this.knockbackStartX) * t;
+    this.visualY = this.knockbackStartY + (this.knockbackTargetY - this.knockbackStartY) * t;
+
+    if (t >= 1) {
+      this.knockbackActive = false;
+      this.visualX = this.knockbackTargetX;
+      this.visualY = this.knockbackTargetY;
+
+      // Apply stunlock after knockback
+      this.stunlockEndTime = time + PLAYER_STUNLOCK_DURATION_MS;
+
+      // Return to idle after knockback
+      if (this.playerAssets && !this.isDead) {
+        this.playerState = PlayerState.IdlePeace;
+        this.updatePlayerAnimation(this.playerAssets, PlayerState.IdlePeace, this.playerDirection - 1);
+      }
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Player Health Bar (in-world)
+  // ---------------------------------------------------------------------------
+
+  private updatePlayerHealthBar(): void {
+    if (!this.playerHealthBar) return;
+    this.playerHealthBar.clear();
+
+    if (this.isDead || this.playerMaxHP <= 0) return;
+
+    const barX = this.visualX + TILE_SIZE / 2 - PLAYER_HEALTH_BAR_WIDTH / 2;
+    const barY = this.visualY - 12;
+
+    // Background
+    this.playerHealthBar.fillStyle(0x333333, 0.8);
+    this.playerHealthBar.fillRect(barX, barY, PLAYER_HEALTH_BAR_WIDTH, PLAYER_HEALTH_BAR_HEIGHT);
+
+    // Fill
+    const ratio = Math.max(0, this.playerHP / this.playerMaxHP);
+    this.playerHealthBar.fillStyle(0xff0000, 0.9);
+    this.playerHealthBar.fillRect(barX, barY, PLAYER_HEALTH_BAR_WIDTH * ratio, PLAYER_HEALTH_BAR_HEIGHT);
+
+    // Border
+    this.playerHealthBar.lineStyle(1, 0x660000, 1);
+    this.playerHealthBar.strokeRect(barX, barY, PLAYER_HEALTH_BAR_WIDTH, PLAYER_HEALTH_BAR_HEIGHT);
+
+    this.playerHealthBar.setDepth(HIGH_DEPTH);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Ghost Trail
+  // ---------------------------------------------------------------------------
+
+  private updateGhostTrail(): void {
+    // Only show ghost trail during movement
+    if (!this.isMoving || !this.playerAssets || this.playerAssets.layers.length === 0) {
+      if (this.ghostSprite) {
+        this.ghostSprite.setVisible(false);
+      }
+      return;
+    }
+
+    const elapsed = this.time.now - this.moveStartTime;
+    const progress = Math.min(elapsed / this.moveDuration, 1);
+    const ghostDistance = 16 * (1 - progress);
+    if (ghostDistance < 1) {
+      if (this.ghostSprite) this.ghostSprite.setVisible(false);
+      return;
+    }
+
+    // Calculate ghost position (behind the player)
+    const dir = this.playerDirection;
+    const ghostX = this.visualX - DIR_DX[dir] * ghostDistance;
+    const ghostY = this.visualY - DIR_DY[dir] * ghostDistance;
+
+    const bodyLayer = this.playerAssets.layers[0];
+    if (!bodyLayer?.sprite?.texture) return;
+
+    try {
+      // Reuse or create the ghost sprite
+      if (!this.ghostSprite) {
+        this.ghostSprite = this.add.sprite(0, 0, bodyLayer.sprite.texture.key, bodyLayer.sprite.frame.name);
+        this.ghostSprite.setOrigin(0, 0);
+        this.ghostSprite.setAlpha(0.3);
+      }
+
+      // Update texture/frame to match current body sprite
+      this.ghostSprite.setTexture(bodyLayer.sprite.texture.key, bodyLayer.sprite.frame.name);
+      this.ghostSprite.setPosition(
+        ghostX + (bodyLayer.sprite.x - this.visualX),
+        ghostY + (bodyLayer.sprite.y - this.visualY),
+      );
+      this.ghostSprite.setDepth(this.tileY * DEPTH_MULTIPLIER - 1);
+      this.ghostSprite.setVisible(true);
+    } catch {
+      // Ignore errors updating ghost sprite
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Status Effect Visuals (Berserk / Chilled tinting)
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Applies a tint to the player's body and armor layers.
+   * @param tintColor - The tint color (e.g. 0xff0000 for berserk red). Pass 0xffffff to clear.
+   * @param excludeWeapon - If true, skip weapon/shield layers.
+   */
+  private applyPlayerTint(tintColor: number, _excludeWeapon = true): void {
+    if (!this.playerAssets) return;
+    for (const layer of this.playerAssets.layers) {
+      layer.sprite.setTint(tintColor);
+    }
+  }
+
+  /** Clears all tints from the player. */
+  private clearPlayerTint(): void {
+    this.applyPlayerTint(0xffffff);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Debug Mode
+  // ---------------------------------------------------------------------------
+
+  private toggleDebugMode(): void {
+    this.debugMode = !this.debugMode;
+
+    if (this.debugMode) {
+      // Create debug overlay text
+      this.debugOverlay = this.add.text(10, 10, '', {
+        fontSize: '10px', color: '#00ff00',
+        backgroundColor: '#000000aa',
+        padding: { x: 4, y: 4 },
+      }).setScrollFactor(0).setDepth(HIGH_DEPTH + 10000);
+      console.log('[DEBUG] Debug mode enabled. F10=blocked cells, F9=grid');
+    } else {
+      // Clean up debug visuals
+      this.debugOverlay?.destroy();
+      this.debugOverlay = null;
+      this.debugGridGraphics?.destroy();
+      this.debugGridGraphics = null;
+      this.debugBlockedGraphics?.destroy();
+      this.debugBlockedGraphics = null;
+      this.showBlockedCells = false;
+      this.showGrid = false;
+    }
+  }
+
+  private updateDebugOverlay(): void {
+    if (!this.debugOverlay) return;
+
+    const pointer = this.input.activePointer;
+    const worldPoint = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
+    const hoverTileX = Math.floor(worldPoint.x / TILE_SIZE);
+    const hoverTileY = Math.floor(worldPoint.y / TILE_SIZE);
+    const walkable = this.isWalkable(hoverTileX, hoverTileY);
+    const occupied = this.isTileOccupied(hoverTileX, hoverTileY);
+
+    this.debugOverlay.setText([
+      `Player: (${this.tileX}, ${this.tileY})`,
+      `Visual: (${Math.round(this.visualX)}, ${Math.round(this.visualY)})`,
+      `Dir: ${this.playerDirection} State: ${PlayerState[this.playerState]}`,
+      `Speed: ${this.movementSpeed} FPS: ${this.getAnimationFps(this.playerState).toFixed(1)}`,
+      `Hover: (${hoverTileX}, ${hoverTileY}) ${walkable ? 'walkable' : 'BLOCKED'} ${occupied ? 'OCCUPIED' : ''}`,
+      `Entities: ${this.remotePlayers.size} players, ${this.npcs.size} NPCs`,
+      `HP: ${this.playerHP}/${this.playerMaxHP}`,
+      `Stunlock: ${this.isStunlocked() ? 'YES' : 'no'} Knockback: ${this.knockbackActive ? 'YES' : 'no'}`,
+    ]);
+  }
+
+  private toggleBlockedCells(): void {
+    this.showBlockedCells = !this.showBlockedCells;
+
+    if (this.showBlockedCells) {
+      this.debugBlockedGraphics = this.add.graphics();
+      this.debugBlockedGraphics.setDepth(HIGH_DEPTH - 1);
+
+      // Draw red overlay on blocked tiles visible on screen
+      const camX = Math.floor(this.cameras.main.scrollX / TILE_SIZE);
+      const camY = Math.floor(this.cameras.main.scrollY / TILE_SIZE);
+      const viewW = Math.ceil(this.cameras.main.width / TILE_SIZE) + 2;
+      const viewH = Math.ceil(this.cameras.main.height / TILE_SIZE) + 2;
+
+      for (let y = camY; y < camY + viewH && y < this.mapHeight; y++) {
+        for (let x = camX; x < camX + viewW && x < this.mapWidth; x++) {
+          if (x < 0 || y < 0) continue;
+          if (!this.isWalkable(x, y)) {
+            this.debugBlockedGraphics.fillStyle(0xff0000, 0.25);
+            this.debugBlockedGraphics.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+          }
+        }
+      }
+    } else {
+      this.debugBlockedGraphics?.destroy();
+      this.debugBlockedGraphics = null;
+    }
+  }
+
+  private toggleGridDisplay(): void {
+    this.showGrid = !this.showGrid;
+
+    if (this.showGrid) {
+      this.debugGridGraphics = this.add.graphics();
+      this.debugGridGraphics.setDepth(HIGH_DEPTH - 2);
+      this.debugGridGraphics.lineStyle(0.5, 0x444444, 0.3);
+
+      // Draw grid for visible area
+      const camX = Math.floor(this.cameras.main.scrollX / TILE_SIZE) * TILE_SIZE;
+      const camY = Math.floor(this.cameras.main.scrollY / TILE_SIZE) * TILE_SIZE;
+      const endX = camX + this.cameras.main.width + TILE_SIZE;
+      const endY = camY + this.cameras.main.height + TILE_SIZE;
+
+      for (let x = camX; x <= endX; x += TILE_SIZE) {
+        this.debugGridGraphics.lineBetween(x, camY, x, endY);
+      }
+      for (let y = camY; y <= endY; y += TILE_SIZE) {
+        this.debugGridGraphics.lineBetween(camX, y, endX, y);
+      }
+    } else {
+      this.debugGridGraphics?.destroy();
+      this.debugGridGraphics = null;
+    }
   }
 
   // ---------------------------------------------------------------------------
@@ -932,10 +1410,10 @@ export class GameScene extends Phaser.Scene {
     const worldX = px * TILE_SIZE;
     const worldY = py * TILE_SIZE;
 
-    const nameText = this.add.text(worldX + TILE_SIZE / 2, worldY - 4, info.name || '???', {
+    const nameText = this.add.text(worldX + TILE_SIZE / 2, worldY - 45, info.name || '???', {
       fontSize: '10px', color: '#ffffff',
       stroke: '#000000', strokeThickness: 2,
-    }).setOrigin(0.5, 1);
+    }).setOrigin(0.5, 1).setVisible(false);
 
     const rp: RemotePlayer = {
       objectId: info.objectId,
@@ -951,7 +1429,7 @@ export class GameScene extends Phaser.Scene {
       targetTileX: px,
       targetTileY: py,
       moveStartTime: 0,
-      moveDuration: WALK_SPEED,
+      moveDuration: movementDurationFromSpeed(DEFAULT_MOVEMENT_SPEED),
       moveStartX: worldX,
       moveStartY: worldY,
       isMoving: false,
@@ -980,8 +1458,20 @@ export class GameScene extends Phaser.Scene {
   // ---------------------------------------------------------------------------
 
   private onMotionEvent(evt: MotionEvent): void {
-    // Ignore NPC motion events - they come via MSG_NPC_MOTION
-    if (evt.ownerType === 2) return;
+    // NPC motion events (attack animations) — auto-create NPC if not known
+    if (evt.ownerType === 2) {
+      if (!this.npcs.has(evt.objectId)) {
+        this.addNPC({
+          objectId: evt.objectId,
+          name: evt.name || 'Monster',
+          npcType: (evt as any).npcType ?? 1,
+          position: evt.position,
+          direction: evt.direction,
+          action: evt.action,
+        });
+      }
+      return;
+    }
 
     if (evt.objectId === this.playerObjectId) {
       // Server correction
@@ -1023,7 +1513,7 @@ export class GameScene extends Phaser.Scene {
         rp.moveStartY = rp.visualY;
         rp.targetTileX = evt.position.x;
         rp.targetTileY = evt.position.y;
-        rp.moveDuration = evt.speed || WALK_SPEED;
+        rp.moveDuration = evt.speed || movementDurationFromSpeed(DEFAULT_MOVEMENT_SPEED);
         rp.moveStartTime = this.time.now;
         rp.isMoving = true;
 
@@ -1053,20 +1543,20 @@ export class GameScene extends Phaser.Scene {
 
     if (data.objectId === this.playerObjectId) {
       worldX = this.visualX + TILE_SIZE / 2;
-      worldY = this.visualY - 20;
+      worldY = this.visualY - 55;
     } else {
       const rp = this.remotePlayers.get(data.objectId);
       if (rp) {
         worldX = rp.visualX + TILE_SIZE / 2;
-        worldY = rp.visualY - 20;
+        worldY = rp.visualY - 55;
       } else {
         worldX = this.visualX + TILE_SIZE / 2;
-        worldY = this.visualY - 60;
+        worldY = this.visualY - 80;
       }
     }
 
     const color = data.type === 1 ? '#FFD700' : data.type === 2 ? '#9b59b6' : '#ffffff';
-    const chatText = this.add.text(worldX, worldY, `${data.senderName}: ${data.message}`, {
+    const chatText = this.add.text(worldX, worldY, data.message, {
       fontSize: '11px', color,
       backgroundColor: '#000000aa',
       padding: { x: 4, y: 2 },
@@ -1188,6 +1678,28 @@ export class GameScene extends Phaser.Scene {
     this.minimapContainer.add([minimapImg]);
   }
 
+  private updateNameHover(): void {
+    const pointer = this.input.activePointer;
+    const worldPoint = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
+    const hoverTileX = Math.floor(worldPoint.x / TILE_SIZE);
+    const hoverTileY = Math.floor(worldPoint.y / TILE_SIZE);
+    const HOVER_RANGE = 1; // tiles
+
+    // Local player name
+    if (this.playerNameText) {
+      const near = Math.abs(hoverTileX - this.tileX) <= HOVER_RANGE &&
+                   Math.abs(hoverTileY - this.tileY) <= HOVER_RANGE;
+      this.playerNameText.setVisible(near);
+    }
+
+    // Remote player names
+    for (const rp of this.remotePlayers.values()) {
+      const near = Math.abs(hoverTileX - rp.tileX) <= HOVER_RANGE &&
+                   Math.abs(hoverTileY - rp.tileY) <= HOVER_RANGE;
+      rp.nameText.setVisible(near);
+    }
+  }
+
   private updateMinimapDot(): void {
     if (!this.minimapPlayerDot) return;
 
@@ -1235,7 +1747,9 @@ export class GameScene extends Phaser.Scene {
     if (spriteName) {
       // Monster sprites have sprite sheet 0 with directional frames
       const textureKey = `${spriteName}-0`;
-      if (this.textures.exists(textureKey)) {
+      const texExists = this.textures.exists(textureKey);
+      console.log(`[addNPC] sprite=${spriteName}, textureKey=${textureKey}, exists=${texExists}`);
+      if (texExists) {
         try {
           asset = new GameAsset(this, {
             x: worldX,
@@ -1248,16 +1762,20 @@ export class GameScene extends Phaser.Scene {
             animationType: AnimationType.DirectionalSubFrame,
           });
           asset.setDepth(py * DEPTH_MULTIPLIER + 1);
+          console.log(`[addNPC] GameAsset created successfully for ${data.name}`);
         } catch (err) {
-          console.warn(`Failed to create NPC sprite for type ${npcTypeId} (${spriteName}):`, err);
+          console.warn(`[addNPC] Failed to create GameAsset for type ${npcTypeId} (${spriteName}):`, err);
           asset = null;
         }
       }
+    } else {
+      console.warn(`[addNPC] No sprite mapping for npcType=${npcTypeId}`);
     }
 
     // Fallback to colored ellipse if sprite creation failed
     if (!asset) {
       const color = NPC_COLORS[npcTypeId] ?? 0xff00ff;
+      console.log(`[addNPC] Using fallback ellipse for ${data.name}, color=0x${color.toString(16)}`);
       fallbackSprite = this.add.ellipse(worldX + TILE_SIZE / 2, worldY + TILE_SIZE / 2, 24, 24, color, 0.9)
         .setDepth(py * DEPTH_MULTIPLIER + 1);
     }
@@ -1366,8 +1884,21 @@ export class GameScene extends Phaser.Scene {
   }
 
   private onNpcMotion(data: NpcMotionData): void {
-    const npcEntity = this.npcs.get(data.objectId);
-    if (!npcEntity) return;
+    let npcEntity = this.npcs.get(data.objectId);
+    if (!npcEntity) {
+      // Auto-create NPC from motion data (server knows about it but we haven't seen it yet)
+      console.log(`[onNpcMotion] Auto-creating NPC obj=${data.objectId} at (${data.position?.x}, ${data.position?.y})`);
+      this.addNPC({
+        objectId: data.objectId,
+        name: data.name || 'Monster',
+        npcType: data.npcType ?? 1,
+        position: data.position,
+        direction: data.direction,
+        action: data.action,
+      });
+      npcEntity = this.npcs.get(data.objectId);
+      if (!npcEntity) return;
+    }
 
     if (data.action === 1) {
       // Movement
@@ -1402,9 +1933,40 @@ export class GameScene extends Phaser.Scene {
   // Combat
   // ---------------------------------------------------------------------------
 
-  private handleAttackClick(pointer: Phaser.Input.Pointer): void {
+  /** Returns true if there's an NPC near the click position and attack was initiated. */
+  private tryAttackNPCAtPointer(pointer: Phaser.Input.Pointer): boolean {
+    if (!this.canAttack()) return false;
     const now = this.time.now;
-    if (now - this.lastAttackTime < this.attackCooldown) return;
+    if (now - this.lastAttackTime < this.attackCooldown) return false;
+
+    const worldPoint = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
+    const clickTileX = Math.floor(worldPoint.x / TILE_SIZE);
+    const clickTileY = Math.floor(worldPoint.y / TILE_SIZE);
+
+    // Find NPC at or near the clicked tile (within 1 tile of click)
+    for (const npcEntity of this.npcs.values()) {
+      const dx = Math.abs(clickTileX - npcEntity.tileX);
+      const dy = Math.abs(clickTileY - npcEntity.tileY);
+      if (dx <= 1 && dy <= 1) {
+        // Check if player is within attack range of this NPC
+        const playerDist = Math.max(
+          Math.abs(this.tileX - npcEntity.tileX),
+          Math.abs(this.tileY - npcEntity.tileY),
+        );
+        if (playerDist <= 2) {
+          this.handleAttackClick(pointer);
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  private handleAttackClick(pointer: Phaser.Input.Pointer): void {
+    console.log(`[ATTACK] handleAttackClick called, canAttack=${this.canAttack()}, npcs.size=${this.npcs.size}`);
+    if (!this.canAttack()) { console.log('[ATTACK] blocked by canAttack()'); return; }
+    const now = this.time.now;
+    if (now - this.lastAttackTime < this.attackCooldown) { console.log('[ATTACK] blocked by cooldown'); return; }
 
     const worldPoint = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
 
@@ -1425,14 +1987,15 @@ export class GameScene extends Phaser.Scene {
       }
     }
 
-    if (!closestNPC) return;
+    if (!closestNPC) { console.log('[ATTACK] no NPC found'); return; }
 
     // Check if NPC is within attack range (2 tiles)
     const tileDist = Math.max(
       Math.abs(this.tileX - closestNPC.tileX),
       Math.abs(this.tileY - closestNPC.tileY),
     );
-    if (tileDist > 2) return;
+    console.log(`[ATTACK] closest NPC: ${closestNPC.name} obj=${closestNPC.objectId} tileDist=${tileDist} player=(${this.tileX},${this.tileY}) npc=(${closestNPC.tileX},${closestNPC.tileY})`);
+    if (tileDist > 2) { console.log('[ATTACK] NPC out of range'); return; }
 
     this.lastAttackTime = now;
 
@@ -1450,10 +2013,12 @@ export class GameScene extends Phaser.Scene {
 
     this.playerDirection = dir;
 
-    // Play attack animation
+    // Play attack animation and sound
     if (this.playerAssets) {
       this.playerState = PlayerState.MeleeAttack;
       this.updatePlayerAnimation(this.playerAssets, PlayerState.MeleeAttack, dir - 1);
+      this.soundTracker.stopAll();
+      this.soundManager.playOnce(PLAYER_MELEE_ATTACK);
 
       // Return to idle after attack animation
       setTimeout(() => {
@@ -1465,6 +2030,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     // Send attack to server
+    console.log(`[ATTACK] Sending attack request: dir=${dir}, targetId=${closestNPC.objectId}`);
     this.msgHandler.sendMessage(Proto.MSG_ATTACK_REQUEST, {
       direction: dir,
       action: 3,
@@ -1483,7 +2049,7 @@ export class GameScene extends Phaser.Scene {
       }
     }
 
-    // Show floating damage number
+    // Show floating damage number using FloatingText
     let targetX: number, targetY: number;
     if (data.targetType === 2) {
       const npcEntity = this.npcs.get(data.targetId);
@@ -1508,24 +2074,46 @@ export class GameScene extends Phaser.Scene {
       }
     }
 
-    const text = data.miss ? 'MISS' : (data.critical ? `${data.damage}!` : `${data.damage}`);
-    const color = data.miss ? '#aaaaaa' : (data.critical ? '#ff4444' : '#ffffff');
-    const fontSize = data.critical ? '14px' : '12px';
-
-    const dmgText = this.add.text(targetX, targetY, text, {
-      fontSize, color,
-      stroke: '#000000', strokeThickness: 2,
-      fontStyle: data.critical ? 'bold' : 'normal',
-    }).setOrigin(0.5, 1).setDepth(30000);
-
-    // Float up and fade
-    this.tweens.add({
-      targets: dmgText,
-      y: targetY - 30,
-      alpha: 0,
-      duration: 1000,
-      onComplete: () => dmgText.destroy(),
+    showDamageNumber(this, targetX, targetY, data.damage, {
+      miss: data.miss,
+      critical: data.critical,
     });
+
+    // Play damage sound (spatial for remote entities)
+    if (data.targetId === this.playerObjectId) {
+      this.soundManager.playOnce(TAKE_DAMAGE_BLADE);
+
+      // Apply knockback if attacker position is available and damage > 0
+      if (!data.miss && data.damage > 0 && data.attackerId) {
+        // Try to get attacker position for knockback direction
+        const attacker = this.npcs.get(data.attackerId) || this.remotePlayers.get(data.attackerId);
+        if (attacker) {
+          this.applyKnockback(attacker.tileX, attacker.tileY);
+        } else {
+          // No attacker position available, just apply stunlock
+          this.stunlockEndTime = this.time.now + PLAYER_STUNLOCK_DURATION_MS;
+          if (this.playerAssets && this.playerState !== PlayerState.Die) {
+            this.playerState = PlayerState.TakeDamage;
+            this.updatePlayerAnimation(this.playerAssets, PlayerState.TakeDamage, this.playerDirection - 1);
+            setTimeout(() => {
+              if (this.playerState === PlayerState.TakeDamage && this.playerAssets) {
+                this.playerState = PlayerState.IdlePeace;
+                this.updatePlayerAnimation(this.playerAssets, PlayerState.IdlePeace, this.playerDirection - 1);
+              }
+            }, 300);
+          }
+        }
+      }
+    } else {
+      // Spatial sound for remote targets
+      const spatial = SoundManager.computeSpatialConfig(
+        Math.floor(targetX / TILE_SIZE), Math.floor(targetY / TILE_SIZE),
+        this.tileX, this.tileY,
+      );
+      if (spatial) {
+        this.soundManager.playOnce(TAKE_DAMAGE_BLADE, undefined, spatial);
+      }
+    }
   }
 
   private onStatUpdate(data: StatUpdateData): void {

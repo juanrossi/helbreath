@@ -163,6 +163,8 @@ export interface NpcMotionData {
   position: Vec2;
   destination?: Vec2;
   speed: number;
+  name: string;
+  npcType: number;
 }
 
 export interface ItemInstanceData {
@@ -527,6 +529,8 @@ export class MessageHandler {
         console.log(`[MSG] ${msgName}: ${decoded.name} (obj=${decoded.objectId}) at (${decoded.position?.x}, ${decoded.position?.y})`);
       } else if (msgType === Proto.MSG_NPC_APPEAR) {
         console.log(`[MSG] ${msgName}: ${decoded.name} (obj=${decoded.objectId}) type=${decoded.npcType} at (${decoded.position?.x}, ${decoded.position?.y})`);
+      } else if (msgType === Proto.MSG_NPC_MOTION) {
+        // Don't log NPC motion (too noisy), but log auto-creates
       } else if (msgType === Proto.MSG_MOTION_EVENT) {
         // Don't log motion events (too noisy)
       } else {

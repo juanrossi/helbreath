@@ -506,6 +506,11 @@ func (e *Engine) processNPCTick(n *npc.NPC, now time.Time) {
 		// Face the target
 		n.Direction = n.DirectionTo(target.X, target.Y)
 
+		// Ensure target player knows about this NPC (send NpcAppear)
+		appear := n.ToNpcAppear()
+		appearData, _ := network.Encode(network.MsgNpcAppear, appear)
+		target.Send(appearData)
+
 		// Calculate damage
 		result := NPCAttackPlayer(n, target)
 
@@ -558,6 +563,8 @@ func (e *Engine) moveNPC(n *npc.NPC, gm *mapdata.GameMap, newX, newY, dir int) {
 		Direction: int32(dir),
 		Position:  &pb.Vec2{X: int32(n.X), Y: int32(n.Y)},
 		Speed:     int32(n.Type.MoveSpeed),
+		Name:      n.Type.Name,
+		NpcType:   int32(n.Type.SpriteType),
 	}
 	e.broadcastToNearby(gm, n.X, n.Y, -1, network.MsgNpcMotion, motionEvent)
 }
@@ -1041,12 +1048,14 @@ func (e *Engine) handleMotion(client *network.Client, req *pb.MotionRequest) {
 	if action == 1 || action == 2 { // walk or run
 		// Anti-speed-hack: check time since last move
 		now := time.Now()
-		minInterval := 350 * time.Millisecond // run speed
+		minInterval := 250 * time.Millisecond // run speed (relaxed for latency)
 		if action == 1 {
-			minInterval = 400 * time.Millisecond // walk speed (slightly relaxed)
+			minInterval = 300 * time.Millisecond // walk speed (relaxed for latency)
 		}
-		if now.Sub(p.LastMoveTime) < minInterval {
+		if !p.LastMoveTime.IsZero() && now.Sub(p.LastMoveTime) < minInterval {
 			// Too fast - send correction
+			log.Printf("[MOTION] Speed correction for %s: interval=%dms, min=%dms",
+				p.Name, now.Sub(p.LastMoveTime).Milliseconds(), minInterval.Milliseconds())
 			e.sendMotionCorrection(p, gm)
 			return
 		}
@@ -1054,7 +1063,9 @@ func (e *Engine) handleMotion(client *network.Client, req *pb.MotionRequest) {
 		newX := p.X + dirDX[dir]
 		newY := p.Y + dirDY[dir]
 
-		if !gm.IsWalkable(newX, newY) {
+		// Check walkability - ignore owner check for movement (only check terrain)
+		if newX < 0 || newY < 0 || newX >= gm.Width || newY >= gm.Height || !gm.Tiles[newY][newX].Walkable {
+			log.Printf("[MOTION] Walkability correction for %s: (%d,%d) not walkable", p.Name, newX, newY)
 			e.sendMotionCorrection(p, gm)
 			return
 		}
@@ -1329,17 +1340,22 @@ func (e *Engine) handleAttack(client *network.Client, req *pb.MotionRequest) {
 	}
 	p := val.(*player.Player)
 
+	log.Printf("[ATTACK] Player %s (obj=%d) attacking targetId=%d dir=%d", p.Name, p.ObjectID, req.TargetId, req.Direction)
+
 	if p.HP <= 0 {
+		log.Printf("[ATTACK] Player %s is dead, ignoring", p.Name)
 		return // dead players can't attack
 	}
 
 	gm, ok := e.maps[p.MapName]
 	if !ok {
+		log.Printf("[ATTACK] Map %s not found", p.MapName)
 		return
 	}
 
 	targetID := req.TargetId
 	if targetID == 0 {
+		log.Printf("[ATTACK] No target ID")
 		return
 	}
 
@@ -1364,6 +1380,8 @@ func (e *Engine) handleAttack(client *network.Client, req *pb.MotionRequest) {
 	npcVal, isNPC := e.npcs.Load(targetID)
 	if isNPC {
 		n := npcVal.(*npc.NPC)
+		log.Printf("[ATTACK] Found NPC %s (obj=%d) at (%d,%d), alive=%v, map=%s, dist=%d",
+			n.Type.Name, n.ObjectID, n.X, n.Y, n.IsAlive(), n.MapName, n.DistanceTo(p.X, p.Y))
 
 		// Shop NPC interaction
 		if npc.IsShopNPC(n.Type.ID) {
@@ -1374,13 +1392,15 @@ func (e *Engine) handleAttack(client *network.Client, req *pb.MotionRequest) {
 		}
 
 		if !n.IsAlive() || n.MapName != p.MapName {
+			log.Printf("[ATTACK] NPC not alive or wrong map")
 			return
 		}
 
-		// Check range (must be adjacent, distance <= 1)
+		// Check range (must be adjacent, distance <= 2)
 		dist := n.DistanceTo(p.X, p.Y)
 		if dist > 2 {
-			return // too far
+			log.Printf("[ATTACK] NPC too far: dist=%d", dist)
+			return
 		}
 
 		// Face the target
@@ -1574,23 +1594,18 @@ func (e *Engine) sendMotionCorrection(p *player.Player, gm *mapdata.GameMap) {
 func (e *Engine) broadcastToNearby(gm *mapdata.GameMap, x, y int, excludeID int32, msgType byte, msg proto.Message) {
 	data, err := network.Encode(msgType, msg)
 	if err != nil {
-		log.Printf("[BROADCAST] encode error for msgType=0x%02x: %v", msgType, err)
 		return
 	}
 
 	nearbyIDs := gm.GetNearbyPlayerIDs(x, y)
-	sent := 0
 	for _, id := range nearbyIDs {
 		if id == excludeID {
 			continue
 		}
 		if val, ok := e.players.Load(id); ok {
 			val.(*player.Player).Send(data)
-			sent++
 		}
 	}
-	log.Printf("[BROADCAST] msgType=0x%02x from (%d,%d) on %s: %d nearby IDs, sent to %d players (excluded obj=%d)",
-		msgType, x, y, gm.Name, len(nearbyIDs), sent, excludeID)
 }
 
 func (e *Engine) broadcastToMap(mapName string, msgType byte, msg proto.Message) {

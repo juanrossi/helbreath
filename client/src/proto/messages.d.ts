@@ -1207,6 +1207,236 @@ export namespace hbonline {
         public static getTypeUrl(typeUrlPrefix?: string): string;
     }
 
+    /** Properties of a ChatRequest. */
+    interface IChatRequest {
+
+        /** ChatRequest type */
+        type?: (number|null);
+
+        /** ChatRequest message */
+        message?: (string|null);
+
+        /** ChatRequest target */
+        target?: (string|null);
+    }
+
+    /** Represents a ChatRequest. */
+    class ChatRequest implements IChatRequest {
+
+        /**
+         * Constructs a new ChatRequest.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: hbonline.IChatRequest);
+
+        /** ChatRequest type. */
+        public type: number;
+
+        /** ChatRequest message. */
+        public message: string;
+
+        /** ChatRequest target. */
+        public target: string;
+
+        /**
+         * Creates a new ChatRequest instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns ChatRequest instance
+         */
+        public static create(properties?: hbonline.IChatRequest): hbonline.ChatRequest;
+
+        /**
+         * Encodes the specified ChatRequest message. Does not implicitly {@link hbonline.ChatRequest.verify|verify} messages.
+         * @param message ChatRequest message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: hbonline.IChatRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified ChatRequest message, length delimited. Does not implicitly {@link hbonline.ChatRequest.verify|verify} messages.
+         * @param message ChatRequest message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: hbonline.IChatRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a ChatRequest message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns ChatRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.ChatRequest;
+
+        /**
+         * Decodes a ChatRequest message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns ChatRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.ChatRequest;
+
+        /**
+         * Verifies a ChatRequest message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a ChatRequest message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns ChatRequest
+         */
+        public static fromObject(object: { [k: string]: any }): hbonline.ChatRequest;
+
+        /**
+         * Creates a plain object from a ChatRequest message. Also converts values to other types if specified.
+         * @param message ChatRequest
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: hbonline.ChatRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this ChatRequest to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the default type url for ChatRequest
+         * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns The default type url
+         */
+        public static getTypeUrl(typeUrlPrefix?: string): string;
+    }
+
+    /** Properties of a ChatMessage. */
+    interface IChatMessage {
+
+        /** ChatMessage objectId */
+        objectId?: (number|null);
+
+        /** ChatMessage senderName */
+        senderName?: (string|null);
+
+        /** ChatMessage type */
+        type?: (number|null);
+
+        /** ChatMessage message */
+        message?: (string|null);
+
+        /** ChatMessage position */
+        position?: (hbonline.IVec2|null);
+    }
+
+    /** Represents a ChatMessage. */
+    class ChatMessage implements IChatMessage {
+
+        /**
+         * Constructs a new ChatMessage.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: hbonline.IChatMessage);
+
+        /** ChatMessage objectId. */
+        public objectId: number;
+
+        /** ChatMessage senderName. */
+        public senderName: string;
+
+        /** ChatMessage type. */
+        public type: number;
+
+        /** ChatMessage message. */
+        public message: string;
+
+        /** ChatMessage position. */
+        public position?: (hbonline.IVec2|null);
+
+        /**
+         * Creates a new ChatMessage instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns ChatMessage instance
+         */
+        public static create(properties?: hbonline.IChatMessage): hbonline.ChatMessage;
+
+        /**
+         * Encodes the specified ChatMessage message. Does not implicitly {@link hbonline.ChatMessage.verify|verify} messages.
+         * @param message ChatMessage message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: hbonline.IChatMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified ChatMessage message, length delimited. Does not implicitly {@link hbonline.ChatMessage.verify|verify} messages.
+         * @param message ChatMessage message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: hbonline.IChatMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a ChatMessage message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns ChatMessage
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.ChatMessage;
+
+        /**
+         * Decodes a ChatMessage message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns ChatMessage
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.ChatMessage;
+
+        /**
+         * Verifies a ChatMessage message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a ChatMessage message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns ChatMessage
+         */
+        public static fromObject(object: { [k: string]: any }): hbonline.ChatMessage;
+
+        /**
+         * Creates a plain object from a ChatMessage message. Also converts values to other types if specified.
+         * @param message ChatMessage
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: hbonline.ChatMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this ChatMessage to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the default type url for ChatMessage
+         * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns The default type url
+         */
+        public static getTypeUrl(typeUrlPrefix?: string): string;
+    }
+
     /** Properties of an EnterGameResponse. */
     interface IEnterGameResponse {
 
@@ -2460,6 +2690,12 @@ export namespace hbonline {
 
         /** NpcMotion speed */
         speed?: (number|null);
+
+        /** NpcMotion name */
+        name?: (string|null);
+
+        /** NpcMotion npcType */
+        npcType?: (number|null);
     }
 
     /** Represents a NpcMotion. */
@@ -2488,6 +2724,12 @@ export namespace hbonline {
 
         /** NpcMotion speed. */
         public speed: number;
+
+        /** NpcMotion name. */
+        public name: string;
+
+        /** NpcMotion npcType. */
+        public npcType: number;
 
         /**
          * Creates a new NpcMotion instance using the specified properties.
@@ -3504,236 +3746,6 @@ export namespace hbonline {
 
         /**
          * Gets the default type url for EntityInfo
-         * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns The default type url
-         */
-        public static getTypeUrl(typeUrlPrefix?: string): string;
-    }
-
-    /** Properties of a ChatRequest. */
-    interface IChatRequest {
-
-        /** ChatRequest type */
-        type?: (number|null);
-
-        /** ChatRequest message */
-        message?: (string|null);
-
-        /** ChatRequest target */
-        target?: (string|null);
-    }
-
-    /** Represents a ChatRequest. */
-    class ChatRequest implements IChatRequest {
-
-        /**
-         * Constructs a new ChatRequest.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: hbonline.IChatRequest);
-
-        /** ChatRequest type. */
-        public type: number;
-
-        /** ChatRequest message. */
-        public message: string;
-
-        /** ChatRequest target. */
-        public target: string;
-
-        /**
-         * Creates a new ChatRequest instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns ChatRequest instance
-         */
-        public static create(properties?: hbonline.IChatRequest): hbonline.ChatRequest;
-
-        /**
-         * Encodes the specified ChatRequest message. Does not implicitly {@link hbonline.ChatRequest.verify|verify} messages.
-         * @param message ChatRequest message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: hbonline.IChatRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
-         * Encodes the specified ChatRequest message, length delimited. Does not implicitly {@link hbonline.ChatRequest.verify|verify} messages.
-         * @param message ChatRequest message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IChatRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
-         * Decodes a ChatRequest message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns ChatRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.ChatRequest;
-
-        /**
-         * Decodes a ChatRequest message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns ChatRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.ChatRequest;
-
-        /**
-         * Verifies a ChatRequest message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a ChatRequest message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns ChatRequest
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.ChatRequest;
-
-        /**
-         * Creates a plain object from a ChatRequest message. Also converts values to other types if specified.
-         * @param message ChatRequest
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.ChatRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this ChatRequest to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-
-        /**
-         * Gets the default type url for ChatRequest
-         * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns The default type url
-         */
-        public static getTypeUrl(typeUrlPrefix?: string): string;
-    }
-
-    /** Properties of a ChatMessage. */
-    interface IChatMessage {
-
-        /** ChatMessage objectId */
-        objectId?: (number|null);
-
-        /** ChatMessage senderName */
-        senderName?: (string|null);
-
-        /** ChatMessage type */
-        type?: (number|null);
-
-        /** ChatMessage message */
-        message?: (string|null);
-
-        /** ChatMessage position */
-        position?: (hbonline.IVec2|null);
-    }
-
-    /** Represents a ChatMessage. */
-    class ChatMessage implements IChatMessage {
-
-        /**
-         * Constructs a new ChatMessage.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: hbonline.IChatMessage);
-
-        /** ChatMessage objectId. */
-        public objectId: number;
-
-        /** ChatMessage senderName. */
-        public senderName: string;
-
-        /** ChatMessage type. */
-        public type: number;
-
-        /** ChatMessage message. */
-        public message: string;
-
-        /** ChatMessage position. */
-        public position?: (hbonline.IVec2|null);
-
-        /**
-         * Creates a new ChatMessage instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns ChatMessage instance
-         */
-        public static create(properties?: hbonline.IChatMessage): hbonline.ChatMessage;
-
-        /**
-         * Encodes the specified ChatMessage message. Does not implicitly {@link hbonline.ChatMessage.verify|verify} messages.
-         * @param message ChatMessage message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: hbonline.IChatMessage, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
-         * Encodes the specified ChatMessage message, length delimited. Does not implicitly {@link hbonline.ChatMessage.verify|verify} messages.
-         * @param message ChatMessage message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IChatMessage, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
-         * Decodes a ChatMessage message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns ChatMessage
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.ChatMessage;
-
-        /**
-         * Decodes a ChatMessage message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns ChatMessage
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.ChatMessage;
-
-        /**
-         * Verifies a ChatMessage message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a ChatMessage message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns ChatMessage
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.ChatMessage;
-
-        /**
-         * Creates a plain object from a ChatMessage message. Also converts values to other types if specified.
-         * @param message ChatMessage
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.ChatMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this ChatMessage to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-
-        /**
-         * Gets the default type url for ChatMessage
          * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
          * @returns The default type url
          */
@@ -6616,6 +6628,690 @@ export namespace hbonline {
         public static getTypeUrl(typeUrlPrefix?: string): string;
     }
 
+    /** Properties of a QuestAcceptRequest. */
+    interface IQuestAcceptRequest {
+
+        /** QuestAcceptRequest questId */
+        questId?: (number|null);
+    }
+
+    /** Represents a QuestAcceptRequest. */
+    class QuestAcceptRequest implements IQuestAcceptRequest {
+
+        /**
+         * Constructs a new QuestAcceptRequest.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: hbonline.IQuestAcceptRequest);
+
+        /** QuestAcceptRequest questId. */
+        public questId: number;
+
+        /**
+         * Creates a new QuestAcceptRequest instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns QuestAcceptRequest instance
+         */
+        public static create(properties?: hbonline.IQuestAcceptRequest): hbonline.QuestAcceptRequest;
+
+        /**
+         * Encodes the specified QuestAcceptRequest message. Does not implicitly {@link hbonline.QuestAcceptRequest.verify|verify} messages.
+         * @param message QuestAcceptRequest message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: hbonline.IQuestAcceptRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified QuestAcceptRequest message, length delimited. Does not implicitly {@link hbonline.QuestAcceptRequest.verify|verify} messages.
+         * @param message QuestAcceptRequest message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: hbonline.IQuestAcceptRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a QuestAcceptRequest message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns QuestAcceptRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.QuestAcceptRequest;
+
+        /**
+         * Decodes a QuestAcceptRequest message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns QuestAcceptRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.QuestAcceptRequest;
+
+        /**
+         * Verifies a QuestAcceptRequest message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a QuestAcceptRequest message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns QuestAcceptRequest
+         */
+        public static fromObject(object: { [k: string]: any }): hbonline.QuestAcceptRequest;
+
+        /**
+         * Creates a plain object from a QuestAcceptRequest message. Also converts values to other types if specified.
+         * @param message QuestAcceptRequest
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: hbonline.QuestAcceptRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this QuestAcceptRequest to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the default type url for QuestAcceptRequest
+         * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns The default type url
+         */
+        public static getTypeUrl(typeUrlPrefix?: string): string;
+    }
+
+    /** Properties of a QuestTurnInRequest. */
+    interface IQuestTurnInRequest {
+
+        /** QuestTurnInRequest questId */
+        questId?: (number|null);
+    }
+
+    /** Represents a QuestTurnInRequest. */
+    class QuestTurnInRequest implements IQuestTurnInRequest {
+
+        /**
+         * Constructs a new QuestTurnInRequest.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: hbonline.IQuestTurnInRequest);
+
+        /** QuestTurnInRequest questId. */
+        public questId: number;
+
+        /**
+         * Creates a new QuestTurnInRequest instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns QuestTurnInRequest instance
+         */
+        public static create(properties?: hbonline.IQuestTurnInRequest): hbonline.QuestTurnInRequest;
+
+        /**
+         * Encodes the specified QuestTurnInRequest message. Does not implicitly {@link hbonline.QuestTurnInRequest.verify|verify} messages.
+         * @param message QuestTurnInRequest message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: hbonline.IQuestTurnInRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified QuestTurnInRequest message, length delimited. Does not implicitly {@link hbonline.QuestTurnInRequest.verify|verify} messages.
+         * @param message QuestTurnInRequest message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: hbonline.IQuestTurnInRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a QuestTurnInRequest message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns QuestTurnInRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.QuestTurnInRequest;
+
+        /**
+         * Decodes a QuestTurnInRequest message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns QuestTurnInRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.QuestTurnInRequest;
+
+        /**
+         * Verifies a QuestTurnInRequest message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a QuestTurnInRequest message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns QuestTurnInRequest
+         */
+        public static fromObject(object: { [k: string]: any }): hbonline.QuestTurnInRequest;
+
+        /**
+         * Creates a plain object from a QuestTurnInRequest message. Also converts values to other types if specified.
+         * @param message QuestTurnInRequest
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: hbonline.QuestTurnInRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this QuestTurnInRequest to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the default type url for QuestTurnInRequest
+         * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns The default type url
+         */
+        public static getTypeUrl(typeUrlPrefix?: string): string;
+    }
+
+    /** Properties of a QuestListUpdate. */
+    interface IQuestListUpdate {
+
+        /** QuestListUpdate activeQuests */
+        activeQuests?: (hbonline.IQuestEntry[]|null);
+
+        /** QuestListUpdate availableQuestIds */
+        availableQuestIds?: (number[]|null);
+    }
+
+    /** Represents a QuestListUpdate. */
+    class QuestListUpdate implements IQuestListUpdate {
+
+        /**
+         * Constructs a new QuestListUpdate.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: hbonline.IQuestListUpdate);
+
+        /** QuestListUpdate activeQuests. */
+        public activeQuests: hbonline.IQuestEntry[];
+
+        /** QuestListUpdate availableQuestIds. */
+        public availableQuestIds: number[];
+
+        /**
+         * Creates a new QuestListUpdate instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns QuestListUpdate instance
+         */
+        public static create(properties?: hbonline.IQuestListUpdate): hbonline.QuestListUpdate;
+
+        /**
+         * Encodes the specified QuestListUpdate message. Does not implicitly {@link hbonline.QuestListUpdate.verify|verify} messages.
+         * @param message QuestListUpdate message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: hbonline.IQuestListUpdate, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified QuestListUpdate message, length delimited. Does not implicitly {@link hbonline.QuestListUpdate.verify|verify} messages.
+         * @param message QuestListUpdate message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: hbonline.IQuestListUpdate, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a QuestListUpdate message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns QuestListUpdate
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.QuestListUpdate;
+
+        /**
+         * Decodes a QuestListUpdate message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns QuestListUpdate
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.QuestListUpdate;
+
+        /**
+         * Verifies a QuestListUpdate message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a QuestListUpdate message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns QuestListUpdate
+         */
+        public static fromObject(object: { [k: string]: any }): hbonline.QuestListUpdate;
+
+        /**
+         * Creates a plain object from a QuestListUpdate message. Also converts values to other types if specified.
+         * @param message QuestListUpdate
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: hbonline.QuestListUpdate, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this QuestListUpdate to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the default type url for QuestListUpdate
+         * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns The default type url
+         */
+        public static getTypeUrl(typeUrlPrefix?: string): string;
+    }
+
+    /** Properties of a QuestEntry. */
+    interface IQuestEntry {
+
+        /** QuestEntry questId */
+        questId?: (number|null);
+
+        /** QuestEntry name */
+        name?: (string|null);
+
+        /** QuestEntry description */
+        description?: (string|null);
+
+        /** QuestEntry questType */
+        questType?: (number|null);
+
+        /** QuestEntry state */
+        state?: (number|null);
+
+        /** QuestEntry progress */
+        progress?: (number|null);
+
+        /** QuestEntry targetCount */
+        targetCount?: (number|null);
+
+        /** QuestEntry rewardXp */
+        rewardXp?: (number|null);
+
+        /** QuestEntry rewardGold */
+        rewardGold?: (number|Long|null);
+    }
+
+    /** Represents a QuestEntry. */
+    class QuestEntry implements IQuestEntry {
+
+        /**
+         * Constructs a new QuestEntry.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: hbonline.IQuestEntry);
+
+        /** QuestEntry questId. */
+        public questId: number;
+
+        /** QuestEntry name. */
+        public name: string;
+
+        /** QuestEntry description. */
+        public description: string;
+
+        /** QuestEntry questType. */
+        public questType: number;
+
+        /** QuestEntry state. */
+        public state: number;
+
+        /** QuestEntry progress. */
+        public progress: number;
+
+        /** QuestEntry targetCount. */
+        public targetCount: number;
+
+        /** QuestEntry rewardXp. */
+        public rewardXp: number;
+
+        /** QuestEntry rewardGold. */
+        public rewardGold: (number|Long);
+
+        /**
+         * Creates a new QuestEntry instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns QuestEntry instance
+         */
+        public static create(properties?: hbonline.IQuestEntry): hbonline.QuestEntry;
+
+        /**
+         * Encodes the specified QuestEntry message. Does not implicitly {@link hbonline.QuestEntry.verify|verify} messages.
+         * @param message QuestEntry message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: hbonline.IQuestEntry, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified QuestEntry message, length delimited. Does not implicitly {@link hbonline.QuestEntry.verify|verify} messages.
+         * @param message QuestEntry message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: hbonline.IQuestEntry, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a QuestEntry message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns QuestEntry
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.QuestEntry;
+
+        /**
+         * Decodes a QuestEntry message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns QuestEntry
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.QuestEntry;
+
+        /**
+         * Verifies a QuestEntry message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a QuestEntry message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns QuestEntry
+         */
+        public static fromObject(object: { [k: string]: any }): hbonline.QuestEntry;
+
+        /**
+         * Creates a plain object from a QuestEntry message. Also converts values to other types if specified.
+         * @param message QuestEntry
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: hbonline.QuestEntry, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this QuestEntry to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the default type url for QuestEntry
+         * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns The default type url
+         */
+        public static getTypeUrl(typeUrlPrefix?: string): string;
+    }
+
+    /** Properties of a QuestProgressUpdate. */
+    interface IQuestProgressUpdate {
+
+        /** QuestProgressUpdate questId */
+        questId?: (number|null);
+
+        /** QuestProgressUpdate progress */
+        progress?: (number|null);
+
+        /** QuestProgressUpdate targetCount */
+        targetCount?: (number|null);
+
+        /** QuestProgressUpdate completed */
+        completed?: (boolean|null);
+    }
+
+    /** Represents a QuestProgressUpdate. */
+    class QuestProgressUpdate implements IQuestProgressUpdate {
+
+        /**
+         * Constructs a new QuestProgressUpdate.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: hbonline.IQuestProgressUpdate);
+
+        /** QuestProgressUpdate questId. */
+        public questId: number;
+
+        /** QuestProgressUpdate progress. */
+        public progress: number;
+
+        /** QuestProgressUpdate targetCount. */
+        public targetCount: number;
+
+        /** QuestProgressUpdate completed. */
+        public completed: boolean;
+
+        /**
+         * Creates a new QuestProgressUpdate instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns QuestProgressUpdate instance
+         */
+        public static create(properties?: hbonline.IQuestProgressUpdate): hbonline.QuestProgressUpdate;
+
+        /**
+         * Encodes the specified QuestProgressUpdate message. Does not implicitly {@link hbonline.QuestProgressUpdate.verify|verify} messages.
+         * @param message QuestProgressUpdate message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: hbonline.IQuestProgressUpdate, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified QuestProgressUpdate message, length delimited. Does not implicitly {@link hbonline.QuestProgressUpdate.verify|verify} messages.
+         * @param message QuestProgressUpdate message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: hbonline.IQuestProgressUpdate, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a QuestProgressUpdate message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns QuestProgressUpdate
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.QuestProgressUpdate;
+
+        /**
+         * Decodes a QuestProgressUpdate message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns QuestProgressUpdate
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.QuestProgressUpdate;
+
+        /**
+         * Verifies a QuestProgressUpdate message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a QuestProgressUpdate message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns QuestProgressUpdate
+         */
+        public static fromObject(object: { [k: string]: any }): hbonline.QuestProgressUpdate;
+
+        /**
+         * Creates a plain object from a QuestProgressUpdate message. Also converts values to other types if specified.
+         * @param message QuestProgressUpdate
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: hbonline.QuestProgressUpdate, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this QuestProgressUpdate to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the default type url for QuestProgressUpdate
+         * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns The default type url
+         */
+        public static getTypeUrl(typeUrlPrefix?: string): string;
+    }
+
+    /** Properties of a QuestRewardNotification. */
+    interface IQuestRewardNotification {
+
+        /** QuestRewardNotification questId */
+        questId?: (number|null);
+
+        /** QuestRewardNotification questName */
+        questName?: (string|null);
+
+        /** QuestRewardNotification xpGained */
+        xpGained?: (number|Long|null);
+
+        /** QuestRewardNotification goldGained */
+        goldGained?: (number|Long|null);
+
+        /** QuestRewardNotification itemId */
+        itemId?: (number|null);
+
+        /** QuestRewardNotification itemCount */
+        itemCount?: (number|null);
+    }
+
+    /** Represents a QuestRewardNotification. */
+    class QuestRewardNotification implements IQuestRewardNotification {
+
+        /**
+         * Constructs a new QuestRewardNotification.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: hbonline.IQuestRewardNotification);
+
+        /** QuestRewardNotification questId. */
+        public questId: number;
+
+        /** QuestRewardNotification questName. */
+        public questName: string;
+
+        /** QuestRewardNotification xpGained. */
+        public xpGained: (number|Long);
+
+        /** QuestRewardNotification goldGained. */
+        public goldGained: (number|Long);
+
+        /** QuestRewardNotification itemId. */
+        public itemId: number;
+
+        /** QuestRewardNotification itemCount. */
+        public itemCount: number;
+
+        /**
+         * Creates a new QuestRewardNotification instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns QuestRewardNotification instance
+         */
+        public static create(properties?: hbonline.IQuestRewardNotification): hbonline.QuestRewardNotification;
+
+        /**
+         * Encodes the specified QuestRewardNotification message. Does not implicitly {@link hbonline.QuestRewardNotification.verify|verify} messages.
+         * @param message QuestRewardNotification message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: hbonline.IQuestRewardNotification, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified QuestRewardNotification message, length delimited. Does not implicitly {@link hbonline.QuestRewardNotification.verify|verify} messages.
+         * @param message QuestRewardNotification message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: hbonline.IQuestRewardNotification, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a QuestRewardNotification message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns QuestRewardNotification
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.QuestRewardNotification;
+
+        /**
+         * Decodes a QuestRewardNotification message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns QuestRewardNotification
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.QuestRewardNotification;
+
+        /**
+         * Verifies a QuestRewardNotification message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a QuestRewardNotification message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns QuestRewardNotification
+         */
+        public static fromObject(object: { [k: string]: any }): hbonline.QuestRewardNotification;
+
+        /**
+         * Creates a plain object from a QuestRewardNotification message. Also converts values to other types if specified.
+         * @param message QuestRewardNotification
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: hbonline.QuestRewardNotification, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this QuestRewardNotification to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the default type url for QuestRewardNotification
+         * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns The default type url
+         */
+        public static getTypeUrl(typeUrlPrefix?: string): string;
+    }
+
     /** Properties of a FactionSelectRequest. */
     interface IFactionSelectRequest {
 
@@ -9039,690 +9735,6 @@ export namespace hbonline {
 
         /**
          * Gets the default type url for PKStatusUpdate
-         * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns The default type url
-         */
-        public static getTypeUrl(typeUrlPrefix?: string): string;
-    }
-
-    /** Properties of a QuestAcceptRequest. */
-    interface IQuestAcceptRequest {
-
-        /** QuestAcceptRequest questId */
-        questId?: (number|null);
-    }
-
-    /** Represents a QuestAcceptRequest. */
-    class QuestAcceptRequest implements IQuestAcceptRequest {
-
-        /**
-         * Constructs a new QuestAcceptRequest.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: hbonline.IQuestAcceptRequest);
-
-        /** QuestAcceptRequest questId. */
-        public questId: number;
-
-        /**
-         * Creates a new QuestAcceptRequest instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns QuestAcceptRequest instance
-         */
-        public static create(properties?: hbonline.IQuestAcceptRequest): hbonline.QuestAcceptRequest;
-
-        /**
-         * Encodes the specified QuestAcceptRequest message. Does not implicitly {@link hbonline.QuestAcceptRequest.verify|verify} messages.
-         * @param message QuestAcceptRequest message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: hbonline.IQuestAcceptRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
-         * Encodes the specified QuestAcceptRequest message, length delimited. Does not implicitly {@link hbonline.QuestAcceptRequest.verify|verify} messages.
-         * @param message QuestAcceptRequest message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IQuestAcceptRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
-         * Decodes a QuestAcceptRequest message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns QuestAcceptRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.QuestAcceptRequest;
-
-        /**
-         * Decodes a QuestAcceptRequest message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns QuestAcceptRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.QuestAcceptRequest;
-
-        /**
-         * Verifies a QuestAcceptRequest message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a QuestAcceptRequest message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns QuestAcceptRequest
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.QuestAcceptRequest;
-
-        /**
-         * Creates a plain object from a QuestAcceptRequest message. Also converts values to other types if specified.
-         * @param message QuestAcceptRequest
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.QuestAcceptRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this QuestAcceptRequest to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-
-        /**
-         * Gets the default type url for QuestAcceptRequest
-         * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns The default type url
-         */
-        public static getTypeUrl(typeUrlPrefix?: string): string;
-    }
-
-    /** Properties of a QuestTurnInRequest. */
-    interface IQuestTurnInRequest {
-
-        /** QuestTurnInRequest questId */
-        questId?: (number|null);
-    }
-
-    /** Represents a QuestTurnInRequest. */
-    class QuestTurnInRequest implements IQuestTurnInRequest {
-
-        /**
-         * Constructs a new QuestTurnInRequest.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: hbonline.IQuestTurnInRequest);
-
-        /** QuestTurnInRequest questId. */
-        public questId: number;
-
-        /**
-         * Creates a new QuestTurnInRequest instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns QuestTurnInRequest instance
-         */
-        public static create(properties?: hbonline.IQuestTurnInRequest): hbonline.QuestTurnInRequest;
-
-        /**
-         * Encodes the specified QuestTurnInRequest message. Does not implicitly {@link hbonline.QuestTurnInRequest.verify|verify} messages.
-         * @param message QuestTurnInRequest message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: hbonline.IQuestTurnInRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
-         * Encodes the specified QuestTurnInRequest message, length delimited. Does not implicitly {@link hbonline.QuestTurnInRequest.verify|verify} messages.
-         * @param message QuestTurnInRequest message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IQuestTurnInRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
-         * Decodes a QuestTurnInRequest message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns QuestTurnInRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.QuestTurnInRequest;
-
-        /**
-         * Decodes a QuestTurnInRequest message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns QuestTurnInRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.QuestTurnInRequest;
-
-        /**
-         * Verifies a QuestTurnInRequest message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a QuestTurnInRequest message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns QuestTurnInRequest
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.QuestTurnInRequest;
-
-        /**
-         * Creates a plain object from a QuestTurnInRequest message. Also converts values to other types if specified.
-         * @param message QuestTurnInRequest
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.QuestTurnInRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this QuestTurnInRequest to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-
-        /**
-         * Gets the default type url for QuestTurnInRequest
-         * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns The default type url
-         */
-        public static getTypeUrl(typeUrlPrefix?: string): string;
-    }
-
-    /** Properties of a QuestListUpdate. */
-    interface IQuestListUpdate {
-
-        /** QuestListUpdate activeQuests */
-        activeQuests?: (hbonline.IQuestEntry[]|null);
-
-        /** QuestListUpdate availableQuestIds */
-        availableQuestIds?: (number[]|null);
-    }
-
-    /** Represents a QuestListUpdate. */
-    class QuestListUpdate implements IQuestListUpdate {
-
-        /**
-         * Constructs a new QuestListUpdate.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: hbonline.IQuestListUpdate);
-
-        /** QuestListUpdate activeQuests. */
-        public activeQuests: hbonline.IQuestEntry[];
-
-        /** QuestListUpdate availableQuestIds. */
-        public availableQuestIds: number[];
-
-        /**
-         * Creates a new QuestListUpdate instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns QuestListUpdate instance
-         */
-        public static create(properties?: hbonline.IQuestListUpdate): hbonline.QuestListUpdate;
-
-        /**
-         * Encodes the specified QuestListUpdate message. Does not implicitly {@link hbonline.QuestListUpdate.verify|verify} messages.
-         * @param message QuestListUpdate message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: hbonline.IQuestListUpdate, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
-         * Encodes the specified QuestListUpdate message, length delimited. Does not implicitly {@link hbonline.QuestListUpdate.verify|verify} messages.
-         * @param message QuestListUpdate message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IQuestListUpdate, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
-         * Decodes a QuestListUpdate message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns QuestListUpdate
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.QuestListUpdate;
-
-        /**
-         * Decodes a QuestListUpdate message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns QuestListUpdate
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.QuestListUpdate;
-
-        /**
-         * Verifies a QuestListUpdate message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a QuestListUpdate message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns QuestListUpdate
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.QuestListUpdate;
-
-        /**
-         * Creates a plain object from a QuestListUpdate message. Also converts values to other types if specified.
-         * @param message QuestListUpdate
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.QuestListUpdate, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this QuestListUpdate to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-
-        /**
-         * Gets the default type url for QuestListUpdate
-         * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns The default type url
-         */
-        public static getTypeUrl(typeUrlPrefix?: string): string;
-    }
-
-    /** Properties of a QuestEntry. */
-    interface IQuestEntry {
-
-        /** QuestEntry questId */
-        questId?: (number|null);
-
-        /** QuestEntry name */
-        name?: (string|null);
-
-        /** QuestEntry description */
-        description?: (string|null);
-
-        /** QuestEntry questType */
-        questType?: (number|null);
-
-        /** QuestEntry state */
-        state?: (number|null);
-
-        /** QuestEntry progress */
-        progress?: (number|null);
-
-        /** QuestEntry targetCount */
-        targetCount?: (number|null);
-
-        /** QuestEntry rewardXp */
-        rewardXp?: (number|null);
-
-        /** QuestEntry rewardGold */
-        rewardGold?: (number|Long|null);
-    }
-
-    /** Represents a QuestEntry. */
-    class QuestEntry implements IQuestEntry {
-
-        /**
-         * Constructs a new QuestEntry.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: hbonline.IQuestEntry);
-
-        /** QuestEntry questId. */
-        public questId: number;
-
-        /** QuestEntry name. */
-        public name: string;
-
-        /** QuestEntry description. */
-        public description: string;
-
-        /** QuestEntry questType. */
-        public questType: number;
-
-        /** QuestEntry state. */
-        public state: number;
-
-        /** QuestEntry progress. */
-        public progress: number;
-
-        /** QuestEntry targetCount. */
-        public targetCount: number;
-
-        /** QuestEntry rewardXp. */
-        public rewardXp: number;
-
-        /** QuestEntry rewardGold. */
-        public rewardGold: (number|Long);
-
-        /**
-         * Creates a new QuestEntry instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns QuestEntry instance
-         */
-        public static create(properties?: hbonline.IQuestEntry): hbonline.QuestEntry;
-
-        /**
-         * Encodes the specified QuestEntry message. Does not implicitly {@link hbonline.QuestEntry.verify|verify} messages.
-         * @param message QuestEntry message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: hbonline.IQuestEntry, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
-         * Encodes the specified QuestEntry message, length delimited. Does not implicitly {@link hbonline.QuestEntry.verify|verify} messages.
-         * @param message QuestEntry message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IQuestEntry, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
-         * Decodes a QuestEntry message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns QuestEntry
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.QuestEntry;
-
-        /**
-         * Decodes a QuestEntry message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns QuestEntry
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.QuestEntry;
-
-        /**
-         * Verifies a QuestEntry message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a QuestEntry message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns QuestEntry
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.QuestEntry;
-
-        /**
-         * Creates a plain object from a QuestEntry message. Also converts values to other types if specified.
-         * @param message QuestEntry
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.QuestEntry, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this QuestEntry to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-
-        /**
-         * Gets the default type url for QuestEntry
-         * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns The default type url
-         */
-        public static getTypeUrl(typeUrlPrefix?: string): string;
-    }
-
-    /** Properties of a QuestProgressUpdate. */
-    interface IQuestProgressUpdate {
-
-        /** QuestProgressUpdate questId */
-        questId?: (number|null);
-
-        /** QuestProgressUpdate progress */
-        progress?: (number|null);
-
-        /** QuestProgressUpdate targetCount */
-        targetCount?: (number|null);
-
-        /** QuestProgressUpdate completed */
-        completed?: (boolean|null);
-    }
-
-    /** Represents a QuestProgressUpdate. */
-    class QuestProgressUpdate implements IQuestProgressUpdate {
-
-        /**
-         * Constructs a new QuestProgressUpdate.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: hbonline.IQuestProgressUpdate);
-
-        /** QuestProgressUpdate questId. */
-        public questId: number;
-
-        /** QuestProgressUpdate progress. */
-        public progress: number;
-
-        /** QuestProgressUpdate targetCount. */
-        public targetCount: number;
-
-        /** QuestProgressUpdate completed. */
-        public completed: boolean;
-
-        /**
-         * Creates a new QuestProgressUpdate instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns QuestProgressUpdate instance
-         */
-        public static create(properties?: hbonline.IQuestProgressUpdate): hbonline.QuestProgressUpdate;
-
-        /**
-         * Encodes the specified QuestProgressUpdate message. Does not implicitly {@link hbonline.QuestProgressUpdate.verify|verify} messages.
-         * @param message QuestProgressUpdate message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: hbonline.IQuestProgressUpdate, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
-         * Encodes the specified QuestProgressUpdate message, length delimited. Does not implicitly {@link hbonline.QuestProgressUpdate.verify|verify} messages.
-         * @param message QuestProgressUpdate message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IQuestProgressUpdate, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
-         * Decodes a QuestProgressUpdate message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns QuestProgressUpdate
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.QuestProgressUpdate;
-
-        /**
-         * Decodes a QuestProgressUpdate message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns QuestProgressUpdate
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.QuestProgressUpdate;
-
-        /**
-         * Verifies a QuestProgressUpdate message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a QuestProgressUpdate message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns QuestProgressUpdate
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.QuestProgressUpdate;
-
-        /**
-         * Creates a plain object from a QuestProgressUpdate message. Also converts values to other types if specified.
-         * @param message QuestProgressUpdate
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.QuestProgressUpdate, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this QuestProgressUpdate to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-
-        /**
-         * Gets the default type url for QuestProgressUpdate
-         * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns The default type url
-         */
-        public static getTypeUrl(typeUrlPrefix?: string): string;
-    }
-
-    /** Properties of a QuestRewardNotification. */
-    interface IQuestRewardNotification {
-
-        /** QuestRewardNotification questId */
-        questId?: (number|null);
-
-        /** QuestRewardNotification questName */
-        questName?: (string|null);
-
-        /** QuestRewardNotification xpGained */
-        xpGained?: (number|Long|null);
-
-        /** QuestRewardNotification goldGained */
-        goldGained?: (number|Long|null);
-
-        /** QuestRewardNotification itemId */
-        itemId?: (number|null);
-
-        /** QuestRewardNotification itemCount */
-        itemCount?: (number|null);
-    }
-
-    /** Represents a QuestRewardNotification. */
-    class QuestRewardNotification implements IQuestRewardNotification {
-
-        /**
-         * Constructs a new QuestRewardNotification.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: hbonline.IQuestRewardNotification);
-
-        /** QuestRewardNotification questId. */
-        public questId: number;
-
-        /** QuestRewardNotification questName. */
-        public questName: string;
-
-        /** QuestRewardNotification xpGained. */
-        public xpGained: (number|Long);
-
-        /** QuestRewardNotification goldGained. */
-        public goldGained: (number|Long);
-
-        /** QuestRewardNotification itemId. */
-        public itemId: number;
-
-        /** QuestRewardNotification itemCount. */
-        public itemCount: number;
-
-        /**
-         * Creates a new QuestRewardNotification instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns QuestRewardNotification instance
-         */
-        public static create(properties?: hbonline.IQuestRewardNotification): hbonline.QuestRewardNotification;
-
-        /**
-         * Encodes the specified QuestRewardNotification message. Does not implicitly {@link hbonline.QuestRewardNotification.verify|verify} messages.
-         * @param message QuestRewardNotification message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: hbonline.IQuestRewardNotification, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
-         * Encodes the specified QuestRewardNotification message, length delimited. Does not implicitly {@link hbonline.QuestRewardNotification.verify|verify} messages.
-         * @param message QuestRewardNotification message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IQuestRewardNotification, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
-         * Decodes a QuestRewardNotification message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns QuestRewardNotification
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.QuestRewardNotification;
-
-        /**
-         * Decodes a QuestRewardNotification message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns QuestRewardNotification
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.QuestRewardNotification;
-
-        /**
-         * Verifies a QuestRewardNotification message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a QuestRewardNotification message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns QuestRewardNotification
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.QuestRewardNotification;
-
-        /**
-         * Creates a plain object from a QuestRewardNotification message. Also converts values to other types if specified.
-         * @param message QuestRewardNotification
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.QuestRewardNotification, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this QuestRewardNotification to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-
-        /**
-         * Gets the default type url for QuestRewardNotification
          * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
          * @returns The default type url
          */

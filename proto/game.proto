@@ -124,6 +124,8 @@ message NpcMotion {
   Vec2 position = 4;
   Vec2 destination = 5;
   int32 speed = 6;
+  string name = 7;
+  int32 npc_type = 8;
 }
 
 // Server -> Client: Generic notification

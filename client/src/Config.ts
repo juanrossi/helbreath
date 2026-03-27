@@ -6,12 +6,13 @@ export const HIGH_DEPTH = 5000000;
 // Movement
 // ---------------------------------------------------------------------------
 
-/** Default movement speed slider value (0-100). Higher = faster. */
-export const DEFAULT_MOVEMENT_SPEED = 80;
+/** Default movement speed slider value (0-100). Higher = faster.
+ *  At 56: run≈350ms, walk≈490ms — matches original Helbreath feel. */
+export const DEFAULT_MOVEMENT_SPEED = 56;
 
-/** Minimum / maximum duration (ms) for a single tile movement. */
-export const MOVEMENT_MIN_DURATION_MS = 100;
-export const MOVEMENT_MAX_DURATION_MS = 500;
+/** Minimum / maximum duration (ms) for a single tile movement (run speed). */
+export const MOVEMENT_MIN_DURATION_MS = 150;
+export const MOVEMENT_MAX_DURATION_MS = 600;
 
 /** Minimum / maximum animation frame rate. */
 export const MOVEMENT_MIN_FPS = 5;
@@ -20,8 +21,9 @@ export const MOVEMENT_MAX_FPS = 30;
 /** Default idle animation frame rate. */
 export const IDLE_ANIMATION_FPS = 10;
 
-/** Walk mode multiplier – walk duration is this many times the run duration. */
-export const WALK_DURATION_MULTIPLIER = 2;
+/** Walk mode multiplier – walk duration is this many times the run duration.
+ *  Original Helbreath: walk=490ms, run=350ms → ratio ~1.4 */
+export const WALK_DURATION_MULTIPLIER = 1.4;
 
 /** Delay (ms) between mouse-held movement commands. */
 export const MOVEMENT_COMMAND_THROTTLE_MS = 100;

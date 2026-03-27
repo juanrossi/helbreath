@@ -3042,6 +3042,561 @@ export const hbonline = $root.hbonline = (() => {
         return Appearance;
     })();
 
+    hbonline.ChatRequest = (function() {
+
+        /**
+         * Properties of a ChatRequest.
+         * @memberof hbonline
+         * @interface IChatRequest
+         * @property {number|null} [type] ChatRequest type
+         * @property {string|null} [message] ChatRequest message
+         * @property {string|null} [target] ChatRequest target
+         */
+
+        /**
+         * Constructs a new ChatRequest.
+         * @memberof hbonline
+         * @classdesc Represents a ChatRequest.
+         * @implements IChatRequest
+         * @constructor
+         * @param {hbonline.IChatRequest=} [properties] Properties to set
+         */
+        function ChatRequest(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * ChatRequest type.
+         * @member {number} type
+         * @memberof hbonline.ChatRequest
+         * @instance
+         */
+        ChatRequest.prototype.type = 0;
+
+        /**
+         * ChatRequest message.
+         * @member {string} message
+         * @memberof hbonline.ChatRequest
+         * @instance
+         */
+        ChatRequest.prototype.message = "";
+
+        /**
+         * ChatRequest target.
+         * @member {string} target
+         * @memberof hbonline.ChatRequest
+         * @instance
+         */
+        ChatRequest.prototype.target = "";
+
+        /**
+         * Creates a new ChatRequest instance using the specified properties.
+         * @function create
+         * @memberof hbonline.ChatRequest
+         * @static
+         * @param {hbonline.IChatRequest=} [properties] Properties to set
+         * @returns {hbonline.ChatRequest} ChatRequest instance
+         */
+        ChatRequest.create = function create(properties) {
+            return new ChatRequest(properties);
+        };
+
+        /**
+         * Encodes the specified ChatRequest message. Does not implicitly {@link hbonline.ChatRequest.verify|verify} messages.
+         * @function encode
+         * @memberof hbonline.ChatRequest
+         * @static
+         * @param {hbonline.IChatRequest} message ChatRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ChatRequest.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.type != null && Object.hasOwnProperty.call(message, "type"))
+                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.type);
+            if (message.message != null && Object.hasOwnProperty.call(message, "message"))
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.message);
+            if (message.target != null && Object.hasOwnProperty.call(message, "target"))
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.target);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified ChatRequest message, length delimited. Does not implicitly {@link hbonline.ChatRequest.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof hbonline.ChatRequest
+         * @static
+         * @param {hbonline.IChatRequest} message ChatRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ChatRequest.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a ChatRequest message from the specified reader or buffer.
+         * @function decode
+         * @memberof hbonline.ChatRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {hbonline.ChatRequest} ChatRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ChatRequest.decode = function decode(reader, length, error) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.hbonline.ChatRequest();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                if (tag === error)
+                    break;
+                switch (tag >>> 3) {
+                case 1: {
+                        message.type = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.message = reader.string();
+                        break;
+                    }
+                case 3: {
+                        message.target = reader.string();
+                        break;
+                    }
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a ChatRequest message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof hbonline.ChatRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {hbonline.ChatRequest} ChatRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ChatRequest.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a ChatRequest message.
+         * @function verify
+         * @memberof hbonline.ChatRequest
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        ChatRequest.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.type != null && message.hasOwnProperty("type"))
+                if (!$util.isInteger(message.type))
+                    return "type: integer expected";
+            if (message.message != null && message.hasOwnProperty("message"))
+                if (!$util.isString(message.message))
+                    return "message: string expected";
+            if (message.target != null && message.hasOwnProperty("target"))
+                if (!$util.isString(message.target))
+                    return "target: string expected";
+            return null;
+        };
+
+        /**
+         * Creates a ChatRequest message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof hbonline.ChatRequest
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {hbonline.ChatRequest} ChatRequest
+         */
+        ChatRequest.fromObject = function fromObject(object) {
+            if (object instanceof $root.hbonline.ChatRequest)
+                return object;
+            let message = new $root.hbonline.ChatRequest();
+            if (object.type != null)
+                message.type = object.type | 0;
+            if (object.message != null)
+                message.message = String(object.message);
+            if (object.target != null)
+                message.target = String(object.target);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a ChatRequest message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof hbonline.ChatRequest
+         * @static
+         * @param {hbonline.ChatRequest} message ChatRequest
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        ChatRequest.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.type = 0;
+                object.message = "";
+                object.target = "";
+            }
+            if (message.type != null && message.hasOwnProperty("type"))
+                object.type = message.type;
+            if (message.message != null && message.hasOwnProperty("message"))
+                object.message = message.message;
+            if (message.target != null && message.hasOwnProperty("target"))
+                object.target = message.target;
+            return object;
+        };
+
+        /**
+         * Converts this ChatRequest to JSON.
+         * @function toJSON
+         * @memberof hbonline.ChatRequest
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        ChatRequest.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the default type url for ChatRequest
+         * @function getTypeUrl
+         * @memberof hbonline.ChatRequest
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        ChatRequest.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/hbonline.ChatRequest";
+        };
+
+        return ChatRequest;
+    })();
+
+    hbonline.ChatMessage = (function() {
+
+        /**
+         * Properties of a ChatMessage.
+         * @memberof hbonline
+         * @interface IChatMessage
+         * @property {number|null} [objectId] ChatMessage objectId
+         * @property {string|null} [senderName] ChatMessage senderName
+         * @property {number|null} [type] ChatMessage type
+         * @property {string|null} [message] ChatMessage message
+         * @property {hbonline.IVec2|null} [position] ChatMessage position
+         */
+
+        /**
+         * Constructs a new ChatMessage.
+         * @memberof hbonline
+         * @classdesc Represents a ChatMessage.
+         * @implements IChatMessage
+         * @constructor
+         * @param {hbonline.IChatMessage=} [properties] Properties to set
+         */
+        function ChatMessage(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * ChatMessage objectId.
+         * @member {number} objectId
+         * @memberof hbonline.ChatMessage
+         * @instance
+         */
+        ChatMessage.prototype.objectId = 0;
+
+        /**
+         * ChatMessage senderName.
+         * @member {string} senderName
+         * @memberof hbonline.ChatMessage
+         * @instance
+         */
+        ChatMessage.prototype.senderName = "";
+
+        /**
+         * ChatMessage type.
+         * @member {number} type
+         * @memberof hbonline.ChatMessage
+         * @instance
+         */
+        ChatMessage.prototype.type = 0;
+
+        /**
+         * ChatMessage message.
+         * @member {string} message
+         * @memberof hbonline.ChatMessage
+         * @instance
+         */
+        ChatMessage.prototype.message = "";
+
+        /**
+         * ChatMessage position.
+         * @member {hbonline.IVec2|null|undefined} position
+         * @memberof hbonline.ChatMessage
+         * @instance
+         */
+        ChatMessage.prototype.position = null;
+
+        /**
+         * Creates a new ChatMessage instance using the specified properties.
+         * @function create
+         * @memberof hbonline.ChatMessage
+         * @static
+         * @param {hbonline.IChatMessage=} [properties] Properties to set
+         * @returns {hbonline.ChatMessage} ChatMessage instance
+         */
+        ChatMessage.create = function create(properties) {
+            return new ChatMessage(properties);
+        };
+
+        /**
+         * Encodes the specified ChatMessage message. Does not implicitly {@link hbonline.ChatMessage.verify|verify} messages.
+         * @function encode
+         * @memberof hbonline.ChatMessage
+         * @static
+         * @param {hbonline.IChatMessage} message ChatMessage message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ChatMessage.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.objectId != null && Object.hasOwnProperty.call(message, "objectId"))
+                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.objectId);
+            if (message.senderName != null && Object.hasOwnProperty.call(message, "senderName"))
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.senderName);
+            if (message.type != null && Object.hasOwnProperty.call(message, "type"))
+                writer.uint32(/* id 3, wireType 0 =*/24).int32(message.type);
+            if (message.message != null && Object.hasOwnProperty.call(message, "message"))
+                writer.uint32(/* id 4, wireType 2 =*/34).string(message.message);
+            if (message.position != null && Object.hasOwnProperty.call(message, "position"))
+                $root.hbonline.Vec2.encode(message.position, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
+            return writer;
+        };
+
+        /**
+         * Encodes the specified ChatMessage message, length delimited. Does not implicitly {@link hbonline.ChatMessage.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof hbonline.ChatMessage
+         * @static
+         * @param {hbonline.IChatMessage} message ChatMessage message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        ChatMessage.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a ChatMessage message from the specified reader or buffer.
+         * @function decode
+         * @memberof hbonline.ChatMessage
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {hbonline.ChatMessage} ChatMessage
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ChatMessage.decode = function decode(reader, length, error) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.hbonline.ChatMessage();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                if (tag === error)
+                    break;
+                switch (tag >>> 3) {
+                case 1: {
+                        message.objectId = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.senderName = reader.string();
+                        break;
+                    }
+                case 3: {
+                        message.type = reader.int32();
+                        break;
+                    }
+                case 4: {
+                        message.message = reader.string();
+                        break;
+                    }
+                case 5: {
+                        message.position = $root.hbonline.Vec2.decode(reader, reader.uint32());
+                        break;
+                    }
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a ChatMessage message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof hbonline.ChatMessage
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {hbonline.ChatMessage} ChatMessage
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        ChatMessage.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a ChatMessage message.
+         * @function verify
+         * @memberof hbonline.ChatMessage
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        ChatMessage.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.objectId != null && message.hasOwnProperty("objectId"))
+                if (!$util.isInteger(message.objectId))
+                    return "objectId: integer expected";
+            if (message.senderName != null && message.hasOwnProperty("senderName"))
+                if (!$util.isString(message.senderName))
+                    return "senderName: string expected";
+            if (message.type != null && message.hasOwnProperty("type"))
+                if (!$util.isInteger(message.type))
+                    return "type: integer expected";
+            if (message.message != null && message.hasOwnProperty("message"))
+                if (!$util.isString(message.message))
+                    return "message: string expected";
+            if (message.position != null && message.hasOwnProperty("position")) {
+                let error = $root.hbonline.Vec2.verify(message.position);
+                if (error)
+                    return "position." + error;
+            }
+            return null;
+        };
+
+        /**
+         * Creates a ChatMessage message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof hbonline.ChatMessage
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {hbonline.ChatMessage} ChatMessage
+         */
+        ChatMessage.fromObject = function fromObject(object) {
+            if (object instanceof $root.hbonline.ChatMessage)
+                return object;
+            let message = new $root.hbonline.ChatMessage();
+            if (object.objectId != null)
+                message.objectId = object.objectId | 0;
+            if (object.senderName != null)
+                message.senderName = String(object.senderName);
+            if (object.type != null)
+                message.type = object.type | 0;
+            if (object.message != null)
+                message.message = String(object.message);
+            if (object.position != null) {
+                if (typeof object.position !== "object")
+                    throw TypeError(".hbonline.ChatMessage.position: object expected");
+                message.position = $root.hbonline.Vec2.fromObject(object.position);
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a ChatMessage message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof hbonline.ChatMessage
+         * @static
+         * @param {hbonline.ChatMessage} message ChatMessage
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        ChatMessage.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.objectId = 0;
+                object.senderName = "";
+                object.type = 0;
+                object.message = "";
+                object.position = null;
+            }
+            if (message.objectId != null && message.hasOwnProperty("objectId"))
+                object.objectId = message.objectId;
+            if (message.senderName != null && message.hasOwnProperty("senderName"))
+                object.senderName = message.senderName;
+            if (message.type != null && message.hasOwnProperty("type"))
+                object.type = message.type;
+            if (message.message != null && message.hasOwnProperty("message"))
+                object.message = message.message;
+            if (message.position != null && message.hasOwnProperty("position"))
+                object.position = $root.hbonline.Vec2.toObject(message.position, options);
+            return object;
+        };
+
+        /**
+         * Converts this ChatMessage to JSON.
+         * @function toJSON
+         * @memberof hbonline.ChatMessage
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        ChatMessage.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the default type url for ChatMessage
+         * @function getTypeUrl
+         * @memberof hbonline.ChatMessage
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        ChatMessage.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/hbonline.ChatMessage";
+        };
+
+        return ChatMessage;
+    })();
+
     hbonline.EnterGameResponse = (function() {
 
         /**
@@ -6422,6 +6977,8 @@ export const hbonline = $root.hbonline = (() => {
          * @property {hbonline.IVec2|null} [position] NpcMotion position
          * @property {hbonline.IVec2|null} [destination] NpcMotion destination
          * @property {number|null} [speed] NpcMotion speed
+         * @property {string|null} [name] NpcMotion name
+         * @property {number|null} [npcType] NpcMotion npcType
          */
 
         /**
@@ -6488,6 +7045,22 @@ export const hbonline = $root.hbonline = (() => {
         NpcMotion.prototype.speed = 0;
 
         /**
+         * NpcMotion name.
+         * @member {string} name
+         * @memberof hbonline.NpcMotion
+         * @instance
+         */
+        NpcMotion.prototype.name = "";
+
+        /**
+         * NpcMotion npcType.
+         * @member {number} npcType
+         * @memberof hbonline.NpcMotion
+         * @instance
+         */
+        NpcMotion.prototype.npcType = 0;
+
+        /**
          * Creates a new NpcMotion instance using the specified properties.
          * @function create
          * @memberof hbonline.NpcMotion
@@ -6523,6 +7096,10 @@ export const hbonline = $root.hbonline = (() => {
                 $root.hbonline.Vec2.encode(message.destination, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
             if (message.speed != null && Object.hasOwnProperty.call(message, "speed"))
                 writer.uint32(/* id 6, wireType 0 =*/48).int32(message.speed);
+            if (message.name != null && Object.hasOwnProperty.call(message, "name"))
+                writer.uint32(/* id 7, wireType 2 =*/58).string(message.name);
+            if (message.npcType != null && Object.hasOwnProperty.call(message, "npcType"))
+                writer.uint32(/* id 8, wireType 0 =*/64).int32(message.npcType);
             return writer;
         };
 
@@ -6583,6 +7160,14 @@ export const hbonline = $root.hbonline = (() => {
                         message.speed = reader.int32();
                         break;
                     }
+                case 7: {
+                        message.name = reader.string();
+                        break;
+                    }
+                case 8: {
+                        message.npcType = reader.int32();
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -6640,6 +7225,12 @@ export const hbonline = $root.hbonline = (() => {
             if (message.speed != null && message.hasOwnProperty("speed"))
                 if (!$util.isInteger(message.speed))
                     return "speed: integer expected";
+            if (message.name != null && message.hasOwnProperty("name"))
+                if (!$util.isString(message.name))
+                    return "name: string expected";
+            if (message.npcType != null && message.hasOwnProperty("npcType"))
+                if (!$util.isInteger(message.npcType))
+                    return "npcType: integer expected";
             return null;
         };
 
@@ -6673,6 +7264,10 @@ export const hbonline = $root.hbonline = (() => {
             }
             if (object.speed != null)
                 message.speed = object.speed | 0;
+            if (object.name != null)
+                message.name = String(object.name);
+            if (object.npcType != null)
+                message.npcType = object.npcType | 0;
             return message;
         };
 
@@ -6696,6 +7291,8 @@ export const hbonline = $root.hbonline = (() => {
                 object.position = null;
                 object.destination = null;
                 object.speed = 0;
+                object.name = "";
+                object.npcType = 0;
             }
             if (message.objectId != null && message.hasOwnProperty("objectId"))
                 object.objectId = message.objectId;
@@ -6709,6 +7306,10 @@ export const hbonline = $root.hbonline = (() => {
                 object.destination = $root.hbonline.Vec2.toObject(message.destination, options);
             if (message.speed != null && message.hasOwnProperty("speed"))
                 object.speed = message.speed;
+            if (message.name != null && message.hasOwnProperty("name"))
+                object.name = message.name;
+            if (message.npcType != null && message.hasOwnProperty("npcType"))
+                object.npcType = message.npcType;
             return object;
         };
 
@@ -9246,561 +9847,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         return EntityInfo;
-    })();
-
-    hbonline.ChatRequest = (function() {
-
-        /**
-         * Properties of a ChatRequest.
-         * @memberof hbonline
-         * @interface IChatRequest
-         * @property {number|null} [type] ChatRequest type
-         * @property {string|null} [message] ChatRequest message
-         * @property {string|null} [target] ChatRequest target
-         */
-
-        /**
-         * Constructs a new ChatRequest.
-         * @memberof hbonline
-         * @classdesc Represents a ChatRequest.
-         * @implements IChatRequest
-         * @constructor
-         * @param {hbonline.IChatRequest=} [properties] Properties to set
-         */
-        function ChatRequest(properties) {
-            if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        /**
-         * ChatRequest type.
-         * @member {number} type
-         * @memberof hbonline.ChatRequest
-         * @instance
-         */
-        ChatRequest.prototype.type = 0;
-
-        /**
-         * ChatRequest message.
-         * @member {string} message
-         * @memberof hbonline.ChatRequest
-         * @instance
-         */
-        ChatRequest.prototype.message = "";
-
-        /**
-         * ChatRequest target.
-         * @member {string} target
-         * @memberof hbonline.ChatRequest
-         * @instance
-         */
-        ChatRequest.prototype.target = "";
-
-        /**
-         * Creates a new ChatRequest instance using the specified properties.
-         * @function create
-         * @memberof hbonline.ChatRequest
-         * @static
-         * @param {hbonline.IChatRequest=} [properties] Properties to set
-         * @returns {hbonline.ChatRequest} ChatRequest instance
-         */
-        ChatRequest.create = function create(properties) {
-            return new ChatRequest(properties);
-        };
-
-        /**
-         * Encodes the specified ChatRequest message. Does not implicitly {@link hbonline.ChatRequest.verify|verify} messages.
-         * @function encode
-         * @memberof hbonline.ChatRequest
-         * @static
-         * @param {hbonline.IChatRequest} message ChatRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        ChatRequest.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.type != null && Object.hasOwnProperty.call(message, "type"))
-                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.type);
-            if (message.message != null && Object.hasOwnProperty.call(message, "message"))
-                writer.uint32(/* id 2, wireType 2 =*/18).string(message.message);
-            if (message.target != null && Object.hasOwnProperty.call(message, "target"))
-                writer.uint32(/* id 3, wireType 2 =*/26).string(message.target);
-            return writer;
-        };
-
-        /**
-         * Encodes the specified ChatRequest message, length delimited. Does not implicitly {@link hbonline.ChatRequest.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.ChatRequest
-         * @static
-         * @param {hbonline.IChatRequest} message ChatRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        ChatRequest.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
-         * Decodes a ChatRequest message from the specified reader or buffer.
-         * @function decode
-         * @memberof hbonline.ChatRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {hbonline.ChatRequest} ChatRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        ChatRequest.decode = function decode(reader, length, error) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.hbonline.ChatRequest();
-            while (reader.pos < end) {
-                let tag = reader.uint32();
-                if (tag === error)
-                    break;
-                switch (tag >>> 3) {
-                case 1: {
-                        message.type = reader.int32();
-                        break;
-                    }
-                case 2: {
-                        message.message = reader.string();
-                        break;
-                    }
-                case 3: {
-                        message.target = reader.string();
-                        break;
-                    }
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Decodes a ChatRequest message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.ChatRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.ChatRequest} ChatRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        ChatRequest.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a ChatRequest message.
-         * @function verify
-         * @memberof hbonline.ChatRequest
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        ChatRequest.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.type != null && message.hasOwnProperty("type"))
-                if (!$util.isInteger(message.type))
-                    return "type: integer expected";
-            if (message.message != null && message.hasOwnProperty("message"))
-                if (!$util.isString(message.message))
-                    return "message: string expected";
-            if (message.target != null && message.hasOwnProperty("target"))
-                if (!$util.isString(message.target))
-                    return "target: string expected";
-            return null;
-        };
-
-        /**
-         * Creates a ChatRequest message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.ChatRequest
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.ChatRequest} ChatRequest
-         */
-        ChatRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.ChatRequest)
-                return object;
-            let message = new $root.hbonline.ChatRequest();
-            if (object.type != null)
-                message.type = object.type | 0;
-            if (object.message != null)
-                message.message = String(object.message);
-            if (object.target != null)
-                message.target = String(object.target);
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a ChatRequest message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.ChatRequest
-         * @static
-         * @param {hbonline.ChatRequest} message ChatRequest
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        ChatRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.type = 0;
-                object.message = "";
-                object.target = "";
-            }
-            if (message.type != null && message.hasOwnProperty("type"))
-                object.type = message.type;
-            if (message.message != null && message.hasOwnProperty("message"))
-                object.message = message.message;
-            if (message.target != null && message.hasOwnProperty("target"))
-                object.target = message.target;
-            return object;
-        };
-
-        /**
-         * Converts this ChatRequest to JSON.
-         * @function toJSON
-         * @memberof hbonline.ChatRequest
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        ChatRequest.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        /**
-         * Gets the default type url for ChatRequest
-         * @function getTypeUrl
-         * @memberof hbonline.ChatRequest
-         * @static
-         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns {string} The default type url
-         */
-        ChatRequest.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-            if (typeUrlPrefix === undefined) {
-                typeUrlPrefix = "type.googleapis.com";
-            }
-            return typeUrlPrefix + "/hbonline.ChatRequest";
-        };
-
-        return ChatRequest;
-    })();
-
-    hbonline.ChatMessage = (function() {
-
-        /**
-         * Properties of a ChatMessage.
-         * @memberof hbonline
-         * @interface IChatMessage
-         * @property {number|null} [objectId] ChatMessage objectId
-         * @property {string|null} [senderName] ChatMessage senderName
-         * @property {number|null} [type] ChatMessage type
-         * @property {string|null} [message] ChatMessage message
-         * @property {hbonline.IVec2|null} [position] ChatMessage position
-         */
-
-        /**
-         * Constructs a new ChatMessage.
-         * @memberof hbonline
-         * @classdesc Represents a ChatMessage.
-         * @implements IChatMessage
-         * @constructor
-         * @param {hbonline.IChatMessage=} [properties] Properties to set
-         */
-        function ChatMessage(properties) {
-            if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        /**
-         * ChatMessage objectId.
-         * @member {number} objectId
-         * @memberof hbonline.ChatMessage
-         * @instance
-         */
-        ChatMessage.prototype.objectId = 0;
-
-        /**
-         * ChatMessage senderName.
-         * @member {string} senderName
-         * @memberof hbonline.ChatMessage
-         * @instance
-         */
-        ChatMessage.prototype.senderName = "";
-
-        /**
-         * ChatMessage type.
-         * @member {number} type
-         * @memberof hbonline.ChatMessage
-         * @instance
-         */
-        ChatMessage.prototype.type = 0;
-
-        /**
-         * ChatMessage message.
-         * @member {string} message
-         * @memberof hbonline.ChatMessage
-         * @instance
-         */
-        ChatMessage.prototype.message = "";
-
-        /**
-         * ChatMessage position.
-         * @member {hbonline.IVec2|null|undefined} position
-         * @memberof hbonline.ChatMessage
-         * @instance
-         */
-        ChatMessage.prototype.position = null;
-
-        /**
-         * Creates a new ChatMessage instance using the specified properties.
-         * @function create
-         * @memberof hbonline.ChatMessage
-         * @static
-         * @param {hbonline.IChatMessage=} [properties] Properties to set
-         * @returns {hbonline.ChatMessage} ChatMessage instance
-         */
-        ChatMessage.create = function create(properties) {
-            return new ChatMessage(properties);
-        };
-
-        /**
-         * Encodes the specified ChatMessage message. Does not implicitly {@link hbonline.ChatMessage.verify|verify} messages.
-         * @function encode
-         * @memberof hbonline.ChatMessage
-         * @static
-         * @param {hbonline.IChatMessage} message ChatMessage message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        ChatMessage.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.objectId != null && Object.hasOwnProperty.call(message, "objectId"))
-                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.objectId);
-            if (message.senderName != null && Object.hasOwnProperty.call(message, "senderName"))
-                writer.uint32(/* id 2, wireType 2 =*/18).string(message.senderName);
-            if (message.type != null && Object.hasOwnProperty.call(message, "type"))
-                writer.uint32(/* id 3, wireType 0 =*/24).int32(message.type);
-            if (message.message != null && Object.hasOwnProperty.call(message, "message"))
-                writer.uint32(/* id 4, wireType 2 =*/34).string(message.message);
-            if (message.position != null && Object.hasOwnProperty.call(message, "position"))
-                $root.hbonline.Vec2.encode(message.position, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
-            return writer;
-        };
-
-        /**
-         * Encodes the specified ChatMessage message, length delimited. Does not implicitly {@link hbonline.ChatMessage.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.ChatMessage
-         * @static
-         * @param {hbonline.IChatMessage} message ChatMessage message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        ChatMessage.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
-         * Decodes a ChatMessage message from the specified reader or buffer.
-         * @function decode
-         * @memberof hbonline.ChatMessage
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {hbonline.ChatMessage} ChatMessage
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        ChatMessage.decode = function decode(reader, length, error) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.hbonline.ChatMessage();
-            while (reader.pos < end) {
-                let tag = reader.uint32();
-                if (tag === error)
-                    break;
-                switch (tag >>> 3) {
-                case 1: {
-                        message.objectId = reader.int32();
-                        break;
-                    }
-                case 2: {
-                        message.senderName = reader.string();
-                        break;
-                    }
-                case 3: {
-                        message.type = reader.int32();
-                        break;
-                    }
-                case 4: {
-                        message.message = reader.string();
-                        break;
-                    }
-                case 5: {
-                        message.position = $root.hbonline.Vec2.decode(reader, reader.uint32());
-                        break;
-                    }
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Decodes a ChatMessage message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.ChatMessage
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.ChatMessage} ChatMessage
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        ChatMessage.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a ChatMessage message.
-         * @function verify
-         * @memberof hbonline.ChatMessage
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        ChatMessage.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.objectId != null && message.hasOwnProperty("objectId"))
-                if (!$util.isInteger(message.objectId))
-                    return "objectId: integer expected";
-            if (message.senderName != null && message.hasOwnProperty("senderName"))
-                if (!$util.isString(message.senderName))
-                    return "senderName: string expected";
-            if (message.type != null && message.hasOwnProperty("type"))
-                if (!$util.isInteger(message.type))
-                    return "type: integer expected";
-            if (message.message != null && message.hasOwnProperty("message"))
-                if (!$util.isString(message.message))
-                    return "message: string expected";
-            if (message.position != null && message.hasOwnProperty("position")) {
-                let error = $root.hbonline.Vec2.verify(message.position);
-                if (error)
-                    return "position." + error;
-            }
-            return null;
-        };
-
-        /**
-         * Creates a ChatMessage message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.ChatMessage
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.ChatMessage} ChatMessage
-         */
-        ChatMessage.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.ChatMessage)
-                return object;
-            let message = new $root.hbonline.ChatMessage();
-            if (object.objectId != null)
-                message.objectId = object.objectId | 0;
-            if (object.senderName != null)
-                message.senderName = String(object.senderName);
-            if (object.type != null)
-                message.type = object.type | 0;
-            if (object.message != null)
-                message.message = String(object.message);
-            if (object.position != null) {
-                if (typeof object.position !== "object")
-                    throw TypeError(".hbonline.ChatMessage.position: object expected");
-                message.position = $root.hbonline.Vec2.fromObject(object.position);
-            }
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a ChatMessage message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.ChatMessage
-         * @static
-         * @param {hbonline.ChatMessage} message ChatMessage
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        ChatMessage.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.objectId = 0;
-                object.senderName = "";
-                object.type = 0;
-                object.message = "";
-                object.position = null;
-            }
-            if (message.objectId != null && message.hasOwnProperty("objectId"))
-                object.objectId = message.objectId;
-            if (message.senderName != null && message.hasOwnProperty("senderName"))
-                object.senderName = message.senderName;
-            if (message.type != null && message.hasOwnProperty("type"))
-                object.type = message.type;
-            if (message.message != null && message.hasOwnProperty("message"))
-                object.message = message.message;
-            if (message.position != null && message.hasOwnProperty("position"))
-                object.position = $root.hbonline.Vec2.toObject(message.position, options);
-            return object;
-        };
-
-        /**
-         * Converts this ChatMessage to JSON.
-         * @function toJSON
-         * @memberof hbonline.ChatMessage
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        ChatMessage.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        /**
-         * Gets the default type url for ChatMessage
-         * @function getTypeUrl
-         * @memberof hbonline.ChatMessage
-         * @static
-         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns {string} The default type url
-         */
-        ChatMessage.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-            if (typeUrlPrefix === undefined) {
-                typeUrlPrefix = "type.googleapis.com";
-            }
-            return typeUrlPrefix + "/hbonline.ChatMessage";
-        };
-
-        return ChatMessage;
     })();
 
     hbonline.ItemInstance = (function() {
@@ -16671,6 +16717,1718 @@ export const hbonline = $root.hbonline = (() => {
         return CraftResult;
     })();
 
+    hbonline.QuestAcceptRequest = (function() {
+
+        /**
+         * Properties of a QuestAcceptRequest.
+         * @memberof hbonline
+         * @interface IQuestAcceptRequest
+         * @property {number|null} [questId] QuestAcceptRequest questId
+         */
+
+        /**
+         * Constructs a new QuestAcceptRequest.
+         * @memberof hbonline
+         * @classdesc Represents a QuestAcceptRequest.
+         * @implements IQuestAcceptRequest
+         * @constructor
+         * @param {hbonline.IQuestAcceptRequest=} [properties] Properties to set
+         */
+        function QuestAcceptRequest(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * QuestAcceptRequest questId.
+         * @member {number} questId
+         * @memberof hbonline.QuestAcceptRequest
+         * @instance
+         */
+        QuestAcceptRequest.prototype.questId = 0;
+
+        /**
+         * Creates a new QuestAcceptRequest instance using the specified properties.
+         * @function create
+         * @memberof hbonline.QuestAcceptRequest
+         * @static
+         * @param {hbonline.IQuestAcceptRequest=} [properties] Properties to set
+         * @returns {hbonline.QuestAcceptRequest} QuestAcceptRequest instance
+         */
+        QuestAcceptRequest.create = function create(properties) {
+            return new QuestAcceptRequest(properties);
+        };
+
+        /**
+         * Encodes the specified QuestAcceptRequest message. Does not implicitly {@link hbonline.QuestAcceptRequest.verify|verify} messages.
+         * @function encode
+         * @memberof hbonline.QuestAcceptRequest
+         * @static
+         * @param {hbonline.IQuestAcceptRequest} message QuestAcceptRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        QuestAcceptRequest.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.questId != null && Object.hasOwnProperty.call(message, "questId"))
+                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.questId);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified QuestAcceptRequest message, length delimited. Does not implicitly {@link hbonline.QuestAcceptRequest.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof hbonline.QuestAcceptRequest
+         * @static
+         * @param {hbonline.IQuestAcceptRequest} message QuestAcceptRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        QuestAcceptRequest.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a QuestAcceptRequest message from the specified reader or buffer.
+         * @function decode
+         * @memberof hbonline.QuestAcceptRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {hbonline.QuestAcceptRequest} QuestAcceptRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        QuestAcceptRequest.decode = function decode(reader, length, error) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.hbonline.QuestAcceptRequest();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                if (tag === error)
+                    break;
+                switch (tag >>> 3) {
+                case 1: {
+                        message.questId = reader.int32();
+                        break;
+                    }
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a QuestAcceptRequest message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof hbonline.QuestAcceptRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {hbonline.QuestAcceptRequest} QuestAcceptRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        QuestAcceptRequest.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a QuestAcceptRequest message.
+         * @function verify
+         * @memberof hbonline.QuestAcceptRequest
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        QuestAcceptRequest.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.questId != null && message.hasOwnProperty("questId"))
+                if (!$util.isInteger(message.questId))
+                    return "questId: integer expected";
+            return null;
+        };
+
+        /**
+         * Creates a QuestAcceptRequest message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof hbonline.QuestAcceptRequest
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {hbonline.QuestAcceptRequest} QuestAcceptRequest
+         */
+        QuestAcceptRequest.fromObject = function fromObject(object) {
+            if (object instanceof $root.hbonline.QuestAcceptRequest)
+                return object;
+            let message = new $root.hbonline.QuestAcceptRequest();
+            if (object.questId != null)
+                message.questId = object.questId | 0;
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a QuestAcceptRequest message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof hbonline.QuestAcceptRequest
+         * @static
+         * @param {hbonline.QuestAcceptRequest} message QuestAcceptRequest
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        QuestAcceptRequest.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults)
+                object.questId = 0;
+            if (message.questId != null && message.hasOwnProperty("questId"))
+                object.questId = message.questId;
+            return object;
+        };
+
+        /**
+         * Converts this QuestAcceptRequest to JSON.
+         * @function toJSON
+         * @memberof hbonline.QuestAcceptRequest
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        QuestAcceptRequest.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the default type url for QuestAcceptRequest
+         * @function getTypeUrl
+         * @memberof hbonline.QuestAcceptRequest
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        QuestAcceptRequest.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/hbonline.QuestAcceptRequest";
+        };
+
+        return QuestAcceptRequest;
+    })();
+
+    hbonline.QuestTurnInRequest = (function() {
+
+        /**
+         * Properties of a QuestTurnInRequest.
+         * @memberof hbonline
+         * @interface IQuestTurnInRequest
+         * @property {number|null} [questId] QuestTurnInRequest questId
+         */
+
+        /**
+         * Constructs a new QuestTurnInRequest.
+         * @memberof hbonline
+         * @classdesc Represents a QuestTurnInRequest.
+         * @implements IQuestTurnInRequest
+         * @constructor
+         * @param {hbonline.IQuestTurnInRequest=} [properties] Properties to set
+         */
+        function QuestTurnInRequest(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * QuestTurnInRequest questId.
+         * @member {number} questId
+         * @memberof hbonline.QuestTurnInRequest
+         * @instance
+         */
+        QuestTurnInRequest.prototype.questId = 0;
+
+        /**
+         * Creates a new QuestTurnInRequest instance using the specified properties.
+         * @function create
+         * @memberof hbonline.QuestTurnInRequest
+         * @static
+         * @param {hbonline.IQuestTurnInRequest=} [properties] Properties to set
+         * @returns {hbonline.QuestTurnInRequest} QuestTurnInRequest instance
+         */
+        QuestTurnInRequest.create = function create(properties) {
+            return new QuestTurnInRequest(properties);
+        };
+
+        /**
+         * Encodes the specified QuestTurnInRequest message. Does not implicitly {@link hbonline.QuestTurnInRequest.verify|verify} messages.
+         * @function encode
+         * @memberof hbonline.QuestTurnInRequest
+         * @static
+         * @param {hbonline.IQuestTurnInRequest} message QuestTurnInRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        QuestTurnInRequest.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.questId != null && Object.hasOwnProperty.call(message, "questId"))
+                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.questId);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified QuestTurnInRequest message, length delimited. Does not implicitly {@link hbonline.QuestTurnInRequest.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof hbonline.QuestTurnInRequest
+         * @static
+         * @param {hbonline.IQuestTurnInRequest} message QuestTurnInRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        QuestTurnInRequest.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a QuestTurnInRequest message from the specified reader or buffer.
+         * @function decode
+         * @memberof hbonline.QuestTurnInRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {hbonline.QuestTurnInRequest} QuestTurnInRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        QuestTurnInRequest.decode = function decode(reader, length, error) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.hbonline.QuestTurnInRequest();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                if (tag === error)
+                    break;
+                switch (tag >>> 3) {
+                case 1: {
+                        message.questId = reader.int32();
+                        break;
+                    }
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a QuestTurnInRequest message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof hbonline.QuestTurnInRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {hbonline.QuestTurnInRequest} QuestTurnInRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        QuestTurnInRequest.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a QuestTurnInRequest message.
+         * @function verify
+         * @memberof hbonline.QuestTurnInRequest
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        QuestTurnInRequest.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.questId != null && message.hasOwnProperty("questId"))
+                if (!$util.isInteger(message.questId))
+                    return "questId: integer expected";
+            return null;
+        };
+
+        /**
+         * Creates a QuestTurnInRequest message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof hbonline.QuestTurnInRequest
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {hbonline.QuestTurnInRequest} QuestTurnInRequest
+         */
+        QuestTurnInRequest.fromObject = function fromObject(object) {
+            if (object instanceof $root.hbonline.QuestTurnInRequest)
+                return object;
+            let message = new $root.hbonline.QuestTurnInRequest();
+            if (object.questId != null)
+                message.questId = object.questId | 0;
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a QuestTurnInRequest message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof hbonline.QuestTurnInRequest
+         * @static
+         * @param {hbonline.QuestTurnInRequest} message QuestTurnInRequest
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        QuestTurnInRequest.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults)
+                object.questId = 0;
+            if (message.questId != null && message.hasOwnProperty("questId"))
+                object.questId = message.questId;
+            return object;
+        };
+
+        /**
+         * Converts this QuestTurnInRequest to JSON.
+         * @function toJSON
+         * @memberof hbonline.QuestTurnInRequest
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        QuestTurnInRequest.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the default type url for QuestTurnInRequest
+         * @function getTypeUrl
+         * @memberof hbonline.QuestTurnInRequest
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        QuestTurnInRequest.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/hbonline.QuestTurnInRequest";
+        };
+
+        return QuestTurnInRequest;
+    })();
+
+    hbonline.QuestListUpdate = (function() {
+
+        /**
+         * Properties of a QuestListUpdate.
+         * @memberof hbonline
+         * @interface IQuestListUpdate
+         * @property {Array.<hbonline.IQuestEntry>|null} [activeQuests] QuestListUpdate activeQuests
+         * @property {Array.<number>|null} [availableQuestIds] QuestListUpdate availableQuestIds
+         */
+
+        /**
+         * Constructs a new QuestListUpdate.
+         * @memberof hbonline
+         * @classdesc Represents a QuestListUpdate.
+         * @implements IQuestListUpdate
+         * @constructor
+         * @param {hbonline.IQuestListUpdate=} [properties] Properties to set
+         */
+        function QuestListUpdate(properties) {
+            this.activeQuests = [];
+            this.availableQuestIds = [];
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * QuestListUpdate activeQuests.
+         * @member {Array.<hbonline.IQuestEntry>} activeQuests
+         * @memberof hbonline.QuestListUpdate
+         * @instance
+         */
+        QuestListUpdate.prototype.activeQuests = $util.emptyArray;
+
+        /**
+         * QuestListUpdate availableQuestIds.
+         * @member {Array.<number>} availableQuestIds
+         * @memberof hbonline.QuestListUpdate
+         * @instance
+         */
+        QuestListUpdate.prototype.availableQuestIds = $util.emptyArray;
+
+        /**
+         * Creates a new QuestListUpdate instance using the specified properties.
+         * @function create
+         * @memberof hbonline.QuestListUpdate
+         * @static
+         * @param {hbonline.IQuestListUpdate=} [properties] Properties to set
+         * @returns {hbonline.QuestListUpdate} QuestListUpdate instance
+         */
+        QuestListUpdate.create = function create(properties) {
+            return new QuestListUpdate(properties);
+        };
+
+        /**
+         * Encodes the specified QuestListUpdate message. Does not implicitly {@link hbonline.QuestListUpdate.verify|verify} messages.
+         * @function encode
+         * @memberof hbonline.QuestListUpdate
+         * @static
+         * @param {hbonline.IQuestListUpdate} message QuestListUpdate message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        QuestListUpdate.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.activeQuests != null && message.activeQuests.length)
+                for (let i = 0; i < message.activeQuests.length; ++i)
+                    $root.hbonline.QuestEntry.encode(message.activeQuests[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            if (message.availableQuestIds != null && message.availableQuestIds.length) {
+                writer.uint32(/* id 2, wireType 2 =*/18).fork();
+                for (let i = 0; i < message.availableQuestIds.length; ++i)
+                    writer.int32(message.availableQuestIds[i]);
+                writer.ldelim();
+            }
+            return writer;
+        };
+
+        /**
+         * Encodes the specified QuestListUpdate message, length delimited. Does not implicitly {@link hbonline.QuestListUpdate.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof hbonline.QuestListUpdate
+         * @static
+         * @param {hbonline.IQuestListUpdate} message QuestListUpdate message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        QuestListUpdate.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a QuestListUpdate message from the specified reader or buffer.
+         * @function decode
+         * @memberof hbonline.QuestListUpdate
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {hbonline.QuestListUpdate} QuestListUpdate
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        QuestListUpdate.decode = function decode(reader, length, error) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.hbonline.QuestListUpdate();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                if (tag === error)
+                    break;
+                switch (tag >>> 3) {
+                case 1: {
+                        if (!(message.activeQuests && message.activeQuests.length))
+                            message.activeQuests = [];
+                        message.activeQuests.push($root.hbonline.QuestEntry.decode(reader, reader.uint32()));
+                        break;
+                    }
+                case 2: {
+                        if (!(message.availableQuestIds && message.availableQuestIds.length))
+                            message.availableQuestIds = [];
+                        if ((tag & 7) === 2) {
+                            let end2 = reader.uint32() + reader.pos;
+                            while (reader.pos < end2)
+                                message.availableQuestIds.push(reader.int32());
+                        } else
+                            message.availableQuestIds.push(reader.int32());
+                        break;
+                    }
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a QuestListUpdate message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof hbonline.QuestListUpdate
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {hbonline.QuestListUpdate} QuestListUpdate
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        QuestListUpdate.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a QuestListUpdate message.
+         * @function verify
+         * @memberof hbonline.QuestListUpdate
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        QuestListUpdate.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.activeQuests != null && message.hasOwnProperty("activeQuests")) {
+                if (!Array.isArray(message.activeQuests))
+                    return "activeQuests: array expected";
+                for (let i = 0; i < message.activeQuests.length; ++i) {
+                    let error = $root.hbonline.QuestEntry.verify(message.activeQuests[i]);
+                    if (error)
+                        return "activeQuests." + error;
+                }
+            }
+            if (message.availableQuestIds != null && message.hasOwnProperty("availableQuestIds")) {
+                if (!Array.isArray(message.availableQuestIds))
+                    return "availableQuestIds: array expected";
+                for (let i = 0; i < message.availableQuestIds.length; ++i)
+                    if (!$util.isInteger(message.availableQuestIds[i]))
+                        return "availableQuestIds: integer[] expected";
+            }
+            return null;
+        };
+
+        /**
+         * Creates a QuestListUpdate message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof hbonline.QuestListUpdate
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {hbonline.QuestListUpdate} QuestListUpdate
+         */
+        QuestListUpdate.fromObject = function fromObject(object) {
+            if (object instanceof $root.hbonline.QuestListUpdate)
+                return object;
+            let message = new $root.hbonline.QuestListUpdate();
+            if (object.activeQuests) {
+                if (!Array.isArray(object.activeQuests))
+                    throw TypeError(".hbonline.QuestListUpdate.activeQuests: array expected");
+                message.activeQuests = [];
+                for (let i = 0; i < object.activeQuests.length; ++i) {
+                    if (typeof object.activeQuests[i] !== "object")
+                        throw TypeError(".hbonline.QuestListUpdate.activeQuests: object expected");
+                    message.activeQuests[i] = $root.hbonline.QuestEntry.fromObject(object.activeQuests[i]);
+                }
+            }
+            if (object.availableQuestIds) {
+                if (!Array.isArray(object.availableQuestIds))
+                    throw TypeError(".hbonline.QuestListUpdate.availableQuestIds: array expected");
+                message.availableQuestIds = [];
+                for (let i = 0; i < object.availableQuestIds.length; ++i)
+                    message.availableQuestIds[i] = object.availableQuestIds[i] | 0;
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a QuestListUpdate message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof hbonline.QuestListUpdate
+         * @static
+         * @param {hbonline.QuestListUpdate} message QuestListUpdate
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        QuestListUpdate.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.arrays || options.defaults) {
+                object.activeQuests = [];
+                object.availableQuestIds = [];
+            }
+            if (message.activeQuests && message.activeQuests.length) {
+                object.activeQuests = [];
+                for (let j = 0; j < message.activeQuests.length; ++j)
+                    object.activeQuests[j] = $root.hbonline.QuestEntry.toObject(message.activeQuests[j], options);
+            }
+            if (message.availableQuestIds && message.availableQuestIds.length) {
+                object.availableQuestIds = [];
+                for (let j = 0; j < message.availableQuestIds.length; ++j)
+                    object.availableQuestIds[j] = message.availableQuestIds[j];
+            }
+            return object;
+        };
+
+        /**
+         * Converts this QuestListUpdate to JSON.
+         * @function toJSON
+         * @memberof hbonline.QuestListUpdate
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        QuestListUpdate.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the default type url for QuestListUpdate
+         * @function getTypeUrl
+         * @memberof hbonline.QuestListUpdate
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        QuestListUpdate.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/hbonline.QuestListUpdate";
+        };
+
+        return QuestListUpdate;
+    })();
+
+    hbonline.QuestEntry = (function() {
+
+        /**
+         * Properties of a QuestEntry.
+         * @memberof hbonline
+         * @interface IQuestEntry
+         * @property {number|null} [questId] QuestEntry questId
+         * @property {string|null} [name] QuestEntry name
+         * @property {string|null} [description] QuestEntry description
+         * @property {number|null} [questType] QuestEntry questType
+         * @property {number|null} [state] QuestEntry state
+         * @property {number|null} [progress] QuestEntry progress
+         * @property {number|null} [targetCount] QuestEntry targetCount
+         * @property {number|null} [rewardXp] QuestEntry rewardXp
+         * @property {number|Long|null} [rewardGold] QuestEntry rewardGold
+         */
+
+        /**
+         * Constructs a new QuestEntry.
+         * @memberof hbonline
+         * @classdesc Represents a QuestEntry.
+         * @implements IQuestEntry
+         * @constructor
+         * @param {hbonline.IQuestEntry=} [properties] Properties to set
+         */
+        function QuestEntry(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * QuestEntry questId.
+         * @member {number} questId
+         * @memberof hbonline.QuestEntry
+         * @instance
+         */
+        QuestEntry.prototype.questId = 0;
+
+        /**
+         * QuestEntry name.
+         * @member {string} name
+         * @memberof hbonline.QuestEntry
+         * @instance
+         */
+        QuestEntry.prototype.name = "";
+
+        /**
+         * QuestEntry description.
+         * @member {string} description
+         * @memberof hbonline.QuestEntry
+         * @instance
+         */
+        QuestEntry.prototype.description = "";
+
+        /**
+         * QuestEntry questType.
+         * @member {number} questType
+         * @memberof hbonline.QuestEntry
+         * @instance
+         */
+        QuestEntry.prototype.questType = 0;
+
+        /**
+         * QuestEntry state.
+         * @member {number} state
+         * @memberof hbonline.QuestEntry
+         * @instance
+         */
+        QuestEntry.prototype.state = 0;
+
+        /**
+         * QuestEntry progress.
+         * @member {number} progress
+         * @memberof hbonline.QuestEntry
+         * @instance
+         */
+        QuestEntry.prototype.progress = 0;
+
+        /**
+         * QuestEntry targetCount.
+         * @member {number} targetCount
+         * @memberof hbonline.QuestEntry
+         * @instance
+         */
+        QuestEntry.prototype.targetCount = 0;
+
+        /**
+         * QuestEntry rewardXp.
+         * @member {number} rewardXp
+         * @memberof hbonline.QuestEntry
+         * @instance
+         */
+        QuestEntry.prototype.rewardXp = 0;
+
+        /**
+         * QuestEntry rewardGold.
+         * @member {number|Long} rewardGold
+         * @memberof hbonline.QuestEntry
+         * @instance
+         */
+        QuestEntry.prototype.rewardGold = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * Creates a new QuestEntry instance using the specified properties.
+         * @function create
+         * @memberof hbonline.QuestEntry
+         * @static
+         * @param {hbonline.IQuestEntry=} [properties] Properties to set
+         * @returns {hbonline.QuestEntry} QuestEntry instance
+         */
+        QuestEntry.create = function create(properties) {
+            return new QuestEntry(properties);
+        };
+
+        /**
+         * Encodes the specified QuestEntry message. Does not implicitly {@link hbonline.QuestEntry.verify|verify} messages.
+         * @function encode
+         * @memberof hbonline.QuestEntry
+         * @static
+         * @param {hbonline.IQuestEntry} message QuestEntry message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        QuestEntry.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.questId != null && Object.hasOwnProperty.call(message, "questId"))
+                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.questId);
+            if (message.name != null && Object.hasOwnProperty.call(message, "name"))
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
+            if (message.description != null && Object.hasOwnProperty.call(message, "description"))
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.description);
+            if (message.questType != null && Object.hasOwnProperty.call(message, "questType"))
+                writer.uint32(/* id 4, wireType 0 =*/32).int32(message.questType);
+            if (message.state != null && Object.hasOwnProperty.call(message, "state"))
+                writer.uint32(/* id 5, wireType 0 =*/40).int32(message.state);
+            if (message.progress != null && Object.hasOwnProperty.call(message, "progress"))
+                writer.uint32(/* id 6, wireType 0 =*/48).int32(message.progress);
+            if (message.targetCount != null && Object.hasOwnProperty.call(message, "targetCount"))
+                writer.uint32(/* id 7, wireType 0 =*/56).int32(message.targetCount);
+            if (message.rewardXp != null && Object.hasOwnProperty.call(message, "rewardXp"))
+                writer.uint32(/* id 8, wireType 0 =*/64).int32(message.rewardXp);
+            if (message.rewardGold != null && Object.hasOwnProperty.call(message, "rewardGold"))
+                writer.uint32(/* id 9, wireType 0 =*/72).int64(message.rewardGold);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified QuestEntry message, length delimited. Does not implicitly {@link hbonline.QuestEntry.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof hbonline.QuestEntry
+         * @static
+         * @param {hbonline.IQuestEntry} message QuestEntry message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        QuestEntry.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a QuestEntry message from the specified reader or buffer.
+         * @function decode
+         * @memberof hbonline.QuestEntry
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {hbonline.QuestEntry} QuestEntry
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        QuestEntry.decode = function decode(reader, length, error) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.hbonline.QuestEntry();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                if (tag === error)
+                    break;
+                switch (tag >>> 3) {
+                case 1: {
+                        message.questId = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.name = reader.string();
+                        break;
+                    }
+                case 3: {
+                        message.description = reader.string();
+                        break;
+                    }
+                case 4: {
+                        message.questType = reader.int32();
+                        break;
+                    }
+                case 5: {
+                        message.state = reader.int32();
+                        break;
+                    }
+                case 6: {
+                        message.progress = reader.int32();
+                        break;
+                    }
+                case 7: {
+                        message.targetCount = reader.int32();
+                        break;
+                    }
+                case 8: {
+                        message.rewardXp = reader.int32();
+                        break;
+                    }
+                case 9: {
+                        message.rewardGold = reader.int64();
+                        break;
+                    }
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a QuestEntry message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof hbonline.QuestEntry
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {hbonline.QuestEntry} QuestEntry
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        QuestEntry.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a QuestEntry message.
+         * @function verify
+         * @memberof hbonline.QuestEntry
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        QuestEntry.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.questId != null && message.hasOwnProperty("questId"))
+                if (!$util.isInteger(message.questId))
+                    return "questId: integer expected";
+            if (message.name != null && message.hasOwnProperty("name"))
+                if (!$util.isString(message.name))
+                    return "name: string expected";
+            if (message.description != null && message.hasOwnProperty("description"))
+                if (!$util.isString(message.description))
+                    return "description: string expected";
+            if (message.questType != null && message.hasOwnProperty("questType"))
+                if (!$util.isInteger(message.questType))
+                    return "questType: integer expected";
+            if (message.state != null && message.hasOwnProperty("state"))
+                if (!$util.isInteger(message.state))
+                    return "state: integer expected";
+            if (message.progress != null && message.hasOwnProperty("progress"))
+                if (!$util.isInteger(message.progress))
+                    return "progress: integer expected";
+            if (message.targetCount != null && message.hasOwnProperty("targetCount"))
+                if (!$util.isInteger(message.targetCount))
+                    return "targetCount: integer expected";
+            if (message.rewardXp != null && message.hasOwnProperty("rewardXp"))
+                if (!$util.isInteger(message.rewardXp))
+                    return "rewardXp: integer expected";
+            if (message.rewardGold != null && message.hasOwnProperty("rewardGold"))
+                if (!$util.isInteger(message.rewardGold) && !(message.rewardGold && $util.isInteger(message.rewardGold.low) && $util.isInteger(message.rewardGold.high)))
+                    return "rewardGold: integer|Long expected";
+            return null;
+        };
+
+        /**
+         * Creates a QuestEntry message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof hbonline.QuestEntry
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {hbonline.QuestEntry} QuestEntry
+         */
+        QuestEntry.fromObject = function fromObject(object) {
+            if (object instanceof $root.hbonline.QuestEntry)
+                return object;
+            let message = new $root.hbonline.QuestEntry();
+            if (object.questId != null)
+                message.questId = object.questId | 0;
+            if (object.name != null)
+                message.name = String(object.name);
+            if (object.description != null)
+                message.description = String(object.description);
+            if (object.questType != null)
+                message.questType = object.questType | 0;
+            if (object.state != null)
+                message.state = object.state | 0;
+            if (object.progress != null)
+                message.progress = object.progress | 0;
+            if (object.targetCount != null)
+                message.targetCount = object.targetCount | 0;
+            if (object.rewardXp != null)
+                message.rewardXp = object.rewardXp | 0;
+            if (object.rewardGold != null)
+                if ($util.Long)
+                    (message.rewardGold = $util.Long.fromValue(object.rewardGold)).unsigned = false;
+                else if (typeof object.rewardGold === "string")
+                    message.rewardGold = parseInt(object.rewardGold, 10);
+                else if (typeof object.rewardGold === "number")
+                    message.rewardGold = object.rewardGold;
+                else if (typeof object.rewardGold === "object")
+                    message.rewardGold = new $util.LongBits(object.rewardGold.low >>> 0, object.rewardGold.high >>> 0).toNumber();
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a QuestEntry message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof hbonline.QuestEntry
+         * @static
+         * @param {hbonline.QuestEntry} message QuestEntry
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        QuestEntry.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.questId = 0;
+                object.name = "";
+                object.description = "";
+                object.questType = 0;
+                object.state = 0;
+                object.progress = 0;
+                object.targetCount = 0;
+                object.rewardXp = 0;
+                if ($util.Long) {
+                    let long = new $util.Long(0, 0, false);
+                    object.rewardGold = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.rewardGold = options.longs === String ? "0" : 0;
+            }
+            if (message.questId != null && message.hasOwnProperty("questId"))
+                object.questId = message.questId;
+            if (message.name != null && message.hasOwnProperty("name"))
+                object.name = message.name;
+            if (message.description != null && message.hasOwnProperty("description"))
+                object.description = message.description;
+            if (message.questType != null && message.hasOwnProperty("questType"))
+                object.questType = message.questType;
+            if (message.state != null && message.hasOwnProperty("state"))
+                object.state = message.state;
+            if (message.progress != null && message.hasOwnProperty("progress"))
+                object.progress = message.progress;
+            if (message.targetCount != null && message.hasOwnProperty("targetCount"))
+                object.targetCount = message.targetCount;
+            if (message.rewardXp != null && message.hasOwnProperty("rewardXp"))
+                object.rewardXp = message.rewardXp;
+            if (message.rewardGold != null && message.hasOwnProperty("rewardGold"))
+                if (typeof message.rewardGold === "number")
+                    object.rewardGold = options.longs === String ? String(message.rewardGold) : message.rewardGold;
+                else
+                    object.rewardGold = options.longs === String ? $util.Long.prototype.toString.call(message.rewardGold) : options.longs === Number ? new $util.LongBits(message.rewardGold.low >>> 0, message.rewardGold.high >>> 0).toNumber() : message.rewardGold;
+            return object;
+        };
+
+        /**
+         * Converts this QuestEntry to JSON.
+         * @function toJSON
+         * @memberof hbonline.QuestEntry
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        QuestEntry.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the default type url for QuestEntry
+         * @function getTypeUrl
+         * @memberof hbonline.QuestEntry
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        QuestEntry.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/hbonline.QuestEntry";
+        };
+
+        return QuestEntry;
+    })();
+
+    hbonline.QuestProgressUpdate = (function() {
+
+        /**
+         * Properties of a QuestProgressUpdate.
+         * @memberof hbonline
+         * @interface IQuestProgressUpdate
+         * @property {number|null} [questId] QuestProgressUpdate questId
+         * @property {number|null} [progress] QuestProgressUpdate progress
+         * @property {number|null} [targetCount] QuestProgressUpdate targetCount
+         * @property {boolean|null} [completed] QuestProgressUpdate completed
+         */
+
+        /**
+         * Constructs a new QuestProgressUpdate.
+         * @memberof hbonline
+         * @classdesc Represents a QuestProgressUpdate.
+         * @implements IQuestProgressUpdate
+         * @constructor
+         * @param {hbonline.IQuestProgressUpdate=} [properties] Properties to set
+         */
+        function QuestProgressUpdate(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * QuestProgressUpdate questId.
+         * @member {number} questId
+         * @memberof hbonline.QuestProgressUpdate
+         * @instance
+         */
+        QuestProgressUpdate.prototype.questId = 0;
+
+        /**
+         * QuestProgressUpdate progress.
+         * @member {number} progress
+         * @memberof hbonline.QuestProgressUpdate
+         * @instance
+         */
+        QuestProgressUpdate.prototype.progress = 0;
+
+        /**
+         * QuestProgressUpdate targetCount.
+         * @member {number} targetCount
+         * @memberof hbonline.QuestProgressUpdate
+         * @instance
+         */
+        QuestProgressUpdate.prototype.targetCount = 0;
+
+        /**
+         * QuestProgressUpdate completed.
+         * @member {boolean} completed
+         * @memberof hbonline.QuestProgressUpdate
+         * @instance
+         */
+        QuestProgressUpdate.prototype.completed = false;
+
+        /**
+         * Creates a new QuestProgressUpdate instance using the specified properties.
+         * @function create
+         * @memberof hbonline.QuestProgressUpdate
+         * @static
+         * @param {hbonline.IQuestProgressUpdate=} [properties] Properties to set
+         * @returns {hbonline.QuestProgressUpdate} QuestProgressUpdate instance
+         */
+        QuestProgressUpdate.create = function create(properties) {
+            return new QuestProgressUpdate(properties);
+        };
+
+        /**
+         * Encodes the specified QuestProgressUpdate message. Does not implicitly {@link hbonline.QuestProgressUpdate.verify|verify} messages.
+         * @function encode
+         * @memberof hbonline.QuestProgressUpdate
+         * @static
+         * @param {hbonline.IQuestProgressUpdate} message QuestProgressUpdate message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        QuestProgressUpdate.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.questId != null && Object.hasOwnProperty.call(message, "questId"))
+                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.questId);
+            if (message.progress != null && Object.hasOwnProperty.call(message, "progress"))
+                writer.uint32(/* id 2, wireType 0 =*/16).int32(message.progress);
+            if (message.targetCount != null && Object.hasOwnProperty.call(message, "targetCount"))
+                writer.uint32(/* id 3, wireType 0 =*/24).int32(message.targetCount);
+            if (message.completed != null && Object.hasOwnProperty.call(message, "completed"))
+                writer.uint32(/* id 4, wireType 0 =*/32).bool(message.completed);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified QuestProgressUpdate message, length delimited. Does not implicitly {@link hbonline.QuestProgressUpdate.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof hbonline.QuestProgressUpdate
+         * @static
+         * @param {hbonline.IQuestProgressUpdate} message QuestProgressUpdate message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        QuestProgressUpdate.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a QuestProgressUpdate message from the specified reader or buffer.
+         * @function decode
+         * @memberof hbonline.QuestProgressUpdate
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {hbonline.QuestProgressUpdate} QuestProgressUpdate
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        QuestProgressUpdate.decode = function decode(reader, length, error) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.hbonline.QuestProgressUpdate();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                if (tag === error)
+                    break;
+                switch (tag >>> 3) {
+                case 1: {
+                        message.questId = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.progress = reader.int32();
+                        break;
+                    }
+                case 3: {
+                        message.targetCount = reader.int32();
+                        break;
+                    }
+                case 4: {
+                        message.completed = reader.bool();
+                        break;
+                    }
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a QuestProgressUpdate message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof hbonline.QuestProgressUpdate
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {hbonline.QuestProgressUpdate} QuestProgressUpdate
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        QuestProgressUpdate.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a QuestProgressUpdate message.
+         * @function verify
+         * @memberof hbonline.QuestProgressUpdate
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        QuestProgressUpdate.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.questId != null && message.hasOwnProperty("questId"))
+                if (!$util.isInteger(message.questId))
+                    return "questId: integer expected";
+            if (message.progress != null && message.hasOwnProperty("progress"))
+                if (!$util.isInteger(message.progress))
+                    return "progress: integer expected";
+            if (message.targetCount != null && message.hasOwnProperty("targetCount"))
+                if (!$util.isInteger(message.targetCount))
+                    return "targetCount: integer expected";
+            if (message.completed != null && message.hasOwnProperty("completed"))
+                if (typeof message.completed !== "boolean")
+                    return "completed: boolean expected";
+            return null;
+        };
+
+        /**
+         * Creates a QuestProgressUpdate message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof hbonline.QuestProgressUpdate
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {hbonline.QuestProgressUpdate} QuestProgressUpdate
+         */
+        QuestProgressUpdate.fromObject = function fromObject(object) {
+            if (object instanceof $root.hbonline.QuestProgressUpdate)
+                return object;
+            let message = new $root.hbonline.QuestProgressUpdate();
+            if (object.questId != null)
+                message.questId = object.questId | 0;
+            if (object.progress != null)
+                message.progress = object.progress | 0;
+            if (object.targetCount != null)
+                message.targetCount = object.targetCount | 0;
+            if (object.completed != null)
+                message.completed = Boolean(object.completed);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a QuestProgressUpdate message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof hbonline.QuestProgressUpdate
+         * @static
+         * @param {hbonline.QuestProgressUpdate} message QuestProgressUpdate
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        QuestProgressUpdate.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.questId = 0;
+                object.progress = 0;
+                object.targetCount = 0;
+                object.completed = false;
+            }
+            if (message.questId != null && message.hasOwnProperty("questId"))
+                object.questId = message.questId;
+            if (message.progress != null && message.hasOwnProperty("progress"))
+                object.progress = message.progress;
+            if (message.targetCount != null && message.hasOwnProperty("targetCount"))
+                object.targetCount = message.targetCount;
+            if (message.completed != null && message.hasOwnProperty("completed"))
+                object.completed = message.completed;
+            return object;
+        };
+
+        /**
+         * Converts this QuestProgressUpdate to JSON.
+         * @function toJSON
+         * @memberof hbonline.QuestProgressUpdate
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        QuestProgressUpdate.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the default type url for QuestProgressUpdate
+         * @function getTypeUrl
+         * @memberof hbonline.QuestProgressUpdate
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        QuestProgressUpdate.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/hbonline.QuestProgressUpdate";
+        };
+
+        return QuestProgressUpdate;
+    })();
+
+    hbonline.QuestRewardNotification = (function() {
+
+        /**
+         * Properties of a QuestRewardNotification.
+         * @memberof hbonline
+         * @interface IQuestRewardNotification
+         * @property {number|null} [questId] QuestRewardNotification questId
+         * @property {string|null} [questName] QuestRewardNotification questName
+         * @property {number|Long|null} [xpGained] QuestRewardNotification xpGained
+         * @property {number|Long|null} [goldGained] QuestRewardNotification goldGained
+         * @property {number|null} [itemId] QuestRewardNotification itemId
+         * @property {number|null} [itemCount] QuestRewardNotification itemCount
+         */
+
+        /**
+         * Constructs a new QuestRewardNotification.
+         * @memberof hbonline
+         * @classdesc Represents a QuestRewardNotification.
+         * @implements IQuestRewardNotification
+         * @constructor
+         * @param {hbonline.IQuestRewardNotification=} [properties] Properties to set
+         */
+        function QuestRewardNotification(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * QuestRewardNotification questId.
+         * @member {number} questId
+         * @memberof hbonline.QuestRewardNotification
+         * @instance
+         */
+        QuestRewardNotification.prototype.questId = 0;
+
+        /**
+         * QuestRewardNotification questName.
+         * @member {string} questName
+         * @memberof hbonline.QuestRewardNotification
+         * @instance
+         */
+        QuestRewardNotification.prototype.questName = "";
+
+        /**
+         * QuestRewardNotification xpGained.
+         * @member {number|Long} xpGained
+         * @memberof hbonline.QuestRewardNotification
+         * @instance
+         */
+        QuestRewardNotification.prototype.xpGained = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * QuestRewardNotification goldGained.
+         * @member {number|Long} goldGained
+         * @memberof hbonline.QuestRewardNotification
+         * @instance
+         */
+        QuestRewardNotification.prototype.goldGained = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * QuestRewardNotification itemId.
+         * @member {number} itemId
+         * @memberof hbonline.QuestRewardNotification
+         * @instance
+         */
+        QuestRewardNotification.prototype.itemId = 0;
+
+        /**
+         * QuestRewardNotification itemCount.
+         * @member {number} itemCount
+         * @memberof hbonline.QuestRewardNotification
+         * @instance
+         */
+        QuestRewardNotification.prototype.itemCount = 0;
+
+        /**
+         * Creates a new QuestRewardNotification instance using the specified properties.
+         * @function create
+         * @memberof hbonline.QuestRewardNotification
+         * @static
+         * @param {hbonline.IQuestRewardNotification=} [properties] Properties to set
+         * @returns {hbonline.QuestRewardNotification} QuestRewardNotification instance
+         */
+        QuestRewardNotification.create = function create(properties) {
+            return new QuestRewardNotification(properties);
+        };
+
+        /**
+         * Encodes the specified QuestRewardNotification message. Does not implicitly {@link hbonline.QuestRewardNotification.verify|verify} messages.
+         * @function encode
+         * @memberof hbonline.QuestRewardNotification
+         * @static
+         * @param {hbonline.IQuestRewardNotification} message QuestRewardNotification message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        QuestRewardNotification.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.questId != null && Object.hasOwnProperty.call(message, "questId"))
+                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.questId);
+            if (message.questName != null && Object.hasOwnProperty.call(message, "questName"))
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.questName);
+            if (message.xpGained != null && Object.hasOwnProperty.call(message, "xpGained"))
+                writer.uint32(/* id 3, wireType 0 =*/24).int64(message.xpGained);
+            if (message.goldGained != null && Object.hasOwnProperty.call(message, "goldGained"))
+                writer.uint32(/* id 4, wireType 0 =*/32).int64(message.goldGained);
+            if (message.itemId != null && Object.hasOwnProperty.call(message, "itemId"))
+                writer.uint32(/* id 5, wireType 0 =*/40).int32(message.itemId);
+            if (message.itemCount != null && Object.hasOwnProperty.call(message, "itemCount"))
+                writer.uint32(/* id 6, wireType 0 =*/48).int32(message.itemCount);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified QuestRewardNotification message, length delimited. Does not implicitly {@link hbonline.QuestRewardNotification.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof hbonline.QuestRewardNotification
+         * @static
+         * @param {hbonline.IQuestRewardNotification} message QuestRewardNotification message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        QuestRewardNotification.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a QuestRewardNotification message from the specified reader or buffer.
+         * @function decode
+         * @memberof hbonline.QuestRewardNotification
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {hbonline.QuestRewardNotification} QuestRewardNotification
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        QuestRewardNotification.decode = function decode(reader, length, error) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.hbonline.QuestRewardNotification();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                if (tag === error)
+                    break;
+                switch (tag >>> 3) {
+                case 1: {
+                        message.questId = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.questName = reader.string();
+                        break;
+                    }
+                case 3: {
+                        message.xpGained = reader.int64();
+                        break;
+                    }
+                case 4: {
+                        message.goldGained = reader.int64();
+                        break;
+                    }
+                case 5: {
+                        message.itemId = reader.int32();
+                        break;
+                    }
+                case 6: {
+                        message.itemCount = reader.int32();
+                        break;
+                    }
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a QuestRewardNotification message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof hbonline.QuestRewardNotification
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {hbonline.QuestRewardNotification} QuestRewardNotification
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        QuestRewardNotification.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a QuestRewardNotification message.
+         * @function verify
+         * @memberof hbonline.QuestRewardNotification
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        QuestRewardNotification.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.questId != null && message.hasOwnProperty("questId"))
+                if (!$util.isInteger(message.questId))
+                    return "questId: integer expected";
+            if (message.questName != null && message.hasOwnProperty("questName"))
+                if (!$util.isString(message.questName))
+                    return "questName: string expected";
+            if (message.xpGained != null && message.hasOwnProperty("xpGained"))
+                if (!$util.isInteger(message.xpGained) && !(message.xpGained && $util.isInteger(message.xpGained.low) && $util.isInteger(message.xpGained.high)))
+                    return "xpGained: integer|Long expected";
+            if (message.goldGained != null && message.hasOwnProperty("goldGained"))
+                if (!$util.isInteger(message.goldGained) && !(message.goldGained && $util.isInteger(message.goldGained.low) && $util.isInteger(message.goldGained.high)))
+                    return "goldGained: integer|Long expected";
+            if (message.itemId != null && message.hasOwnProperty("itemId"))
+                if (!$util.isInteger(message.itemId))
+                    return "itemId: integer expected";
+            if (message.itemCount != null && message.hasOwnProperty("itemCount"))
+                if (!$util.isInteger(message.itemCount))
+                    return "itemCount: integer expected";
+            return null;
+        };
+
+        /**
+         * Creates a QuestRewardNotification message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof hbonline.QuestRewardNotification
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {hbonline.QuestRewardNotification} QuestRewardNotification
+         */
+        QuestRewardNotification.fromObject = function fromObject(object) {
+            if (object instanceof $root.hbonline.QuestRewardNotification)
+                return object;
+            let message = new $root.hbonline.QuestRewardNotification();
+            if (object.questId != null)
+                message.questId = object.questId | 0;
+            if (object.questName != null)
+                message.questName = String(object.questName);
+            if (object.xpGained != null)
+                if ($util.Long)
+                    (message.xpGained = $util.Long.fromValue(object.xpGained)).unsigned = false;
+                else if (typeof object.xpGained === "string")
+                    message.xpGained = parseInt(object.xpGained, 10);
+                else if (typeof object.xpGained === "number")
+                    message.xpGained = object.xpGained;
+                else if (typeof object.xpGained === "object")
+                    message.xpGained = new $util.LongBits(object.xpGained.low >>> 0, object.xpGained.high >>> 0).toNumber();
+            if (object.goldGained != null)
+                if ($util.Long)
+                    (message.goldGained = $util.Long.fromValue(object.goldGained)).unsigned = false;
+                else if (typeof object.goldGained === "string")
+                    message.goldGained = parseInt(object.goldGained, 10);
+                else if (typeof object.goldGained === "number")
+                    message.goldGained = object.goldGained;
+                else if (typeof object.goldGained === "object")
+                    message.goldGained = new $util.LongBits(object.goldGained.low >>> 0, object.goldGained.high >>> 0).toNumber();
+            if (object.itemId != null)
+                message.itemId = object.itemId | 0;
+            if (object.itemCount != null)
+                message.itemCount = object.itemCount | 0;
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a QuestRewardNotification message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof hbonline.QuestRewardNotification
+         * @static
+         * @param {hbonline.QuestRewardNotification} message QuestRewardNotification
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        QuestRewardNotification.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.questId = 0;
+                object.questName = "";
+                if ($util.Long) {
+                    let long = new $util.Long(0, 0, false);
+                    object.xpGained = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.xpGained = options.longs === String ? "0" : 0;
+                if ($util.Long) {
+                    let long = new $util.Long(0, 0, false);
+                    object.goldGained = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.goldGained = options.longs === String ? "0" : 0;
+                object.itemId = 0;
+                object.itemCount = 0;
+            }
+            if (message.questId != null && message.hasOwnProperty("questId"))
+                object.questId = message.questId;
+            if (message.questName != null && message.hasOwnProperty("questName"))
+                object.questName = message.questName;
+            if (message.xpGained != null && message.hasOwnProperty("xpGained"))
+                if (typeof message.xpGained === "number")
+                    object.xpGained = options.longs === String ? String(message.xpGained) : message.xpGained;
+                else
+                    object.xpGained = options.longs === String ? $util.Long.prototype.toString.call(message.xpGained) : options.longs === Number ? new $util.LongBits(message.xpGained.low >>> 0, message.xpGained.high >>> 0).toNumber() : message.xpGained;
+            if (message.goldGained != null && message.hasOwnProperty("goldGained"))
+                if (typeof message.goldGained === "number")
+                    object.goldGained = options.longs === String ? String(message.goldGained) : message.goldGained;
+                else
+                    object.goldGained = options.longs === String ? $util.Long.prototype.toString.call(message.goldGained) : options.longs === Number ? new $util.LongBits(message.goldGained.low >>> 0, message.goldGained.high >>> 0).toNumber() : message.goldGained;
+            if (message.itemId != null && message.hasOwnProperty("itemId"))
+                object.itemId = message.itemId;
+            if (message.itemCount != null && message.hasOwnProperty("itemCount"))
+                object.itemCount = message.itemCount;
+            return object;
+        };
+
+        /**
+         * Converts this QuestRewardNotification to JSON.
+         * @function toJSON
+         * @memberof hbonline.QuestRewardNotification
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        QuestRewardNotification.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the default type url for QuestRewardNotification
+         * @function getTypeUrl
+         * @memberof hbonline.QuestRewardNotification
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        QuestRewardNotification.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/hbonline.QuestRewardNotification";
+        };
+
+        return QuestRewardNotification;
+    })();
+
     hbonline.FactionSelectRequest = (function() {
 
         /**
@@ -22288,1718 +24046,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         return PKStatusUpdate;
-    })();
-
-    hbonline.QuestAcceptRequest = (function() {
-
-        /**
-         * Properties of a QuestAcceptRequest.
-         * @memberof hbonline
-         * @interface IQuestAcceptRequest
-         * @property {number|null} [questId] QuestAcceptRequest questId
-         */
-
-        /**
-         * Constructs a new QuestAcceptRequest.
-         * @memberof hbonline
-         * @classdesc Represents a QuestAcceptRequest.
-         * @implements IQuestAcceptRequest
-         * @constructor
-         * @param {hbonline.IQuestAcceptRequest=} [properties] Properties to set
-         */
-        function QuestAcceptRequest(properties) {
-            if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        /**
-         * QuestAcceptRequest questId.
-         * @member {number} questId
-         * @memberof hbonline.QuestAcceptRequest
-         * @instance
-         */
-        QuestAcceptRequest.prototype.questId = 0;
-
-        /**
-         * Creates a new QuestAcceptRequest instance using the specified properties.
-         * @function create
-         * @memberof hbonline.QuestAcceptRequest
-         * @static
-         * @param {hbonline.IQuestAcceptRequest=} [properties] Properties to set
-         * @returns {hbonline.QuestAcceptRequest} QuestAcceptRequest instance
-         */
-        QuestAcceptRequest.create = function create(properties) {
-            return new QuestAcceptRequest(properties);
-        };
-
-        /**
-         * Encodes the specified QuestAcceptRequest message. Does not implicitly {@link hbonline.QuestAcceptRequest.verify|verify} messages.
-         * @function encode
-         * @memberof hbonline.QuestAcceptRequest
-         * @static
-         * @param {hbonline.IQuestAcceptRequest} message QuestAcceptRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        QuestAcceptRequest.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.questId != null && Object.hasOwnProperty.call(message, "questId"))
-                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.questId);
-            return writer;
-        };
-
-        /**
-         * Encodes the specified QuestAcceptRequest message, length delimited. Does not implicitly {@link hbonline.QuestAcceptRequest.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.QuestAcceptRequest
-         * @static
-         * @param {hbonline.IQuestAcceptRequest} message QuestAcceptRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        QuestAcceptRequest.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
-         * Decodes a QuestAcceptRequest message from the specified reader or buffer.
-         * @function decode
-         * @memberof hbonline.QuestAcceptRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {hbonline.QuestAcceptRequest} QuestAcceptRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        QuestAcceptRequest.decode = function decode(reader, length, error) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.hbonline.QuestAcceptRequest();
-            while (reader.pos < end) {
-                let tag = reader.uint32();
-                if (tag === error)
-                    break;
-                switch (tag >>> 3) {
-                case 1: {
-                        message.questId = reader.int32();
-                        break;
-                    }
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Decodes a QuestAcceptRequest message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.QuestAcceptRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.QuestAcceptRequest} QuestAcceptRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        QuestAcceptRequest.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a QuestAcceptRequest message.
-         * @function verify
-         * @memberof hbonline.QuestAcceptRequest
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        QuestAcceptRequest.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.questId != null && message.hasOwnProperty("questId"))
-                if (!$util.isInteger(message.questId))
-                    return "questId: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a QuestAcceptRequest message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.QuestAcceptRequest
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.QuestAcceptRequest} QuestAcceptRequest
-         */
-        QuestAcceptRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.QuestAcceptRequest)
-                return object;
-            let message = new $root.hbonline.QuestAcceptRequest();
-            if (object.questId != null)
-                message.questId = object.questId | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a QuestAcceptRequest message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.QuestAcceptRequest
-         * @static
-         * @param {hbonline.QuestAcceptRequest} message QuestAcceptRequest
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        QuestAcceptRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults)
-                object.questId = 0;
-            if (message.questId != null && message.hasOwnProperty("questId"))
-                object.questId = message.questId;
-            return object;
-        };
-
-        /**
-         * Converts this QuestAcceptRequest to JSON.
-         * @function toJSON
-         * @memberof hbonline.QuestAcceptRequest
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        QuestAcceptRequest.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        /**
-         * Gets the default type url for QuestAcceptRequest
-         * @function getTypeUrl
-         * @memberof hbonline.QuestAcceptRequest
-         * @static
-         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns {string} The default type url
-         */
-        QuestAcceptRequest.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-            if (typeUrlPrefix === undefined) {
-                typeUrlPrefix = "type.googleapis.com";
-            }
-            return typeUrlPrefix + "/hbonline.QuestAcceptRequest";
-        };
-
-        return QuestAcceptRequest;
-    })();
-
-    hbonline.QuestTurnInRequest = (function() {
-
-        /**
-         * Properties of a QuestTurnInRequest.
-         * @memberof hbonline
-         * @interface IQuestTurnInRequest
-         * @property {number|null} [questId] QuestTurnInRequest questId
-         */
-
-        /**
-         * Constructs a new QuestTurnInRequest.
-         * @memberof hbonline
-         * @classdesc Represents a QuestTurnInRequest.
-         * @implements IQuestTurnInRequest
-         * @constructor
-         * @param {hbonline.IQuestTurnInRequest=} [properties] Properties to set
-         */
-        function QuestTurnInRequest(properties) {
-            if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        /**
-         * QuestTurnInRequest questId.
-         * @member {number} questId
-         * @memberof hbonline.QuestTurnInRequest
-         * @instance
-         */
-        QuestTurnInRequest.prototype.questId = 0;
-
-        /**
-         * Creates a new QuestTurnInRequest instance using the specified properties.
-         * @function create
-         * @memberof hbonline.QuestTurnInRequest
-         * @static
-         * @param {hbonline.IQuestTurnInRequest=} [properties] Properties to set
-         * @returns {hbonline.QuestTurnInRequest} QuestTurnInRequest instance
-         */
-        QuestTurnInRequest.create = function create(properties) {
-            return new QuestTurnInRequest(properties);
-        };
-
-        /**
-         * Encodes the specified QuestTurnInRequest message. Does not implicitly {@link hbonline.QuestTurnInRequest.verify|verify} messages.
-         * @function encode
-         * @memberof hbonline.QuestTurnInRequest
-         * @static
-         * @param {hbonline.IQuestTurnInRequest} message QuestTurnInRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        QuestTurnInRequest.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.questId != null && Object.hasOwnProperty.call(message, "questId"))
-                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.questId);
-            return writer;
-        };
-
-        /**
-         * Encodes the specified QuestTurnInRequest message, length delimited. Does not implicitly {@link hbonline.QuestTurnInRequest.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.QuestTurnInRequest
-         * @static
-         * @param {hbonline.IQuestTurnInRequest} message QuestTurnInRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        QuestTurnInRequest.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
-         * Decodes a QuestTurnInRequest message from the specified reader or buffer.
-         * @function decode
-         * @memberof hbonline.QuestTurnInRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {hbonline.QuestTurnInRequest} QuestTurnInRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        QuestTurnInRequest.decode = function decode(reader, length, error) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.hbonline.QuestTurnInRequest();
-            while (reader.pos < end) {
-                let tag = reader.uint32();
-                if (tag === error)
-                    break;
-                switch (tag >>> 3) {
-                case 1: {
-                        message.questId = reader.int32();
-                        break;
-                    }
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Decodes a QuestTurnInRequest message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.QuestTurnInRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.QuestTurnInRequest} QuestTurnInRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        QuestTurnInRequest.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a QuestTurnInRequest message.
-         * @function verify
-         * @memberof hbonline.QuestTurnInRequest
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        QuestTurnInRequest.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.questId != null && message.hasOwnProperty("questId"))
-                if (!$util.isInteger(message.questId))
-                    return "questId: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a QuestTurnInRequest message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.QuestTurnInRequest
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.QuestTurnInRequest} QuestTurnInRequest
-         */
-        QuestTurnInRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.QuestTurnInRequest)
-                return object;
-            let message = new $root.hbonline.QuestTurnInRequest();
-            if (object.questId != null)
-                message.questId = object.questId | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a QuestTurnInRequest message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.QuestTurnInRequest
-         * @static
-         * @param {hbonline.QuestTurnInRequest} message QuestTurnInRequest
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        QuestTurnInRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults)
-                object.questId = 0;
-            if (message.questId != null && message.hasOwnProperty("questId"))
-                object.questId = message.questId;
-            return object;
-        };
-
-        /**
-         * Converts this QuestTurnInRequest to JSON.
-         * @function toJSON
-         * @memberof hbonline.QuestTurnInRequest
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        QuestTurnInRequest.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        /**
-         * Gets the default type url for QuestTurnInRequest
-         * @function getTypeUrl
-         * @memberof hbonline.QuestTurnInRequest
-         * @static
-         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns {string} The default type url
-         */
-        QuestTurnInRequest.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-            if (typeUrlPrefix === undefined) {
-                typeUrlPrefix = "type.googleapis.com";
-            }
-            return typeUrlPrefix + "/hbonline.QuestTurnInRequest";
-        };
-
-        return QuestTurnInRequest;
-    })();
-
-    hbonline.QuestListUpdate = (function() {
-
-        /**
-         * Properties of a QuestListUpdate.
-         * @memberof hbonline
-         * @interface IQuestListUpdate
-         * @property {Array.<hbonline.IQuestEntry>|null} [activeQuests] QuestListUpdate activeQuests
-         * @property {Array.<number>|null} [availableQuestIds] QuestListUpdate availableQuestIds
-         */
-
-        /**
-         * Constructs a new QuestListUpdate.
-         * @memberof hbonline
-         * @classdesc Represents a QuestListUpdate.
-         * @implements IQuestListUpdate
-         * @constructor
-         * @param {hbonline.IQuestListUpdate=} [properties] Properties to set
-         */
-        function QuestListUpdate(properties) {
-            this.activeQuests = [];
-            this.availableQuestIds = [];
-            if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        /**
-         * QuestListUpdate activeQuests.
-         * @member {Array.<hbonline.IQuestEntry>} activeQuests
-         * @memberof hbonline.QuestListUpdate
-         * @instance
-         */
-        QuestListUpdate.prototype.activeQuests = $util.emptyArray;
-
-        /**
-         * QuestListUpdate availableQuestIds.
-         * @member {Array.<number>} availableQuestIds
-         * @memberof hbonline.QuestListUpdate
-         * @instance
-         */
-        QuestListUpdate.prototype.availableQuestIds = $util.emptyArray;
-
-        /**
-         * Creates a new QuestListUpdate instance using the specified properties.
-         * @function create
-         * @memberof hbonline.QuestListUpdate
-         * @static
-         * @param {hbonline.IQuestListUpdate=} [properties] Properties to set
-         * @returns {hbonline.QuestListUpdate} QuestListUpdate instance
-         */
-        QuestListUpdate.create = function create(properties) {
-            return new QuestListUpdate(properties);
-        };
-
-        /**
-         * Encodes the specified QuestListUpdate message. Does not implicitly {@link hbonline.QuestListUpdate.verify|verify} messages.
-         * @function encode
-         * @memberof hbonline.QuestListUpdate
-         * @static
-         * @param {hbonline.IQuestListUpdate} message QuestListUpdate message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        QuestListUpdate.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.activeQuests != null && message.activeQuests.length)
-                for (let i = 0; i < message.activeQuests.length; ++i)
-                    $root.hbonline.QuestEntry.encode(message.activeQuests[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-            if (message.availableQuestIds != null && message.availableQuestIds.length) {
-                writer.uint32(/* id 2, wireType 2 =*/18).fork();
-                for (let i = 0; i < message.availableQuestIds.length; ++i)
-                    writer.int32(message.availableQuestIds[i]);
-                writer.ldelim();
-            }
-            return writer;
-        };
-
-        /**
-         * Encodes the specified QuestListUpdate message, length delimited. Does not implicitly {@link hbonline.QuestListUpdate.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.QuestListUpdate
-         * @static
-         * @param {hbonline.IQuestListUpdate} message QuestListUpdate message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        QuestListUpdate.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
-         * Decodes a QuestListUpdate message from the specified reader or buffer.
-         * @function decode
-         * @memberof hbonline.QuestListUpdate
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {hbonline.QuestListUpdate} QuestListUpdate
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        QuestListUpdate.decode = function decode(reader, length, error) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.hbonline.QuestListUpdate();
-            while (reader.pos < end) {
-                let tag = reader.uint32();
-                if (tag === error)
-                    break;
-                switch (tag >>> 3) {
-                case 1: {
-                        if (!(message.activeQuests && message.activeQuests.length))
-                            message.activeQuests = [];
-                        message.activeQuests.push($root.hbonline.QuestEntry.decode(reader, reader.uint32()));
-                        break;
-                    }
-                case 2: {
-                        if (!(message.availableQuestIds && message.availableQuestIds.length))
-                            message.availableQuestIds = [];
-                        if ((tag & 7) === 2) {
-                            let end2 = reader.uint32() + reader.pos;
-                            while (reader.pos < end2)
-                                message.availableQuestIds.push(reader.int32());
-                        } else
-                            message.availableQuestIds.push(reader.int32());
-                        break;
-                    }
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Decodes a QuestListUpdate message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.QuestListUpdate
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.QuestListUpdate} QuestListUpdate
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        QuestListUpdate.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a QuestListUpdate message.
-         * @function verify
-         * @memberof hbonline.QuestListUpdate
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        QuestListUpdate.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.activeQuests != null && message.hasOwnProperty("activeQuests")) {
-                if (!Array.isArray(message.activeQuests))
-                    return "activeQuests: array expected";
-                for (let i = 0; i < message.activeQuests.length; ++i) {
-                    let error = $root.hbonline.QuestEntry.verify(message.activeQuests[i]);
-                    if (error)
-                        return "activeQuests." + error;
-                }
-            }
-            if (message.availableQuestIds != null && message.hasOwnProperty("availableQuestIds")) {
-                if (!Array.isArray(message.availableQuestIds))
-                    return "availableQuestIds: array expected";
-                for (let i = 0; i < message.availableQuestIds.length; ++i)
-                    if (!$util.isInteger(message.availableQuestIds[i]))
-                        return "availableQuestIds: integer[] expected";
-            }
-            return null;
-        };
-
-        /**
-         * Creates a QuestListUpdate message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.QuestListUpdate
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.QuestListUpdate} QuestListUpdate
-         */
-        QuestListUpdate.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.QuestListUpdate)
-                return object;
-            let message = new $root.hbonline.QuestListUpdate();
-            if (object.activeQuests) {
-                if (!Array.isArray(object.activeQuests))
-                    throw TypeError(".hbonline.QuestListUpdate.activeQuests: array expected");
-                message.activeQuests = [];
-                for (let i = 0; i < object.activeQuests.length; ++i) {
-                    if (typeof object.activeQuests[i] !== "object")
-                        throw TypeError(".hbonline.QuestListUpdate.activeQuests: object expected");
-                    message.activeQuests[i] = $root.hbonline.QuestEntry.fromObject(object.activeQuests[i]);
-                }
-            }
-            if (object.availableQuestIds) {
-                if (!Array.isArray(object.availableQuestIds))
-                    throw TypeError(".hbonline.QuestListUpdate.availableQuestIds: array expected");
-                message.availableQuestIds = [];
-                for (let i = 0; i < object.availableQuestIds.length; ++i)
-                    message.availableQuestIds[i] = object.availableQuestIds[i] | 0;
-            }
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a QuestListUpdate message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.QuestListUpdate
-         * @static
-         * @param {hbonline.QuestListUpdate} message QuestListUpdate
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        QuestListUpdate.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.arrays || options.defaults) {
-                object.activeQuests = [];
-                object.availableQuestIds = [];
-            }
-            if (message.activeQuests && message.activeQuests.length) {
-                object.activeQuests = [];
-                for (let j = 0; j < message.activeQuests.length; ++j)
-                    object.activeQuests[j] = $root.hbonline.QuestEntry.toObject(message.activeQuests[j], options);
-            }
-            if (message.availableQuestIds && message.availableQuestIds.length) {
-                object.availableQuestIds = [];
-                for (let j = 0; j < message.availableQuestIds.length; ++j)
-                    object.availableQuestIds[j] = message.availableQuestIds[j];
-            }
-            return object;
-        };
-
-        /**
-         * Converts this QuestListUpdate to JSON.
-         * @function toJSON
-         * @memberof hbonline.QuestListUpdate
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        QuestListUpdate.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        /**
-         * Gets the default type url for QuestListUpdate
-         * @function getTypeUrl
-         * @memberof hbonline.QuestListUpdate
-         * @static
-         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns {string} The default type url
-         */
-        QuestListUpdate.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-            if (typeUrlPrefix === undefined) {
-                typeUrlPrefix = "type.googleapis.com";
-            }
-            return typeUrlPrefix + "/hbonline.QuestListUpdate";
-        };
-
-        return QuestListUpdate;
-    })();
-
-    hbonline.QuestEntry = (function() {
-
-        /**
-         * Properties of a QuestEntry.
-         * @memberof hbonline
-         * @interface IQuestEntry
-         * @property {number|null} [questId] QuestEntry questId
-         * @property {string|null} [name] QuestEntry name
-         * @property {string|null} [description] QuestEntry description
-         * @property {number|null} [questType] QuestEntry questType
-         * @property {number|null} [state] QuestEntry state
-         * @property {number|null} [progress] QuestEntry progress
-         * @property {number|null} [targetCount] QuestEntry targetCount
-         * @property {number|null} [rewardXp] QuestEntry rewardXp
-         * @property {number|Long|null} [rewardGold] QuestEntry rewardGold
-         */
-
-        /**
-         * Constructs a new QuestEntry.
-         * @memberof hbonline
-         * @classdesc Represents a QuestEntry.
-         * @implements IQuestEntry
-         * @constructor
-         * @param {hbonline.IQuestEntry=} [properties] Properties to set
-         */
-        function QuestEntry(properties) {
-            if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        /**
-         * QuestEntry questId.
-         * @member {number} questId
-         * @memberof hbonline.QuestEntry
-         * @instance
-         */
-        QuestEntry.prototype.questId = 0;
-
-        /**
-         * QuestEntry name.
-         * @member {string} name
-         * @memberof hbonline.QuestEntry
-         * @instance
-         */
-        QuestEntry.prototype.name = "";
-
-        /**
-         * QuestEntry description.
-         * @member {string} description
-         * @memberof hbonline.QuestEntry
-         * @instance
-         */
-        QuestEntry.prototype.description = "";
-
-        /**
-         * QuestEntry questType.
-         * @member {number} questType
-         * @memberof hbonline.QuestEntry
-         * @instance
-         */
-        QuestEntry.prototype.questType = 0;
-
-        /**
-         * QuestEntry state.
-         * @member {number} state
-         * @memberof hbonline.QuestEntry
-         * @instance
-         */
-        QuestEntry.prototype.state = 0;
-
-        /**
-         * QuestEntry progress.
-         * @member {number} progress
-         * @memberof hbonline.QuestEntry
-         * @instance
-         */
-        QuestEntry.prototype.progress = 0;
-
-        /**
-         * QuestEntry targetCount.
-         * @member {number} targetCount
-         * @memberof hbonline.QuestEntry
-         * @instance
-         */
-        QuestEntry.prototype.targetCount = 0;
-
-        /**
-         * QuestEntry rewardXp.
-         * @member {number} rewardXp
-         * @memberof hbonline.QuestEntry
-         * @instance
-         */
-        QuestEntry.prototype.rewardXp = 0;
-
-        /**
-         * QuestEntry rewardGold.
-         * @member {number|Long} rewardGold
-         * @memberof hbonline.QuestEntry
-         * @instance
-         */
-        QuestEntry.prototype.rewardGold = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-
-        /**
-         * Creates a new QuestEntry instance using the specified properties.
-         * @function create
-         * @memberof hbonline.QuestEntry
-         * @static
-         * @param {hbonline.IQuestEntry=} [properties] Properties to set
-         * @returns {hbonline.QuestEntry} QuestEntry instance
-         */
-        QuestEntry.create = function create(properties) {
-            return new QuestEntry(properties);
-        };
-
-        /**
-         * Encodes the specified QuestEntry message. Does not implicitly {@link hbonline.QuestEntry.verify|verify} messages.
-         * @function encode
-         * @memberof hbonline.QuestEntry
-         * @static
-         * @param {hbonline.IQuestEntry} message QuestEntry message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        QuestEntry.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.questId != null && Object.hasOwnProperty.call(message, "questId"))
-                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.questId);
-            if (message.name != null && Object.hasOwnProperty.call(message, "name"))
-                writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
-            if (message.description != null && Object.hasOwnProperty.call(message, "description"))
-                writer.uint32(/* id 3, wireType 2 =*/26).string(message.description);
-            if (message.questType != null && Object.hasOwnProperty.call(message, "questType"))
-                writer.uint32(/* id 4, wireType 0 =*/32).int32(message.questType);
-            if (message.state != null && Object.hasOwnProperty.call(message, "state"))
-                writer.uint32(/* id 5, wireType 0 =*/40).int32(message.state);
-            if (message.progress != null && Object.hasOwnProperty.call(message, "progress"))
-                writer.uint32(/* id 6, wireType 0 =*/48).int32(message.progress);
-            if (message.targetCount != null && Object.hasOwnProperty.call(message, "targetCount"))
-                writer.uint32(/* id 7, wireType 0 =*/56).int32(message.targetCount);
-            if (message.rewardXp != null && Object.hasOwnProperty.call(message, "rewardXp"))
-                writer.uint32(/* id 8, wireType 0 =*/64).int32(message.rewardXp);
-            if (message.rewardGold != null && Object.hasOwnProperty.call(message, "rewardGold"))
-                writer.uint32(/* id 9, wireType 0 =*/72).int64(message.rewardGold);
-            return writer;
-        };
-
-        /**
-         * Encodes the specified QuestEntry message, length delimited. Does not implicitly {@link hbonline.QuestEntry.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.QuestEntry
-         * @static
-         * @param {hbonline.IQuestEntry} message QuestEntry message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        QuestEntry.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
-         * Decodes a QuestEntry message from the specified reader or buffer.
-         * @function decode
-         * @memberof hbonline.QuestEntry
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {hbonline.QuestEntry} QuestEntry
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        QuestEntry.decode = function decode(reader, length, error) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.hbonline.QuestEntry();
-            while (reader.pos < end) {
-                let tag = reader.uint32();
-                if (tag === error)
-                    break;
-                switch (tag >>> 3) {
-                case 1: {
-                        message.questId = reader.int32();
-                        break;
-                    }
-                case 2: {
-                        message.name = reader.string();
-                        break;
-                    }
-                case 3: {
-                        message.description = reader.string();
-                        break;
-                    }
-                case 4: {
-                        message.questType = reader.int32();
-                        break;
-                    }
-                case 5: {
-                        message.state = reader.int32();
-                        break;
-                    }
-                case 6: {
-                        message.progress = reader.int32();
-                        break;
-                    }
-                case 7: {
-                        message.targetCount = reader.int32();
-                        break;
-                    }
-                case 8: {
-                        message.rewardXp = reader.int32();
-                        break;
-                    }
-                case 9: {
-                        message.rewardGold = reader.int64();
-                        break;
-                    }
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Decodes a QuestEntry message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.QuestEntry
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.QuestEntry} QuestEntry
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        QuestEntry.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a QuestEntry message.
-         * @function verify
-         * @memberof hbonline.QuestEntry
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        QuestEntry.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.questId != null && message.hasOwnProperty("questId"))
-                if (!$util.isInteger(message.questId))
-                    return "questId: integer expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.description != null && message.hasOwnProperty("description"))
-                if (!$util.isString(message.description))
-                    return "description: string expected";
-            if (message.questType != null && message.hasOwnProperty("questType"))
-                if (!$util.isInteger(message.questType))
-                    return "questType: integer expected";
-            if (message.state != null && message.hasOwnProperty("state"))
-                if (!$util.isInteger(message.state))
-                    return "state: integer expected";
-            if (message.progress != null && message.hasOwnProperty("progress"))
-                if (!$util.isInteger(message.progress))
-                    return "progress: integer expected";
-            if (message.targetCount != null && message.hasOwnProperty("targetCount"))
-                if (!$util.isInteger(message.targetCount))
-                    return "targetCount: integer expected";
-            if (message.rewardXp != null && message.hasOwnProperty("rewardXp"))
-                if (!$util.isInteger(message.rewardXp))
-                    return "rewardXp: integer expected";
-            if (message.rewardGold != null && message.hasOwnProperty("rewardGold"))
-                if (!$util.isInteger(message.rewardGold) && !(message.rewardGold && $util.isInteger(message.rewardGold.low) && $util.isInteger(message.rewardGold.high)))
-                    return "rewardGold: integer|Long expected";
-            return null;
-        };
-
-        /**
-         * Creates a QuestEntry message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.QuestEntry
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.QuestEntry} QuestEntry
-         */
-        QuestEntry.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.QuestEntry)
-                return object;
-            let message = new $root.hbonline.QuestEntry();
-            if (object.questId != null)
-                message.questId = object.questId | 0;
-            if (object.name != null)
-                message.name = String(object.name);
-            if (object.description != null)
-                message.description = String(object.description);
-            if (object.questType != null)
-                message.questType = object.questType | 0;
-            if (object.state != null)
-                message.state = object.state | 0;
-            if (object.progress != null)
-                message.progress = object.progress | 0;
-            if (object.targetCount != null)
-                message.targetCount = object.targetCount | 0;
-            if (object.rewardXp != null)
-                message.rewardXp = object.rewardXp | 0;
-            if (object.rewardGold != null)
-                if ($util.Long)
-                    (message.rewardGold = $util.Long.fromValue(object.rewardGold)).unsigned = false;
-                else if (typeof object.rewardGold === "string")
-                    message.rewardGold = parseInt(object.rewardGold, 10);
-                else if (typeof object.rewardGold === "number")
-                    message.rewardGold = object.rewardGold;
-                else if (typeof object.rewardGold === "object")
-                    message.rewardGold = new $util.LongBits(object.rewardGold.low >>> 0, object.rewardGold.high >>> 0).toNumber();
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a QuestEntry message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.QuestEntry
-         * @static
-         * @param {hbonline.QuestEntry} message QuestEntry
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        QuestEntry.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.questId = 0;
-                object.name = "";
-                object.description = "";
-                object.questType = 0;
-                object.state = 0;
-                object.progress = 0;
-                object.targetCount = 0;
-                object.rewardXp = 0;
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
-                    object.rewardGold = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.rewardGold = options.longs === String ? "0" : 0;
-            }
-            if (message.questId != null && message.hasOwnProperty("questId"))
-                object.questId = message.questId;
-            if (message.name != null && message.hasOwnProperty("name"))
-                object.name = message.name;
-            if (message.description != null && message.hasOwnProperty("description"))
-                object.description = message.description;
-            if (message.questType != null && message.hasOwnProperty("questType"))
-                object.questType = message.questType;
-            if (message.state != null && message.hasOwnProperty("state"))
-                object.state = message.state;
-            if (message.progress != null && message.hasOwnProperty("progress"))
-                object.progress = message.progress;
-            if (message.targetCount != null && message.hasOwnProperty("targetCount"))
-                object.targetCount = message.targetCount;
-            if (message.rewardXp != null && message.hasOwnProperty("rewardXp"))
-                object.rewardXp = message.rewardXp;
-            if (message.rewardGold != null && message.hasOwnProperty("rewardGold"))
-                if (typeof message.rewardGold === "number")
-                    object.rewardGold = options.longs === String ? String(message.rewardGold) : message.rewardGold;
-                else
-                    object.rewardGold = options.longs === String ? $util.Long.prototype.toString.call(message.rewardGold) : options.longs === Number ? new $util.LongBits(message.rewardGold.low >>> 0, message.rewardGold.high >>> 0).toNumber() : message.rewardGold;
-            return object;
-        };
-
-        /**
-         * Converts this QuestEntry to JSON.
-         * @function toJSON
-         * @memberof hbonline.QuestEntry
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        QuestEntry.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        /**
-         * Gets the default type url for QuestEntry
-         * @function getTypeUrl
-         * @memberof hbonline.QuestEntry
-         * @static
-         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns {string} The default type url
-         */
-        QuestEntry.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-            if (typeUrlPrefix === undefined) {
-                typeUrlPrefix = "type.googleapis.com";
-            }
-            return typeUrlPrefix + "/hbonline.QuestEntry";
-        };
-
-        return QuestEntry;
-    })();
-
-    hbonline.QuestProgressUpdate = (function() {
-
-        /**
-         * Properties of a QuestProgressUpdate.
-         * @memberof hbonline
-         * @interface IQuestProgressUpdate
-         * @property {number|null} [questId] QuestProgressUpdate questId
-         * @property {number|null} [progress] QuestProgressUpdate progress
-         * @property {number|null} [targetCount] QuestProgressUpdate targetCount
-         * @property {boolean|null} [completed] QuestProgressUpdate completed
-         */
-
-        /**
-         * Constructs a new QuestProgressUpdate.
-         * @memberof hbonline
-         * @classdesc Represents a QuestProgressUpdate.
-         * @implements IQuestProgressUpdate
-         * @constructor
-         * @param {hbonline.IQuestProgressUpdate=} [properties] Properties to set
-         */
-        function QuestProgressUpdate(properties) {
-            if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        /**
-         * QuestProgressUpdate questId.
-         * @member {number} questId
-         * @memberof hbonline.QuestProgressUpdate
-         * @instance
-         */
-        QuestProgressUpdate.prototype.questId = 0;
-
-        /**
-         * QuestProgressUpdate progress.
-         * @member {number} progress
-         * @memberof hbonline.QuestProgressUpdate
-         * @instance
-         */
-        QuestProgressUpdate.prototype.progress = 0;
-
-        /**
-         * QuestProgressUpdate targetCount.
-         * @member {number} targetCount
-         * @memberof hbonline.QuestProgressUpdate
-         * @instance
-         */
-        QuestProgressUpdate.prototype.targetCount = 0;
-
-        /**
-         * QuestProgressUpdate completed.
-         * @member {boolean} completed
-         * @memberof hbonline.QuestProgressUpdate
-         * @instance
-         */
-        QuestProgressUpdate.prototype.completed = false;
-
-        /**
-         * Creates a new QuestProgressUpdate instance using the specified properties.
-         * @function create
-         * @memberof hbonline.QuestProgressUpdate
-         * @static
-         * @param {hbonline.IQuestProgressUpdate=} [properties] Properties to set
-         * @returns {hbonline.QuestProgressUpdate} QuestProgressUpdate instance
-         */
-        QuestProgressUpdate.create = function create(properties) {
-            return new QuestProgressUpdate(properties);
-        };
-
-        /**
-         * Encodes the specified QuestProgressUpdate message. Does not implicitly {@link hbonline.QuestProgressUpdate.verify|verify} messages.
-         * @function encode
-         * @memberof hbonline.QuestProgressUpdate
-         * @static
-         * @param {hbonline.IQuestProgressUpdate} message QuestProgressUpdate message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        QuestProgressUpdate.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.questId != null && Object.hasOwnProperty.call(message, "questId"))
-                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.questId);
-            if (message.progress != null && Object.hasOwnProperty.call(message, "progress"))
-                writer.uint32(/* id 2, wireType 0 =*/16).int32(message.progress);
-            if (message.targetCount != null && Object.hasOwnProperty.call(message, "targetCount"))
-                writer.uint32(/* id 3, wireType 0 =*/24).int32(message.targetCount);
-            if (message.completed != null && Object.hasOwnProperty.call(message, "completed"))
-                writer.uint32(/* id 4, wireType 0 =*/32).bool(message.completed);
-            return writer;
-        };
-
-        /**
-         * Encodes the specified QuestProgressUpdate message, length delimited. Does not implicitly {@link hbonline.QuestProgressUpdate.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.QuestProgressUpdate
-         * @static
-         * @param {hbonline.IQuestProgressUpdate} message QuestProgressUpdate message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        QuestProgressUpdate.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
-         * Decodes a QuestProgressUpdate message from the specified reader or buffer.
-         * @function decode
-         * @memberof hbonline.QuestProgressUpdate
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {hbonline.QuestProgressUpdate} QuestProgressUpdate
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        QuestProgressUpdate.decode = function decode(reader, length, error) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.hbonline.QuestProgressUpdate();
-            while (reader.pos < end) {
-                let tag = reader.uint32();
-                if (tag === error)
-                    break;
-                switch (tag >>> 3) {
-                case 1: {
-                        message.questId = reader.int32();
-                        break;
-                    }
-                case 2: {
-                        message.progress = reader.int32();
-                        break;
-                    }
-                case 3: {
-                        message.targetCount = reader.int32();
-                        break;
-                    }
-                case 4: {
-                        message.completed = reader.bool();
-                        break;
-                    }
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Decodes a QuestProgressUpdate message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.QuestProgressUpdate
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.QuestProgressUpdate} QuestProgressUpdate
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        QuestProgressUpdate.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a QuestProgressUpdate message.
-         * @function verify
-         * @memberof hbonline.QuestProgressUpdate
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        QuestProgressUpdate.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.questId != null && message.hasOwnProperty("questId"))
-                if (!$util.isInteger(message.questId))
-                    return "questId: integer expected";
-            if (message.progress != null && message.hasOwnProperty("progress"))
-                if (!$util.isInteger(message.progress))
-                    return "progress: integer expected";
-            if (message.targetCount != null && message.hasOwnProperty("targetCount"))
-                if (!$util.isInteger(message.targetCount))
-                    return "targetCount: integer expected";
-            if (message.completed != null && message.hasOwnProperty("completed"))
-                if (typeof message.completed !== "boolean")
-                    return "completed: boolean expected";
-            return null;
-        };
-
-        /**
-         * Creates a QuestProgressUpdate message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.QuestProgressUpdate
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.QuestProgressUpdate} QuestProgressUpdate
-         */
-        QuestProgressUpdate.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.QuestProgressUpdate)
-                return object;
-            let message = new $root.hbonline.QuestProgressUpdate();
-            if (object.questId != null)
-                message.questId = object.questId | 0;
-            if (object.progress != null)
-                message.progress = object.progress | 0;
-            if (object.targetCount != null)
-                message.targetCount = object.targetCount | 0;
-            if (object.completed != null)
-                message.completed = Boolean(object.completed);
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a QuestProgressUpdate message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.QuestProgressUpdate
-         * @static
-         * @param {hbonline.QuestProgressUpdate} message QuestProgressUpdate
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        QuestProgressUpdate.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.questId = 0;
-                object.progress = 0;
-                object.targetCount = 0;
-                object.completed = false;
-            }
-            if (message.questId != null && message.hasOwnProperty("questId"))
-                object.questId = message.questId;
-            if (message.progress != null && message.hasOwnProperty("progress"))
-                object.progress = message.progress;
-            if (message.targetCount != null && message.hasOwnProperty("targetCount"))
-                object.targetCount = message.targetCount;
-            if (message.completed != null && message.hasOwnProperty("completed"))
-                object.completed = message.completed;
-            return object;
-        };
-
-        /**
-         * Converts this QuestProgressUpdate to JSON.
-         * @function toJSON
-         * @memberof hbonline.QuestProgressUpdate
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        QuestProgressUpdate.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        /**
-         * Gets the default type url for QuestProgressUpdate
-         * @function getTypeUrl
-         * @memberof hbonline.QuestProgressUpdate
-         * @static
-         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns {string} The default type url
-         */
-        QuestProgressUpdate.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-            if (typeUrlPrefix === undefined) {
-                typeUrlPrefix = "type.googleapis.com";
-            }
-            return typeUrlPrefix + "/hbonline.QuestProgressUpdate";
-        };
-
-        return QuestProgressUpdate;
-    })();
-
-    hbonline.QuestRewardNotification = (function() {
-
-        /**
-         * Properties of a QuestRewardNotification.
-         * @memberof hbonline
-         * @interface IQuestRewardNotification
-         * @property {number|null} [questId] QuestRewardNotification questId
-         * @property {string|null} [questName] QuestRewardNotification questName
-         * @property {number|Long|null} [xpGained] QuestRewardNotification xpGained
-         * @property {number|Long|null} [goldGained] QuestRewardNotification goldGained
-         * @property {number|null} [itemId] QuestRewardNotification itemId
-         * @property {number|null} [itemCount] QuestRewardNotification itemCount
-         */
-
-        /**
-         * Constructs a new QuestRewardNotification.
-         * @memberof hbonline
-         * @classdesc Represents a QuestRewardNotification.
-         * @implements IQuestRewardNotification
-         * @constructor
-         * @param {hbonline.IQuestRewardNotification=} [properties] Properties to set
-         */
-        function QuestRewardNotification(properties) {
-            if (properties)
-                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        /**
-         * QuestRewardNotification questId.
-         * @member {number} questId
-         * @memberof hbonline.QuestRewardNotification
-         * @instance
-         */
-        QuestRewardNotification.prototype.questId = 0;
-
-        /**
-         * QuestRewardNotification questName.
-         * @member {string} questName
-         * @memberof hbonline.QuestRewardNotification
-         * @instance
-         */
-        QuestRewardNotification.prototype.questName = "";
-
-        /**
-         * QuestRewardNotification xpGained.
-         * @member {number|Long} xpGained
-         * @memberof hbonline.QuestRewardNotification
-         * @instance
-         */
-        QuestRewardNotification.prototype.xpGained = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-
-        /**
-         * QuestRewardNotification goldGained.
-         * @member {number|Long} goldGained
-         * @memberof hbonline.QuestRewardNotification
-         * @instance
-         */
-        QuestRewardNotification.prototype.goldGained = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-
-        /**
-         * QuestRewardNotification itemId.
-         * @member {number} itemId
-         * @memberof hbonline.QuestRewardNotification
-         * @instance
-         */
-        QuestRewardNotification.prototype.itemId = 0;
-
-        /**
-         * QuestRewardNotification itemCount.
-         * @member {number} itemCount
-         * @memberof hbonline.QuestRewardNotification
-         * @instance
-         */
-        QuestRewardNotification.prototype.itemCount = 0;
-
-        /**
-         * Creates a new QuestRewardNotification instance using the specified properties.
-         * @function create
-         * @memberof hbonline.QuestRewardNotification
-         * @static
-         * @param {hbonline.IQuestRewardNotification=} [properties] Properties to set
-         * @returns {hbonline.QuestRewardNotification} QuestRewardNotification instance
-         */
-        QuestRewardNotification.create = function create(properties) {
-            return new QuestRewardNotification(properties);
-        };
-
-        /**
-         * Encodes the specified QuestRewardNotification message. Does not implicitly {@link hbonline.QuestRewardNotification.verify|verify} messages.
-         * @function encode
-         * @memberof hbonline.QuestRewardNotification
-         * @static
-         * @param {hbonline.IQuestRewardNotification} message QuestRewardNotification message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        QuestRewardNotification.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.questId != null && Object.hasOwnProperty.call(message, "questId"))
-                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.questId);
-            if (message.questName != null && Object.hasOwnProperty.call(message, "questName"))
-                writer.uint32(/* id 2, wireType 2 =*/18).string(message.questName);
-            if (message.xpGained != null && Object.hasOwnProperty.call(message, "xpGained"))
-                writer.uint32(/* id 3, wireType 0 =*/24).int64(message.xpGained);
-            if (message.goldGained != null && Object.hasOwnProperty.call(message, "goldGained"))
-                writer.uint32(/* id 4, wireType 0 =*/32).int64(message.goldGained);
-            if (message.itemId != null && Object.hasOwnProperty.call(message, "itemId"))
-                writer.uint32(/* id 5, wireType 0 =*/40).int32(message.itemId);
-            if (message.itemCount != null && Object.hasOwnProperty.call(message, "itemCount"))
-                writer.uint32(/* id 6, wireType 0 =*/48).int32(message.itemCount);
-            return writer;
-        };
-
-        /**
-         * Encodes the specified QuestRewardNotification message, length delimited. Does not implicitly {@link hbonline.QuestRewardNotification.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.QuestRewardNotification
-         * @static
-         * @param {hbonline.IQuestRewardNotification} message QuestRewardNotification message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        QuestRewardNotification.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
-         * Decodes a QuestRewardNotification message from the specified reader or buffer.
-         * @function decode
-         * @memberof hbonline.QuestRewardNotification
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {hbonline.QuestRewardNotification} QuestRewardNotification
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        QuestRewardNotification.decode = function decode(reader, length, error) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.hbonline.QuestRewardNotification();
-            while (reader.pos < end) {
-                let tag = reader.uint32();
-                if (tag === error)
-                    break;
-                switch (tag >>> 3) {
-                case 1: {
-                        message.questId = reader.int32();
-                        break;
-                    }
-                case 2: {
-                        message.questName = reader.string();
-                        break;
-                    }
-                case 3: {
-                        message.xpGained = reader.int64();
-                        break;
-                    }
-                case 4: {
-                        message.goldGained = reader.int64();
-                        break;
-                    }
-                case 5: {
-                        message.itemId = reader.int32();
-                        break;
-                    }
-                case 6: {
-                        message.itemCount = reader.int32();
-                        break;
-                    }
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Decodes a QuestRewardNotification message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.QuestRewardNotification
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.QuestRewardNotification} QuestRewardNotification
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        QuestRewardNotification.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a QuestRewardNotification message.
-         * @function verify
-         * @memberof hbonline.QuestRewardNotification
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        QuestRewardNotification.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.questId != null && message.hasOwnProperty("questId"))
-                if (!$util.isInteger(message.questId))
-                    return "questId: integer expected";
-            if (message.questName != null && message.hasOwnProperty("questName"))
-                if (!$util.isString(message.questName))
-                    return "questName: string expected";
-            if (message.xpGained != null && message.hasOwnProperty("xpGained"))
-                if (!$util.isInteger(message.xpGained) && !(message.xpGained && $util.isInteger(message.xpGained.low) && $util.isInteger(message.xpGained.high)))
-                    return "xpGained: integer|Long expected";
-            if (message.goldGained != null && message.hasOwnProperty("goldGained"))
-                if (!$util.isInteger(message.goldGained) && !(message.goldGained && $util.isInteger(message.goldGained.low) && $util.isInteger(message.goldGained.high)))
-                    return "goldGained: integer|Long expected";
-            if (message.itemId != null && message.hasOwnProperty("itemId"))
-                if (!$util.isInteger(message.itemId))
-                    return "itemId: integer expected";
-            if (message.itemCount != null && message.hasOwnProperty("itemCount"))
-                if (!$util.isInteger(message.itemCount))
-                    return "itemCount: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a QuestRewardNotification message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.QuestRewardNotification
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.QuestRewardNotification} QuestRewardNotification
-         */
-        QuestRewardNotification.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.QuestRewardNotification)
-                return object;
-            let message = new $root.hbonline.QuestRewardNotification();
-            if (object.questId != null)
-                message.questId = object.questId | 0;
-            if (object.questName != null)
-                message.questName = String(object.questName);
-            if (object.xpGained != null)
-                if ($util.Long)
-                    (message.xpGained = $util.Long.fromValue(object.xpGained)).unsigned = false;
-                else if (typeof object.xpGained === "string")
-                    message.xpGained = parseInt(object.xpGained, 10);
-                else if (typeof object.xpGained === "number")
-                    message.xpGained = object.xpGained;
-                else if (typeof object.xpGained === "object")
-                    message.xpGained = new $util.LongBits(object.xpGained.low >>> 0, object.xpGained.high >>> 0).toNumber();
-            if (object.goldGained != null)
-                if ($util.Long)
-                    (message.goldGained = $util.Long.fromValue(object.goldGained)).unsigned = false;
-                else if (typeof object.goldGained === "string")
-                    message.goldGained = parseInt(object.goldGained, 10);
-                else if (typeof object.goldGained === "number")
-                    message.goldGained = object.goldGained;
-                else if (typeof object.goldGained === "object")
-                    message.goldGained = new $util.LongBits(object.goldGained.low >>> 0, object.goldGained.high >>> 0).toNumber();
-            if (object.itemId != null)
-                message.itemId = object.itemId | 0;
-            if (object.itemCount != null)
-                message.itemCount = object.itemCount | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a QuestRewardNotification message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.QuestRewardNotification
-         * @static
-         * @param {hbonline.QuestRewardNotification} message QuestRewardNotification
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        QuestRewardNotification.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.questId = 0;
-                object.questName = "";
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
-                    object.xpGained = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.xpGained = options.longs === String ? "0" : 0;
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
-                    object.goldGained = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.goldGained = options.longs === String ? "0" : 0;
-                object.itemId = 0;
-                object.itemCount = 0;
-            }
-            if (message.questId != null && message.hasOwnProperty("questId"))
-                object.questId = message.questId;
-            if (message.questName != null && message.hasOwnProperty("questName"))
-                object.questName = message.questName;
-            if (message.xpGained != null && message.hasOwnProperty("xpGained"))
-                if (typeof message.xpGained === "number")
-                    object.xpGained = options.longs === String ? String(message.xpGained) : message.xpGained;
-                else
-                    object.xpGained = options.longs === String ? $util.Long.prototype.toString.call(message.xpGained) : options.longs === Number ? new $util.LongBits(message.xpGained.low >>> 0, message.xpGained.high >>> 0).toNumber() : message.xpGained;
-            if (message.goldGained != null && message.hasOwnProperty("goldGained"))
-                if (typeof message.goldGained === "number")
-                    object.goldGained = options.longs === String ? String(message.goldGained) : message.goldGained;
-                else
-                    object.goldGained = options.longs === String ? $util.Long.prototype.toString.call(message.goldGained) : options.longs === Number ? new $util.LongBits(message.goldGained.low >>> 0, message.goldGained.high >>> 0).toNumber() : message.goldGained;
-            if (message.itemId != null && message.hasOwnProperty("itemId"))
-                object.itemId = message.itemId;
-            if (message.itemCount != null && message.hasOwnProperty("itemCount"))
-                object.itemCount = message.itemCount;
-            return object;
-        };
-
-        /**
-         * Converts this QuestRewardNotification to JSON.
-         * @function toJSON
-         * @memberof hbonline.QuestRewardNotification
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        QuestRewardNotification.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        /**
-         * Gets the default type url for QuestRewardNotification
-         * @function getTypeUrl
-         * @memberof hbonline.QuestRewardNotification
-         * @static
-         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns {string} The default type url
-         */
-        QuestRewardNotification.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-            if (typeUrlPrefix === undefined) {
-                typeUrlPrefix = "type.googleapis.com";
-            }
-            return typeUrlPrefix + "/hbonline.QuestRewardNotification";
-        };
-
-        return QuestRewardNotification;
     })();
 
     return hbonline;
