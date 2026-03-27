@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/base64"
 	"encoding/binary"
 	"encoding/json"
 	"flag"
@@ -11,34 +12,16 @@ import (
 	"strings"
 )
 
-// Tile represents a single map tile from the AMD file.
-type Tile struct {
-	X                int16 `json:"x"`
-	Y                int16 `json:"y"`
-	TileSprite       int16 `json:"tileSprite"`
-	TileSpriteFrame  int16 `json:"tileSpriteFrame"`
-	ObjectSprite     int16 `json:"objectSprite"`
-	ObjectSpriteFrame int16 `json:"objectSpriteFrame"`
-	Walkable         bool  `json:"walkable"`
-	Teleport         bool  `json:"teleport"`
-	Farm             bool  `json:"farm"`
-	Water            bool  `json:"water"`
-}
-
-// MapData is the output JSON structure for a converted map.
-type MapData struct {
-	Name           string    `json:"name"`
-	Width          int       `json:"width"`
-	Height         int       `json:"height"`
-	Tiles          []Tile    `json:"tiles"`
-	CollisionGrid  [][]int8  `json:"collisionGrid"`
-	TeleportTiles  []TilePos `json:"teleportTiles"`
-}
-
-// TilePos is a simple x,y coordinate.
-type TilePos struct {
-	X int `json:"x"`
-	Y int `json:"y"`
+// CompactMapData is the web-optimized output format.
+// Tile data uses flat int16 arrays (row-major: y*width+x).
+// Collision is a base64-encoded packed bitfield.
+type CompactMapData struct {
+	Name      string   `json:"name"`
+	Width     int      `json:"width"`
+	Height    int      `json:"height"`
+	Tiles     []int16  `json:"tiles"`     // flat: [tileSprite, tileSpriteFrame, objSprite, objSpriteFrame, ...] 4 values per tile
+	Collision string   `json:"collision"` // base64 packed bitfield (1=blocked)
+	Teleports [][2]int `json:"teleports"` // [[x,y], ...]
 }
 
 func main() {
@@ -68,14 +51,19 @@ func main() {
 			fmt.Fprintf(os.Stderr, "Error reading dir: %v\n", err)
 			os.Exit(1)
 		}
+		success, failed := 0, 0
 		for _, entry := range entries {
 			if strings.ToLower(filepath.Ext(entry.Name())) == ".amd" {
 				amdPath := filepath.Join(*inputPath, entry.Name())
 				if err := convertAMD(amdPath, *outputDir); err != nil {
 					fmt.Fprintf(os.Stderr, "Warning: %s: %v\n", entry.Name(), err)
+					failed++
+				} else {
+					success++
 				}
 			}
 		}
+		fmt.Printf("\nDone: %d converted, %d failed\n", success, failed)
 	} else {
 		if err := convertAMD(*inputPath, *outputDir); err != nil {
 			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
@@ -94,8 +82,6 @@ func convertAMD(amdPath, outputDir string) error {
 		return fmt.Errorf("file too small: %d bytes", len(data))
 	}
 
-	// Parse 256-byte ASCII header to extract MAPSIZEX and MAPSIZEY.
-	// Header is null-padded; replace nulls with spaces for tokenizing.
 	header := make([]byte, 256)
 	copy(header, data[:256])
 	for i := range header {
@@ -103,9 +89,8 @@ func convertAMD(amdPath, outputDir string) error {
 			header[i] = ' '
 		}
 	}
-	headerStr := string(header)
 
-	width, height, err := parseHeaderDimensions(headerStr)
+	width, height, err := parseHeaderDimensions(string(header))
 	if err != nil {
 		return fmt.Errorf("parse header: %w", err)
 	}
@@ -117,65 +102,46 @@ func convertAMD(amdPath, outputDir string) error {
 	}
 
 	baseName := strings.TrimSuffix(filepath.Base(amdPath), filepath.Ext(amdPath))
-	fmt.Printf("Converting %s: %dx%d\n", baseName, width, height)
+	fmt.Printf("Converting %s: %dx%d", baseName, width, height)
 
-	// Parse tile data: row-major (y outer, x inner), 10 bytes per tile.
-	tiles := make([]Tile, 0, width*height)
-	collisionGrid := make([][]int8, height)
-	var teleportTiles []TilePos
+	totalTiles := width * height
+	tiles := make([]int16, totalTiles*4)
+	collisionBits := make([]byte, (totalTiles+7)/8)
+	var teleports [][2]int
+	blocked := 0
 
 	offset := 256
 	for y := 0; y < height; y++ {
-		collisionGrid[y] = make([]int8, width)
 		for x := 0; x < width; x++ {
 			tileData := data[offset : offset+10]
 			offset += 10
 
-			tileSprite := int16(binary.LittleEndian.Uint16(tileData[0:2]))
-			tileSpriteFrame := int16(binary.LittleEndian.Uint16(tileData[2:4]))
-			objectSprite := int16(binary.LittleEndian.Uint16(tileData[4:6]))
-			objectSpriteFrame := int16(binary.LittleEndian.Uint16(tileData[6:8]))
+			idx := (y*width + x) * 4
+			tiles[idx+0] = int16(binary.LittleEndian.Uint16(tileData[0:2]))
+			tiles[idx+1] = int16(binary.LittleEndian.Uint16(tileData[2:4]))
+			tiles[idx+2] = int16(binary.LittleEndian.Uint16(tileData[4:6]))
+			tiles[idx+3] = int16(binary.LittleEndian.Uint16(tileData[6:8]))
 			flags := tileData[8]
 
-			walkable := (flags & 0x80) == 0
-			teleport := (flags & 0x40) != 0
-			farm := (flags & 0x20) != 0
-			// Water detection: tileSprite == 19 (from Map.cpp)
-			water := tileSprite == 19
-
-			tile := Tile{
-				X:                 int16(x),
-				Y:                 int16(y),
-				TileSprite:        tileSprite,
-				TileSpriteFrame:   tileSpriteFrame,
-				ObjectSprite:      objectSprite,
-				ObjectSpriteFrame: objectSpriteFrame,
-				Walkable:          walkable,
-				Teleport:          teleport,
-				Farm:              farm,
-				Water:             water,
-			}
-			tiles = append(tiles, tile)
-
-			if walkable {
-				collisionGrid[y][x] = 0
-			} else {
-				collisionGrid[y][x] = 1
+			tileIndex := y*width + x
+			if (flags & 0x80) != 0 {
+				collisionBits[tileIndex/8] |= 1 << (uint(tileIndex) % 8)
+				blocked++
 			}
 
-			if teleport {
-				teleportTiles = append(teleportTiles, TilePos{X: x, Y: y})
+			if (flags & 0x40) != 0 {
+				teleports = append(teleports, [2]int{x, y})
 			}
 		}
 	}
 
-	mapData := MapData{
-		Name:          baseName,
-		Width:         width,
-		Height:        height,
-		Tiles:         tiles,
-		CollisionGrid: collisionGrid,
-		TeleportTiles: teleportTiles,
+	mapData := CompactMapData{
+		Name:      baseName,
+		Width:     width,
+		Height:    height,
+		Tiles:     tiles,
+		Collision: base64.StdEncoding.EncodeToString(collisionBits),
+		Teleports: teleports,
 	}
 
 	jsonData, err := json.Marshal(mapData)
@@ -188,29 +154,18 @@ func convertAMD(amdPath, outputDir string) error {
 		return fmt.Errorf("write: %w", err)
 	}
 
-	blocked := 0
-	for _, row := range collisionGrid {
-		for _, v := range row {
-			if v == 1 {
-				blocked++
-			}
-		}
-	}
-
-	fmt.Printf("  %d tiles, %d blocked (%.1f%%), %d teleports -> %s\n",
-		width*height, blocked, float64(blocked)/float64(width*height)*100,
-		len(teleportTiles), outPath)
+	fmt.Printf(" -> %s (%.1f%% blocked, %d teleports, %.0fKB)\n",
+		outPath, float64(blocked)/float64(totalTiles)*100,
+		len(teleports), float64(len(jsonData))/1024)
 
 	return nil
 }
 
 func parseHeaderDimensions(header string) (width, height int, err error) {
-	// Tokenize the header string to find MAPSIZEX and MAPSIZEY values.
 	fields := strings.Fields(header)
 	for i := 0; i < len(fields); i++ {
 		switch fields[i] {
 		case "MAPSIZEX":
-			// Skip "=" if present
 			j := i + 1
 			for j < len(fields) && fields[j] == "=" {
 				j++

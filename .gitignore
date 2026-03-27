@@ -4,3 +4,4 @@
 ./pakextract
 ep_client_final/
 old/
+node_modules/
