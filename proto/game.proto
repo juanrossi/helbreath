@@ -1,0 +1,155 @@
+syntax = "proto3";
+
+package hbonline;
+
+option go_package = "github.com/juanrossi/hbonline/server/pkg/proto";
+
+import "common.proto";
+
+// Server -> Client: Full game state on entering
+message EnterGameResponse {
+  PlayerContents player = 1;
+  MapInfo map_info = 2;
+  repeated EntityInfo nearby_players = 3;
+  repeated EntityInfo nearby_npcs = 4;
+}
+
+// Full player data sent to the owning client
+message PlayerContents {
+  int32 object_id = 1;
+  string name = 2;
+  string map_name = 3;
+  Vec2 position = 4;
+  int32 direction = 5;
+  Appearance appearance = 6;
+
+  // Stats
+  int32 level = 7;
+  int64 experience = 8;
+  int32 hp = 9;
+  int32 max_hp = 10;
+  int32 mp = 11;
+  int32 max_mp = 12;
+  int32 sp = 13;
+  int32 max_sp = 14;
+
+  int32 str = 15;
+  int32 vit = 16;
+  int32 dex = 17;
+  int32 int_stat = 18;
+  int32 mag = 19;
+  int32 charisma = 20;
+  int32 lu_pool = 21;
+
+  int32 side = 22;    // 0=neutral, 1=aresden, 2=elvine
+  int64 gold = 23;
+  int32 pk_count = 24;
+  int32 ek_count = 25;
+  int32 hunger = 26;
+  int32 admin_level = 27;
+}
+
+// Map metadata sent to client
+message MapInfo {
+  string name = 1;
+  int32 width = 2;
+  int32 height = 3;
+  bytes collision_grid = 4;  // packed bitfield: 1=blocked, row-major
+  // Tile sprites sent separately or loaded from cached JSON
+}
+
+// Client -> Server: Movement/action request
+message MotionRequest {
+  int32 direction = 1;   // 1=N, 2=NE, 3=E, 4=SE, 5=S, 6=SW, 7=W, 8=NW
+  int32 action = 2;      // 0=stop, 1=walk, 2=run, 3=attack, 4=magic, 5=getitem
+  Vec2 position = 3;     // client-reported tile position
+  int32 target_id = 4;   // target object ID (for attack/magic)
+  int32 spell_id = 5;    // spell ID (for magic action)
+}
+
+// Server -> Client: Entity moved/acted (broadcast)
+message MotionEvent {
+  int32 object_id = 1;
+  int32 owner_type = 2;   // 1=player, 2=npc
+  int32 action = 3;
+  int32 direction = 4;
+  Vec2 position = 5;
+  Vec2 destination = 6;
+  int32 speed = 7;         // ms per tile
+  Appearance appearance = 8;
+  string name = 9;
+  int32 status = 10;       // 0=alive, 1=dead, 2=invisible
+}
+
+// Server -> Client: A player appeared in range
+message PlayerAppear {
+  int32 object_id = 1;
+  string name = 2;
+  Vec2 position = 3;
+  int32 direction = 4;
+  Appearance appearance = 5;
+  int32 action = 6;
+  int32 level = 7;
+  int32 side = 8;
+  int32 status = 9;
+  int32 pk_count = 10;
+}
+
+// Server -> Client: A player left range
+message PlayerDisappear {
+  int32 object_id = 1;
+}
+
+// Server -> Client: An NPC appeared in range
+message NpcAppear {
+  int32 object_id = 1;
+  string name = 2;
+  int32 npc_type = 3;       // monster/NPC type ID
+  Vec2 position = 4;
+  int32 direction = 5;
+  int32 action = 6;
+  int32 status = 7;
+}
+
+// Server -> Client: An NPC left range
+message NpcDisappear {
+  int32 object_id = 1;
+}
+
+// Server -> Client: NPC moved/acted
+message NpcMotion {
+  int32 object_id = 1;
+  int32 action = 2;
+  int32 direction = 3;
+  Vec2 position = 4;
+  Vec2 destination = 5;
+  int32 speed = 6;
+}
+
+// Server -> Client: Generic notification
+message Notification {
+  string message = 1;
+  int32 type = 2;  // 0=info, 1=warning, 2=error, 3=system
+}
+
+// Server -> Client: Map change (teleport)
+message MapChangeResponse {
+  string map_name = 1;
+  Vec2 position = 2;
+  int32 direction = 3;
+}
+
+// Entity info for initial world state
+message EntityInfo {
+  int32 object_id = 1;
+  int32 entity_type = 2;  // 1=player, 2=npc
+  string name = 3;
+  Vec2 position = 4;
+  int32 direction = 5;
+  int32 action = 6;
+  int32 status = 7;
+  Appearance appearance = 8;  // only for players
+  int32 npc_type = 9;         // only for NPCs
+  int32 level = 10;
+  int32 side = 11;
+}

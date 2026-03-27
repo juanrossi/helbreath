@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package hbonline;
+
+option go_package = "github.com/juanrossi/hbonline/server/pkg/proto";
+
+import "common.proto";
+
+// Client -> Server: Login or register
+message LoginRequest {
+  string username = 1;  // 3-20 chars, alphanumeric
+  string password = 2;  // 6-30 chars
+  bool register = 3;    // true = create new account
+}
+
+// Server -> Client: Login/register result
+message LoginResponse {
+  bool success = 1;
+  string error = 2;
+  repeated CharacterSummary characters = 3;
+}
+
+// Summary of a character shown on character select screen
+message CharacterSummary {
+  int32 id = 1;
+  string name = 2;
+  int32 level = 3;
+  int32 gender = 4;
+  int32 side = 5;       // 0=neutral, 1=aresden, 2=elvine
+  string map_name = 6;
+  Appearance appearance = 7;
+}
+
+// Client -> Server: Create a new character
+message CreateCharacterRequest {
+  string name = 1;             // 3-10 chars
+  int32 gender = 2;            // 0=male, 1=female
+  int32 skin_color = 3;       // 0-2
+  int32 hair_style = 4;       // 0-12
+  int32 hair_color = 5;       // 0-7
+  int32 underwear_color = 6;  // 0-7
+  int32 str = 7;               // each >= 10, total = 70
+  int32 vit = 8;
+  int32 dex = 9;
+  int32 int_stat = 10;
+  int32 mag = 11;
+  int32 charisma = 12;
+}
+
+// Server -> Client: Character creation result
+message CreateCharacterResponse {
+  bool success = 1;
+  string error = 2;
+  repeated CharacterSummary characters = 3;  // updated list
+}
+
+// Client -> Server: Enter game with a character
+message EnterGameRequest {
+  int32 character_id = 1;
+}
+
+// Client -> Server: Delete a character
+message DeleteCharacterRequest {
+  int32 character_id = 1;
+}
+
+message DeleteCharacterResponse {
+  bool success = 1;
+  string error = 2;
+  repeated CharacterSummary characters = 3;
+}

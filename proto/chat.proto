@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package hbonline;
+
+option go_package = "github.com/juanrossi/hbonline/server/pkg/proto";
+
+import "common.proto";
+
+// Client -> Server: Send a chat message
+message ChatRequest {
+  int32 type = 1;     // 0=normal, 1=shout, 2=whisper, 3=guild, 4=party
+  string message = 2;
+  string target = 3;  // recipient name for whisper
+}
+
+// Server -> Client: Incoming chat message
+message ChatMessage {
+  int32 object_id = 1;
+  string sender_name = 2;
+  int32 type = 3;
+  string message = 4;
+  Vec2 position = 5;  // sender position (for distance-based normal chat)
+}

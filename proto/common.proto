@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package hbonline;
+
+option go_package = "github.com/juanrossi/hbonline/server/pkg/proto";
+
+message Vec2 {
+  int32 x = 1;
+  int32 y = 2;
+}
+
+message Appearance {
+  int32 gender = 1;          // 0=male, 1=female
+  int32 skin_color = 2;     // 0-2
+  int32 hair_style = 3;     // 0-12
+  int32 hair_color = 4;     // 0-7
+  int32 underwear_color = 5; // 0-7
+  int32 body_armor = 6;     // equipment sprite index (0=none)
+  int32 arm_armor = 7;
+  int32 leggings = 8;
+  int32 helm = 9;
+  int32 weapon = 10;
+  int32 shield = 11;
+  int32 cape = 12;
+  int32 boots = 13;
+  int32 appr_color = 14;    // dye color
+}
