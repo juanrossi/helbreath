@@ -4,7 +4,11 @@ import (
 	"time"
 
 	"github.com/juanrossi/hbonline/server/internal/db"
+	"github.com/juanrossi/hbonline/server/internal/items"
+	"github.com/juanrossi/hbonline/server/internal/magic"
 	"github.com/juanrossi/hbonline/server/internal/network"
+	"github.com/juanrossi/hbonline/server/internal/quest"
+	"github.com/juanrossi/hbonline/server/internal/skills"
 	pb "github.com/juanrossi/hbonline/server/pkg/proto"
 )
 
@@ -53,6 +57,18 @@ type Player struct {
 	Hunger     int
 	AdminLevel int
 
+	// Inventory & Equipment
+	Inventory *items.Inventory
+
+	// Skills & Magic
+	Skills       *skills.PlayerSkills
+	LearnedSpells map[int]bool         // spell IDs the player knows
+	Buffs        *magic.BuffTracker
+	Cooldowns    map[int]time.Time     // spell ID -> when cooldown expires
+
+	// Quests
+	Quests *quest.QuestTracker
+
 	// Anti-hack
 	LastMoveTime time.Time
 
@@ -94,6 +110,12 @@ func FromDB(row *db.CharacterRow, objectID int32, client *network.Client) *Playe
 		EKCount:        row.EKCount,
 		Hunger:         row.Hunger,
 		AdminLevel:     row.AdminLevel,
+		Inventory:      items.NewInventory(),
+		Skills:         skills.NewPlayerSkills(),
+		LearnedSpells:  make(map[int]bool),
+		Buffs:          magic.NewBuffTracker(),
+		Cooldowns:      make(map[int]time.Time),
+		Quests:         quest.NewQuestTracker(),
 		LastMoveTime:   time.Now(),
 		Client:         client,
 	}
@@ -184,4 +206,195 @@ func (p *Player) Send(data []byte) {
 	if p.Client != nil {
 		p.Client.Send(data)
 	}
+}
+
+// SyncEquipmentAppearance updates the player's appearance fields from equipped items.
+func (p *Player) SyncEquipmentAppearance() {
+	getAppr := func(slot items.EquipSlot) int {
+		item := p.Inventory.GetEquipped(slot)
+		if item == nil {
+			return 0
+		}
+		def := item.Def()
+		if def == nil {
+			return 0
+		}
+		return def.ApprIndex
+	}
+	p.Weapon = getAppr(items.EquipWeapon)
+	p.Shield = getAppr(items.EquipShield)
+	p.Helm = getAppr(items.EquipHelm)
+	p.BodyArmor = getAppr(items.EquipBody)
+	p.Leggings = getAppr(items.EquipLeggings)
+	p.Boots = getAppr(items.EquipBoots)
+	p.Cape = getAppr(items.EquipCape)
+}
+
+// ToInventoryUpdate creates the protobuf message for full inventory state.
+func (p *Player) ToInventoryUpdate() *pb.InventoryUpdate {
+	update := &pb.InventoryUpdate{Gold: p.Gold}
+
+	for i := 0; i < items.MaxInventorySlots; i++ {
+		item := p.Inventory.Slots[i]
+		if item == nil {
+			continue
+		}
+		def := item.Def()
+		if def == nil {
+			continue
+		}
+		update.Items = append(update.Items, &pb.ItemInstance{
+			ItemId:        int32(item.DefID),
+			Name:          def.Name,
+			Count:         int32(item.Count),
+			Durability:    int32(item.Durability),
+			MaxDurability: int32(def.Durability),
+			SlotIndex:     int32(i),
+		})
+	}
+
+	for i := 1; i <= items.MaxEquipSlots; i++ {
+		item := p.Inventory.Equipment[i]
+		if item == nil {
+			continue
+		}
+		def := item.Def()
+		if def == nil {
+			continue
+		}
+		update.Equipment = append(update.Equipment, &pb.ItemInstance{
+			ItemId:        int32(item.DefID),
+			Name:          def.Name,
+			Count:         int32(item.Count),
+			Durability:    int32(item.Durability),
+			MaxDurability: int32(def.Durability),
+			SlotIndex:     int32(i),
+		})
+	}
+
+	return update
+}
+
+// EffectiveSTR returns STR with buff modifiers.
+func (p *Player) EffectiveSTR() int {
+	return p.STR + p.Buffs.GetStatModifier(1)
+}
+
+// EffectiveVIT returns VIT with buff modifiers.
+func (p *Player) EffectiveVIT() int {
+	return p.VIT + p.Buffs.GetStatModifier(2)
+}
+
+// EffectiveDEX returns DEX with buff modifiers.
+func (p *Player) EffectiveDEX() int {
+	return p.DEX + p.Buffs.GetStatModifier(3)
+}
+
+// EffectiveINT returns INT with buff modifiers.
+func (p *Player) EffectiveINT() int {
+	return p.INT + p.Buffs.GetStatModifier(4)
+}
+
+// EffectiveMAG returns MAG with buff modifiers.
+func (p *Player) EffectiveMAG() int {
+	return p.MAG + p.Buffs.GetStatModifier(5)
+}
+
+// CanCastSpell checks if a player can cast a spell (knows it, has mana, not on cooldown).
+func (p *Player) CanCastSpell(spellDef *magic.SpellDef) (bool, string) {
+	if !p.LearnedSpells[spellDef.ID] {
+		return false, "You haven't learned this spell"
+	}
+	if p.Level < spellDef.ReqLevel {
+		return false, "Your level is too low"
+	}
+	if p.MAG < spellDef.ReqMAG {
+		return false, "Not enough MAG"
+	}
+	if p.INT < spellDef.ReqINT {
+		return false, "Not enough INT"
+	}
+	if p.MP < spellDef.ManaCost {
+		return false, "Not enough mana"
+	}
+	if cooldownEnd, ok := p.Cooldowns[spellDef.ID]; ok {
+		if time.Now().Before(cooldownEnd) {
+			return false, "Spell is on cooldown"
+		}
+	}
+	if p.HP <= 0 {
+		return false, "You are dead"
+	}
+	return true, ""
+}
+
+// StartCooldown sets a spell's cooldown.
+func (p *Player) StartCooldown(spellID int, cooldownMs int) {
+	p.Cooldowns[spellID] = time.Now().Add(time.Duration(cooldownMs) * time.Millisecond)
+}
+
+// LearnSpell adds a spell to the player's known spells.
+func (p *Player) LearnSpell(spellID int) bool {
+	if p.LearnedSpells[spellID] {
+		return false // already known
+	}
+	p.LearnedSpells[spellID] = true
+	return true
+}
+
+// ToSpellList generates the protobuf spell list update.
+func (p *Player) ToSpellList() *pb.SpellListUpdate {
+	update := &pb.SpellListUpdate{}
+	for spellID := range p.LearnedSpells {
+		def := magic.GetSpellDef(spellID)
+		if def == nil {
+			continue
+		}
+		update.Spells = append(update.Spells, &pb.LearnedSpell{
+			SpellId:    int32(def.ID),
+			Name:       def.Name,
+			ManaCost:   int32(def.ManaCost),
+			CooldownMs: int32(def.Cooldown),
+			SpellType:  int32(def.Type),
+			SpriteId:   int32(def.SpriteID),
+		})
+	}
+	return update
+}
+
+// ToSkillList generates the protobuf skill list update.
+func (p *Player) ToSkillList() *pb.SkillListUpdate {
+	update := &pb.SkillListUpdate{
+		TotalMastery: int32(p.Skills.TotalMastery()),
+		MasteryCap:   int32(skills.MasteryCap),
+	}
+	for id, def := range skills.SkillDefs {
+		mastery := p.Skills.GetMastery(id)
+		update.Skills = append(update.Skills, &pb.SkillEntry{
+			SkillId: int32(def.ID),
+			Name:    def.Name,
+			Mastery: int32(mastery),
+		})
+	}
+	return update
+}
+
+// MeetsRequirements checks if the player meets an item's stat requirements.
+func (p *Player) MeetsRequirements(def *items.ItemDef) bool {
+	if def.ReqLevel > 0 && p.Level < def.ReqLevel {
+		return false
+	}
+	if def.ReqSTR > 0 && p.STR < def.ReqSTR {
+		return false
+	}
+	if def.ReqDEX > 0 && p.DEX < def.ReqDEX {
+		return false
+	}
+	if def.ReqINT > 0 && p.INT < def.ReqINT {
+		return false
+	}
+	if def.ReqMAG > 0 && p.MAG < def.ReqMAG {
+		return false
+	}
+	return true
 }

@@ -1,0 +1,219 @@
+package npc
+
+import (
+	"testing"
+	"time"
+)
+
+func TestNewNPC(t *testing.T) {
+	npcType := NpcTypes[1] // Slime
+	n := NewNPC(100, npcType, "default", 50, 55)
+
+	if n.ObjectID != 100 {
+		t.Errorf("Expected ObjectID=100, got %d", n.ObjectID)
+	}
+	if n.Type.Name != "Slime" {
+		t.Errorf("Expected Slime, got %s", n.Type.Name)
+	}
+	if n.MapName != "default" {
+		t.Errorf("Expected default map, got %s", n.MapName)
+	}
+	if n.X != 50 || n.Y != 55 {
+		t.Errorf("Expected (50,55), got (%d,%d)", n.X, n.Y)
+	}
+	if n.SpawnX != 50 || n.SpawnY != 55 {
+		t.Errorf("Spawn should match initial position")
+	}
+	if n.HP != 30 || n.MaxHP != 30 {
+		t.Errorf("Expected HP=30, got %d/%d", n.HP, n.MaxHP)
+	}
+	if n.State != StateIdle {
+		t.Errorf("Expected StateIdle, got %d", n.State)
+	}
+	if n.Direction < 1 || n.Direction > 8 {
+		t.Errorf("Direction should be 1-8, got %d", n.Direction)
+	}
+}
+
+func TestNPCIsAlive(t *testing.T) {
+	n := NewNPC(1, NpcTypes[1], "default", 0, 0)
+	if !n.IsAlive() {
+		t.Error("New NPC should be alive")
+	}
+
+	n.HP = 0
+	n.State = StateDead
+	if n.IsAlive() {
+		t.Error("Dead NPC should not be alive")
+	}
+}
+
+func TestNPCTakeDamage(t *testing.T) {
+	n := NewNPC(1, NpcTypes[1], "default", 0, 0)
+
+	// Take some damage
+	killed := n.TakeDamage(10)
+	if killed {
+		t.Error("10 damage should not kill 30HP Slime")
+	}
+	if n.HP != 20 {
+		t.Errorf("Expected 20 HP, got %d", n.HP)
+	}
+
+	// Kill it
+	killed = n.TakeDamage(25)
+	if !killed {
+		t.Error("25 more damage should kill 20HP Slime")
+	}
+	if n.HP != 0 {
+		t.Errorf("Dead NPC HP should be 0, got %d", n.HP)
+	}
+	if n.State != StateDead {
+		t.Error("Should be in StateDead")
+	}
+}
+
+func TestNPCRespawn(t *testing.T) {
+	n := NewNPC(1, NpcTypes[1], "default", 50, 50)
+	n.X = 60
+	n.Y = 60
+	n.TakeDamage(100) // kill it
+
+	n.Respawn()
+	if n.HP != n.MaxHP {
+		t.Errorf("Should have full HP after respawn, got %d/%d", n.HP, n.MaxHP)
+	}
+	if n.X != 50 || n.Y != 50 {
+		t.Errorf("Should return to spawn position (%d,%d), got (%d,%d)", n.SpawnX, n.SpawnY, n.X, n.Y)
+	}
+	if n.State != StateIdle {
+		t.Error("Should be idle after respawn")
+	}
+}
+
+func TestNPCReadyToRespawn(t *testing.T) {
+	n := NewNPC(1, NpcTypes[1], "default", 0, 0)
+	n.TakeDamage(100)
+
+	if n.ReadyToRespawn() {
+		t.Error("Should not be ready to respawn immediately")
+	}
+
+	n.DeathTime = time.Now().Add(-20 * time.Second) // pretend died 20s ago
+	if !n.ReadyToRespawn() {
+		t.Error("Should be ready to respawn after delay")
+	}
+}
+
+func TestNPCDistanceTo(t *testing.T) {
+	n := NewNPC(1, NpcTypes[1], "default", 10, 10)
+
+	// Same position
+	if d := n.DistanceTo(10, 10); d != 0 {
+		t.Errorf("Same pos should be distance 0, got %d", d)
+	}
+
+	// Adjacent
+	if d := n.DistanceTo(11, 10); d != 1 {
+		t.Errorf("Adjacent should be distance 1, got %d", d)
+	}
+
+	// Diagonal
+	if d := n.DistanceTo(11, 11); d != 1 {
+		t.Errorf("Diagonal adjacent should be Chebyshev distance 1, got %d", d)
+	}
+
+	// Far away
+	if d := n.DistanceTo(20, 15); d != 10 {
+		t.Errorf("Expected Chebyshev distance 10, got %d", d)
+	}
+}
+
+func TestNPCDirectionTo(t *testing.T) {
+	n := NewNPC(1, NpcTypes[1], "default", 10, 10)
+
+	tests := []struct {
+		tx, ty int
+		dir    int
+	}{
+		{10, 9, 1},  // N
+		{11, 9, 2},  // NE
+		{11, 10, 3}, // E
+		{11, 11, 4}, // SE
+		{10, 11, 5}, // S
+		{9, 11, 6},  // SW
+		{9, 10, 7},  // W
+		{9, 9, 8},   // NW
+	}
+
+	for _, tt := range tests {
+		got := n.DirectionTo(tt.tx, tt.ty)
+		if got != tt.dir {
+			t.Errorf("DirectionTo(%d,%d): expected dir=%d, got %d", tt.tx, tt.ty, tt.dir, got)
+		}
+	}
+}
+
+func TestIsShopNPC(t *testing.T) {
+	if !IsShopNPC(10) {
+		t.Error("Type 10 should be a shop NPC")
+	}
+	if !IsShopNPC(11) {
+		t.Error("Type 11 should be a shop NPC")
+	}
+	if !IsShopNPC(12) {
+		t.Error("Type 12 should be a shop NPC")
+	}
+	if IsShopNPC(1) {
+		t.Error("Type 1 (Slime) should not be a shop NPC")
+	}
+	if IsShopNPC(4) {
+		t.Error("Type 4 (Demon) should not be a shop NPC")
+	}
+}
+
+func TestShopNPCProperties(t *testing.T) {
+	for _, id := range []int{10, 11, 12} {
+		npcType := NpcTypes[id]
+		if npcType == nil {
+			t.Errorf("Shop NPC type %d not found", id)
+			continue
+		}
+		if npcType.AggroRange != 0 {
+			t.Errorf("Shop NPC %d should have AggroRange=0", id)
+		}
+		if npcType.WanderRange != 0 {
+			t.Errorf("Shop NPC %d should have WanderRange=0", id)
+		}
+		if npcType.MinDamage != 0 {
+			t.Errorf("Shop NPC %d should not deal damage", id)
+		}
+	}
+}
+
+func TestNPCToNpcAppear(t *testing.T) {
+	n := NewNPC(42, NpcTypes[1], "default", 30, 40)
+	msg := n.ToNpcAppear()
+
+	if msg.ObjectId != 42 {
+		t.Errorf("Expected ObjectId=42, got %d", msg.ObjectId)
+	}
+	if msg.Name != "Slime" {
+		t.Errorf("Expected name=Slime, got %s", msg.Name)
+	}
+	if msg.Position.X != 30 || msg.Position.Y != 40 {
+		t.Errorf("Expected position (30,40), got (%d,%d)", msg.Position.X, msg.Position.Y)
+	}
+}
+
+func TestNPCToEntityInfo(t *testing.T) {
+	n := NewNPC(42, NpcTypes[2], "default", 30, 40)
+	info := n.ToEntityInfo()
+
+	if info.EntityType != 2 {
+		t.Errorf("Expected EntityType=2, got %d", info.EntityType)
+	}
+	if info.Name != "Skeleton" {
+		t.Errorf("Expected name=Skeleton, got %s", info.Name)
+	}
+}

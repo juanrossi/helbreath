@@ -1106,6 +1106,434 @@ func (x *MapChangeResponse) GetDirection() int32 {
 	return 0
 }
 
+// Server -> Client: Damage dealt/received
+type DamageEvent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AttackerId    int32                  `protobuf:"varint,1,opt,name=attacker_id,json=attackerId,proto3" json:"attacker_id,omitempty"`
+	TargetId      int32                  `protobuf:"varint,2,opt,name=target_id,json=targetId,proto3" json:"target_id,omitempty"`
+	TargetType    int32                  `protobuf:"varint,3,opt,name=target_type,json=targetType,proto3" json:"target_type,omitempty"` // 1=player, 2=npc
+	Damage        int32                  `protobuf:"varint,4,opt,name=damage,proto3" json:"damage,omitempty"`
+	Critical      bool                   `protobuf:"varint,5,opt,name=critical,proto3" json:"critical,omitempty"`
+	Miss          bool                   `protobuf:"varint,6,opt,name=miss,proto3" json:"miss,omitempty"`
+	TargetHp      int32                  `protobuf:"varint,7,opt,name=target_hp,json=targetHp,proto3" json:"target_hp,omitempty"`
+	TargetMaxHp   int32                  `protobuf:"varint,8,opt,name=target_max_hp,json=targetMaxHp,proto3" json:"target_max_hp,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DamageEvent) Reset() {
+	*x = DamageEvent{}
+	mi := &file_game_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DamageEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DamageEvent) ProtoMessage() {}
+
+func (x *DamageEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_game_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DamageEvent.ProtoReflect.Descriptor instead.
+func (*DamageEvent) Descriptor() ([]byte, []int) {
+	return file_game_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *DamageEvent) GetAttackerId() int32 {
+	if x != nil {
+		return x.AttackerId
+	}
+	return 0
+}
+
+func (x *DamageEvent) GetTargetId() int32 {
+	if x != nil {
+		return x.TargetId
+	}
+	return 0
+}
+
+func (x *DamageEvent) GetTargetType() int32 {
+	if x != nil {
+		return x.TargetType
+	}
+	return 0
+}
+
+func (x *DamageEvent) GetDamage() int32 {
+	if x != nil {
+		return x.Damage
+	}
+	return 0
+}
+
+func (x *DamageEvent) GetCritical() bool {
+	if x != nil {
+		return x.Critical
+	}
+	return false
+}
+
+func (x *DamageEvent) GetMiss() bool {
+	if x != nil {
+		return x.Miss
+	}
+	return false
+}
+
+func (x *DamageEvent) GetTargetHp() int32 {
+	if x != nil {
+		return x.TargetHp
+	}
+	return 0
+}
+
+func (x *DamageEvent) GetTargetMaxHp() int32 {
+	if x != nil {
+		return x.TargetMaxHp
+	}
+	return 0
+}
+
+// Server -> Client: Update player stats (HP/MP/SP/XP/Level)
+type StatUpdate struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Hp            int32                  `protobuf:"varint,1,opt,name=hp,proto3" json:"hp,omitempty"`
+	MaxHp         int32                  `protobuf:"varint,2,opt,name=max_hp,json=maxHp,proto3" json:"max_hp,omitempty"`
+	Mp            int32                  `protobuf:"varint,3,opt,name=mp,proto3" json:"mp,omitempty"`
+	MaxMp         int32                  `protobuf:"varint,4,opt,name=max_mp,json=maxMp,proto3" json:"max_mp,omitempty"`
+	Sp            int32                  `protobuf:"varint,5,opt,name=sp,proto3" json:"sp,omitempty"`
+	MaxSp         int32                  `protobuf:"varint,6,opt,name=max_sp,json=maxSp,proto3" json:"max_sp,omitempty"`
+	Experience    int64                  `protobuf:"varint,7,opt,name=experience,proto3" json:"experience,omitempty"`
+	Level         int32                  `protobuf:"varint,8,opt,name=level,proto3" json:"level,omitempty"`
+	LuPool        int32                  `protobuf:"varint,9,opt,name=lu_pool,json=luPool,proto3" json:"lu_pool,omitempty"`
+	Str           int32                  `protobuf:"varint,10,opt,name=str,proto3" json:"str,omitempty"`
+	Vit           int32                  `protobuf:"varint,11,opt,name=vit,proto3" json:"vit,omitempty"`
+	Dex           int32                  `protobuf:"varint,12,opt,name=dex,proto3" json:"dex,omitempty"`
+	IntStat       int32                  `protobuf:"varint,13,opt,name=int_stat,json=intStat,proto3" json:"int_stat,omitempty"`
+	Mag           int32                  `protobuf:"varint,14,opt,name=mag,proto3" json:"mag,omitempty"`
+	Charisma      int32                  `protobuf:"varint,15,opt,name=charisma,proto3" json:"charisma,omitempty"`
+	Gold          int64                  `protobuf:"varint,16,opt,name=gold,proto3" json:"gold,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *StatUpdate) Reset() {
+	*x = StatUpdate{}
+	mi := &file_game_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *StatUpdate) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StatUpdate) ProtoMessage() {}
+
+func (x *StatUpdate) ProtoReflect() protoreflect.Message {
+	mi := &file_game_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StatUpdate.ProtoReflect.Descriptor instead.
+func (*StatUpdate) Descriptor() ([]byte, []int) {
+	return file_game_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *StatUpdate) GetHp() int32 {
+	if x != nil {
+		return x.Hp
+	}
+	return 0
+}
+
+func (x *StatUpdate) GetMaxHp() int32 {
+	if x != nil {
+		return x.MaxHp
+	}
+	return 0
+}
+
+func (x *StatUpdate) GetMp() int32 {
+	if x != nil {
+		return x.Mp
+	}
+	return 0
+}
+
+func (x *StatUpdate) GetMaxMp() int32 {
+	if x != nil {
+		return x.MaxMp
+	}
+	return 0
+}
+
+func (x *StatUpdate) GetSp() int32 {
+	if x != nil {
+		return x.Sp
+	}
+	return 0
+}
+
+func (x *StatUpdate) GetMaxSp() int32 {
+	if x != nil {
+		return x.MaxSp
+	}
+	return 0
+}
+
+func (x *StatUpdate) GetExperience() int64 {
+	if x != nil {
+		return x.Experience
+	}
+	return 0
+}
+
+func (x *StatUpdate) GetLevel() int32 {
+	if x != nil {
+		return x.Level
+	}
+	return 0
+}
+
+func (x *StatUpdate) GetLuPool() int32 {
+	if x != nil {
+		return x.LuPool
+	}
+	return 0
+}
+
+func (x *StatUpdate) GetStr() int32 {
+	if x != nil {
+		return x.Str
+	}
+	return 0
+}
+
+func (x *StatUpdate) GetVit() int32 {
+	if x != nil {
+		return x.Vit
+	}
+	return 0
+}
+
+func (x *StatUpdate) GetDex() int32 {
+	if x != nil {
+		return x.Dex
+	}
+	return 0
+}
+
+func (x *StatUpdate) GetIntStat() int32 {
+	if x != nil {
+		return x.IntStat
+	}
+	return 0
+}
+
+func (x *StatUpdate) GetMag() int32 {
+	if x != nil {
+		return x.Mag
+	}
+	return 0
+}
+
+func (x *StatUpdate) GetCharisma() int32 {
+	if x != nil {
+		return x.Charisma
+	}
+	return 0
+}
+
+func (x *StatUpdate) GetGold() int64 {
+	if x != nil {
+		return x.Gold
+	}
+	return 0
+}
+
+// Server -> Client: Entity died
+type DeathEvent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ObjectId      int32                  `protobuf:"varint,1,opt,name=object_id,json=objectId,proto3" json:"object_id,omitempty"`
+	ObjectType    int32                  `protobuf:"varint,2,opt,name=object_type,json=objectType,proto3" json:"object_type,omitempty"` // 1=player, 2=npc
+	KillerId      int32                  `protobuf:"varint,3,opt,name=killer_id,json=killerId,proto3" json:"killer_id,omitempty"`
+	KillerName    string                 `protobuf:"bytes,4,opt,name=killer_name,json=killerName,proto3" json:"killer_name,omitempty"`
+	Position      *Vec2                  `protobuf:"bytes,5,opt,name=position,proto3" json:"position,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeathEvent) Reset() {
+	*x = DeathEvent{}
+	mi := &file_game_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeathEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeathEvent) ProtoMessage() {}
+
+func (x *DeathEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_game_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeathEvent.ProtoReflect.Descriptor instead.
+func (*DeathEvent) Descriptor() ([]byte, []int) {
+	return file_game_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *DeathEvent) GetObjectId() int32 {
+	if x != nil {
+		return x.ObjectId
+	}
+	return 0
+}
+
+func (x *DeathEvent) GetObjectType() int32 {
+	if x != nil {
+		return x.ObjectType
+	}
+	return 0
+}
+
+func (x *DeathEvent) GetKillerId() int32 {
+	if x != nil {
+		return x.KillerId
+	}
+	return 0
+}
+
+func (x *DeathEvent) GetKillerName() string {
+	if x != nil {
+		return x.KillerName
+	}
+	return ""
+}
+
+func (x *DeathEvent) GetPosition() *Vec2 {
+	if x != nil {
+		return x.Position
+	}
+	return nil
+}
+
+// Server -> Client: Player respawned
+type RespawnEvent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Position      *Vec2                  `protobuf:"bytes,1,opt,name=position,proto3" json:"position,omitempty"`
+	Direction     int32                  `protobuf:"varint,2,opt,name=direction,proto3" json:"direction,omitempty"`
+	MapName       string                 `protobuf:"bytes,3,opt,name=map_name,json=mapName,proto3" json:"map_name,omitempty"`
+	Hp            int32                  `protobuf:"varint,4,opt,name=hp,proto3" json:"hp,omitempty"`
+	Mp            int32                  `protobuf:"varint,5,opt,name=mp,proto3" json:"mp,omitempty"`
+	Sp            int32                  `protobuf:"varint,6,opt,name=sp,proto3" json:"sp,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RespawnEvent) Reset() {
+	*x = RespawnEvent{}
+	mi := &file_game_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RespawnEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RespawnEvent) ProtoMessage() {}
+
+func (x *RespawnEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_game_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RespawnEvent.ProtoReflect.Descriptor instead.
+func (*RespawnEvent) Descriptor() ([]byte, []int) {
+	return file_game_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *RespawnEvent) GetPosition() *Vec2 {
+	if x != nil {
+		return x.Position
+	}
+	return nil
+}
+
+func (x *RespawnEvent) GetDirection() int32 {
+	if x != nil {
+		return x.Direction
+	}
+	return 0
+}
+
+func (x *RespawnEvent) GetMapName() string {
+	if x != nil {
+		return x.MapName
+	}
+	return ""
+}
+
+func (x *RespawnEvent) GetHp() int32 {
+	if x != nil {
+		return x.Hp
+	}
+	return 0
+}
+
+func (x *RespawnEvent) GetMp() int32 {
+	if x != nil {
+		return x.Mp
+	}
+	return 0
+}
+
+func (x *RespawnEvent) GetSp() int32 {
+	if x != nil {
+		return x.Sp
+	}
+	return 0
+}
+
 // Entity info for initial world state
 type EntityInfo struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -1126,7 +1554,7 @@ type EntityInfo struct {
 
 func (x *EntityInfo) Reset() {
 	*x = EntityInfo{}
-	mi := &file_game_proto_msgTypes[12]
+	mi := &file_game_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1138,7 +1566,7 @@ func (x *EntityInfo) String() string {
 func (*EntityInfo) ProtoMessage() {}
 
 func (x *EntityInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_game_proto_msgTypes[12]
+	mi := &file_game_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1151,7 +1579,7 @@ func (x *EntityInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EntityInfo.ProtoReflect.Descriptor instead.
 func (*EntityInfo) Descriptor() ([]byte, []int) {
-	return file_game_proto_rawDescGZIP(), []int{12}
+	return file_game_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *EntityInfo) GetObjectId() int32 {
@@ -1342,7 +1770,55 @@ const file_game_proto_rawDesc = "" +
 	"\x11MapChangeResponse\x12\x19\n" +
 	"\bmap_name\x18\x01 \x01(\tR\amapName\x12*\n" +
 	"\bposition\x18\x02 \x01(\v2\x0e.hbonline.Vec2R\bposition\x12\x1c\n" +
-	"\tdirection\x18\x03 \x01(\x05R\tdirection\"\xd3\x02\n" +
+	"\tdirection\x18\x03 \x01(\x05R\tdirection\"\xf5\x01\n" +
+	"\vDamageEvent\x12\x1f\n" +
+	"\vattacker_id\x18\x01 \x01(\x05R\n" +
+	"attackerId\x12\x1b\n" +
+	"\ttarget_id\x18\x02 \x01(\x05R\btargetId\x12\x1f\n" +
+	"\vtarget_type\x18\x03 \x01(\x05R\n" +
+	"targetType\x12\x16\n" +
+	"\x06damage\x18\x04 \x01(\x05R\x06damage\x12\x1a\n" +
+	"\bcritical\x18\x05 \x01(\bR\bcritical\x12\x12\n" +
+	"\x04miss\x18\x06 \x01(\bR\x04miss\x12\x1b\n" +
+	"\ttarget_hp\x18\a \x01(\x05R\btargetHp\x12\"\n" +
+	"\rtarget_max_hp\x18\b \x01(\x05R\vtargetMaxHp\"\xe3\x02\n" +
+	"\n" +
+	"StatUpdate\x12\x0e\n" +
+	"\x02hp\x18\x01 \x01(\x05R\x02hp\x12\x15\n" +
+	"\x06max_hp\x18\x02 \x01(\x05R\x05maxHp\x12\x0e\n" +
+	"\x02mp\x18\x03 \x01(\x05R\x02mp\x12\x15\n" +
+	"\x06max_mp\x18\x04 \x01(\x05R\x05maxMp\x12\x0e\n" +
+	"\x02sp\x18\x05 \x01(\x05R\x02sp\x12\x15\n" +
+	"\x06max_sp\x18\x06 \x01(\x05R\x05maxSp\x12\x1e\n" +
+	"\n" +
+	"experience\x18\a \x01(\x03R\n" +
+	"experience\x12\x14\n" +
+	"\x05level\x18\b \x01(\x05R\x05level\x12\x17\n" +
+	"\alu_pool\x18\t \x01(\x05R\x06luPool\x12\x10\n" +
+	"\x03str\x18\n" +
+	" \x01(\x05R\x03str\x12\x10\n" +
+	"\x03vit\x18\v \x01(\x05R\x03vit\x12\x10\n" +
+	"\x03dex\x18\f \x01(\x05R\x03dex\x12\x19\n" +
+	"\bint_stat\x18\r \x01(\x05R\aintStat\x12\x10\n" +
+	"\x03mag\x18\x0e \x01(\x05R\x03mag\x12\x1a\n" +
+	"\bcharisma\x18\x0f \x01(\x05R\bcharisma\x12\x12\n" +
+	"\x04gold\x18\x10 \x01(\x03R\x04gold\"\xb4\x01\n" +
+	"\n" +
+	"DeathEvent\x12\x1b\n" +
+	"\tobject_id\x18\x01 \x01(\x05R\bobjectId\x12\x1f\n" +
+	"\vobject_type\x18\x02 \x01(\x05R\n" +
+	"objectType\x12\x1b\n" +
+	"\tkiller_id\x18\x03 \x01(\x05R\bkillerId\x12\x1f\n" +
+	"\vkiller_name\x18\x04 \x01(\tR\n" +
+	"killerName\x12*\n" +
+	"\bposition\x18\x05 \x01(\v2\x0e.hbonline.Vec2R\bposition\"\xa3\x01\n" +
+	"\fRespawnEvent\x12*\n" +
+	"\bposition\x18\x01 \x01(\v2\x0e.hbonline.Vec2R\bposition\x12\x1c\n" +
+	"\tdirection\x18\x02 \x01(\x05R\tdirection\x12\x19\n" +
+	"\bmap_name\x18\x03 \x01(\tR\amapName\x12\x0e\n" +
+	"\x02hp\x18\x04 \x01(\x05R\x02hp\x12\x0e\n" +
+	"\x02mp\x18\x05 \x01(\x05R\x02mp\x12\x0e\n" +
+	"\x02sp\x18\x06 \x01(\x05R\x02sp\"\xd3\x02\n" +
 	"\n" +
 	"EntityInfo\x12\x1b\n" +
 	"\tobject_id\x18\x01 \x01(\x05R\bobjectId\x12\x1f\n" +
@@ -1373,7 +1849,7 @@ func file_game_proto_rawDescGZIP() []byte {
 	return file_game_proto_rawDescData
 }
 
-var file_game_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+var file_game_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
 var file_game_proto_goTypes = []any{
 	(*EnterGameResponse)(nil), // 0: hbonline.EnterGameResponse
 	(*PlayerContents)(nil),    // 1: hbonline.PlayerContents
@@ -1387,34 +1863,40 @@ var file_game_proto_goTypes = []any{
 	(*NpcMotion)(nil),         // 9: hbonline.NpcMotion
 	(*Notification)(nil),      // 10: hbonline.Notification
 	(*MapChangeResponse)(nil), // 11: hbonline.MapChangeResponse
-	(*EntityInfo)(nil),        // 12: hbonline.EntityInfo
-	(*Vec2)(nil),              // 13: hbonline.Vec2
-	(*Appearance)(nil),        // 14: hbonline.Appearance
+	(*DamageEvent)(nil),       // 12: hbonline.DamageEvent
+	(*StatUpdate)(nil),        // 13: hbonline.StatUpdate
+	(*DeathEvent)(nil),        // 14: hbonline.DeathEvent
+	(*RespawnEvent)(nil),      // 15: hbonline.RespawnEvent
+	(*EntityInfo)(nil),        // 16: hbonline.EntityInfo
+	(*Vec2)(nil),              // 17: hbonline.Vec2
+	(*Appearance)(nil),        // 18: hbonline.Appearance
 }
 var file_game_proto_depIdxs = []int32{
 	1,  // 0: hbonline.EnterGameResponse.player:type_name -> hbonline.PlayerContents
 	2,  // 1: hbonline.EnterGameResponse.map_info:type_name -> hbonline.MapInfo
-	12, // 2: hbonline.EnterGameResponse.nearby_players:type_name -> hbonline.EntityInfo
-	12, // 3: hbonline.EnterGameResponse.nearby_npcs:type_name -> hbonline.EntityInfo
-	13, // 4: hbonline.PlayerContents.position:type_name -> hbonline.Vec2
-	14, // 5: hbonline.PlayerContents.appearance:type_name -> hbonline.Appearance
-	13, // 6: hbonline.MotionRequest.position:type_name -> hbonline.Vec2
-	13, // 7: hbonline.MotionEvent.position:type_name -> hbonline.Vec2
-	13, // 8: hbonline.MotionEvent.destination:type_name -> hbonline.Vec2
-	14, // 9: hbonline.MotionEvent.appearance:type_name -> hbonline.Appearance
-	13, // 10: hbonline.PlayerAppear.position:type_name -> hbonline.Vec2
-	14, // 11: hbonline.PlayerAppear.appearance:type_name -> hbonline.Appearance
-	13, // 12: hbonline.NpcAppear.position:type_name -> hbonline.Vec2
-	13, // 13: hbonline.NpcMotion.position:type_name -> hbonline.Vec2
-	13, // 14: hbonline.NpcMotion.destination:type_name -> hbonline.Vec2
-	13, // 15: hbonline.MapChangeResponse.position:type_name -> hbonline.Vec2
-	13, // 16: hbonline.EntityInfo.position:type_name -> hbonline.Vec2
-	14, // 17: hbonline.EntityInfo.appearance:type_name -> hbonline.Appearance
-	18, // [18:18] is the sub-list for method output_type
-	18, // [18:18] is the sub-list for method input_type
-	18, // [18:18] is the sub-list for extension type_name
-	18, // [18:18] is the sub-list for extension extendee
-	0,  // [0:18] is the sub-list for field type_name
+	16, // 2: hbonline.EnterGameResponse.nearby_players:type_name -> hbonline.EntityInfo
+	16, // 3: hbonline.EnterGameResponse.nearby_npcs:type_name -> hbonline.EntityInfo
+	17, // 4: hbonline.PlayerContents.position:type_name -> hbonline.Vec2
+	18, // 5: hbonline.PlayerContents.appearance:type_name -> hbonline.Appearance
+	17, // 6: hbonline.MotionRequest.position:type_name -> hbonline.Vec2
+	17, // 7: hbonline.MotionEvent.position:type_name -> hbonline.Vec2
+	17, // 8: hbonline.MotionEvent.destination:type_name -> hbonline.Vec2
+	18, // 9: hbonline.MotionEvent.appearance:type_name -> hbonline.Appearance
+	17, // 10: hbonline.PlayerAppear.position:type_name -> hbonline.Vec2
+	18, // 11: hbonline.PlayerAppear.appearance:type_name -> hbonline.Appearance
+	17, // 12: hbonline.NpcAppear.position:type_name -> hbonline.Vec2
+	17, // 13: hbonline.NpcMotion.position:type_name -> hbonline.Vec2
+	17, // 14: hbonline.NpcMotion.destination:type_name -> hbonline.Vec2
+	17, // 15: hbonline.MapChangeResponse.position:type_name -> hbonline.Vec2
+	17, // 16: hbonline.DeathEvent.position:type_name -> hbonline.Vec2
+	17, // 17: hbonline.RespawnEvent.position:type_name -> hbonline.Vec2
+	17, // 18: hbonline.EntityInfo.position:type_name -> hbonline.Vec2
+	18, // 19: hbonline.EntityInfo.appearance:type_name -> hbonline.Appearance
+	20, // [20:20] is the sub-list for method output_type
+	20, // [20:20] is the sub-list for method input_type
+	20, // [20:20] is the sub-list for extension type_name
+	20, // [20:20] is the sub-list for extension extendee
+	0,  // [0:20] is the sub-list for field type_name
 }
 
 func init() { file_game_proto_init() }
@@ -1429,7 +1911,7 @@ func file_game_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_game_proto_rawDesc), len(file_game_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   13,
+			NumMessages:   17,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+package hbonline;
+
+option go_package = "github.com/juanrossi/hbonline/server/pkg/proto";
+
+import "common.proto";
+
+// Client -> Server: Cast a spell
+message SpellCastRequest {
+  int32 spell_id = 1;        // spell definition ID
+  int32 target_id = 2;       // target object ID (0 for self/position-targeted)
+  Vec2 target_position = 3;  // target tile for AOE spells
+}
+
+// Server -> Client: Spell effect visual (broadcast to nearby)
+message SpellEffectEvent {
+  int32 caster_id = 1;
+  int32 spell_id = 2;
+  int32 target_id = 3;
+  Vec2 caster_position = 4;
+  Vec2 target_position = 5;
+  int32 damage = 6;          // 0 for non-damage spells
+  int32 heal_amount = 7;     // 0 for non-heal spells
+  bool miss = 8;
+  int32 sprite_id = 9;       // spell effect sprite
+  int32 sound_id = 10;       // spell sound effect
+}
+
+// Server -> Client: Buff/debuff applied or removed
+message BuffUpdate {
+  int32 object_id = 1;       // who has the buff
+  int32 spell_id = 2;        // which spell created it
+  string name = 3;           // buff name
+  int32 stat_type = 4;       // which stat (1=STR, 2=VIT, 3=DEX, 4=INT, 5=MAG)
+  int32 amount = 5;          // +/- modifier
+  int32 remaining_seconds = 6;
+  bool removed = 7;          // true = buff expired/was removed
+}
+
+// Server -> Client: Full list of player's learned spells
+message SpellListUpdate {
+  repeated LearnedSpell spells = 1;
+}
+
+message LearnedSpell {
+  int32 spell_id = 1;
+  string name = 2;
+  int32 mana_cost = 3;
+  int32 cooldown_ms = 4;
+  int32 spell_type = 5;      // 1=damage, 2=aoe, 3=heal, 4=buff, 5=debuff
+  int32 sprite_id = 6;
+}
+
+// Client -> Server: Learn a spell (from scroll/NPC)
+message LearnSpellRequest {
+  int32 spell_id = 1;
+}
+
+// Server -> Client: Full list of player's skills
+message SkillListUpdate {
+  repeated SkillEntry skills = 1;
+  int32 total_mastery = 2;   // sum of all skill masteries
+  int32 mastery_cap = 3;     // 700
+}
+
+message SkillEntry {
+  int32 skill_id = 1;
+  string name = 2;
+  int32 mastery = 3;         // 0-100
+}
+
+// Client -> Server: Use a skill (mining, fishing, etc.)
+message SkillUseRequest {
+  int32 skill_id = 1;
+  Vec2 target_position = 2;  // target tile
+  int32 target_id = 3;       // target object (for crafting stations)
+}
+
+// Server -> Client: Skill use result
+message SkillResultEvent {
+  int32 skill_id = 1;
+  bool success = 2;
+  string message = 3;
+  int32 new_mastery = 4;     // updated mastery level
+  int32 item_gained_id = 5;  // item produced (0 if none)
+}
+
+// Client -> Server: Craft an item
+message CraftRequest {
+  int32 recipe_id = 1;
+}
+
+// Server -> Client: Craft result
+message CraftResult {
+  bool success = 1;
+  string message = 2;
+  int32 item_id = 3;         // item produced (0 on failure)
+  int32 count = 4;
+}

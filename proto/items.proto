@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+package hbonline;
+
+option go_package = "github.com/juanrossi/hbonline/server/pkg/proto";
+
+import "common.proto";
+
+// An item instance (in inventory, on ground, or equipped)
+message ItemInstance {
+  int32 item_id = 1;          // item definition ID
+  string name = 2;
+  int32 count = 3;            // stack count
+  int32 durability = 4;       // current durability
+  int32 max_durability = 5;
+  int32 slot_index = 6;       // inventory slot (0-49) or equip slot
+}
+
+// Server -> Client: Full inventory state
+message InventoryUpdate {
+  repeated ItemInstance items = 1;         // inventory items (slots 0-49)
+  repeated ItemInstance equipment = 2;     // equipped items (7 slots)
+  int64 gold = 3;
+}
+
+// Server -> Client: An item appeared on the ground
+message GroundItemAppear {
+  int32 ground_id = 1;        // unique ground item instance ID
+  int32 item_id = 2;
+  string name = 3;
+  int32 count = 4;
+  Vec2 position = 5;
+}
+
+// Server -> Client: An item was picked up from the ground
+message GroundItemDisappear {
+  int32 ground_id = 1;
+}
+
+// Client -> Server: Pick up a ground item
+message ItemPickupRequest {
+  int32 ground_id = 1;
+}
+
+// Client -> Server: Use an item (potion, scroll, etc.)
+message ItemUseRequest {
+  int32 slot_index = 1;       // inventory slot
+}
+
+// Client -> Server: Equip or unequip an item
+message ItemEquipRequest {
+  int32 slot_index = 1;       // inventory slot to equip, or -1 to unequip
+  int32 equip_slot = 2;       // equipment slot (1-7)
+}
+
+// Client -> Server: Drop an item on the ground
+message ItemDropRequest {
+  int32 slot_index = 1;
+  int32 count = 2;            // how many to drop (for stacks)
+}
+
+// Client -> Server: Allocate stat points
+message StatAllocRequest {
+  int32 stat_type = 1;        // 1=STR, 2=VIT, 3=DEX, 4=INT, 5=MAG, 6=CHR
+  int32 points = 2;           // how many points to allocate
+}
+
+// Server -> Client: Shop inventory for buy/sell
+message ShopOpen {
+  int32 npc_id = 1;
+  string shop_name = 2;
+  repeated ShopItem items = 3;
+}
+
+message ShopItem {
+  int32 item_id = 1;
+  string name = 2;
+  int64 price = 3;
+  int32 item_type = 4;        // for display categorization
+}
+
+// Client -> Server: Buy from shop
+message ShopBuyRequest {
+  int32 npc_id = 1;
+  int32 item_id = 2;
+  int32 count = 3;
+}
+
+// Client -> Server: Sell to shop
+message ShopSellRequest {
+  int32 npc_id = 1;
+  int32 slot_index = 2;       // inventory slot
+  int32 count = 3;
+}
+
+// Server -> Client: Shop transaction result
+message ShopResponse {
+  bool success = 1;
+  string error = 2;
+}

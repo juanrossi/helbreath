@@ -212,18 +212,18 @@ When attacking another player, server checks:
 
 ## 5.8 Verification Checklist
 
-- [ ] Faction selection at cityhall NPC, level 10+ required
-- [ ] Cannot enter enemy city (force recall)
-- [ ] PK count increments when killing innocents
-- [ ] Criminal status changes name color
-- [ ] Guards attack criminals
-- [ ] Death XP loss scales with PK status
-- [ ] Guild creation with CHR 20+ and Level 20+
-- [ ] Guild invite/accept/kick works
-- [ ] Guild chat visible only to guild members
-- [ ] Party formation up to 8 members
-- [ ] Party XP multiplier and division correct
-- [ ] Whisper delivers to target only
-- [ ] PvP damage modifiers per map type correct
-- [ ] 7-second post-respawn immunity works
-- [ ] Trade exchange atomic and validated
+- [x] Faction selection at cityhall NPC, level 10+ required
+- [ ] Cannot enter enemy city (force recall) *(not implemented — no faction-based map restrictions)*
+- [x] PK count increments when killing innocents
+- [x] Criminal status changes name color *(PKCount >= 3 = criminal, broadcast via sendPKStatus)*
+- [ ] Guards attack criminals *(not implemented — no guard NPC AI for criminal detection)*
+- [x] Death XP loss scales with PK status *(5% XP loss on death)*
+- [x] Guild creation with CHR 20+ and Level 20+
+- [x] Guild invite/accept/kick works
+- [x] Guild chat visible only to guild members
+- [x] Party formation up to 8 members
+- [ ] Party XP multiplier and division correct *(party exists but no shared XP on kills)*
+- [x] Whisper delivers to target only
+- [ ] PvP damage modifiers per map type correct *(PvP works but no map-based PK mode checks)*
+- [ ] 7-second post-respawn immunity works *(not implemented — only 3s respawn delay)*
+- [x] Trade exchange atomic and validated

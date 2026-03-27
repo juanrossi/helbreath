@@ -539,23 +539,23 @@ Amount = dice(effectValue1, effectValue2) + effectValue3
 
 ## 3.20 Verification Checklist
 
-- [ ] Attack NPC -> hit/miss rolls match formula
-- [ ] Damage calculation matches STR scaling formula
-- [ ] Critical hits apply correct weapon-specific bonuses
-- [ ] Combo counter increments 1-4, resets to 1
-- [ ] Armor reduces damage up to 80% cap
-- [ ] Back attacks halve target defense
-- [ ] NPC detects player at configured range
-- [ ] NPC pathfinds toward target
-- [ ] NPC attacks when adjacent
-- [ ] NPC flees when HP below bravery
-- [ ] NPC respawns after configured timer
-- [ ] HP/MP/SP regenerate at correct intervals
-- [ ] Death teleports to home city, XP loss applied
-- [ ] XP gained from kills matches formula
-- [ ] Level up grants 3 stat points
-- [ ] Equipping weapon changes hit ratio and damage
-- [ ] Potions restore correct HP/MP/SP amount
-- [ ] Shop buy/sell with gold works
-- [ ] Ground items appear on NPC death, pickable
-- [ ] Inventory weight limit enforced
+- [x] Attack NPC -> hit/miss rolls match formula
+- [x] Damage calculation matches STR scaling formula
+- [x] Critical hits apply correct weapon-specific bonuses
+- [ ] Combo counter increments 1-4, resets to 1 *(not implemented — no combo tracking system)*
+- [x] Armor reduces damage up to 80% cap
+- [ ] Back attacks halve target defense *(not implemented)*
+- [x] NPC detects player at configured range
+- [ ] NPC pathfinds toward target *(1-step movement only, no A\* pathfinding)*
+- [x] NPC attacks when adjacent
+- [ ] NPC flees when HP below bravery *(no flee state implemented)*
+- [x] NPC respawns after configured timer
+- [x] HP/MP/SP regenerate at correct intervals
+- [x] Death teleports to home city, XP loss applied *(respawns to map center, not faction home city)*
+- [x] XP gained from kills matches formula
+- [x] Level up grants 3 stat points
+- [x] Equipping weapon changes hit ratio and damage
+- [x] Potions restore correct HP/MP/SP amount
+- [x] Shop buy/sell with gold works
+- [x] Ground items appear on NPC death, pickable
+- [ ] Inventory weight limit enforced *(no weight system implemented)*

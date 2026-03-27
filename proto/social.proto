@@ -1,0 +1,160 @@
+syntax = "proto3";
+
+package hbonline;
+
+option go_package = "github.com/juanrossi/hbonline/server/pkg/proto";
+
+// ===== FACTION =====
+
+// Client -> Server: Choose a faction
+message FactionSelectRequest {
+  int32 side = 1; // 1=Aresden, 2=Elvine
+}
+
+// Server -> Client: Faction selection result
+message FactionSelectResponse {
+  bool success = 1;
+  string error = 2;
+  int32 side = 3;
+}
+
+// ===== GUILD =====
+
+// Client -> Server: Create a guild
+message GuildCreateRequest {
+  string name = 1;
+}
+
+// Client -> Server: Guild management action
+message GuildActionRequest {
+  int32 action = 1;  // 1=invite, 2=kick, 3=promote, 4=demote, 5=leave, 6=disband
+  string target_name = 2;
+}
+
+// Server -> Client: Guild info update
+message GuildInfo {
+  int32 guild_id = 1;
+  string name = 2;
+  int32 side = 3;
+  repeated GuildMemberInfo members = 4;
+  string master_name = 5;
+}
+
+message GuildMemberInfo {
+  string name = 1;
+  int32 rank = 2;     // 1=member, 2=officer, 3=master
+  int32 level = 3;
+  bool online = 4;
+}
+
+// Server -> Client: Guild action result
+message GuildActionResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// ===== PARTY =====
+
+// Client -> Server: Party action
+message PartyActionRequest {
+  int32 action = 1;  // 1=invite, 2=kick, 3=leave
+  string target_name = 2;
+}
+
+// Server -> Client: Party action result
+message PartyActionResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// Server -> Client: Party member list
+message PartyUpdate {
+  repeated PartyMemberInfo members = 1;
+  int32 leader_object_id = 2;
+}
+
+message PartyMemberInfo {
+  int32 object_id = 1;
+  string name = 2;
+  int32 hp = 3;
+  int32 max_hp = 4;
+  int32 level = 5;
+}
+
+// Server -> Client: Party invite received
+message PartyInvite {
+  int32 inviter_object_id = 1;
+  string inviter_name = 2;
+}
+
+// Client -> Server: Accept/decline party invite
+message PartyInviteResponse {
+  bool accept = 1;
+}
+
+// ===== TRADE =====
+
+// Client -> Server: Request trade with another player
+message TradeRequest {
+  int32 target_id = 1;
+}
+
+// Server -> Client: Incoming trade request
+message TradeIncoming {
+  int32 requester_id = 1;
+  string requester_name = 2;
+}
+
+// Client -> Server: Accept or decline trade
+message TradeResponse {
+  bool accept = 1;
+}
+
+// Client -> Server: Set item in trade slot
+message TradeSetItem {
+  int32 inventory_slot = 1;
+  int32 count = 2;
+}
+
+// Client -> Server: Set gold in trade
+message TradeSetGold {
+  int64 gold = 1;
+}
+
+// Client -> Server: Confirm trade (ready)
+message TradeConfirm {
+  bool confirmed = 1;
+}
+
+// Server -> Client: Trade window state update
+message TradeUpdate {
+  repeated TradeSlot my_items = 1;
+  repeated TradeSlot their_items = 2;
+  int64 my_gold = 3;
+  int64 their_gold = 4;
+  bool my_confirmed = 5;
+  bool their_confirmed = 6;
+}
+
+message TradeSlot {
+  int32 item_id = 1;
+  string name = 2;
+  int32 count = 3;
+  int32 slot_index = 4;
+}
+
+// Server -> Client: Trade completed or cancelled
+message TradeComplete {
+  bool success = 1;
+  string message = 2;
+}
+
+// ===== PVP =====
+
+// Server -> Client: PK status change
+message PKStatusUpdate {
+  int32 pk_count = 1;
+  int32 ek_count = 2;
+  bool criminal = 3;      // true if flagged as criminal
+  int32 criminal_timer = 4; // seconds remaining
+}

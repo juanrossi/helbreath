@@ -497,20 +497,20 @@ if Result >= TamingDifficulty -> SUCCESS
 
 ## 4.19 Verification Checklist
 
-- [ ] All 24 skills listed in skill UI
-- [ ] Skill mastery increases with use
-- [ ] 700-point total cap enforced (lowest skill auto-reduced)
-- [ ] Attribute caps respected (STR*2, DEX*2, etc.)
-- [ ] Mining: pickaxe + mineral node -> ore item
-- [ ] Fishing: rod + water tile -> fish item (success rate matches formula)
-- [ ] Farming: plant + grow + harvest cycle works
-- [ ] Alchemy: correct recipes produce potions with purity
-- [ ] Manufacturing: crafting recipes with skill check
-- [ ] All 98 spells castable with correct mana cost and INT requirement
-- [ ] Spell success rate matches circle probability formula
-- [ ] AoE spells affect correct tile radius
-- [ ] Buff durations correct per spell config
-- [ ] Poison applies periodic damage until cured
-- [ ] Summoned creatures follow master and attack targets
-- [ ] Taming works per class difficulty table
-- [ ] Recall teleports to home town
+- [x] All 24 skills listed in skill UI
+- [x] Skill mastery increases with use
+- [x] 700-point total cap enforced (lowest skill auto-reduced)
+- [ ] Attribute caps respected (STR*2, DEX*2, etc.) *(not implemented)*
+- [x] Mining: pickaxe + mineral node -> ore item *(no pickaxe requirement check yet)*
+- [x] Fishing: rod + water tile -> fish item (success rate matches formula) *(no rod requirement check yet)*
+- [ ] Farming: plant + grow + harvest cycle works *(not implemented)*
+- [x] Alchemy: correct recipes produce potions with purity *(16 recipes implemented, no purity system)*
+- [x] Manufacturing: crafting recipes with skill check
+- [ ] All 98 spells castable with correct mana cost and INT requirement *(only 11 spells implemented)*
+- [ ] Spell success rate matches circle probability formula *(not implemented — uses simple mastery check)*
+- [x] AoE spells affect correct tile radius
+- [x] Buff durations correct per spell config
+- [ ] Poison applies periodic damage until cured *(not implemented)*
+- [ ] Summoned creatures follow master and attack targets *(SpellTypeSummon defined but not handled)*
+- [ ] Taming works per class difficulty table *(not implemented)*
+- [ ] Recall teleports to home town *(SpellTypeTeleport defined but not handled)*

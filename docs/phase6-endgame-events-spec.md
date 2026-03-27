@@ -282,19 +282,19 @@ HP restore, MP restore, SP restore, food, recall, invisibility, summon, trance, 
 
 ## 6.11 Verification Checklist
 
-- [ ] Quest NPC offers quest with correct requirements
-- [ ] Monster hunt quest tracks kills correctly
-- [ ] Go-place quest completes on arrival
-- [ ] Quest rewards granted on turn-in
-- [ ] Crusade mode activatable by admin
-- [ ] Crusade structures placeable and destructible
-- [ ] Grand Magic Generator collects mana and launches meteors
-- [ ] Crusade victory when enemy structures destroyed
-- [ ] Heldenian event: towers attackable/defensible
-- [ ] Apocalypse boss spawns and has unique behavior
-- [ ] Arena entry with ticket, no death penalties
-- [ ] Day/night cycle changes at minute 40
-- [ ] Weather affects archery and magic per tables
-- [ ] Berserk form provides correct damage bonus
-- [ ] Metamorphosis changes damage dice correctly
-- [ ] Ancient Slates apply correct 600-second buffs
+- [x] Quest NPC offers quest with correct requirements *(hunt, delivery, collect quests implemented)*
+- [x] Monster hunt quest tracks kills correctly
+- [ ] Go-place quest completes on arrival *(not implemented)*
+- [x] Quest rewards granted on turn-in *(XP, gold, items)*
+- [ ] Crusade mode activatable by admin *(EventState tracking exists but no admin commands or gameplay)*
+- [ ] Crusade structures placeable and destructible *(not implemented)*
+- [ ] Grand Magic Generator collects mana and launches meteors *(not implemented)*
+- [ ] Crusade victory when enemy structures destroyed *(not implemented)*
+- [ ] Heldenian event: towers attackable/defensible *(not implemented)*
+- [ ] Apocalypse boss spawns and has unique behavior *(not implemented — no boss NPCs)*
+- [ ] Arena entry with ticket, no death penalties *(arena state tracking exists but no ticket/gameplay)*
+- [x] Day/night cycle changes at minute 40 *(30-min cycle with 4 phases implemented)*
+- [ ] Weather affects archery and magic per tables *(weather system exists but no combat effects)*
+- [ ] Berserk form provides correct damage bonus *(not implemented)*
+- [ ] Metamorphosis changes damage dice correctly *(not implemented)*
+- [ ] Ancient Slates apply correct 600-second buffs *(not implemented)*

@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package hbonline;
+
+option go_package = "github.com/juanrossi/hbonline/server/pkg/proto";
+
+// Client -> Server: Accept a quest
+message QuestAcceptRequest {
+  int32 quest_id = 1;
+}
+
+// Client -> Server: Turn in a completed quest
+message QuestTurnInRequest {
+  int32 quest_id = 1;
+}
+
+// Server -> Client: Quest list update
+message QuestListUpdate {
+  repeated QuestEntry active_quests = 1;
+  repeated int32 available_quest_ids = 2;
+}
+
+message QuestEntry {
+  int32 quest_id = 1;
+  string name = 2;
+  string description = 3;
+  int32 quest_type = 4;
+  int32 state = 5;
+  int32 progress = 6;
+  int32 target_count = 7;
+  int32 reward_xp = 8;
+  int64 reward_gold = 9;
+}
+
+// Server -> Client: Quest progress update
+message QuestProgressUpdate {
+  int32 quest_id = 1;
+  int32 progress = 2;
+  int32 target_count = 3;
+  bool completed = 4;
+}
+
+// Server -> Client: Quest completion reward
+message QuestRewardNotification {
+  int32 quest_id = 1;
+  string quest_name = 2;
+  int64 xp_gained = 3;
+  int64 gold_gained = 4;
+  int32 item_id = 5;
+  int32 item_count = 6;
+}

@@ -139,6 +139,57 @@ message MapChangeResponse {
   int32 direction = 3;
 }
 
+// Server -> Client: Damage dealt/received
+message DamageEvent {
+  int32 attacker_id = 1;
+  int32 target_id = 2;
+  int32 target_type = 3;    // 1=player, 2=npc
+  int32 damage = 4;
+  bool critical = 5;
+  bool miss = 6;
+  int32 target_hp = 7;
+  int32 target_max_hp = 8;
+}
+
+// Server -> Client: Update player stats (HP/MP/SP/XP/Level)
+message StatUpdate {
+  int32 hp = 1;
+  int32 max_hp = 2;
+  int32 mp = 3;
+  int32 max_mp = 4;
+  int32 sp = 5;
+  int32 max_sp = 6;
+  int64 experience = 7;
+  int32 level = 8;
+  int32 lu_pool = 9;
+  int32 str = 10;
+  int32 vit = 11;
+  int32 dex = 12;
+  int32 int_stat = 13;
+  int32 mag = 14;
+  int32 charisma = 15;
+  int64 gold = 16;
+}
+
+// Server -> Client: Entity died
+message DeathEvent {
+  int32 object_id = 1;
+  int32 object_type = 2;    // 1=player, 2=npc
+  int32 killer_id = 3;
+  string killer_name = 4;
+  Vec2 position = 5;
+}
+
+// Server -> Client: Player respawned
+message RespawnEvent {
+  Vec2 position = 1;
+  int32 direction = 2;
+  string map_name = 3;
+  int32 hp = 4;
+  int32 mp = 5;
+  int32 sp = 6;
+}
+
 // Entity info for initial world state
 message EntityInfo {
   int32 object_id = 1;

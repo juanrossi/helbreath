@@ -294,19 +294,19 @@ function calculateVolume(playerX, playerY, soundX, soundY): number {
 
 ## 2.13 Verification Checklist
 
-- [ ] Register account via web form -> bcrypt hash in PostgreSQL
-- [ ] Login with wrong password -> error message
-- [ ] Create 4 characters with different appearances -> all saved correctly
-- [ ] 5th character creation rejected
-- [ ] Enter game -> map renders with correct collision
-- [ ] Walk around Aresden -> collision blocks at buildings/walls/water
-- [ ] Walk to map edge -> teleport to connected map
-- [ ] Open second browser -> both players see each other
-- [ ] Move in one browser -> movement appears in other
-- [ ] Type chat -> bubble appears for other player
-- [ ] Shout chat -> visible to all players on map
-- [ ] Whisper -> only target player receives
-- [ ] NPCs visible at correct positions
-- [ ] Disconnect -> reconnect -> character at same position
-- [ ] Server shutdown -> all positions saved
-- [ ] Anti-speed-hack: rapid movement corrected by server
+- [x] Register account via web form -> bcrypt hash in PostgreSQL
+- [x] Login with wrong password -> error message
+- [x] Create 4 characters with different appearances -> all saved correctly
+- [x] 5th character creation rejected
+- [x] Enter game -> map renders with correct collision
+- [x] Walk around Aresden -> collision blocks at buildings/walls/water
+- [x] Walk to map edge -> teleport to connected map *(teleport config with destinations for aresden, elvine, middleland, buildings)*
+- [x] Open second browser -> both players see each other
+- [x] Move in one browser -> movement appears in other
+- [x] Type chat -> bubble appears for other player
+- [x] Shout chat -> visible to all players on map
+- [x] Whisper -> only target player receives
+- [x] NPCs visible at correct positions
+- [x] Disconnect -> reconnect -> character at same position
+- [x] Server shutdown -> all positions saved
+- [x] Anti-speed-hack: rapid movement corrected by server

@@ -19,20 +19,26 @@ func main() {
 	addr := flag.String("addr", ":8080", "Server listen address")
 	dbURL := flag.String("db", "postgres://hbonline:hbonline@localhost:5432/hbonline?sslmode=disable", "PostgreSQL connection URL")
 	mapDir := flag.String("maps", "assets/MAPDATA", "Directory containing AMD map files")
+	memDB := flag.Bool("memdb", false, "Use in-memory store instead of PostgreSQL (for development)")
 	flag.Parse()
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	// Connect to database
-	pool, err := db.Connect(ctx, *dbURL)
-	if err != nil {
-		log.Fatalf("Database connection failed: %v", err)
-	}
-	defer pool.Close()
-	log.Println("Connected to database")
+	var store db.DataStore
 
-	store := db.NewStore(pool)
+	if *memDB {
+		store = db.NewMemoryStore()
+		log.Println("Using in-memory store (no PostgreSQL required)")
+	} else {
+		pool, err := db.Connect(ctx, *dbURL)
+		if err != nil {
+			log.Fatalf("Database connection failed: %v", err)
+		}
+		defer pool.Close()
+		log.Println("Connected to database")
+		store = db.NewStore(pool)
+	}
 
 	// Create game engine
 	engine := game.NewEngine(store)
@@ -41,6 +47,9 @@ func main() {
 	if err := engine.LoadMaps(*mapDir); err != nil {
 		log.Fatalf("Failed to load maps: %v", err)
 	}
+
+	// Spawn NPCs
+	engine.SpawnNPCs()
 
 	// Start game loop
 	go engine.Run(ctx)

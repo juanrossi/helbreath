@@ -124,8 +124,7 @@ export class HBMap {
         // Parse the map file
         this.parseMap(buffer);
 
-        // Remove map file from cache to free up memory (no longer needed after parsing)
-        scene.cache.binary.remove(this.fileName);
+        // Keep map binary in cache for potential map reloads
 
         this.isLoaded = true;
         console.log(`Map loaded: ${this.fileName} (${this.sizeX}x${this.sizeY}, tileSize: ${this.tileSize})`);
