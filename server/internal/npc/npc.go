@@ -79,60 +79,58 @@ type NpcType struct {
 // Predefined NPC types
 var NpcTypes = map[int]*NpcType{
 	// Monsters
-	// Movement/attack speeds aligned with original Server.cpp m_dwActionTime
-	// Original minimum action time: 600ms. Values here are per-tile move and per-attack intervals.
-	1: {ID: 1, Name: "Slime", SpriteType: 1, HP: 30, MinDamage: 2, MaxDamage: 5, Defense: 2, DEX: 8, INT: 3, XP: 15,
-		AggroRange: 5, MoveSpeed: 1200, AttackSpeed: 1800, WanderRange: 8,
-		DiceThrow: 1, DiceRange: 4, AttackBonus: 1, Size: SizeSmall, Side: SideMonster,
-		CanFlee: false, RespawnDelay: 15 * time.Second},
+	// ================================================================
+	// All stats from original NPC.cfg (helbreath-v3.82-master/Server/Core/NPC.cfg)
+	// Format: HD=HitDice DR=DefenseRatio HR=HitRatio ATime=ActionTime(ms)
+	// ================================================================
 
-	2: {ID: 2, Name: "Skeleton", SpriteType: 2, HP: 60, MinDamage: 5, MaxDamage: 12, Defense: 5, DEX: 12, INT: 8, XP: 35,
-		AggroRange: 7, MoveSpeed: 900, AttackSpeed: 1400, WanderRange: 10,
-		DiceThrow: 2, DiceRange: 4, AttackBonus: 3, Size: SizeMedium, Side: SideMonster,
-		CanFlee: false, RespawnDelay: 20 * time.Second},
+	// Level 10-20 monsters
+	1: {ID: 1, Name: "Slime", SpriteType: 1, HP: 20, MinDamage: 1, MaxDamage: 4, Defense: 20, DEX: 30, INT: 5, XP: 45,
+		AggroRange: 2, MoveSpeed: 2100, AttackSpeed: 2100, WanderRange: 8,
+		DiceThrow: 1, DiceRange: 4, AttackBonus: 0, Size: SizeSmall, Side: SideMonster,
+		CanFlee: false, RespawnDelay: 5 * time.Second},
 
-	3: {ID: 3, Name: "Orc", SpriteType: 3, HP: 100, MinDamage: 8, MaxDamage: 20, Defense: 10, DEX: 10, INT: 6, XP: 60,
-		AggroRange: 8, MoveSpeed: 800, AttackSpeed: 1200, WanderRange: 12,
-		DiceThrow: 2, DiceRange: 6, AttackBonus: 6, Size: SizeLarge, Side: SideMonster,
-		CanFlee: true, FleeHPPct: 15, RespawnDelay: 25 * time.Second},
+	// Level 20-40 monsters
+	2: {ID: 2, Name: "Skeleton", SpriteType: 2, HP: 80, MinDamage: 5, MaxDamage: 25, Defense: 80, DEX: 100, INT: 40, XP: 262,
+		AggroRange: 5, MoveSpeed: 800, AttackSpeed: 800, WanderRange: 10,
+		DiceThrow: 5, DiceRange: 4, AttackBonus: 0, Size: SizeMedium, Side: SideMonster,
+		CanFlee: false, RespawnDelay: 5 * time.Second},
 
-	4: {ID: 4, Name: "Demon", SpriteType: 4, HP: 200, MinDamage: 15, MaxDamage: 35, Defense: 20, DEX: 14, INT: 18, XP: 120,
-		AggroRange: 10, MoveSpeed: 700, AttackSpeed: 1000, WanderRange: 15,
-		DiceThrow: 3, DiceRange: 7, AttackBonus: 12, Size: SizeLarge, Side: SideMonster,
-		CanFlee: false, RespawnDelay: 30 * time.Second},
+	3: {ID: 3, Name: "Orc", SpriteType: 3, HP: 40, MinDamage: 3, MaxDamage: 9, Defense: 75, DEX: 70, INT: 25, XP: 126,
+		AggroRange: 5, MoveSpeed: 1200, AttackSpeed: 1200, WanderRange: 12,
+		DiceThrow: 3, DiceRange: 3, AttackBonus: 0, Size: SizeLarge, Side: SideMonster,
+		CanFlee: false, RespawnDelay: 5 * time.Second},
 
-	// Shop NPCs (non-aggressive, stationary: AggroRange=0, WanderRange=0, MoveSpeed=0)
-	10: {ID: 10, Name: "Weapon Smith", SpriteType: 10, HP: 9999, MinDamage: 0, MaxDamage: 0, Defense: 100, DEX: 0, XP: 0,
-		AggroRange: 0, MoveSpeed: 0, AttackSpeed: 0, WanderRange: 0,
+	// Level 140+ boss
+	4: {ID: 4, Name: "Demon", SpriteType: 4, HP: 3400, MinDamage: 30, MaxDamage: 100, Defense: 450, DEX: 500, INT: 250, XP: 14450,
+		AggroRange: 7, MoveSpeed: 600, AttackSpeed: 600, WanderRange: 15,
+		DiceThrow: 10, DiceRange: 10, AttackBonus: 0, Size: SizeLarge, Side: SideMonster,
+		CanFlee: false, RespawnDelay: 60 * time.Second},
+
+	// Shop NPCs (from NPC.cfg: Type 15, stationary, AcLmt=2 means no move)
+	10: {ID: 10, Name: "ShopKeeper-W", SpriteType: 15, HP: 100, Defense: 10, DEX: 20,
+		AggroRange: 0, MoveSpeed: 0, AttackSpeed: 15000, WanderRange: 0,
 		Size: SizeMedium, Side: SideNeutral},
 
-	11: {ID: 11, Name: "Armorer", SpriteType: 11, HP: 9999, MinDamage: 0, MaxDamage: 0, Defense: 100, DEX: 0, XP: 0,
-		AggroRange: 0, MoveSpeed: 0, AttackSpeed: 0, WanderRange: 0,
+	11: {ID: 11, Name: "Armorer", SpriteType: 15, HP: 100, Defense: 10, DEX: 20,
+		AggroRange: 0, MoveSpeed: 0, AttackSpeed: 15000, WanderRange: 0,
 		Size: SizeMedium, Side: SideNeutral},
 
-	12: {ID: 12, Name: "Potion Merchant", SpriteType: 12, HP: 9999, MinDamage: 0, MaxDamage: 0, Defense: 100, DEX: 0, XP: 0,
-		AggroRange: 0, MoveSpeed: 0, AttackSpeed: 0, WanderRange: 0,
+	12: {ID: 12, Name: "Potion Merchant", SpriteType: 15, HP: 100, Defense: 10, DEX: 20,
+		AggroRange: 0, MoveSpeed: 0, AttackSpeed: 15000, WanderRange: 0,
 		Size: SizeMedium, Side: SideNeutral},
 
-	// Named town NPCs (stationary, non-aggressive)
-	// CityHall
-	15: {ID: 15, Name: "William", SpriteType: 15, HP: 9999, Defense: 100, Side: SideNeutral},   // Cityhall clerk (Aresden)
-	16: {ID: 16, Name: "Kennedy", SpriteType: 16, HP: 9999, Defense: 100, Side: SideNeutral},   // Cityhall clerk (Elvine)
-	// Warehouse
-	20: {ID: 20, Name: "Howard", SpriteType: 20, HP: 9999, Defense: 100, Side: SideNeutral},    // Warehouse keeper
-	// Blacksmith
-	21: {ID: 21, Name: "Tom", SpriteType: 21, HP: 9999, Defense: 100, Side: SideNeutral},       // Blacksmith NPC
-	// General shop
-	22: {ID: 22, Name: "Perry", SpriteType: 22, HP: 9999, Defense: 100, Side: SideNeutral},     // General shop keeper
-	// Wizard tower
-	19: {ID: 19, Name: "Gandlf", SpriteType: 19, HP: 9999, Defense: 100, Side: SideNeutral},    // Magic teacher
-	// Cathedral
-	23: {ID: 23, Name: "Gail", SpriteType: 23, HP: 9999, Defense: 100, Side: SideNeutral},      // Cathedral priest
-
-	// Guards (stationary, faction-based)
-	14: {ID: 14, Name: "Guard", SpriteType: 14, HP: 5000, MinDamage: 30, MaxDamage: 60, Defense: 50, DEX: 20, XP: 0,
-		AggroRange: 10, MoveSpeed: 400, AttackSpeed: 800, WanderRange: 3,
-		DiceThrow: 3, DiceRange: 10, AttackBonus: 20, Size: SizeMedium, Side: SideNeutral},
+	// Named town NPCs (from NPC.cfg: stationary, AcLmt=2)
+	14: {ID: 14, Name: "Guard", SpriteType: 21, HP: 1550, MinDamage: 3, MaxDamage: 24, Defense: 150, DEX: 330, INT: 100, XP: 0,
+		AggroRange: 8, MoveSpeed: 1000, AttackSpeed: 1000, WanderRange: 3,
+		DiceThrow: 3, DiceRange: 8, AttackBonus: 0, Size: SizeLarge, Side: SideNeutral},
+	15: {ID: 15, Name: "William", SpriteType: 25, HP: 100, Defense: 10, Side: SideNeutral},   // Cityhall clerk
+	16: {ID: 16, Name: "Kennedy", SpriteType: 26, HP: 100, Defense: 10, Side: SideNeutral},   // General shop clerk
+	19: {ID: 19, Name: "Gandlf", SpriteType: 19, HP: 100, Defense: 10, Side: SideNeutral},    // Magic teacher
+	20: {ID: 20, Name: "Howard", SpriteType: 20, HP: 100, Defense: 10, Side: SideNeutral},    // Warehouse keeper
+	21: {ID: 21, Name: "Tom", SpriteType: 24, HP: 100, Defense: 10, Side: SideNeutral},       // Blacksmith
+	22: {ID: 22, Name: "Perry", SpriteType: 68, HP: 100, Defense: 10, Side: SideNeutral},     // Special NPC
+	23: {ID: 23, Name: "Gail", SpriteType: 90, HP: 100, Defense: 10, Side: SideNeutral},      // Command hall
 }
 
 // IsShopNPC returns true if this NPC type is a shop vendor or town NPC.

@@ -24,8 +24,9 @@ func TestNewNPC(t *testing.T) {
 	if n.SpawnX != 50 || n.SpawnY != 55 {
 		t.Errorf("Spawn should match initial position")
 	}
-	if n.HP != 30 || n.MaxHP != 30 {
-		t.Errorf("Expected HP=30, got %d/%d", n.HP, n.MaxHP)
+	expectedHP := NpcTypes[1].HP
+	if n.HP != expectedHP || n.MaxHP != expectedHP {
+		t.Errorf("Expected HP=%d, got %d/%d", expectedHP, n.HP, n.MaxHP)
 	}
 	if n.State != StateIdle {
 		t.Errorf("Expected StateIdle, got %d", n.State)
@@ -50,20 +51,21 @@ func TestNPCIsAlive(t *testing.T) {
 
 func TestNPCTakeDamage(t *testing.T) {
 	n := NewNPC(1, NpcTypes[1], "default", 0, 0)
+	startHP := n.HP
 
 	// Take some damage
-	killed := n.TakeDamage(10)
+	killed := n.TakeDamage(5)
 	if killed {
-		t.Error("10 damage should not kill 30HP Slime")
+		t.Errorf("5 damage should not kill %dHP Slime", startHP)
 	}
-	if n.HP != 20 {
-		t.Errorf("Expected 20 HP, got %d", n.HP)
+	if n.HP != startHP-5 {
+		t.Errorf("Expected %d HP, got %d", startHP-5, n.HP)
 	}
 
 	// Kill it
-	killed = n.TakeDamage(25)
+	killed = n.TakeDamage(startHP)
 	if !killed {
-		t.Error("25 more damage should kill 20HP Slime")
+		t.Errorf("%d more damage should kill %dHP Slime", startHP, n.HP)
 	}
 	if n.HP != 0 {
 		t.Errorf("Dead NPC HP should be 0, got %d", n.HP)

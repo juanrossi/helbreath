@@ -245,8 +245,9 @@ func TestCheckLevelUpNotEnoughXP(t *testing.T) {
 
 func TestBerserkIncreasesDamage(t *testing.T) {
 	p := makeTestPlayer()
-	p.STR = 20
-	p.DEX = 50 // ensure high hit rate
+	p.STR = 60
+	p.DEX = 80 // ensure high hit rate
+	p.Level = 50
 	p.RecalcCombatStats()
 	n := makeTestNPC(1) // Slime
 

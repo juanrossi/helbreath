@@ -144,7 +144,7 @@ hbonline/
 
 - **Server**: Authoritative game state. Validates all movement, combat, and item actions. Runs at 10 ticks/second.
 - **Client**: Renders the game using Phaser 3. Loads `.amd` map files and `.spr` sprite files directly. Communicates via binary WebSocket (1-byte type prefix + protobuf payload).
-- **Database**: Stores accounts and characters. Schema auto-created via `migrations/001_initial.sql`.
+- **Database**: Stores accounts, characters, inventories, and skills. Schema in `migrations/001_initial.sql` + `002_inventory_skills_and_missing_fields.sql`.
 
 ## Network Protocol
 
@@ -156,6 +156,96 @@ All messages are binary WebSocket frames: `[1-byte type ID][protobuf payload]`.
 
 See `proto/*.proto` for full message definitions.
 
+## Admin System
+
+Admin commands are typed in the in-game chat starting with `/`. They are intercepted by the server and not broadcast to other players.
+
+### Activating Admin Mode
+
+**Via PostgreSQL:**
+```sql
+-- Set a character to Super GM (level 4)
+UPDATE characters SET admin_level = 4 WHERE name = 'YourCharName';
+```
+
+**Via Docker:**
+```bash
+docker compose exec postgres psql -U hbonline -d hbonline \
+  -c "UPDATE characters SET admin_level = 4 WHERE name = 'YourCharName';"
+```
+
+**Via in-game command** (requires an existing admin level 5):
+```
+/setadmin PlayerName 4
+```
+
+**For development with `-memdb`:** Modify `db/memory.go` `CreateCharacter` to set `AdminLevel: 4` in the CharacterRow.
+
+### Admin Levels
+
+| Level | Title        | Description                               |
+|-------|-------------|-------------------------------------------|
+| 0     | Player       | No admin commands                         |
+| 1     | Basic GM     | Teleport, player list                     |
+| 2     | Standard GM  | Kill, revive, god mode, effects, kick     |
+| 3     | Senior GM    | Summon NPCs, weather control, clear mobs  |
+| 4     | Super GM     | Create items, modify stats, set gold      |
+| 5     | Server Admin | Full control, can promote to level 4+     |
+
+These levels match the original C++ server (`admin-user-level` in character files like `Gem[GM].txt`).
+
+### Command Reference
+
+**Level 1+ (Basic GM):**
+
+| Command                      | Description                              |
+|------------------------------|------------------------------------------|
+| `/who`                       | List all online players with count       |
+| `/tp <map> [x] [y]`         | Teleport to a map (alias: `/teleport`)   |
+| `/goto <player>`             | Teleport to a player's location          |
+
+**Level 2+ (Standard GM):**
+
+| Command                      | Description                              |
+|------------------------------|------------------------------------------|
+| `/god`                       | Toggle god mode (0 damage taken, 10x dealt) |
+| `/heal`                      | Fully restore own HP/MP/SP               |
+| `/kill <player>`             | Kill a player (set HP to 0)              |
+| `/revive <player>`           | Revive a dead player (full HP)           |
+| `/setinvi [player]`          | Toggle invisibility effect               |
+| `/setzerk [player]`          | Toggle berserk effect                    |
+| `/setfreeze [player]`        | Toggle ice/frozen effect                 |
+| `/summonplayer <player>`     | Teleport player to your location         |
+| `/kick <player>`             | Disconnect a player                      |
+| `/shutup <player> <minutes>` | Mute a player's chat                     |
+| `/givexp <amount>`           | Give yourself XP                         |
+
+**Level 3+ (Senior GM):**
+
+| Command                      | Description                              |
+|------------------------------|------------------------------------------|
+| `/summon <npc_id> [count]`   | Spawn NPCs at your location (max 20)    |
+| `/weather <type>`            | Change weather: clear, rain, snow, fog   |
+| `/clearnpc`                  | Kill all monsters on current map         |
+
+**Level 4+ (Super GM):**
+
+| Command                            | Description                        |
+|------------------------------------|------------------------------------|
+| `/createitem <id> [count] [player]` | Create items in inventory         |
+| `/setstat <player> <stat> <value>` | Set player stat (str/vit/dex/int/mag/chr/level) |
+| `/setgold <player> <amount>`       | Set a player's gold               |
+| `/setadmin <player> <level>`       | Set admin level (lvl 5 needed for 4+) |
+
+### NPC Type IDs (for `/summon`)
+
+| ID | Name            | Level | Notes          |
+|----|-----------------|-------|----------------|
+| 1  | Slime           | Low   | Small, no flee |
+| 2  | Skeleton        | Med   | Medium size    |
+| 3  | Orc             | High  | Large, flees   |
+| 4  | Demon           | Boss  | Large, tough   |
+
 ## Game Features
 
 ### Implemented
@@ -164,20 +254,25 @@ See `proto/*.proto` for full message definitions.
 - Map rendering from original .amd files with collision
 - Real-time multiplayer movement with server validation
 - Chat (normal, shout, whisper, guild, party)
-- NPC monsters with AI (idle, wander, chase, attack, respawn)
-- Melee combat with hit/miss/damage/critical formulas
-- Item system (equipment, potions, materials, ground drops)
+- NPC monsters with AI (idle, wander, chase, attack, flee, respawn)
+- Dice-based combat with STR scaling, layered defense, weapon skill mastery
+- Item system with persistence (equipment, potions, materials, ground drops)
+- Item attributes (Sharp, Ancient) that modify weapon dice
 - Shop NPCs (buy/sell)
 - Spell system (damage, heal, buff, debuff, area effects)
-- Skill system (mining, fishing, alchemy, crafting)
+- 13 status effects (poison, ice, berserk, invisibility, silence, etc.)
+- Skill system (mining, fishing, alchemy, crafting, weapon mastery)
 - Faction selection (Aresden/Elvine)
 - Guild system (create, invite, kick, ranks, chat)
 - Party system (up to 8 members)
 - Player trading
-- PK/criminal tracking
+- PK/criminal tracking with reputation system
 - Quest system (hunt, collect, turn-in)
 - Map teleportation between zones
-- Day/night cycle and weather system
+- Day/night cycle and weather system (fog affects aggro)
+- Multi-tier loot tables with boss drops
+- Criminal status tiers with PK decay
+- Admin command system (22 commands across 5 levels)
 - Starting equipment for new characters
 - Minimap with terrain colors
 - HUD with HP/MP/SP bars
@@ -190,7 +285,7 @@ Cities (Aresden, Elvine), hunt zones, dungeons, middleland (PvP), buildings (bla
 ### Run Tests
 
 ```bash
-# Server tests (591 tests)
+# Server tests (730+ tests)
 cd server
 go test ./... -count=1
 
