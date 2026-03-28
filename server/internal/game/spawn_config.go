@@ -78,130 +78,121 @@ func DefaultSpawnConfig() *SpawnConfig {
 	return &SpawnConfig{
 		Spawns: []SpawnEntry{
 			// ================================================================
-			// DEFAULT MAP (starter zone)
+			// DEFAULT MAP (starter zone) — NPC Type IDs match NPC.cfg
 			// ================================================================
-			{MapName: "default", NpcTypeID: 1, Count: 8, SpawnX: 55, SpawnY: 55, SpawnRadius: 15},  // Slimes
-			{MapName: "default", NpcTypeID: 2, Count: 3, SpawnX: 60, SpawnY: 60, SpawnRadius: 10},  // Skeletons
-			{MapName: "default", NpcTypeID: 3, Count: 2, SpawnX: 65, SpawnY: 50, SpawnRadius: 8},   // Orcs
+			{MapName: "default", NpcTypeID: 10, Count: 8, SpawnX: 55, SpawnY: 55, SpawnRadius: 15},  // Slimes
+			{MapName: "default", NpcTypeID: 11, Count: 3, SpawnX: 60, SpawnY: 60, SpawnRadius: 10},  // Skeletons
+			{MapName: "default", NpcTypeID: 14, Count: 2, SpawnX: 65, SpawnY: 50, SpawnRadius: 8},   // Orcs
 			// Shop NPCs
-			{MapName: "default", NpcTypeID: 10, SpawnX: 82, SpawnY: 82},
-			{MapName: "default", NpcTypeID: 11, SpawnX: 84, SpawnY: 82},
-			{MapName: "default", NpcTypeID: 12, SpawnX: 86, SpawnY: 82},
+			{MapName: "default", NpcTypeID: 15, SpawnX: 82, SpawnY: 82}, // ShopKeeper
+			{MapName: "default", NpcTypeID: 15, SpawnX: 84, SpawnY: 82}, // ShopKeeper
+			{MapName: "default", NpcTypeID: 15, SpawnX: 86, SpawnY: 82}, // ShopKeeper
 
 			// ================================================================
-			// ARESDEN (city) — outdoor shops + guards
+			// ARESDEN (city) — guards + spot mobs from aresden.txt
 			// ================================================================
-			{MapName: "aresden", NpcTypeID: 10, SpawnX: 160, SpawnY: 190}, // Weapon Smith
-			{MapName: "aresden", NpcTypeID: 11, SpawnX: 162, SpawnY: 190}, // Armorer
-			{MapName: "aresden", NpcTypeID: 12, SpawnX: 164, SpawnY: 190}, // Potion Merchant
-			{MapName: "aresden", NpcTypeID: 14, Count: 4, SpawnX: 140, SpawnY: 140, SpawnRadius: 30}, // Guards
+			{MapName: "aresden", NpcTypeID: 21, Count: 6, SpawnX: 240, SpawnY: 150, SpawnRadius: 25}, // Guard-Elvine patrol
+			{MapName: "aresden", NpcTypeID: 21, Count: 6, SpawnX: 130, SpawnY: 180, SpawnRadius: 30}, // Guard-Aresden patrol
+			{MapName: "aresden", NpcTypeID: 10, Count: 10, SpawnX: 252, SpawnY: 207, SpawnRadius: 12}, // Slime pit 1
+			{MapName: "aresden", NpcTypeID: 10, Count: 10, SpawnX: 139, SpawnY: 242, SpawnRadius: 12}, // Slime pit 2
+			{MapName: "aresden", NpcTypeID: 22, Count: 10, SpawnX: 114, SpawnY: 38, SpawnRadius: 14},  // Amphis pit 1
+			{MapName: "aresden", NpcTypeID: 22, Count: 10, SpawnX: 163, SpawnY: 40, SpawnRadius: 12},  // Amphis pit 2
+			{MapName: "aresden", NpcTypeID: 17, Count: 10, SpawnX: 210, SpawnY: 237, SpawnRadius: 20}, // Scorpion pit
 
 			// ================================================================
-			// ARESDEN BUILDINGS — positions from original map config files
+			// ARESDEN BUILDINGS — positions from original MapData .txt files
 			// ================================================================
-			// Blacksmith 1 (bsmith_1 waypoint 49,33)
-			{MapName: "bsmith_1", NpcTypeID: 21, SpawnX: 49, SpawnY: 33},   // Tom
-			// General Shop 1 (gshop_1 waypoint 59,42)
-			{MapName: "gshop_1", NpcTypeID: 10, SpawnX: 59, SpawnY: 42},    // ShopKeeper-W
-			// General Shop 1f — expanded shop (gshop_1f waypoints 65,41 / 43,37 / 60,37)
-			{MapName: "gshop_1f", NpcTypeID: 10, SpawnX: 65, SpawnY: 41},   // ShopKeeper-W
-			{MapName: "gshop_1f", NpcTypeID: 16, SpawnX: 43, SpawnY: 37},   // Kennedy
-			{MapName: "gshop_1f", NpcTypeID: 15, SpawnX: 60, SpawnY: 37},   // William
-			// Warehouse 1 (wrhus_1 waypoint 66,38)
-			{MapName: "wrhus_1", NpcTypeID: 20, SpawnX: 66, SpawnY: 38},    // Howard
-			// Warehouse Aresden West (arewrhus waypoint 66,38)
-			{MapName: "arewrhus", NpcTypeID: 20, SpawnX: 66, SpawnY: 38},   // Howard
-			// Wizard Tower 1 (wzdtwr_1 waypoint 49,33)
-			{MapName: "wzdtwr_1", NpcTypeID: 19, SpawnX: 49, SpawnY: 33},   // Gandlf
-			// Command Hall 1 (CmdHall_1 waypoint 57,50)
-			{MapName: "cmdhall_1", NpcTypeID: 23, SpawnX: 57, SpawnY: 50},  // Gail
+			{MapName: "bsmith_1", NpcTypeID: 24, SpawnX: 49, SpawnY: 33},    // Tom
+			{MapName: "gshop_1", NpcTypeID: 15, SpawnX: 59, SpawnY: 42},     // ShopKeeper-W
+			{MapName: "gshop_1f", NpcTypeID: 15, SpawnX: 65, SpawnY: 41},    // ShopKeeper-W
+			{MapName: "gshop_1f", NpcTypeID: 26, SpawnX: 43, SpawnY: 37},    // Kennedy
+			{MapName: "gshop_1f", NpcTypeID: 25, SpawnX: 60, SpawnY: 37},    // William
+			{MapName: "wrhus_1", NpcTypeID: 20, SpawnX: 66, SpawnY: 38},     // Howard
+			{MapName: "arewrhus", NpcTypeID: 20, SpawnX: 66, SpawnY: 38},    // Howard
+			{MapName: "wzdtwr_1", NpcTypeID: 19, SpawnX: 49, SpawnY: 33},    // Gandlf
+			{MapName: "cmdhall_1", NpcTypeID: 90, SpawnX: 57, SpawnY: 50},   // Gail
 
 			// ================================================================
-			// ELVINE (city) — outdoor shops + guards
+			// ELVINE (city) — guards + spot mobs
 			// ================================================================
-			{MapName: "elvine", NpcTypeID: 10, SpawnX: 232, SpawnY: 105}, // Weapon Smith
-			{MapName: "elvine", NpcTypeID: 11, SpawnX: 234, SpawnY: 105}, // Armorer
-			{MapName: "elvine", NpcTypeID: 12, SpawnX: 236, SpawnY: 105}, // Potion Merchant
-			{MapName: "elvine", NpcTypeID: 14, Count: 4, SpawnX: 140, SpawnY: 140, SpawnRadius: 30}, // Guards
+			{MapName: "elvine", NpcTypeID: 21, Count: 6, SpawnX: 150, SpawnY: 150, SpawnRadius: 30}, // Guards
+			{MapName: "elvine", NpcTypeID: 10, Count: 10, SpawnX: 100, SpawnY: 100, SpawnRadius: 20}, // Slimes
+			{MapName: "elvine", NpcTypeID: 22, Count: 10, SpawnX: 200, SpawnY: 200, SpawnRadius: 15}, // Amphis
 
 			// ================================================================
-			// ELVINE BUILDINGS — positions from original map config files
+			// ELVINE BUILDINGS
 			// ================================================================
-			// Blacksmith 2 (bsmith_2 waypoint 49,33)
-			{MapName: "bsmith_2", NpcTypeID: 21, SpawnX: 49, SpawnY: 33},   // Tom
-			// General Shop 2 (gshop_2 waypoint 59,42)
-			{MapName: "gshop_2", NpcTypeID: 10, SpawnX: 59, SpawnY: 42},    // ShopKeeper-W
-			// General Shop 2f — expanded shop (gshop_2f waypoints 65,41 / 43,37 / 60,37)
-			{MapName: "gshop_2f", NpcTypeID: 10, SpawnX: 65, SpawnY: 41},   // ShopKeeper-W
-			{MapName: "gshop_2f", NpcTypeID: 16, SpawnX: 43, SpawnY: 37},   // Kennedy
-			{MapName: "gshop_2f", NpcTypeID: 15, SpawnX: 60, SpawnY: 37},   // William
-			// Warehouse 2 (wrhus_2 waypoint 66,38)
-			{MapName: "wrhus_2", NpcTypeID: 20, SpawnX: 66, SpawnY: 38},    // Howard
-			// Warehouse Elvine (elvwrhus waypoints 66,38)
-			{MapName: "elvwrhus", NpcTypeID: 20, SpawnX: 66, SpawnY: 38},   // Howard
-			{MapName: "elvwrhus", NpcTypeID: 15, SpawnX: 66, SpawnY: 38},   // William
-			// Command Hall 2 (CmdHall_2 waypoint 57,50)
-			{MapName: "cmdhall_2", NpcTypeID: 23, SpawnX: 57, SpawnY: 50},  // Gail
+			{MapName: "bsmith_2", NpcTypeID: 24, SpawnX: 49, SpawnY: 33},    // Tom
+			{MapName: "gshop_2", NpcTypeID: 15, SpawnX: 59, SpawnY: 42},     // ShopKeeper-W
+			{MapName: "gshop_2f", NpcTypeID: 15, SpawnX: 65, SpawnY: 41},    // ShopKeeper-W
+			{MapName: "gshop_2f", NpcTypeID: 26, SpawnX: 43, SpawnY: 37},    // Kennedy
+			{MapName: "gshop_2f", NpcTypeID: 25, SpawnX: 60, SpawnY: 37},    // William
+			{MapName: "wrhus_2", NpcTypeID: 20, SpawnX: 66, SpawnY: 38},     // Howard
+			{MapName: "elvwrhus", NpcTypeID: 20, SpawnX: 66, SpawnY: 38},    // Howard
+			{MapName: "elvwrhus", NpcTypeID: 25, SpawnX: 66, SpawnY: 38},    // William
+			{MapName: "cmdhall_2", NpcTypeID: 90, SpawnX: 57, SpawnY: 50},   // Gail
 
 			// ================================================================
-			// MIDDLELAND (open PvP zone — higher density, radius spread)
+			// MIDDLELAND — progressive difficulty zones
 			// ================================================================
-			// South (near Aresden) — low level
-			{MapName: "middleland", NpcTypeID: 1, Count: 10, SpawnX: 165, SpawnY: 480, SpawnRadius: 20}, // Slimes
-			{MapName: "middleland", NpcTypeID: 1, Count: 10, SpawnX: 345, SpawnY: 475, SpawnRadius: 20}, // Slimes
-			{MapName: "middleland", NpcTypeID: 2, Count: 8, SpawnX: 220, SpawnY: 400, SpawnRadius: 25},  // Skeletons
-			{MapName: "middleland", NpcTypeID: 2, Count: 8, SpawnX: 290, SpawnY: 410, SpawnRadius: 25},  // Skeletons
-			// Center — mid level
-			{MapName: "middleland", NpcTypeID: 3, Count: 6, SpawnX: 250, SpawnY: 300, SpawnRadius: 20},  // Orcs
-			{MapName: "middleland", NpcTypeID: 3, Count: 6, SpawnX: 260, SpawnY: 280, SpawnRadius: 20},  // Orcs
-			{MapName: "middleland", NpcTypeID: 4, Count: 3, SpawnX: 250, SpawnY: 250, SpawnRadius: 15},  // Demons
-			// North (near Elvine) — low level
-			{MapName: "middleland", NpcTypeID: 1, Count: 10, SpawnX: 115, SpawnY: 45, SpawnRadius: 20},  // Slimes
-			{MapName: "middleland", NpcTypeID: 1, Count: 10, SpawnX: 315, SpawnY: 45, SpawnRadius: 20},  // Slimes
-			{MapName: "middleland", NpcTypeID: 2, Count: 8, SpawnX: 210, SpawnY: 110, SpawnRadius: 25},  // Skeletons
+			// South (near Aresden) — Slimes + Scorpions
+			{MapName: "middleland", NpcTypeID: 10, Count: 10, SpawnX: 165, SpawnY: 480, SpawnRadius: 20},
+			{MapName: "middleland", NpcTypeID: 10, Count: 10, SpawnX: 345, SpawnY: 475, SpawnRadius: 20},
+			{MapName: "middleland", NpcTypeID: 17, Count: 8, SpawnX: 220, SpawnY: 400, SpawnRadius: 25},
+			{MapName: "middleland", NpcTypeID: 17, Count: 8, SpawnX: 290, SpawnY: 410, SpawnRadius: 25},
+			// Mid — Skeletons + Orcs
+			{MapName: "middleland", NpcTypeID: 11, Count: 8, SpawnX: 200, SpawnY: 300, SpawnRadius: 25},
+			{MapName: "middleland", NpcTypeID: 14, Count: 6, SpawnX: 250, SpawnY: 300, SpawnRadius: 20},
+			{MapName: "middleland", NpcTypeID: 14, Count: 6, SpawnX: 260, SpawnY: 280, SpawnRadius: 20},
+			// Center — Trolls + Ogres
+			{MapName: "middleland", NpcTypeID: 28, Count: 4, SpawnX: 250, SpawnY: 250, SpawnRadius: 15},
+			{MapName: "middleland", NpcTypeID: 29, Count: 3, SpawnX: 260, SpawnY: 240, SpawnRadius: 15},
+			// North (near Elvine)
+			{MapName: "middleland", NpcTypeID: 10, Count: 10, SpawnX: 115, SpawnY: 45, SpawnRadius: 20},
+			{MapName: "middleland", NpcTypeID: 10, Count: 10, SpawnX: 315, SpawnY: 45, SpawnRadius: 20},
+			{MapName: "middleland", NpcTypeID: 11, Count: 8, SpawnX: 210, SpawnY: 110, SpawnRadius: 25},
 
 			// ================================================================
-			// HUNT ZONES — denser spawns for leveling
+			// HUNT ZONES — dense leveling areas
 			// ================================================================
-			// Huntzone1 (near Aresden)
-			{MapName: "huntzone1", NpcTypeID: 1, Count: 12, SpawnX: 100, SpawnY: 100, SpawnRadius: 30}, // Slimes
-			{MapName: "huntzone1", NpcTypeID: 2, Count: 8, SpawnX: 100, SpawnY: 100, SpawnRadius: 25},  // Skeletons
-			{MapName: "huntzone1", NpcTypeID: 3, Count: 4, SpawnX: 120, SpawnY: 80, SpawnRadius: 20},   // Orcs
-			// Huntzone2 (near Elvine)
-			{MapName: "huntzone2", NpcTypeID: 1, Count: 12, SpawnX: 100, SpawnY: 100, SpawnRadius: 30}, // Slimes
-			{MapName: "huntzone2", NpcTypeID: 2, Count: 8, SpawnX: 100, SpawnY: 100, SpawnRadius: 25},  // Skeletons
-			{MapName: "huntzone2", NpcTypeID: 3, Count: 4, SpawnX: 80, SpawnY: 120, SpawnRadius: 20},   // Orcs
-			// Huntzone3
-			{MapName: "huntzone3", NpcTypeID: 2, Count: 10, SpawnX: 100, SpawnY: 100, SpawnRadius: 30}, // Skeletons
-			{MapName: "huntzone3", NpcTypeID: 3, Count: 6, SpawnX: 100, SpawnY: 100, SpawnRadius: 25},  // Orcs
-			{MapName: "huntzone3", NpcTypeID: 4, Count: 3, SpawnX: 100, SpawnY: 100, SpawnRadius: 20},  // Demons
-			// Huntzone4
-			{MapName: "huntzone4", NpcTypeID: 2, Count: 10, SpawnX: 100, SpawnY: 100, SpawnRadius: 30}, // Skeletons
-			{MapName: "huntzone4", NpcTypeID: 3, Count: 6, SpawnX: 100, SpawnY: 100, SpawnRadius: 25},  // Orcs
+			{MapName: "huntzone1", NpcTypeID: 10, Count: 12, SpawnX: 100, SpawnY: 100, SpawnRadius: 30},
+			{MapName: "huntzone1", NpcTypeID: 17, Count: 8, SpawnX: 100, SpawnY: 100, SpawnRadius: 25},
+			{MapName: "huntzone1", NpcTypeID: 14, Count: 4, SpawnX: 120, SpawnY: 80, SpawnRadius: 20},
+			{MapName: "huntzone2", NpcTypeID: 10, Count: 12, SpawnX: 100, SpawnY: 100, SpawnRadius: 30},
+			{MapName: "huntzone2", NpcTypeID: 11, Count: 8, SpawnX: 100, SpawnY: 100, SpawnRadius: 25},
+			{MapName: "huntzone2", NpcTypeID: 14, Count: 4, SpawnX: 80, SpawnY: 120, SpawnRadius: 20},
+			{MapName: "huntzone3", NpcTypeID: 11, Count: 10, SpawnX: 100, SpawnY: 100, SpawnRadius: 30},
+			{MapName: "huntzone3", NpcTypeID: 28, Count: 6, SpawnX: 100, SpawnY: 100, SpawnRadius: 25},
+			{MapName: "huntzone3", NpcTypeID: 29, Count: 3, SpawnX: 100, SpawnY: 100, SpawnRadius: 20},
+			{MapName: "huntzone4", NpcTypeID: 14, Count: 10, SpawnX: 100, SpawnY: 100, SpawnRadius: 30},
+			{MapName: "huntzone4", NpcTypeID: 28, Count: 6, SpawnX: 100, SpawnY: 100, SpawnRadius: 25},
 
 			// ================================================================
-			// DUNGEONS — packed with monsters
+			// DUNGEONS
 			// ================================================================
-			// Aresdend1
-			{MapName: "aresdend1", NpcTypeID: 2, Count: 8, SpawnX: 70, SpawnY: 70, SpawnRadius: 25},   // Skeletons
-			{MapName: "aresdend1", NpcTypeID: 3, Count: 5, SpawnX: 100, SpawnY: 100, SpawnRadius: 20},  // Orcs
-			{MapName: "aresdend1", NpcTypeID: 4, Count: 2, SpawnX: 95, SpawnY: 50, SpawnRadius: 15},    // Demons
-			// Elvined1
-			{MapName: "elvined1", NpcTypeID: 2, Count: 8, SpawnX: 90, SpawnY: 90, SpawnRadius: 25},    // Skeletons
-			{MapName: "elvined1", NpcTypeID: 3, Count: 5, SpawnX: 100, SpawnY: 130, SpawnRadius: 20},   // Orcs
-			{MapName: "elvined1", NpcTypeID: 4, Count: 2, SpawnX: 100, SpawnY: 50, SpawnRadius: 15},    // Demons
-			// Deep dungeons (dglv2-4) — mostly Orcs and Demons
-			{MapName: "dglv2", NpcTypeID: 3, Count: 15, SpawnX: 200, SpawnY: 200, SpawnRadius: 80},    // Orcs
-			{MapName: "dglv2", NpcTypeID: 4, Count: 8, SpawnX: 300, SpawnY: 300, SpawnRadius: 60},     // Demons
-			{MapName: "dglv3", NpcTypeID: 3, Count: 10, SpawnX: 200, SpawnY: 150, SpawnRadius: 50},    // Orcs
-			{MapName: "dglv3", NpcTypeID: 4, Count: 6, SpawnX: 200, SpawnY: 200, SpawnRadius: 40},     // Demons
-			{MapName: "dglv4", NpcTypeID: 4, Count: 10, SpawnX: 200, SpawnY: 200, SpawnRadius: 50},    // Demons
+			{MapName: "aresdend1", NpcTypeID: 11, Count: 8, SpawnX: 70, SpawnY: 70, SpawnRadius: 25},
+			{MapName: "aresdend1", NpcTypeID: 14, Count: 5, SpawnX: 100, SpawnY: 100, SpawnRadius: 20},
+			{MapName: "aresdend1", NpcTypeID: 28, Count: 2, SpawnX: 95, SpawnY: 50, SpawnRadius: 15},
+			{MapName: "elvined1", NpcTypeID: 11, Count: 8, SpawnX: 90, SpawnY: 90, SpawnRadius: 25},
+			{MapName: "elvined1", NpcTypeID: 14, Count: 5, SpawnX: 100, SpawnY: 130, SpawnRadius: 20},
+			{MapName: "elvined1", NpcTypeID: 28, Count: 2, SpawnX: 100, SpawnY: 50, SpawnRadius: 15},
+			// Deep dungeons — higher tier monsters
+			{MapName: "dglv2", NpcTypeID: 28, Count: 10, SpawnX: 200, SpawnY: 200, SpawnRadius: 80},
+			{MapName: "dglv2", NpcTypeID: 29, Count: 5, SpawnX: 300, SpawnY: 300, SpawnRadius: 60},
+			{MapName: "dglv2", NpcTypeID: 48, Count: 3, SpawnX: 250, SpawnY: 250, SpawnRadius: 40},
+			{MapName: "dglv3", NpcTypeID: 29, Count: 8, SpawnX: 200, SpawnY: 150, SpawnRadius: 50},
+			{MapName: "dglv3", NpcTypeID: 30, Count: 4, SpawnX: 200, SpawnY: 200, SpawnRadius: 40},
+			{MapName: "dglv3", NpcTypeID: 48, Count: 3, SpawnX: 150, SpawnY: 150, SpawnRadius: 30},
+			{MapName: "dglv4", NpcTypeID: 30, Count: 5, SpawnX: 200, SpawnY: 200, SpawnRadius: 50},
+			{MapName: "dglv4", NpcTypeID: 59, Count: 3, SpawnX: 250, SpawnY: 250, SpawnRadius: 40},
+			{MapName: "dglv4", NpcTypeID: 31, Count: 2, SpawnX: 200, SpawnY: 200, SpawnRadius: 30},
 
 			// ================================================================
 			// 2NDMIDDLE (secondary continent)
 			// ================================================================
-			{MapName: "2ndmiddle", NpcTypeID: 3, Count: 8, SpawnX: 130, SpawnY: 130, SpawnRadius: 25},  // Orcs
-			{MapName: "2ndmiddle", NpcTypeID: 4, Count: 4, SpawnX: 140, SpawnY: 110, SpawnRadius: 20},  // Demons
+			{MapName: "2ndmiddle", NpcTypeID: 14, Count: 8, SpawnX: 130, SpawnY: 130, SpawnRadius: 25},
+			{MapName: "2ndmiddle", NpcTypeID: 28, Count: 4, SpawnX: 140, SpawnY: 110, SpawnRadius: 20},
+			{MapName: "2ndmiddle", NpcTypeID: 29, Count: 3, SpawnX: 120, SpawnY: 100, SpawnRadius: 20},
 		},
 	}
 }

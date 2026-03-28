@@ -45,7 +45,7 @@ func makeTestNPC(npcTypeID int) *npc.NPC {
 
 func TestPlayerAttackNPCUnarmed(t *testing.T) {
 	p := makeTestPlayer()
-	n := makeTestNPC(1) // Slime
+	n := makeTestNPC(10) // Slime
 
 	hitCount := 0
 	missCount := 0
@@ -76,7 +76,7 @@ func TestPlayerAttackNPCUnarmed(t *testing.T) {
 
 func TestPlayerAttackNPCWithWeapon(t *testing.T) {
 	p := makeTestPlayer()
-	n := makeTestNPC(1)
+	n := makeTestNPC(10)
 
 	// Equip a Short Sword
 	sword := items.NewItem(items.GetItemDef(1), 1)
@@ -106,7 +106,7 @@ func TestPlayerAttackNPCWithWeapon(t *testing.T) {
 
 func TestNPCAttackPlayerWithArmor(t *testing.T) {
 	p := makeTestPlayer()
-	n := makeTestNPC(2) // Skeleton
+	n := makeTestNPC(11) // Skeleton
 
 	// Equip Leather Armor (defense=4)
 	armor := items.NewItem(items.GetItemDef(40), 1)
@@ -249,7 +249,7 @@ func TestBerserkIncreasesDamage(t *testing.T) {
 	p.DEX = 80 // ensure high hit rate
 	p.Level = 50
 	p.RecalcCombatStats()
-	n := makeTestNPC(1) // Slime
+	n := makeTestNPC(10) // Slime
 
 	// Collect damage without berserk
 	normalDamages := []int{}
@@ -292,7 +292,7 @@ func TestBerserkIncreasesDamage(t *testing.T) {
 
 func TestDefenseShieldReducesDamage(t *testing.T) {
 	p := makeTestPlayer()
-	n := makeTestNPC(2) // Skeleton
+	n := makeTestNPC(11) // Skeleton
 
 	// Damage without shield
 	normalDamages := []int{}
@@ -339,7 +339,7 @@ func TestInvisibilityBreaksOnAttack(t *testing.T) {
 	p := makeTestPlayer()
 	p.DEX = 50
 	p.RecalcCombatStats()
-	n := makeTestNPC(1)
+	n := makeTestNPC(10)
 
 	// Apply invisibility
 	p.Effects.AddEffect(&magic.ActiveEffect{
@@ -362,7 +362,7 @@ func TestInvisibilityBreaksOnAttack(t *testing.T) {
 
 func TestInvisibilityBreaksOnDamage(t *testing.T) {
 	p := makeTestPlayer()
-	n := makeTestNPC(2) // Skeleton
+	n := makeTestNPC(11) // Skeleton
 
 	// Apply invisibility
 	p.Effects.AddEffect(&magic.ActiveEffect{
@@ -387,7 +387,7 @@ func TestInvisibilityBreaksOnDamage(t *testing.T) {
 
 func TestIceEffectIncreasesDamage(t *testing.T) {
 	p := makeTestPlayer()
-	n := makeTestNPC(2) // Skeleton
+	n := makeTestNPC(11) // Skeleton
 
 	// Apply ice effect to the player (as target)
 	p.Effects.AddEffect(&magic.ActiveEffect{
@@ -433,7 +433,7 @@ func TestBerserkReducesDefense(t *testing.T) {
 		ExpiresAt: time.Now().Add(60 * time.Second),
 	})
 
-	n := makeTestNPC(2)
+	n := makeTestNPC(11)
 
 	// When berserk is active on the target, they take more damage
 	damages := []int{}

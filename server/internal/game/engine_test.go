@@ -1171,7 +1171,7 @@ func TestHandleAttackNPC(t *testing.T) {
 	client := makeClientWithObjectID(1)
 
 	// Spawn an NPC nearby
-	slimeType := npc.NpcTypes[1]
+	slimeType := npc.NpcTypes[10]
 	slime := npc.NewNPC(100, slimeType, "test", 51, 50) // adjacent
 	e.npcs.Store(slime.ObjectID, slime)
 
@@ -1200,7 +1200,7 @@ func TestHandleAttackNPCTooFar(t *testing.T) {
 	client := makeClientWithObjectID(1)
 
 	// Spawn NPC far away
-	slimeType := npc.NpcTypes[1]
+	slimeType := npc.NpcTypes[10]
 	slime := npc.NewNPC(100, slimeType, "test", 80, 80) // far away
 	e.npcs.Store(slime.ObjectID, slime)
 
@@ -1227,7 +1227,7 @@ func TestHandleAttackDeadPlayer(t *testing.T) {
 	addPlayerToEngine(e, p)
 	client := makeClientWithObjectID(1)
 
-	slimeType := npc.NpcTypes[1]
+	slimeType := npc.NpcTypes[10]
 	slime := npc.NewNPC(100, slimeType, "test", 51, 50)
 	e.npcs.Store(slime.ObjectID, slime)
 
@@ -1275,7 +1275,7 @@ func TestHandleNPCDeath(t *testing.T) {
 	p.Experience = 0
 	addPlayerToEngine(e, p)
 
-	slimeType := npc.NpcTypes[1]
+	slimeType := npc.NpcTypes[10]
 	slime := npc.NewNPC(100, slimeType, "test", 51, 50)
 	slime.HP = 0
 

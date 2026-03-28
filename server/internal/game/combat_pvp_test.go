@@ -427,7 +427,7 @@ func TestApplyElementBonus(t *testing.T) {
 func TestNPCAttackPlayerKill(t *testing.T) {
 	p := makeTestPlayer()
 	p.HP = 1
-	n := makeTestNPC(2) // Skeleton
+	n := makeTestNPC(11) // Skeleton
 
 	// Keep trying until we get a hit
 	var result CombatResult
@@ -453,7 +453,7 @@ func TestHitChanceClamping(t *testing.T) {
 	p := makeTestPlayer()
 	p.DEX = 100
 	p.RecalcCombatStats() // recalc HitRatio after changing DEX
-	n := makeTestNPC(1)   // Slime with low DEX
+	n := makeTestNPC(10)   // Slime with low DEX
 
 	hitCount := 0
 	for i := 0; i < 1000; i++ {

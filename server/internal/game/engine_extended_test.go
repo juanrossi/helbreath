@@ -57,7 +57,7 @@ func TestProcessNPCTickDeadRespawn(t *testing.T) {
 	gm := makeTestGameMap(100, 100)
 	e.maps["test"] = gm
 
-	npcType := npc.NpcTypes[1] // Slime
+	npcType := npc.NpcTypes[10] // Slime
 	n := npc.NewNPC(100, npcType, "test", 50, 50)
 	n.State = npc.StateDead
 	n.DeathTime = time.Now().Add(-60 * time.Second) // died 60s ago
@@ -75,7 +75,7 @@ func TestProcessNPCTickDeadNotReady(t *testing.T) {
 	gm := makeTestGameMap(100, 100)
 	e.maps["test"] = gm
 
-	npcType := npc.NpcTypes[1]
+	npcType := npc.NpcTypes[10]
 	n := npc.NewNPC(100, npcType, "test", 50, 50)
 	n.State = npc.StateDead
 	n.DeathTime = time.Now() // just died
@@ -89,7 +89,7 @@ func TestProcessNPCTickDeadNotReady(t *testing.T) {
 
 func TestProcessNPCTickNoMap(t *testing.T) {
 	e := makeTestEngine()
-	npcType := npc.NpcTypes[1]
+	npcType := npc.NpcTypes[10]
 	n := npc.NewNPC(100, npcType, "nonexistent", 50, 50)
 	e.processNPCTick(n, time.Now()) // should not panic
 }
@@ -99,7 +99,7 @@ func TestProcessNPCTickIdle(t *testing.T) {
 	gm := makeTestGameMap(100, 100)
 	e.maps["test"] = gm
 
-	npcType := npc.NpcTypes[1]
+	npcType := npc.NpcTypes[10]
 	n := npc.NewNPC(100, npcType, "test", 50, 50)
 	n.State = npc.StateIdle
 	n.NextThinkTime = time.Time{} // allow thinking
@@ -123,7 +123,7 @@ func TestProcessNPCTickChaseAndAttack(t *testing.T) {
 	addPlayerToEngine(e, p)
 	gm.AddPlayerToSector(p.X, p.Y, p.ObjectID)
 
-	npcType := npc.NpcTypes[2] // Skeleton
+	npcType := npc.NpcTypes[11] // Skeleton
 	n := npc.NewNPC(100, npcType, "test", 50, 50)
 	n.State = npc.StateChase
 	n.TargetID = p.ObjectID
@@ -149,7 +149,7 @@ func TestProcessNPCTickAttackHitsPlayer(t *testing.T) {
 	addPlayerToEngine(e, p)
 	gm.AddPlayerToSector(p.X, p.Y, p.ObjectID)
 
-	npcType := npc.NpcTypes[2]
+	npcType := npc.NpcTypes[11]
 	n := npc.NewNPC(100, npcType, "test", 50, 50)
 	n.State = npc.StateAttack
 	n.TargetID = p.ObjectID
@@ -176,7 +176,7 @@ func TestProcessNPCTickChaseTargetDead(t *testing.T) {
 	p.HP = 0
 	addPlayerToEngine(e, p)
 
-	npcType := npc.NpcTypes[1]
+	npcType := npc.NpcTypes[10]
 	n := npc.NewNPC(100, npcType, "test", 50, 50)
 	n.State = npc.StateChase
 	n.TargetID = p.ObjectID
@@ -194,7 +194,7 @@ func TestProcessNPCTickAttackTargetGone(t *testing.T) {
 	gm := makeTestGameMap(100, 100)
 	e.maps["test"] = gm
 
-	npcType := npc.NpcTypes[1]
+	npcType := npc.NpcTypes[10]
 	n := npc.NewNPC(100, npcType, "test", 50, 50)
 	n.State = npc.StateAttack
 	n.TargetID = 999 // nonexistent
@@ -216,7 +216,7 @@ func TestMoveNPC(t *testing.T) {
 	gm := makeTestGameMap(100, 100)
 	e.maps["test"] = gm
 
-	npcType := npc.NpcTypes[1]
+	npcType := npc.NpcTypes[10]
 	n := npc.NewNPC(100, npcType, "test", 50, 50)
 	e.npcs.Store(n.ObjectID, n)
 
@@ -249,7 +249,7 @@ func TestFindNearestPlayer(t *testing.T) {
 	addPlayerToEngine(e, p2)
 	gm.AddPlayerToSector(p2.X, p2.Y, p2.ObjectID)
 
-	npcType := npc.NpcTypes[1]
+	npcType := npc.NpcTypes[10]
 	n := npc.NewNPC(100, npcType, "test", 50, 50)
 
 	nearest, dist := e.findNearestPlayer(n, gm)
@@ -269,7 +269,7 @@ func TestFindNearestPlayerNone(t *testing.T) {
 	gm := makeTestGameMap(100, 100)
 	e.maps["test"] = gm
 
-	npcType := npc.NpcTypes[1]
+	npcType := npc.NpcTypes[10]
 	n := npc.NewNPC(100, npcType, "test", 50, 50)
 
 	nearest, _ := e.findNearestPlayer(n, gm)
@@ -289,7 +289,7 @@ func TestFindNearestPlayerSkipsDead(t *testing.T) {
 	addPlayerToEngine(e, p)
 	gm.AddPlayerToSector(p.X, p.Y, p.ObjectID)
 
-	npcType := npc.NpcTypes[1]
+	npcType := npc.NpcTypes[10]
 	n := npc.NewNPC(100, npcType, "test", 50, 50)
 
 	nearest, _ := e.findNearestPlayer(n, gm)
@@ -387,7 +387,7 @@ func TestGetNearbyNPCInfos(t *testing.T) {
 	gm.Name = "test"
 	e.maps["test"] = gm
 
-	npcType := npc.NpcTypes[1]
+	npcType := npc.NpcTypes[10]
 	n := npc.NewNPC(100, npcType, "test", 50, 50)
 	e.npcs.Store(n.ObjectID, n)
 
@@ -403,7 +403,7 @@ func TestGetNearbyNPCInfosSkipsDead(t *testing.T) {
 	gm.Name = "test"
 	e.maps["test"] = gm
 
-	npcType := npc.NpcTypes[1]
+	npcType := npc.NpcTypes[10]
 	n := npc.NewNPC(100, npcType, "test", 50, 50)
 	n.HP = 0
 	n.State = npc.StateDead
@@ -421,7 +421,7 @@ func TestGetNearbyNPCInfosSkipsFar(t *testing.T) {
 	gm.Name = "test"
 	e.maps["test"] = gm
 
-	npcType := npc.NpcTypes[1]
+	npcType := npc.NpcTypes[10]
 	n := npc.NewNPC(100, npcType, "test", 150, 150)
 	e.npcs.Store(n.ObjectID, n)
 
@@ -650,7 +650,7 @@ func TestHandleShopBuySuccess(t *testing.T) {
 	client := makeClientWithObjectID(p.ObjectID)
 
 	// Place a shop NPC nearby
-	shopType, ok := npc.NpcTypes[10] // Weapon Shop
+	shopType, ok := npc.NpcTypes[15] // Weapon Shop
 	if !ok {
 		t.Skip("Shop NPC type 10 not found")
 	}
@@ -658,9 +658,9 @@ func TestHandleShopBuySuccess(t *testing.T) {
 	e.npcs.Store(shopNPC.ObjectID, shopNPC)
 
 	// Get first item from shop inventory
-	shopItems, ok := items.ShopInventories[10]
+	shopItems, ok := items.ShopInventories[15]
 	if !ok || len(shopItems) == 0 {
-		t.Skip("No shop inventory for NPC type 10")
+		t.Skip("No shop inventory for NPC type 15")
 	}
 	itemID := shopItems[0]
 
@@ -687,14 +687,14 @@ func TestHandleShopBuyNoGold(t *testing.T) {
 	addPlayerToEngine(e, p)
 	client := makeClientWithObjectID(p.ObjectID)
 
-	shopType, ok := npc.NpcTypes[10]
+	shopType, ok := npc.NpcTypes[15]
 	if !ok {
 		t.Skip("Shop NPC type 10 not found")
 	}
 	shopNPC := npc.NewNPC(200, shopType, "test", 50, 50)
 	e.npcs.Store(shopNPC.ObjectID, shopNPC)
 
-	shopItems, ok := items.ShopInventories[10]
+	shopItems, ok := items.ShopInventories[15]
 	if !ok || len(shopItems) == 0 {
 		t.Skip("No shop items")
 	}
@@ -721,14 +721,14 @@ func TestHandleShopBuyTooFar(t *testing.T) {
 	addPlayerToEngine(e, p)
 	client := makeClientWithObjectID(p.ObjectID)
 
-	shopType, ok := npc.NpcTypes[10]
+	shopType, ok := npc.NpcTypes[15]
 	if !ok {
 		t.Skip("Shop NPC type 10 not found")
 	}
 	shopNPC := npc.NewNPC(200, shopType, "test", 50, 50) // far away
 	e.npcs.Store(shopNPC.ObjectID, shopNPC)
 
-	shopItems, ok := items.ShopInventories[10]
+	shopItems, ok := items.ShopInventories[15]
 	if !ok || len(shopItems) == 0 {
 		t.Skip("No shop items")
 	}
@@ -755,7 +755,7 @@ func TestHandleShopSellSuccess(t *testing.T) {
 	addPlayerToEngine(e, p)
 	client := makeClientWithObjectID(p.ObjectID)
 
-	shopType, ok := npc.NpcTypes[10]
+	shopType, ok := npc.NpcTypes[15]
 	if !ok {
 		t.Skip("Shop NPC type 10 not found")
 	}
@@ -788,7 +788,7 @@ func TestHandleNPCInteractShop(t *testing.T) {
 	e := makeTestEngine()
 	p := makeFullTestPlayer(1, "Player")
 
-	shopType, ok := npc.NpcTypes[10]
+	shopType, ok := npc.NpcTypes[15]
 	if !ok {
 		t.Skip("Shop NPC type 10 not found")
 	}
@@ -802,7 +802,7 @@ func TestHandleNPCInteractMonster(t *testing.T) {
 	e := makeTestEngine()
 	p := makeFullTestPlayer(1, "Player")
 
-	npcType := npc.NpcTypes[1] // Slime - not a shop
+	npcType := npc.NpcTypes[10] // Slime - not a shop
 	n := npc.NewNPC(100, npcType, "test", 50, 50)
 
 	e.handleNPCInteract(p, n) // should return early
@@ -827,7 +827,7 @@ func TestHandleSpellCastDamageSpell(t *testing.T) {
 	addPlayerToEngine(e, p)
 	client := makeClientWithObjectID(p.ObjectID)
 
-	npcType := npc.NpcTypes[1]
+	npcType := npc.NpcTypes[10]
 	n := npc.NewNPC(100, npcType, "test", 52, 50)
 	e.npcs.Store(n.ObjectID, n)
 
@@ -944,7 +944,7 @@ func TestHandleDebuffSpellOnNPC(t *testing.T) {
 
 	p := makeFullTestPlayer(1, "Debuffer")
 
-	npcType := npc.NpcTypes[1]
+	npcType := npc.NpcTypes[10]
 	n := npc.NewNPC(100, npcType, "test", 52, 50)
 	e.npcs.Store(n.ObjectID, n)
 
@@ -1000,7 +1000,7 @@ func TestHandleAOESpell(t *testing.T) {
 		t.Skip("No AOE spell found")
 	}
 
-	npcType := npc.NpcTypes[1]
+	npcType := npc.NpcTypes[10]
 	n := npc.NewNPC(100, npcType, "test", 52, 50)
 	e.npcs.Store(n.ObjectID, n)
 
@@ -1847,7 +1847,7 @@ func TestHandleDamageSpellKillNPC(t *testing.T) {
 	addPlayerToEngine(e, p)
 	gm.AddPlayerToSector(p.X, p.Y, p.ObjectID)
 
-	npcType := npc.NpcTypes[1]
+	npcType := npc.NpcTypes[10]
 	n := npc.NewNPC(100, npcType, "test", 52, 50)
 	n.HP = 1
 	e.npcs.Store(n.ObjectID, n)
@@ -1864,7 +1864,7 @@ func TestHandleDamageSpellOutOfRange(t *testing.T) {
 
 	p := makeFullTestPlayer(1, "Mage")
 
-	npcType := npc.NpcTypes[1]
+	npcType := npc.NpcTypes[10]
 	n := npc.NewNPC(100, npcType, "test", 150, 150) // far
 	e.npcs.Store(n.ObjectID, n)
 
@@ -1942,7 +1942,7 @@ func TestProcessTickWithNPCs(t *testing.T) {
 	gm.Name = "test"
 	e.maps["test"] = gm
 
-	npcType := npc.NpcTypes[1]
+	npcType := npc.NpcTypes[10]
 	n := npc.NewNPC(100, npcType, "test", 50, 50)
 	n.State = npc.StateIdle
 	n.NextThinkTime = time.Time{}
@@ -2731,7 +2731,7 @@ func TestHandleAttackNPCAdjacent(t *testing.T) {
 	gm.AddPlayerToSector(p.X, p.Y, p.ObjectID)
 	client := makeClientWithObjectID(p.ObjectID)
 
-	npcType := npc.NpcTypes[1]
+	npcType := npc.NpcTypes[10]
 	n := npc.NewNPC(100, npcType, "test", 51, 50) // adjacent
 	e.npcs.Store(n.ObjectID, n)
 
@@ -2752,7 +2752,7 @@ func TestHandleAttackShopNPCAdjacent(t *testing.T) {
 	gm.AddPlayerToSector(p.X, p.Y, p.ObjectID)
 	client := makeClientWithObjectID(p.ObjectID)
 
-	shopType, ok := npc.NpcTypes[10]
+	shopType, ok := npc.NpcTypes[15]
 	if !ok {
 		t.Skip("Shop NPC type 10 not found")
 	}
@@ -2775,7 +2775,7 @@ func TestHandleAttackNPCKill(t *testing.T) {
 	gm.AddPlayerToSector(p.X, p.Y, p.ObjectID)
 	client := makeClientWithObjectID(p.ObjectID)
 
-	npcType := npc.NpcTypes[1]
+	npcType := npc.NpcTypes[10]
 	n := npc.NewNPC(100, npcType, "test", 51, 50)
 	n.HP = 1 // nearly dead
 	e.npcs.Store(n.ObjectID, n)
@@ -2930,7 +2930,7 @@ func TestProcessNPCTickWander(t *testing.T) {
 	gm := makeTestGameMap(100, 100)
 	e.maps["test"] = gm
 
-	npcType := npc.NpcTypes[1]
+	npcType := npc.NpcTypes[10]
 	n := npc.NewNPC(100, npcType, "test", 50, 50)
 	n.State = npc.StateWander
 	n.NextThinkTime = time.Time{}
@@ -2953,7 +2953,7 @@ func TestProcessNPCTickWanderFarFromSpawn(t *testing.T) {
 	gm := makeTestGameMap(100, 100)
 	e.maps["test"] = gm
 
-	npcType := npc.NpcTypes[1]
+	npcType := npc.NpcTypes[10]
 	n := npc.NewNPC(100, npcType, "test", 50, 50)
 	n.State = npc.StateWander
 	n.NextThinkTime = time.Time{}
@@ -2980,7 +2980,7 @@ func TestProcessNPCTickChaseTargetTooFarFromSpawn(t *testing.T) {
 	addPlayerToEngine(e, p)
 	gm.AddPlayerToSector(p.X, p.Y, p.ObjectID)
 
-	npcType := npc.NpcTypes[1]
+	npcType := npc.NpcTypes[10]
 	n := npc.NewNPC(100, npcType, "test", 50, 50)
 	n.State = npc.StateChase
 	n.TargetID = p.ObjectID
@@ -3007,7 +3007,7 @@ func TestProcessNPCTickChaseMovesToward(t *testing.T) {
 	addPlayerToEngine(e, p)
 	gm.AddPlayerToSector(p.X, p.Y, p.ObjectID)
 
-	npcType := npc.NpcTypes[1]
+	npcType := npc.NpcTypes[10]
 	n := npc.NewNPC(100, npcType, "test", 50, 50)
 	n.State = npc.StateChase
 	n.TargetID = p.ObjectID
@@ -3032,7 +3032,7 @@ func TestProcessNPCTickIdleAggroPlayer(t *testing.T) {
 	addPlayerToEngine(e, p)
 	gm.AddPlayerToSector(p.X, p.Y, p.ObjectID)
 
-	npcType := npc.NpcTypes[2] // Skeleton with aggro range
+	npcType := npc.NpcTypes[11] // Skeleton with aggro range
 	n := npc.NewNPC(100, npcType, "test", 50, 50)
 	n.State = npc.StateIdle
 	n.NextThinkTime = time.Time{}
@@ -3438,7 +3438,7 @@ func TestHandleShopSellMultipleItems(t *testing.T) {
 	addPlayerToEngine(e, p)
 	client := makeClientWithObjectID(p.ObjectID)
 
-	shopType, ok := npc.NpcTypes[10]
+	shopType, ok := npc.NpcTypes[15]
 	if !ok {
 		t.Skip("Shop NPC type 10 not found")
 	}
@@ -3462,7 +3462,7 @@ func TestHandleShopSellEmptySlot(t *testing.T) {
 	addPlayerToEngine(e, p)
 	client := makeClientWithObjectID(p.ObjectID)
 
-	shopType, ok := npc.NpcTypes[10]
+	shopType, ok := npc.NpcTypes[15]
 	if !ok {
 		t.Skip("Shop NPC")
 	}
@@ -3487,7 +3487,7 @@ func TestHandleShopBuyItemNotAvailable(t *testing.T) {
 	addPlayerToEngine(e, p)
 	client := makeClientWithObjectID(p.ObjectID)
 
-	shopType, ok := npc.NpcTypes[10]
+	shopType, ok := npc.NpcTypes[15]
 	if !ok {
 		t.Skip("Shop NPC type 10 not found")
 	}
@@ -3859,7 +3859,7 @@ func TestHandleShopSellCountClamp(t *testing.T) {
 	// Add a shop NPC nearby
 	shopNPC := &npc.NPC{
 		ObjectID: 500,
-		Type:     npc.NpcTypes[10], // shop
+		Type:     npc.NpcTypes[15], // shop
 		MapName:  "test",
 		X:        51, Y: 50,
 		HP: 100, MaxHP: 100,
@@ -3885,7 +3885,7 @@ func TestHandleShopSellNotShopNPC(t *testing.T) {
 	// Add a monster NPC (not a shop)
 	monsterNPC := &npc.NPC{
 		ObjectID: 500,
-		Type:     npc.NpcTypes[1], // Slime, not a shop
+		Type:     npc.NpcTypes[10], // Slime, not a shop
 		MapName:  "test",
 		X:        51, Y: 50,
 		HP: 10, MaxHP: 10,
@@ -3909,7 +3909,7 @@ func TestHandleShopSellTooFar(t *testing.T) {
 
 	shopNPC := &npc.NPC{
 		ObjectID: 500,
-		Type:     npc.NpcTypes[10], // shop
+		Type:     npc.NpcTypes[15], // shop
 		MapName:  "test",
 		X:        90, Y: 90, // far away
 		HP: 100, MaxHP: 100,
@@ -4029,7 +4029,7 @@ func TestHandleAttackNPCDead(t *testing.T) {
 
 	n := &npc.NPC{
 		ObjectID: 500,
-		Type:     npc.NpcTypes[1],
+		Type:     npc.NpcTypes[10],
 		MapName:  "test",
 		X:        51, Y: 50,
 		HP: 0, MaxHP: 10, // dead
@@ -4052,7 +4052,7 @@ func TestHandleAttackNPCTooFarExtended(t *testing.T) {
 
 	n := &npc.NPC{
 		ObjectID: 500,
-		Type:     npc.NpcTypes[1],
+		Type:     npc.NpcTypes[10],
 		MapName:  "test",
 		X:        80, Y: 80, // too far
 		HP: 10, MaxHP: 10,
@@ -4120,7 +4120,7 @@ func TestHandleAOESpellKillNPC(t *testing.T) {
 
 	n := &npc.NPC{
 		ObjectID: 500,
-		Type:     npc.NpcTypes[1], // Slime
+		Type:     npc.NpcTypes[10], // Slime
 		MapName:  "test",
 		X:        51, Y: 50,
 		HP: 1, MaxHP: 10,
@@ -4152,7 +4152,7 @@ func TestHandleDebuffSpellOutOfRange(t *testing.T) {
 
 	n := &npc.NPC{
 		ObjectID: 500,
-		Type:     npc.NpcTypes[1],
+		Type:     npc.NpcTypes[10],
 		MapName:  "test",
 		X:        90, Y: 90, // far
 		HP: 10, MaxHP: 10,
@@ -4178,7 +4178,7 @@ func TestHandleDebuffSpellNPCDead(t *testing.T) {
 
 	n := &npc.NPC{
 		ObjectID: 500,
-		Type:     npc.NpcTypes[1],
+		Type:     npc.NpcTypes[10],
 		MapName:  "test",
 		X:        51, Y: 50,
 		HP: 0, MaxHP: 10, // dead
@@ -4372,7 +4372,7 @@ func TestHandleNPCDeathPartyXP(t *testing.T) {
 
 	n := &npc.NPC{
 		ObjectID: 500,
-		Type:     npc.NpcTypes[2], // Skeleton
+		Type:     npc.NpcTypes[11], // Skeleton
 		MapName:  "test",
 		X:        51, Y: 50,
 		HP: 0, MaxHP: 30,
@@ -4401,7 +4401,7 @@ func TestNPCAttackPlayerCritical(t *testing.T) {
 	p.HP = 500
 	p.MaxHP = 500
 
-	n := makeTestNPC(2) // Skeleton
+	n := makeTestNPC(11) // Skeleton
 
 	critCount := 0
 	for i := 0; i < 1000; i++ {

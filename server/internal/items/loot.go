@@ -174,10 +174,10 @@ func RollBossLoot() []*Item {
 // ShopInventory defines what items each shop NPC sells.
 // Map from NPC type ID to list of sellable item IDs.
 var ShopInventories = map[int][]int{
-	// Weapon shop NPC (type 10)
-	10: {1, 2, 3, 4, 5, 6},
-	// Armor shop NPC (type 11)
-	11: {20, 21, 22, 30, 31, 32, 40, 41, 42, 50, 51, 52, 60, 61, 70, 71},
-	// Potion shop NPC (type 12)
-	12: {100, 101, 102, 103, 104, 105, 106},
+	// ShopKeeper-W (type 15) — sells everything
+	15: {1, 2, 3, 4, 5, 6, 20, 21, 22, 30, 31, 32, 40, 41, 42, 50, 51, 52, 60, 61, 70, 71, 100, 101, 102, 103, 104, 105, 106},
+	// Tom the Blacksmith (type 24) — weapons and armor
+	24: {1, 2, 3, 4, 5, 6, 20, 21, 22, 30, 31, 32, 40, 41, 42, 50, 51, 52, 60, 61, 70, 71},
+	// Howard the Warehouse keeper (type 20) — potions
+	20: {100, 101, 102, 103, 104, 105, 106},
 }

@@ -74,68 +74,224 @@ type NpcType struct {
 	Mana          int
 	MaxMana       int
 	MagicHitRatio int
+
+	// Attack range in tiles (1 = melee, 2+ = ranged)
+	AttackRange int
 }
 
-// Predefined NPC types
+// Predefined NPC types — all stats from original NPC.cfg
+// (helbreath-v3.82-master/Server/Core/NPC.cfg)
+// HP = HitDice * 10, ActionTime = MoveSpeed = AttackSpeed
 var NpcTypes = map[int]*NpcType{
-	// Monsters
 	// ================================================================
-	// All stats from original NPC.cfg (helbreath-v3.82-master/Server/Core/NPC.cfg)
-	// Format: HD=HitDice DR=DefenseRatio HR=HitRatio ATime=ActionTime(ms)
+	// Level 10-20 (starter area)
 	// ================================================================
-
-	// Level 10-20 monsters
-	1: {ID: 1, Name: "Slime", SpriteType: 1, HP: 20, MinDamage: 1, MaxDamage: 4, Defense: 20, DEX: 30, INT: 5, XP: 45,
+	10: {ID: 10, Name: "Slime", SpriteType: 10, HP: 20, MinDamage: 1, MaxDamage: 4, Defense: 20, DEX: 30, XP: 45,
 		AggroRange: 2, MoveSpeed: 2100, AttackSpeed: 2100, WanderRange: 8,
-		DiceThrow: 1, DiceRange: 4, AttackBonus: 0, Size: SizeSmall, Side: SideMonster,
-		CanFlee: false, RespawnDelay: 5 * time.Second},
+		DiceThrow: 1, DiceRange: 4, Size: SizeSmall, Side: SideMonster, RespawnDelay: 5 * time.Second},
+	55: {ID: 55, Name: "Rabbit", SpriteType: 55, HP: 40, MinDamage: 1, MaxDamage: 5, Defense: 20, DEX: 35, XP: 37,
+		AggroRange: 0, MoveSpeed: 1500, AttackSpeed: 1500, WanderRange: 8,
+		DiceThrow: 1, DiceRange: 5, Size: SizeSmall, Side: SideMonster, CanFlee: true, FleeHPPct: 50, RespawnDelay: 5 * time.Second},
+	56: {ID: 56, Name: "Cat", SpriteType: 56, HP: 40, MinDamage: 2, MaxDamage: 8, Defense: 40, DEX: 45, XP: 105,
+		AggroRange: 5, MoveSpeed: 1500, AttackSpeed: 1500, WanderRange: 8,
+		DiceThrow: 2, DiceRange: 4, Size: SizeSmall, Side: SideMonster, RespawnDelay: 5 * time.Second},
+	16: {ID: 16, Name: "Giant-Ant", SpriteType: 16, HP: 30, MinDamage: 2, MaxDamage: 6, Defense: 30, DEX: 40, XP: 98,
+		AggroRange: 2, MoveSpeed: 1200, AttackSpeed: 1200, WanderRange: 8,
+		DiceThrow: 2, DiceRange: 3, Size: SizeSmall, Side: SideMonster, RespawnDelay: 5 * time.Second},
 
-	// Level 20-40 monsters
-	2: {ID: 2, Name: "Skeleton", SpriteType: 2, HP: 80, MinDamage: 5, MaxDamage: 25, Defense: 80, DEX: 100, INT: 40, XP: 262,
+	// ================================================================
+	// Level 10-20 (snakes / amphibians)
+	// ================================================================
+	22: {ID: 22, Name: "Amphis", SpriteType: 22, HP: 40, MinDamage: 2, MaxDamage: 8, Defense: 60, DEX: 50, XP: 115,
+		AggroRange: 3, MoveSpeed: 1000, AttackSpeed: 1000, WanderRange: 8,
+		DiceThrow: 2, DiceRange: 4, Size: SizeMedium, Side: SideMonster, RespawnDelay: 5 * time.Second},
+	14: {ID: 14, Name: "Orc", SpriteType: 14, HP: 40, MinDamage: 3, MaxDamage: 9, Defense: 75, DEX: 70, XP: 126,
+		AggroRange: 5, MoveSpeed: 1200, AttackSpeed: 1200, WanderRange: 8,
+		DiceThrow: 3, DiceRange: 3, Size: SizeLarge, Side: SideMonster, RespawnDelay: 5 * time.Second},
+
+	// ================================================================
+	// Level 20-40
+	// ================================================================
+	18: {ID: 18, Name: "Zombie", SpriteType: 18, HP: 100, MinDamage: 4, MaxDamage: 16, Defense: 80, DEX: 90, XP: 189,
+		AggroRange: 6, MoveSpeed: 1500, AttackSpeed: 1500, WanderRange: 8,
+		DiceThrow: 4, DiceRange: 4, Size: SizeMedium, Side: SideMonster, RespawnDelay: 5 * time.Second},
+	17: {ID: 17, Name: "Scorpion", SpriteType: 17, HP: 60, MinDamage: 5, MaxDamage: 15, Defense: 70, DEX: 80, XP: 161,
+		AggroRange: 4, MoveSpeed: 1200, AttackSpeed: 1200, WanderRange: 8,
+		DiceThrow: 5, DiceRange: 3, Size: SizeMedium, Side: SideMonster, RespawnDelay: 5 * time.Second},
+	11: {ID: 11, Name: "Skeleton", SpriteType: 11, HP: 80, MinDamage: 5, MaxDamage: 20, Defense: 80, DEX: 100, XP: 262,
 		AggroRange: 5, MoveSpeed: 800, AttackSpeed: 800, WanderRange: 10,
-		DiceThrow: 5, DiceRange: 4, AttackBonus: 0, Size: SizeMedium, Side: SideMonster,
-		CanFlee: false, RespawnDelay: 5 * time.Second},
+		DiceThrow: 5, DiceRange: 4, Size: SizeMedium, Side: SideMonster, RespawnDelay: 5 * time.Second},
 
-	3: {ID: 3, Name: "Orc", SpriteType: 3, HP: 40, MinDamage: 3, MaxDamage: 9, Defense: 75, DEX: 70, INT: 25, XP: 126,
-		AggroRange: 5, MoveSpeed: 1200, AttackSpeed: 1200, WanderRange: 12,
-		DiceThrow: 3, DiceRange: 3, AttackBonus: 0, Size: SizeLarge, Side: SideMonster,
-		CanFlee: false, RespawnDelay: 5 * time.Second},
+	// ================================================================
+	// Level 40-50
+	// ================================================================
+	23: {ID: 23, Name: "Clay-Golem", SpriteType: 23, HP: 300, MinDamage: 7, MaxDamage: 28, Defense: 100, DEX: 150, XP: 542,
+		AggroRange: 5, MoveSpeed: 1200, AttackSpeed: 1200, WanderRange: 8,
+		DiceThrow: 7, DiceRange: 4, Size: SizeLarge, Side: SideMonster, RespawnDelay: 10 * time.Second},
+	12: {ID: 12, Name: "Stone-Golem", SpriteType: 12, HP: 250, MinDamage: 7, MaxDamage: 28, Defense: 110, DEX: 150, XP: 542,
+		AggroRange: 5, MoveSpeed: 1200, AttackSpeed: 1200, WanderRange: 8,
+		DiceThrow: 7, DiceRange: 4, Size: SizeLarge, Side: SideMonster, RespawnDelay: 10 * time.Second},
+	27: {ID: 27, Name: "Hellbound", SpriteType: 27, HP: 350, MinDamage: 7, MaxDamage: 35, Defense: 90, DEX: 170, XP: 892,
+		AggroRange: 7, MoveSpeed: 900, AttackSpeed: 900, WanderRange: 8,
+		DiceThrow: 7, DiceRange: 5, Size: SizeLarge, Side: SideMonster, INT: 50, MaxMana: 250, MagicHitRatio: 20, RespawnDelay: 10 * time.Second},
+	57: {ID: 57, Name: "Frog", SpriteType: 57, HP: 350, MinDamage: 7, MaxDamage: 35, Defense: 90, DEX: 170, XP: 945,
+		AggroRange: 7, MoveSpeed: 900, AttackSpeed: 900, WanderRange: 8,
+		DiceThrow: 7, DiceRange: 5, Size: SizeLarge, Side: SideMonster, AttackRange: 2, RespawnDelay: 10 * time.Second},
+	61: {ID: 61, Name: "Rudolph", SpriteType: 61, HP: 400, MinDamage: 7, MaxDamage: 35, Defense: 100, DEX: 180, XP: 980,
+		AggroRange: 5, MoveSpeed: 1000, AttackSpeed: 1000, WanderRange: 8,
+		DiceThrow: 7, DiceRange: 5, Size: SizeLarge, Side: SideMonster, INT: 50, RespawnDelay: 10 * time.Second},
 
-	// Level 140+ boss
-	4: {ID: 4, Name: "Demon", SpriteType: 4, HP: 3400, MinDamage: 30, MaxDamage: 100, Defense: 450, DEX: 500, INT: 250, XP: 14450,
-		AggroRange: 7, MoveSpeed: 600, AttackSpeed: 600, WanderRange: 15,
-		DiceThrow: 10, DiceRange: 10, AttackBonus: 0, Size: SizeLarge, Side: SideMonster,
-		CanFlee: false, RespawnDelay: 60 * time.Second},
+	// ================================================================
+	// Level 50-60
+	// ================================================================
+	28: {ID: 28, Name: "Troll", SpriteType: 28, HP: 550, MinDamage: 8, MaxDamage: 40, Defense: 85, DEX: 200, XP: 1260,
+		AggroRange: 7, MoveSpeed: 700, AttackSpeed: 700, WanderRange: 8,
+		DiceThrow: 8, DiceRange: 5, Size: SizeLarge, Side: SideMonster, RespawnDelay: 10 * time.Second},
+	13: {ID: 13, Name: "Cyclops", SpriteType: 13, HP: 600, MinDamage: 8, MaxDamage: 48, Defense: 100, DEX: 180, XP: 1100,
+		AggroRange: 7, MoveSpeed: 1200, AttackSpeed: 1200, WanderRange: 8,
+		DiceThrow: 8, DiceRange: 6, Size: SizeLarge, Side: SideMonster, INT: 50, MaxMana: 450, MagicHitRatio: 50, AttackRange: 3, RespawnDelay: 10 * time.Second},
+	65: {ID: 65, Name: "Ice-Golem", SpriteType: 65, HP: 600, MinDamage: 8, MaxDamage: 48, Defense: 100, DEX: 180, XP: 1120,
+		AggroRange: 7, MoveSpeed: 1200, AttackSpeed: 1200, WanderRange: 8,
+		DiceThrow: 8, DiceRange: 6, Size: SizeLarge, Side: SideMonster, INT: 110, MaxMana: 150, MagicHitRatio: 200, RespawnDelay: 10 * time.Second},
 
-	// Shop NPCs (from NPC.cfg: Type 15, stationary, AcLmt=2 means no move)
-	10: {ID: 10, Name: "ShopKeeper-W", SpriteType: 15, HP: 100, Defense: 10, DEX: 20,
-		AggroRange: 0, MoveSpeed: 0, AttackSpeed: 15000, WanderRange: 0,
-		Size: SizeMedium, Side: SideNeutral},
+	// ================================================================
+	// Level 60-90
+	// ================================================================
+	53: {ID: 53, Name: "Beholder", SpriteType: 53, HP: 1000, MinDamage: 8, MaxDamage: 64, Defense: 100, DEX: 450, XP: 2380,
+		AggroRange: 7, MoveSpeed: 800, AttackSpeed: 800, WanderRange: 8,
+		DiceThrow: 8, DiceRange: 8, Size: SizeLarge, Side: SideMonster, MagicHitRatio: 200, AttackRange: 4, RespawnDelay: 10 * time.Second},
+	60: {ID: 60, Name: "Plant", SpriteType: 60, HP: 900, MinDamage: 8, MaxDamage: 56, Defense: 80, DEX: 230, XP: 2425,
+		AggroRange: 7, MoveSpeed: 800, AttackSpeed: 800, WanderRange: 8,
+		DiceThrow: 8, DiceRange: 7, Size: SizeLarge, Side: SideMonster, INT: 50, MaxMana: 550, MagicHitRatio: 65, AttackRange: 2, RespawnDelay: 10 * time.Second},
+	29: {ID: 29, Name: "Ogre", SpriteType: 29, HP: 1150, MinDamage: 8, MaxDamage: 56, Defense: 150, DEX: 230, XP: 2500,
+		AggroRange: 7, MoveSpeed: 700, AttackSpeed: 700, WanderRange: 8,
+		DiceThrow: 8, DiceRange: 7, Size: SizeLarge, Side: SideMonster, AttackRange: 3, RespawnDelay: 10 * time.Second},
+	58: {ID: 58, Name: "Mountain-Giant", SpriteType: 58, HP: 1000, MinDamage: 8, MaxDamage: 56, Defense: 250, DEX: 230, XP: 2500,
+		AggroRange: 7, MoveSpeed: 700, AttackSpeed: 700, WanderRange: 8,
+		DiceThrow: 8, DiceRange: 7, Size: SizeLarge, Side: SideMonster, AttackRange: 2, RespawnDelay: 10 * time.Second},
+	62: {ID: 62, Name: "DireBoar", SpriteType: 62, HP: 1300, MinDamage: 8, MaxDamage: 64, Defense: 80, DEX: 230, XP: 2450,
+		AggroRange: 7, MoveSpeed: 800, AttackSpeed: 800, WanderRange: 8,
+		DiceThrow: 8, DiceRange: 8, Size: SizeLarge, Side: SideMonster, RespawnDelay: 10 * time.Second},
+	80: {ID: 80, Name: "Tentocle", SpriteType: 80, HP: 800, MinDamage: 7, MaxDamage: 42, Defense: 150, DEX: 180, XP: 2100,
+		AggroRange: 5, MoveSpeed: 400, AttackSpeed: 400, WanderRange: 8,
+		DiceThrow: 7, DiceRange: 6, Size: SizeLarge, Side: SideMonster, INT: 60, MaxMana: 500, MagicHitRatio: 80, AttackRange: 3, RespawnDelay: 10 * time.Second},
+	74: {ID: 74, Name: "Giant-Crayfish", SpriteType: 74, HP: 700, MinDamage: 7, MaxDamage: 49, Defense: 150, DEX: 200, XP: 1400,
+		AggroRange: 5, MoveSpeed: 400, AttackSpeed: 400, WanderRange: 8,
+		DiceThrow: 7, DiceRange: 7, Size: SizeLarge, Side: SideMonster, AttackRange: 2, RespawnDelay: 10 * time.Second},
 
-	11: {ID: 11, Name: "Armorer", SpriteType: 15, HP: 100, Defense: 10, DEX: 20,
-		AggroRange: 0, MoveSpeed: 0, AttackSpeed: 15000, WanderRange: 0,
-		Size: SizeMedium, Side: SideNeutral},
+	// ================================================================
+	// Level 90+
+	// ================================================================
+	76: {ID: 76, Name: "Giant-Tree", SpriteType: 76, HP: 1000, MinDamage: 8, MaxDamage: 48, Defense: 120, DEX: 200, XP: 2225,
+		AggroRange: 5, MoveSpeed: 700, AttackSpeed: 700, WanderRange: 8,
+		DiceThrow: 8, DiceRange: 6, Size: SizeLarge, Side: SideMonster, AttackRange: 2, RespawnDelay: 10 * time.Second},
+	30: {ID: 30, Name: "Liche", SpriteType: 30, HP: 1300, MinDamage: 8, MaxDamage: 48, Defense: 300, DEX: 230, XP: 3850,
+		AggroRange: 7, MoveSpeed: 700, AttackSpeed: 700, WanderRange: 8,
+		DiceThrow: 8, DiceRange: 6, Size: SizeLarge, Side: SideMonster, INT: 60, MaxMana: 1000, MagicHitRatio: 80, AttackRange: 4, RespawnDelay: 10 * time.Second},
+	48: {ID: 48, Name: "Stalker", SpriteType: 48, HP: 1300, MinDamage: 8, MaxDamage: 72, Defense: 200, DEX: 300, XP: 3150,
+		AggroRange: 7, MoveSpeed: 600, AttackSpeed: 600, WanderRange: 8,
+		DiceThrow: 8, DiceRange: 9, Size: SizeLarge, Side: SideMonster, AttackRange: 3, RespawnDelay: 10 * time.Second},
+	33: {ID: 33, Name: "WereWolf", SpriteType: 33, HP: 1400, MinDamage: 8, MaxDamage: 64, Defense: 180, DEX: 300, XP: 3045,
+		AggroRange: 7, MoveSpeed: 700, AttackSpeed: 700, WanderRange: 8,
+		DiceThrow: 8, DiceRange: 8, Size: SizeLarge, Side: SideMonster, RespawnDelay: 10 * time.Second},
+	54: {ID: 54, Name: "Dark-Elf", SpriteType: 54, HP: 1400, MinDamage: 8, MaxDamage: 32, Defense: 200, DEX: 450, XP: 3500,
+		AggroRange: 8, MoveSpeed: 700, AttackSpeed: 700, WanderRange: 8,
+		DiceThrow: 8, DiceRange: 4, Size: SizeMedium, Side: SideMonster, AttackRange: 8, RespawnDelay: 10 * time.Second},
+	63: {ID: 63, Name: "Frost", SpriteType: 63, HP: 1300, MinDamage: 8, MaxDamage: 48, Defense: 300, DEX: 230, XP: 3675,
+		AggroRange: 7, MoveSpeed: 700, AttackSpeed: 700, WanderRange: 8,
+		DiceThrow: 8, DiceRange: 6, Size: SizeLarge, Side: SideMonster, INT: 100, MaxMana: 700, MagicHitRatio: 80, AttackRange: 3, RespawnDelay: 10 * time.Second},
+	72: {ID: 72, Name: "Claw-Turtle", SpriteType: 72, HP: 1200, MinDamage: 8, MaxDamage: 72, Defense: 200, DEX: 280, XP: 2975,
+		AggroRange: 5, MoveSpeed: 500, AttackSpeed: 500, WanderRange: 8,
+		DiceThrow: 8, DiceRange: 9, Size: SizeLarge, Side: SideMonster, AttackRange: 2, RespawnDelay: 10 * time.Second},
 
-	12: {ID: 12, Name: "Potion Merchant", SpriteType: 15, HP: 100, Defense: 10, DEX: 20,
-		AggroRange: 0, MoveSpeed: 0, AttackSpeed: 15000, WanderRange: 0,
-		Size: SizeMedium, Side: SideNeutral},
+	// ================================================================
+	// Level 140+ (endgame)
+	// ================================================================
+	59: {ID: 59, Name: "Ettin", SpriteType: 59, HP: 1800, MinDamage: 8, MaxDamage: 72, Defense: 350, DEX: 350, XP: 4500,
+		AggroRange: 7, MoveSpeed: 700, AttackSpeed: 700, WanderRange: 8,
+		DiceThrow: 8, DiceRange: 9, Size: SizeLarge, Side: SideMonster, AttackRange: 3, RespawnDelay: 10 * time.Second},
+	77: {ID: 77, Name: "MasterMage-Orc", SpriteType: 77, HP: 2500, MinDamage: 8, MaxDamage: 56, Defense: 300, DEX: 300, XP: 6000,
+		AggroRange: 5, MoveSpeed: 500, AttackSpeed: 500, WanderRange: 8,
+		DiceThrow: 8, DiceRange: 7, Size: SizeLarge, Side: SideMonster, INT: 70, MaxMana: 1500, MagicHitRatio: 80, AttackRange: 3, RespawnDelay: 10 * time.Second},
+	79: {ID: 79, Name: "Nizie", SpriteType: 79, HP: 2800, MinDamage: 10, MaxDamage: 100, Defense: 300, DEX: 300, XP: 6000,
+		AggroRange: 5, MoveSpeed: 500, AttackSpeed: 500, WanderRange: 8,
+		DiceThrow: 10, DiceRange: 10, Size: SizeLarge, Side: SideMonster, INT: 100, MaxMana: 2000, MagicHitRatio: 80, AttackRange: 3, RespawnDelay: 10 * time.Second},
+	78: {ID: 78, Name: "Minotaurs", SpriteType: 78, HP: 3400, MinDamage: 13, MaxDamage: 143, Defense: 500, DEX: 500, XP: 10500,
+		AggroRange: 5, MoveSpeed: 500, AttackSpeed: 500, WanderRange: 8,
+		DiceThrow: 13, DiceRange: 11, Size: SizeLarge, Side: SideMonster, AttackRange: 2, RespawnDelay: 10 * time.Second},
+	71: {ID: 71, Name: "Centaurus", SpriteType: 71, HP: 3500, MinDamage: 12, MaxDamage: 132, Defense: 450, DEX: 500, XP: 15000,
+		AggroRange: 5, MoveSpeed: 500, AttackSpeed: 500, WanderRange: 8,
+		DiceThrow: 12, DiceRange: 11, Size: SizeLarge, Side: SideMonster, INT: 80, MaxMana: 2000, MagicHitRatio: 80, AttackRange: 3, RespawnDelay: 10 * time.Second},
+	75: {ID: 75, Name: "Giant-Lizard", SpriteType: 75, HP: 4500, MinDamage: 10, MaxDamage: 100, Defense: 400, DEX: 400, XP: 15000,
+		AggroRange: 5, MoveSpeed: 600, AttackSpeed: 600, WanderRange: 8,
+		DiceThrow: 10, DiceRange: 10, Size: SizeLarge, Side: SideMonster, INT: 80, MaxMana: 700, MagicHitRatio: 80, AttackRange: 2, RespawnDelay: 10 * time.Second},
+	32: {ID: 32, Name: "Unicorn", SpriteType: 32, HP: 5000, MinDamage: 10, MaxDamage: 100, Defense: 450, DEX: 500, XP: 45,
+		AggroRange: 7, MoveSpeed: 700, AttackSpeed: 700, WanderRange: 8,
+		DiceThrow: 10, DiceRange: 10, Size: SizeLarge, Side: SideMonster, INT: 80, MaxMana: 2000, MagicHitRatio: 250, AttackRange: 4, RespawnDelay: 60 * time.Second},
+	31: {ID: 31, Name: "Demon", SpriteType: 31, HP: 3400, MinDamage: 10, MaxDamage: 100, Defense: 450, DEX: 500, XP: 14450,
+		AggroRange: 7, MoveSpeed: 600, AttackSpeed: 600, WanderRange: 8,
+		DiceThrow: 10, DiceRange: 10, Size: SizeLarge, Side: SideMonster, INT: 70, MaxMana: 2000, MagicHitRatio: 250, AttackRange: 4, RespawnDelay: 60 * time.Second},
+	52: {ID: 52, Name: "Gagoyle", SpriteType: 52, HP: 5500, MinDamage: 15, MaxDamage: 150, Defense: 450, DEX: 500, XP: 21000,
+		AggroRange: 7, MoveSpeed: 600, AttackSpeed: 600, WanderRange: 8,
+		DiceThrow: 15, DiceRange: 10, Size: SizeLarge, Side: SideMonster, INT: 70, MaxMana: 2000, MagicHitRatio: 250, AttackRange: 5, RespawnDelay: 60 * time.Second},
 
-	// Named town NPCs (from NPC.cfg: stationary, AcLmt=2)
-	14: {ID: 14, Name: "Guard", SpriteType: 21, HP: 1550, MinDamage: 3, MaxDamage: 24, Defense: 150, DEX: 330, INT: 100, XP: 0,
+	// ================================================================
+	// Boss monsters
+	// ================================================================
+	49: {ID: 49, Name: "Hellclaw", SpriteType: 49, HP: 12500, MinDamage: 15, MaxDamage: 210, Defense: 450, DEX: 1000, XP: 30000,
+		AggroRange: 7, MoveSpeed: 600, AttackSpeed: 600, WanderRange: 8,
+		DiceThrow: 15, DiceRange: 14, Size: SizeLarge, Side: SideMonster, INT: 70, AttackRange: 5, RespawnDelay: 60 * time.Second},
+	50: {ID: 50, Name: "Tigerworm", SpriteType: 50, HP: 20000, MinDamage: 18, MaxDamage: 306, Defense: 550, DEX: 1200, XP: 75000,
+		AggroRange: 7, MoveSpeed: 600, AttackSpeed: 600, WanderRange: 8,
+		DiceThrow: 18, DiceRange: 17, Size: SizeLarge, Side: SideMonster, INT: 90, MaxMana: 16000, MagicHitRatio: 250, AttackRange: 6, RespawnDelay: 60 * time.Second},
+	66: {ID: 66, Name: "Wyvern", SpriteType: 66, HP: 25000, MinDamage: 20, MaxDamage: 360, Defense: 450, DEX: 1000, XP: 45000,
+		AggroRange: 8, MoveSpeed: 600, AttackSpeed: 600, WanderRange: 8,
+		DiceThrow: 20, DiceRange: 18, Size: SizeLarge, Side: SideMonster, INT: 120, MaxMana: 16000, MagicHitRatio: 250, AttackRange: 7, RespawnDelay: 60 * time.Second},
+	73: {ID: 73, Name: "Fire-Wyvern", SpriteType: 73, HP: 30000, MinDamage: 20, MaxDamage: 360, Defense: 450, DEX: 1000, XP: 225000,
+		AggroRange: 8, MoveSpeed: 600, AttackSpeed: 600, WanderRange: 8,
+		DiceThrow: 20, DiceRange: 18, Size: SizeLarge, Side: SideMonster, INT: 70, MaxMana: 16000, MagicHitRatio: 250, AttackRange: 7, RespawnDelay: 60 * time.Second},
+	81: {ID: 81, Name: "Abaddon", SpriteType: 81, HP: 150000, MinDamage: 20, MaxDamage: 400, Defense: 999, DEX: 999, XP: 999500,
+		AggroRange: 8, MoveSpeed: 500, AttackSpeed: 500, WanderRange: 8,
+		DiceThrow: 20, DiceRange: 20, Size: SizeLarge, Side: SideMonster, INT: 130, MaxMana: 20000, MagicHitRatio: 300, AttackRange: 7, RespawnDelay: 60 * time.Second},
+
+	// ================================================================
+	// Town NPCs (stationary, non-aggressive)
+	// ================================================================
+	15: {ID: 15, Name: "ShopKeeper-W", SpriteType: 15, HP: 100, Defense: 10, DEX: 20, Side: SideNeutral},
+	19: {ID: 19, Name: "Gandlf", SpriteType: 19, HP: 100, Defense: 10, DEX: 20, Side: SideNeutral},
+	20: {ID: 20, Name: "Howard", SpriteType: 20, HP: 100, Defense: 10, DEX: 20, Side: SideNeutral},
+	24: {ID: 24, Name: "Tom", SpriteType: 24, HP: 100, Defense: 10, DEX: 20, Side: SideNeutral},
+	25: {ID: 25, Name: "William", SpriteType: 25, HP: 100, Defense: 10, DEX: 20, Side: SideNeutral},
+	26: {ID: 26, Name: "Kennedy", SpriteType: 26, HP: 100, Defense: 10, DEX: 20, Side: SideNeutral},
+	67: {ID: 67, Name: "McGaffin", SpriteType: 67, HP: 100, Defense: 10, DEX: 20, Side: SideNeutral},
+	68: {ID: 68, Name: "Perry", SpriteType: 68, HP: 100, Defense: 10, DEX: 20, Side: SideNeutral},
+	69: {ID: 69, Name: "Devlin", SpriteType: 69, HP: 100, Defense: 10, DEX: 20, Side: SideNeutral},
+	90: {ID: 90, Name: "Gail", SpriteType: 90, HP: 100, Defense: 10, DEX: 20, Side: SideNeutral},
+
+	// ================================================================
+	// Guards (faction-based, aggressive to enemies)
+	// ================================================================
+	21: {ID: 21, Name: "Guard", SpriteType: 21, HP: 1550, MinDamage: 3, MaxDamage: 24, Defense: 150, DEX: 330, XP: 0,
 		AggroRange: 8, MoveSpeed: 1000, AttackSpeed: 1000, WanderRange: 3,
-		DiceThrow: 3, DiceRange: 8, AttackBonus: 0, Size: SizeLarge, Side: SideNeutral},
-	15: {ID: 15, Name: "William", SpriteType: 25, HP: 100, Defense: 10, Side: SideNeutral},   // Cityhall clerk
-	16: {ID: 16, Name: "Kennedy", SpriteType: 26, HP: 100, Defense: 10, Side: SideNeutral},   // General shop clerk
-	19: {ID: 19, Name: "Gandlf", SpriteType: 19, HP: 100, Defense: 10, Side: SideNeutral},    // Magic teacher
-	20: {ID: 20, Name: "Howard", SpriteType: 20, HP: 100, Defense: 10, Side: SideNeutral},    // Warehouse keeper
-	21: {ID: 21, Name: "Tom", SpriteType: 24, HP: 100, Defense: 10, Side: SideNeutral},       // Blacksmith
-	22: {ID: 22, Name: "Perry", SpriteType: 68, HP: 100, Defense: 10, Side: SideNeutral},     // Special NPC
-	23: {ID: 23, Name: "Gail", SpriteType: 90, HP: 100, Defense: 10, Side: SideNeutral},      // Command hall
+		DiceThrow: 3, DiceRange: 8, Size: SizeLarge, Side: SideNeutral, INT: 100, MaxMana: 1000, MagicHitRatio: 130, AttackRange: 5, RespawnDelay: 10 * time.Second},
+
+	// ================================================================
+	// Miscellaneous
+	// ================================================================
+	34: {ID: 34, Name: "Dummy", SpriteType: 34, HP: 100, Defense: 15, DEX: 300, XP: 227, Side: SideNeutral,
+		MoveSpeed: 2100, AttackSpeed: 2100, RespawnDelay: 3 * time.Second},
+	64: {ID: 64, Name: "Crops", SpriteType: 64, HP: 20000, Defense: 10, DEX: 10, XP: 1, Side: SideNeutral,
+		RespawnDelay: 3 * time.Second},
 }
 
 // IsShopNPC returns true if this NPC type is a shop vendor or town NPC.
 func IsShopNPC(npcTypeID int) bool {
-	return npcTypeID >= 10 && npcTypeID <= 23
+	switch npcTypeID {
+	case 15, 19, 20, 24, 25, 26, 67, 68, 69, 90: // Town NPCs
+		return true
+	default:
+		return false
+	}
 }
 
 // SpawnPoint defines where an NPC spawns.

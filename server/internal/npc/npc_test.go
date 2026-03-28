@@ -6,7 +6,7 @@ import (
 )
 
 func TestNewNPC(t *testing.T) {
-	npcType := NpcTypes[1] // Slime
+	npcType := NpcTypes[10] // Slime
 	n := NewNPC(100, npcType, "default", 50, 55)
 
 	if n.ObjectID != 100 {
@@ -24,7 +24,7 @@ func TestNewNPC(t *testing.T) {
 	if n.SpawnX != 50 || n.SpawnY != 55 {
 		t.Errorf("Spawn should match initial position")
 	}
-	expectedHP := NpcTypes[1].HP
+	expectedHP := NpcTypes[10].HP
 	if n.HP != expectedHP || n.MaxHP != expectedHP {
 		t.Errorf("Expected HP=%d, got %d/%d", expectedHP, n.HP, n.MaxHP)
 	}
@@ -37,7 +37,7 @@ func TestNewNPC(t *testing.T) {
 }
 
 func TestNPCIsAlive(t *testing.T) {
-	n := NewNPC(1, NpcTypes[1], "default", 0, 0)
+	n := NewNPC(1, NpcTypes[10], "default", 0, 0)
 	if !n.IsAlive() {
 		t.Error("New NPC should be alive")
 	}
@@ -50,7 +50,7 @@ func TestNPCIsAlive(t *testing.T) {
 }
 
 func TestNPCTakeDamage(t *testing.T) {
-	n := NewNPC(1, NpcTypes[1], "default", 0, 0)
+	n := NewNPC(1, NpcTypes[10], "default", 0, 0)
 	startHP := n.HP
 
 	// Take some damage
@@ -76,7 +76,7 @@ func TestNPCTakeDamage(t *testing.T) {
 }
 
 func TestNPCRespawn(t *testing.T) {
-	n := NewNPC(1, NpcTypes[1], "default", 50, 50)
+	n := NewNPC(1, NpcTypes[10], "default", 50, 50)
 	n.X = 60
 	n.Y = 60
 	n.TakeDamage(100) // kill it
@@ -94,7 +94,7 @@ func TestNPCRespawn(t *testing.T) {
 }
 
 func TestNPCReadyToRespawn(t *testing.T) {
-	n := NewNPC(1, NpcTypes[1], "default", 0, 0)
+	n := NewNPC(1, NpcTypes[10], "default", 0, 0)
 	n.TakeDamage(100)
 
 	if n.ReadyToRespawn() {
@@ -108,7 +108,7 @@ func TestNPCReadyToRespawn(t *testing.T) {
 }
 
 func TestNPCDistanceTo(t *testing.T) {
-	n := NewNPC(1, NpcTypes[1], "default", 10, 10)
+	n := NewNPC(1, NpcTypes[10], "default", 10, 10)
 
 	// Same position
 	if d := n.DistanceTo(10, 10); d != 0 {
@@ -132,7 +132,7 @@ func TestNPCDistanceTo(t *testing.T) {
 }
 
 func TestNPCDirectionTo(t *testing.T) {
-	n := NewNPC(1, NpcTypes[1], "default", 10, 10)
+	n := NewNPC(1, NpcTypes[10], "default", 10, 10)
 
 	tests := []struct {
 		tx, ty int
@@ -157,25 +157,28 @@ func TestNPCDirectionTo(t *testing.T) {
 }
 
 func TestIsShopNPC(t *testing.T) {
-	if !IsShopNPC(10) {
-		t.Error("Type 10 should be a shop NPC")
+	if !IsShopNPC(15) {
+		t.Error("Type 15 (ShopKeeper) should be a shop NPC")
 	}
-	if !IsShopNPC(11) {
-		t.Error("Type 11 should be a shop NPC")
+	if !IsShopNPC(20) {
+		t.Error("Type 20 (Howard) should be a shop NPC")
 	}
-	if !IsShopNPC(12) {
-		t.Error("Type 12 should be a shop NPC")
+	if !IsShopNPC(24) {
+		t.Error("Type 24 (Tom) should be a shop NPC")
 	}
-	if IsShopNPC(1) {
-		t.Error("Type 1 (Slime) should not be a shop NPC")
+	if !IsShopNPC(90) {
+		t.Error("Type 90 (Gail) should be a shop NPC")
 	}
-	if IsShopNPC(4) {
-		t.Error("Type 4 (Demon) should not be a shop NPC")
+	if IsShopNPC(10) {
+		t.Error("Type 10 (Slime) should not be a shop NPC")
+	}
+	if IsShopNPC(31) {
+		t.Error("Type 31 (Demon) should not be a shop NPC")
 	}
 }
 
 func TestShopNPCProperties(t *testing.T) {
-	for _, id := range []int{10, 11, 12} {
+	for _, id := range []int{15, 19, 20, 24, 25, 26} {
 		npcType := NpcTypes[id]
 		if npcType == nil {
 			t.Errorf("Shop NPC type %d not found", id)
@@ -187,14 +190,11 @@ func TestShopNPCProperties(t *testing.T) {
 		if npcType.WanderRange != 0 {
 			t.Errorf("Shop NPC %d should have WanderRange=0", id)
 		}
-		if npcType.MinDamage != 0 {
-			t.Errorf("Shop NPC %d should not deal damage", id)
-		}
 	}
 }
 
 func TestNPCToNpcAppear(t *testing.T) {
-	n := NewNPC(42, NpcTypes[1], "default", 30, 40)
+	n := NewNPC(42, NpcTypes[10], "default", 30, 40)
 	msg := n.ToNpcAppear()
 
 	if msg.ObjectId != 42 {
@@ -209,7 +209,7 @@ func TestNPCToNpcAppear(t *testing.T) {
 }
 
 func TestNPCToEntityInfo(t *testing.T) {
-	n := NewNPC(42, NpcTypes[2], "default", 30, 40)
+	n := NewNPC(42, NpcTypes[11], "default", 30, 40)
 	info := n.ToEntityInfo()
 
 	if info.EntityType != 2 {
