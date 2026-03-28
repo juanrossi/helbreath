@@ -500,6 +500,8 @@ const encoderMap: Record<number, { create: (data: any) => any; encode: (msg: any
 export class MessageHandler {
   private listeners: Map<number, MessageListener[]> = new Map();
   private ws: WebSocketClient;
+  // Buffer for messages that arrive before handlers are registered (scene transitions)
+  private pendingMessages: Map<number, any[]> = new Map();
 
   constructor(ws: WebSocketClient) {
     this.ws = ws;
@@ -510,6 +512,16 @@ export class MessageHandler {
       this.listeners.set(msgType, []);
     }
     this.listeners.get(msgType)!.push(listener);
+
+    // Replay any buffered messages for this type
+    const pending = this.pendingMessages.get(msgType);
+    if (pending && pending.length > 0) {
+      console.log(`[MSG] Replaying ${pending.length} buffered messages for 0x${msgType.toString(16)}`);
+      for (const decoded of pending) {
+        try { listener(decoded); } catch (e) { console.error('Error replaying buffered message:', e); }
+      }
+      this.pendingMessages.delete(msgType);
+    }
   }
 
   /** Remove all listeners for a specific message type. */
@@ -525,7 +537,15 @@ export class MessageHandler {
   handleMessage(msgType: number, payload: Uint8Array): void {
     const listeners = this.listeners.get(msgType);
     if (!listeners || listeners.length === 0) {
-      console.warn(`No handler for message type 0x${msgType.toString(16)}`);
+      // Buffer the message so it can be replayed when a handler is registered
+      const decoded = this.decode(msgType, payload);
+      if (decoded) {
+        if (!this.pendingMessages.has(msgType)) {
+          this.pendingMessages.set(msgType, []);
+        }
+        this.pendingMessages.get(msgType)!.push(decoded);
+        console.log(`[MSG] Buffered message type 0x${msgType.toString(16)} (no handler yet)`);
+      }
       return;
     }
 

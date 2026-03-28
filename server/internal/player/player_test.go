@@ -163,7 +163,7 @@ func TestSyncEquipmentAppearance(t *testing.T) {
 		t.Error("No equipment should mean all appearance = 0")
 	}
 
-	// Equip Short Sword (ApprIndex=1)
+	// Equip Dagger (ApprIndex=1)
 	sword := items.NewItem(items.GetItemDef(1), 1)
 	p.Inventory.AddItem(sword)
 	p.Inventory.Equip(0)
@@ -173,8 +173,8 @@ func TestSyncEquipmentAppearance(t *testing.T) {
 		t.Errorf("Expected Weapon=1, got %d", p.Weapon)
 	}
 
-	// Equip Leather Armor (ApprIndex=1)
-	armor := items.NewItem(items.GetItemDef(40), 1)
+	// Equip Shirt(M) (ApprIndex=1)
+	armor := items.NewItem(items.GetItemDef(453), 1)
 	p.Inventory.AddItem(armor)
 	p.Inventory.Equip(0)
 	p.SyncEquipmentAppearance()
@@ -192,16 +192,16 @@ func TestMeetsRequirements(t *testing.T) {
 	}
 	p := FromDB(row, 1, nil)
 
-	// Short Sword: req level 1, no stat reqs
+	// Dagger: no level requirement
 	sword := items.GetItemDef(1)
 	if !p.MeetsRequirements(sword) {
-		t.Error("Level 5 player should meet Short Sword requirements")
+		t.Error("Level 5 player should meet Dagger requirements")
 	}
 
-	// Battle Axe: req level 8, STR 15
-	axe := items.GetItemDef(3)
-	if p.MeetsRequirements(axe) {
-		t.Error("Level 5 with STR 14 should not meet Battle Axe requirements (level 8, STR 15)")
+	// Dagger+1: req level 10
+	daggerPlus := items.GetItemDef(4)
+	if p.MeetsRequirements(daggerPlus) {
+		t.Error("Level 5 should not meet Dagger+1 requirements (level 10)")
 	}
 }
 
@@ -214,8 +214,8 @@ func TestToInventoryUpdate(t *testing.T) {
 	p := FromDB(row, 1, nil)
 
 	// Add some items
-	p.Inventory.AddItem(items.NewItem(items.GetItemDef(100), 5)) // 5x Small HP Potion
-	p.Inventory.AddItem(items.NewItem(items.GetItemDef(1), 1))   // Short Sword
+	p.Inventory.AddItem(items.NewItem(items.GetItemDef(91), 5)) // 5x RedPotion
+	p.Inventory.AddItem(items.NewItem(items.GetItemDef(1), 1))  // Dagger
 
 	// Equip sword
 	p.Inventory.Equip(1)

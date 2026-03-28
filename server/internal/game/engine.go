@@ -326,21 +326,27 @@ func (e *Engine) SpawnNPCsWithConfigPath(configPath string) {
 
 // giveStartingItems equips a new character with basic starter gear.
 func (e *Engine) giveStartingItems(p *player.Player) {
-	// Starting equipment based on original Helbreath:
-	// Short Sword (weapon), Leather Armor (body), Leather Leggings,
-	// Leather Cap (helm), Cloth Cape, Leather Boots
-	// Plus some HP potions to get started
+	// Starting equipment using original Helbreath item IDs (from Item.cfg):
+	// Dagger(1), Shirt(453M/471W), Trousers(459M)/Skirt(479W),
+	// Helm(600), Cape(402), Shoes(450), RedPotion(91) x5
+	isMale := p.Gender == 1
+	bodyID := 471 // Shirt(W)
+	legsID := 479 // Skirt(W)
+	if isMale {
+		bodyID = 453 // Shirt(M)
+		legsID = 459 // Trousers(M)
+	}
 	starterGear := []struct {
 		itemID int
 		equip  bool
 	}{
-		{1, true},   // Short Sword -> equip weapon
-		{40, true},  // Leather Armor -> equip body
-		{50, true},  // Leather Leggings -> equip legs
-		{30, true},  // Leather Cap -> equip helm
-		{70, true},  // Cloth Cape -> equip cape
-		{60, true},  // Leather Boots -> equip boots
-		{100, false}, // 5x Small HP Potions -> inventory
+		{1, true},       // Dagger -> equip weapon
+		{bodyID, true},  // Shirt -> equip body
+		{legsID, true},  // Trousers/Skirt -> equip legs
+		{600, true},     // Helm -> equip helm
+		{402, true},     // Cape -> equip cape
+		{450, true},     // Shoes -> equip boots
+		{91, false},     // 5x RedPotion (HP) -> inventory
 	}
 
 	for _, sg := range starterGear {
@@ -349,7 +355,7 @@ func (e *Engine) giveStartingItems(p *player.Player) {
 			continue
 		}
 		count := 1
-		if sg.itemID == 100 {
+		if sg.itemID == 91 {
 			count = 5
 		}
 		item := items.NewItem(def, count)

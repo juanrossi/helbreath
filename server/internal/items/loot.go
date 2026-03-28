@@ -11,35 +11,36 @@ type LootEntry struct {
 }
 
 // NpcLootTables maps NPC type ID to loot entries.
+// Item IDs reference the original Helbreath Item.cfg (via itemdefs_gen.go).
 var NpcLootTables = map[int][]LootEntry{
 	1: { // Slime
-		{ItemID: 100, DropChance: 0.30, MinCount: 1, MaxCount: 1}, // Small HP Potion
+		{ItemID: 91, DropChance: 0.30, MinCount: 1, MaxCount: 1}, // RedPotion
 	},
 	2: { // Skeleton
-		{ItemID: 100, DropChance: 0.20, MinCount: 1, MaxCount: 2}, // Small HP Potion
-		{ItemID: 103, DropChance: 0.15, MinCount: 1, MaxCount: 1}, // Small MP Potion
-		{ItemID: 6, DropChance: 0.08, MinCount: 1, MaxCount: 1},   // Dagger
-		{ItemID: 30, DropChance: 0.05, MinCount: 1, MaxCount: 1},  // Leather Cap
+		{ItemID: 91, DropChance: 0.20, MinCount: 1, MaxCount: 2},  // RedPotion
+		{ItemID: 93, DropChance: 0.15, MinCount: 1, MaxCount: 1},  // BluePotion
+		{ItemID: 1, DropChance: 0.08, MinCount: 1, MaxCount: 1},   // Dagger
+		{ItemID: 600, DropChance: 0.05, MinCount: 1, MaxCount: 1}, // Helm
 	},
 	3: { // Orc
-		{ItemID: 101, DropChance: 0.25, MinCount: 1, MaxCount: 2}, // HP Potion
-		{ItemID: 104, DropChance: 0.15, MinCount: 1, MaxCount: 1}, // MP Potion
-		{ItemID: 1, DropChance: 0.10, MinCount: 1, MaxCount: 1},   // Short Sword
-		{ItemID: 20, DropChance: 0.08, MinCount: 1, MaxCount: 1},  // Wooden Shield
-		{ItemID: 40, DropChance: 0.06, MinCount: 1, MaxCount: 1},  // Leather Armor
-		{ItemID: 50, DropChance: 0.06, MinCount: 1, MaxCount: 1},  // Leather Leggings
-		{ItemID: 60, DropChance: 0.06, MinCount: 1, MaxCount: 1},  // Leather Boots
+		{ItemID: 92, DropChance: 0.25, MinCount: 1, MaxCount: 2},  // BigHealthPotion
+		{ItemID: 94, DropChance: 0.15, MinCount: 1, MaxCount: 1},  // BigManaPotion
+		{ItemID: 8, DropChance: 0.10, MinCount: 1, MaxCount: 1},   // ShortSword
+		{ItemID: 79, DropChance: 0.08, MinCount: 1, MaxCount: 1},  // WoodShield
+		{ItemID: 453, DropChance: 0.06, MinCount: 1, MaxCount: 1}, // Shirt(M)
+		{ItemID: 459, DropChance: 0.06, MinCount: 1, MaxCount: 1}, // Trousers(M)
+		{ItemID: 450, DropChance: 0.06, MinCount: 1, MaxCount: 1}, // Shoes
 	},
 	4: { // Demon
-		{ItemID: 102, DropChance: 0.30, MinCount: 1, MaxCount: 3}, // Large HP Potion
-		{ItemID: 105, DropChance: 0.20, MinCount: 1, MaxCount: 2}, // Large MP Potion
-		{ItemID: 2, DropChance: 0.12, MinCount: 1, MaxCount: 1},   // Long Sword
-		{ItemID: 3, DropChance: 0.08, MinCount: 1, MaxCount: 1},   // Battle Axe
-		{ItemID: 21, DropChance: 0.10, MinCount: 1, MaxCount: 1},  // Iron Shield
-		{ItemID: 41, DropChance: 0.08, MinCount: 1, MaxCount: 1},  // Chain Mail
-		{ItemID: 31, DropChance: 0.08, MinCount: 1, MaxCount: 1},  // Iron Helm
-		{ItemID: 51, DropChance: 0.07, MinCount: 1, MaxCount: 1},  // Chain Leggings
-		{ItemID: 71, DropChance: 0.05, MinCount: 1, MaxCount: 1},  // Silk Mantle
+		{ItemID: 92, DropChance: 0.30, MinCount: 1, MaxCount: 3},  // BigHealthPotion
+		{ItemID: 94, DropChance: 0.20, MinCount: 1, MaxCount: 2},  // BigManaPotion
+		{ItemID: 8, DropChance: 0.12, MinCount: 1, MaxCount: 1},   // ShortSword
+		{ItemID: 50, DropChance: 0.08, MinCount: 1, MaxCount: 1},  // GreatSword
+		{ItemID: 80, DropChance: 0.10, MinCount: 1, MaxCount: 1},  // LeatherShield
+		{ItemID: 454, DropChance: 0.08, MinCount: 1, MaxCount: 1}, // Hauberk(M)
+		{ItemID: 600, DropChance: 0.08, MinCount: 1, MaxCount: 1}, // Helm
+		{ItemID: 461, DropChance: 0.07, MinCount: 1, MaxCount: 1}, // ChainHose(M)
+		{ItemID: 402, DropChance: 0.05, MinCount: 1, MaxCount: 1}, // Cape
 	},
 }
 
@@ -78,27 +79,28 @@ func RollGoldDrop(npcXP int) int64 {
 }
 
 // PotionTierByDifficulty returns a potion item ID based on NPC difficulty (XP).
-// Low difficulty (XP < 30): small potions, medium (30-80): regular, high (80+): large.
+// Low difficulty (XP < 30): basic potions, medium (30-80): big potions, high (80+): big potions.
+// Uses original Helbreath potion IDs from Item.cfg.
 func PotionTierByDifficulty(npcXP int) int {
 	if npcXP >= 80 {
-		// Large potions
+		// Big potions
 		if rand.Intn(2) == 0 {
-			return 102 // Large HP Potion
+			return 92 // BigHealthPotion
 		}
-		return 105 // Large MP Potion
+		return 94 // BigManaPotion
 	}
 	if npcXP >= 30 {
-		// Regular potions
+		// Big potions
 		if rand.Intn(2) == 0 {
-			return 101 // HP Potion
+			return 92 // BigHealthPotion
 		}
-		return 104 // MP Potion
+		return 94 // BigManaPotion
 	}
-	// Small potions
+	// Basic potions
 	if rand.Intn(2) == 0 {
-		return 100 // Small HP Potion
+		return 91 // RedPotion
 	}
-	return 103 // Small MP Potion
+	return 93 // BluePotion
 }
 
 // RollMultiTierLoot performs multi-tier loot rolling for an NPC kill.
@@ -125,7 +127,7 @@ func RollMultiTierLoot(npcTypeID int, npcXP int) []*Item {
 	// Tier 4: Rare roll (0.1% chance) — placeholder for future rare items
 	if rand.Float64() < 0.001 {
 		// Roll a random high-tier equipment piece as rare drop
-		rareItems := []int{3, 4, 22, 42, 32, 52} // Battle Axe, War Hammer, Tower Shield, Plate Mail, Full Helm, Plate Leggings
+		rareItems := []int{50, 4, 81, 456, 600, 461} // GreatSword, Dagger+1, TargeShield, ChainMail(M), Helm, ChainHose(M)
 		rareID := rareItems[rand.Intn(len(rareItems))]
 		def := GetItemDef(rareID)
 		if def != nil {
@@ -141,15 +143,16 @@ func RollMultiTierLoot(npcTypeID int, npcXP int) []*Item {
 
 // BossLootTable defines guaranteed drops for boss-type NPCs.
 // Boss loot has 100% drop rate and better items.
+// Uses original Helbreath Item.cfg IDs.
 var BossLootTable = []LootEntry{
-	{ItemID: 102, DropChance: 1.0, MinCount: 2, MaxCount: 5}, // Large HP Potions (guaranteed)
-	{ItemID: 105, DropChance: 1.0, MinCount: 1, MaxCount: 3}, // Large MP Potions (guaranteed)
-	{ItemID: 4, DropChance: 0.50, MinCount: 1, MaxCount: 1},  // War Hammer
-	{ItemID: 3, DropChance: 0.50, MinCount: 1, MaxCount: 1},  // Battle Axe
-	{ItemID: 22, DropChance: 0.40, MinCount: 1, MaxCount: 1}, // Tower Shield
-	{ItemID: 42, DropChance: 0.35, MinCount: 1, MaxCount: 1}, // Plate Mail
-	{ItemID: 32, DropChance: 0.30, MinCount: 1, MaxCount: 1}, // Full Helm
-	{ItemID: 52, DropChance: 0.25, MinCount: 1, MaxCount: 1}, // Plate Leggings
+	{ItemID: 92, DropChance: 1.0, MinCount: 2, MaxCount: 5},   // BigHealthPotion (guaranteed)
+	{ItemID: 94, DropChance: 1.0, MinCount: 1, MaxCount: 3},   // BigManaPotion (guaranteed)
+	{ItemID: 4, DropChance: 0.50, MinCount: 1, MaxCount: 1},   // Dagger+1
+	{ItemID: 50, DropChance: 0.50, MinCount: 1, MaxCount: 1},  // GreatSword
+	{ItemID: 81, DropChance: 0.40, MinCount: 1, MaxCount: 1},  // TargeShield
+	{ItemID: 456, DropChance: 0.35, MinCount: 1, MaxCount: 1}, // ChainMail(M)
+	{ItemID: 600, DropChance: 0.30, MinCount: 1, MaxCount: 1}, // Helm
+	{ItemID: 461, DropChance: 0.25, MinCount: 1, MaxCount: 1}, // ChainHose(M)
 }
 
 // RollBossLoot rolls loot from the boss loot table.
@@ -172,12 +175,44 @@ func RollBossLoot() []*Item {
 }
 
 // ShopInventory defines what items each shop NPC sells.
-// Map from NPC type ID to list of sellable item IDs.
+// Map from NPC type ID to list of sellable item IDs (from original Item.cfg).
 var ShopInventories = map[int][]int{
-	// ShopKeeper-W (type 15) — sells everything
-	15: {1, 2, 3, 4, 5, 6, 20, 21, 22, 30, 31, 32, 40, 41, 42, 50, 51, 52, 60, 61, 70, 71, 100, 101, 102, 103, 104, 105, 106},
-	// Tom the Blacksmith (type 24) — weapons and armor
-	24: {1, 2, 3, 4, 5, 6, 20, 21, 22, 30, 31, 32, 40, 41, 42, 50, 51, 52, 60, 61, 70, 71},
-	// Howard the Warehouse keeper (type 20) — potions
-	20: {100, 101, 102, 103, 104, 105, 106},
+	// Weapon Smith (type 10) — weapons
+	10: {
+		1,   // Dagger
+		8,   // ShortSword
+		10,  // MainGauche (shield)
+		17,  // Gradius+2
+		26,  // KnightScimitar
+		30,  // Falchion+2
+		34,  // Rapier
+		402, // Cape
+	},
+	// Armorer (type 11) — armor, shields, helms, boots
+	11: {
+		79,  // WoodShield
+		80,  // LeatherShield
+		450, // Shoes
+		451, // LongBoots
+		453, // Shirt(M)
+		454, // Hauberk(M)
+		456, // ChainMail(M)
+		459, // Trousers(M)
+		460, // KneeTrousers(M)
+		471, // Shirt(W)
+		472, // Hauberk(W)
+		476, // ChainMail(W)
+		479, // Skirt(W)
+		480, // Trousers(W)
+		600, // Helm
+	},
+	// Potion Merchant (type 12) -- potions
+	12: {
+		91, // RedPotion (HP)
+		92, // BigHealthPotion
+		93, // BluePotion (MP)
+		94, // BigManaPotion
+		95, // GreenPotion (SP)
+		96, // BigRevitPotion
+	},
 }

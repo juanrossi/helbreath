@@ -39,6 +39,7 @@ import {
   getHumanSpriteName,
   isOneShotState,
   isMovementState,
+  resolveEquipmentSprite,
   type GearConfig,
 } from '../game/PlayerAppearanceManager';
 import { SoundManager } from '../audio/SoundManager';
@@ -108,25 +109,131 @@ interface GameNPC {
 }
 
 // NPC type -> sprite file name mapping
+// NPC type ID -> sprite file name mapping (IDs match original NPC.cfg)
 const NPC_SPRITE_MAP: Record<number, string> = {
-  1: 'slm',     // Slime
-  2: 'ske',     // Skeleton
-  3: 'orc',     // Orc
-  4: 'demon',   // Demon
-  10: 'guard',  // Weapon Smith
-  11: 'guard',  // Armorer
-  12: 'guard',  // Potion Merchant
+  // Monsters
+  10: 'slm',        // Slime
+  11: 'ske',        // Skeleton
+  12: 'gol',        // Stone-Golem
+  13: 'cyc',        // Cyclops
+  14: 'orc',        // Orc
+  16: 'ant',        // Giant-Ant
+  17: 'scp',        // Scorpion
+  18: 'zom',        // Zombie
+  22: 'amp',        // Amphis (snake)
+  23: 'cla',        // Clay-Golem
+  27: 'helb',       // Hellbound
+  28: 'troll',      // Troll
+  29: 'orge',       // Ogre
+  30: 'liche',      // Liche
+  31: 'demon',      // Demon
+  32: 'unicorn',    // Unicorn
+  33: 'werewolf',   // WereWolf
+  48: 'stalker',    // Stalker
+  49: 'hellclaw',   // Hellclaw
+  50: 'tigerworm',  // Tigerworm
+  52: 'gagoyle',    // Gagoyle
+  53: 'beholder',   // Beholder
+  54: 'darkelf',    // Dark-Elf
+  55: 'bunny',      // Rabbit
+  56: 'cat',        // Cat
+  57: 'giantfrog',  // Frog
+  58: 'mtgiant',    // Mountain-Giant
+  59: 'ettin',      // Ettin
+  60: 'giantplant', // Plant
+  61: 'rudolph',    // Rudolph
+  62: 'direboar',   // DireBoar
+  63: 'frost',      // Frost
+  65: 'icegolem',   // Ice-Golem
+  66: 'wyvern',     // Wyvern
+  71: 'centaurus',  // Centaurus
+  72: 'clawturtle', // Claw-Turtle
+  73: 'firewyvern', // Fire-Wyvern
+  74: 'giantcrayfish', // Giant-Crayfish
+  75: 'giantlizard',  // Giant-Lizard
+  76: 'giantplant',   // Giant-Tree
+  77: 'mastermageorc', // MasterMage-Orc
+  78: 'minotaurs',  // Minotaurs
+  79: 'nizie',      // Nizie
+  80: 'tentocle',   // Tentocle
+  // Town NPCs
+  15: 'shopkpr',    // ShopKeeper-W
+  19: 'gandlf',     // Gandlf
+  20: 'howard',     // Howard
+  21: 'guard',      // Guard
+  24: 'tom',        // Tom
+  25: 'william',    // William
+  26: 'kennedy',    // Kennedy
+  34: 'dummy',      // Dummy
+  64: 'crop',       // Crops
+  67: 'mcgaffin',   // McGaffin
+  68: 'perry',      // Perry
+  69: 'devlin',     // Devlin
+  90: 'gail',       // Gail
 };
 
 // Fallback colors if sprite fails to load
 const NPC_COLORS: Record<number, number> = {
-  1: 0x44ff44,  // Slime - green
-  2: 0xcccccc,  // Skeleton - gray
-  3: 0x886644,  // Orc - brown
-  4: 0xff4444,  // Demon - red
-  10: 0x4488ff, // Weapon Smith - blue
-  11: 0x4488ff, // Armorer - blue
-  12: 0x4488ff, // Potion Merchant - blue
+  // Monsters
+  10: 0x44ff44,  // Slime - green
+  11: 0xcccccc,  // Skeleton - gray
+  12: 0x888888,  // Stone-Golem - dark gray
+  13: 0xcc6600,  // Cyclops - orange
+  14: 0x886644,  // Orc - brown
+  16: 0x663300,  // Giant-Ant - dark brown
+  17: 0x996633,  // Scorpion - tan
+  18: 0x557755,  // Zombie - sickly green
+  22: 0x55aa55,  // Amphis - snake green
+  23: 0xaa8866,  // Clay-Golem - clay
+  27: 0xbb3333,  // Hellbound - dark red
+  28: 0x669966,  // Troll - troll green
+  29: 0x998844,  // Ogre - khaki
+  30: 0x8844aa,  // Liche - purple
+  31: 0xff4444,  // Demon - red
+  32: 0xffffff,  // Unicorn - white
+  33: 0x554433,  // WereWolf - dark fur
+  48: 0x334455,  // Stalker - dark blue-gray
+  49: 0xcc2222,  // Hellclaw - crimson
+  50: 0xff8800,  // Tigerworm - orange
+  52: 0x886688,  // Gagoyle - mauve
+  53: 0x44aacc,  // Beholder - cyan
+  54: 0x443366,  // Dark-Elf - dark purple
+  55: 0xeeeeee,  // Rabbit - white
+  56: 0xddaa44,  // Cat - ginger
+  57: 0x228833,  // Frog - frog green
+  58: 0x776655,  // Mountain-Giant - stone
+  59: 0x887766,  // Ettin - brown-gray
+  60: 0x33aa33,  // Plant - plant green
+  61: 0x884422,  // Rudolph - brown
+  62: 0x664422,  // DireBoar - boar brown
+  63: 0x88ccff,  // Frost - ice blue
+  64: 0x44aa22,  // Crops - crop green
+  65: 0x99ccee,  // Ice-Golem - ice
+  66: 0xaa4466,  // Wyvern - wine
+  71: 0xbbaa55,  // Centaurus - gold-brown
+  72: 0x448855,  // Claw-Turtle - turtle green
+  73: 0xff4400,  // Fire-Wyvern - fire
+  74: 0xcc5544,  // Giant-Crayfish - crayfish red
+  75: 0x667744,  // Giant-Lizard - lizard green
+  76: 0x336633,  // Giant-Tree - forest green
+  77: 0x884422,  // MasterMage-Orc - orc brown
+  78: 0x885533,  // Minotaurs - minotaur brown
+  79: 0x6666aa,  // Nizie - lavender
+  80: 0x448866,  // Tentocle - teal
+  81: 0x440000,  // Abaddon - pitch dark red
+  // Town NPCs
+  15: 0x4488ff,  // ShopKeeper - blue
+  19: 0x4488ff,  // Gandlf - blue
+  20: 0x4488ff,  // Howard - blue
+  21: 0xaaaaaa,  // Guard - silver
+  24: 0x4488ff,  // Tom - blue
+  25: 0x4488ff,  // William - blue
+  26: 0x4488ff,  // Kennedy - blue
+  34: 0xccaa66,  // Dummy - straw
+  67: 0x4488ff,  // McGaffin - blue
+  68: 0x4488ff,  // Perry - blue
+  69: 0x4488ff,  // Devlin - blue
+  90: 0x4488ff,  // Gail - blue
 };
 
 interface GroundItemDisplay {
@@ -136,8 +243,9 @@ interface GroundItemDisplay {
   count: number;
   x: number;
   y: number;
-  sprite: Phaser.GameObjects.Rectangle;
+  sprite: Phaser.GameObjects.GameObject;
   label: Phaser.GameObjects.Text;
+  extras?: Phaser.GameObjects.GameObject[];
 }
 
 // Direction deltas indexed by direction 1-8
@@ -163,6 +271,13 @@ export class GameScene extends Phaser.Scene {
   private playerSkinColor = 0;
   private playerHairStyle = 0;
   private playerUnderwearColor = 0;
+  private playerBodyArmor = 0;
+  private playerWeapon = 0;
+  private playerShield = 0;
+  private playerHelm = 0;
+  private playerLeggings = 0;
+  private playerBoots = 0;
+  private playerCape = 0;
   private playerAssets: PlayerAssets | null = null;
   private playerNameText!: Phaser.GameObjects.Text;
   private playerState: PlayerState = PlayerState.IdlePeace;
@@ -344,6 +459,10 @@ export class GameScene extends Phaser.Scene {
     ];
     for (const t of gameSceneMsgTypes) this.msgHandler.off(t);
 
+    // Register network handlers FIRST — the server sends inventory/spell/skill
+    // updates immediately after EnterGameResponse, so handlers must be ready.
+    this.registerNetworkHandlers();
+
     const enterData = this.registry.get('enterGameData') as EnterGameResponse;
 
     if (!enterData) {
@@ -363,6 +482,13 @@ export class GameScene extends Phaser.Scene {
     this.playerSkinColor = pd.appearance?.skinColor ?? 0;
     this.playerHairStyle = pd.appearance?.hairStyle ?? 0;
     this.playerUnderwearColor = pd.appearance?.underwearColor ?? 0;
+    this.playerBodyArmor = pd.appearance?.bodyArmor ?? 0;
+    this.playerWeapon = pd.appearance?.weapon ?? 0;
+    this.playerShield = pd.appearance?.shield ?? 0;
+    this.playerHelm = pd.appearance?.helm ?? 0;
+    this.playerLeggings = pd.appearance?.leggings ?? 0;
+    this.playerBoots = pd.appearance?.boots ?? 0;
+    this.playerCape = pd.appearance?.cape ?? 0;
     this.currentMapName = pd.mapName;
     this.playerHP = pd.hp;
     this.playerMaxHP = pd.maxHp;
@@ -455,46 +581,9 @@ export class GameScene extends Phaser.Scene {
       this.musicManager.playMapMusic(mapAsset.music);
     }
 
-    // Network handlers
-    this.msgHandler.on(Proto.MSG_MOTION_EVENT, (evt: MotionEvent) => this.onMotionEvent(evt));
-    this.msgHandler.on(Proto.MSG_PLAYER_APPEAR, (data: any) => this.addRemotePlayer(data));
-    this.msgHandler.on(Proto.MSG_PLAYER_DISAPPEAR, (data: any) => this.removeRemotePlayer(data.objectId));
-    this.msgHandler.on(Proto.MSG_CHAT_MESSAGE, (data: ChatMessageData) => this.onChatMessage(data));
-    this.msgHandler.on(Proto.MSG_NPC_APPEAR, (data: NpcAppearData) => this.addNPC(data));
-    this.msgHandler.on(Proto.MSG_NPC_DISAPPEAR, (data: any) => this.removeNPC(data.objectId));
-    this.msgHandler.on(Proto.MSG_NPC_MOTION, (data: NpcMotionData) => this.onNpcMotion(data));
-    this.msgHandler.on(Proto.MSG_DAMAGE_EVENT, (data: DamageEventData) => this.onDamageEvent(data));
-    this.msgHandler.on(Proto.MSG_STAT_UPDATE, (data: StatUpdateData) => this.onStatUpdate(data));
-    this.msgHandler.on(Proto.MSG_DEATH_EVENT, (data: DeathEventData) => this.onDeathEvent(data));
-    this.msgHandler.on(Proto.MSG_RESPAWN_EVENT, (data: RespawnEventData) => this.onRespawnEvent(data));
-    this.msgHandler.on(Proto.MSG_NOTIFICATION, (data: any) => this.onNotification(data));
-    this.msgHandler.on(Proto.MSG_INVENTORY_UPDATE, (data: InventoryUpdateData) => this.onInventoryUpdate(data));
-    this.msgHandler.on(Proto.MSG_GROUND_ITEM_APPEAR, (data: GroundItemAppearData) => this.onGroundItemAppear(data));
-    this.msgHandler.on(Proto.MSG_GROUND_ITEM_DISAPPEAR, (data: GroundItemDisappearData) => this.onGroundItemDisappear(data));
-    this.msgHandler.on(Proto.MSG_SHOP_OPEN, (data: ShopOpenData) => this.onShopOpen(data));
-    this.msgHandler.on(Proto.MSG_SHOP_RESPONSE, (data: ShopResponseData) => this.onShopResponse(data));
-    this.msgHandler.on(Proto.MSG_SPELL_EFFECT, (data: SpellEffectData) => this.onSpellEffect(data));
-    this.msgHandler.on(Proto.MSG_BUFF_UPDATE, (data: BuffUpdateData) => this.onBuffUpdate(data));
-    this.msgHandler.on(Proto.MSG_SPELL_LIST, (data: SpellListData) => this.onSpellList(data));
-    this.msgHandler.on(Proto.MSG_SKILL_LIST, (data: SkillListData) => this.onSkillList(data));
-    this.msgHandler.on(Proto.MSG_SKILL_RESULT, (data: SkillResultData) => this.onSkillResult(data));
-    this.msgHandler.on(Proto.MSG_CRAFT_RESULT, (data: CraftResultData) => this.onCraftResult(data));
-    this.msgHandler.on(Proto.MSG_FACTION_SELECT_RESPONSE, (data: FactionSelectResponseData) => this.onFactionResponse(data));
-    this.msgHandler.on(Proto.MSG_GUILD_INFO, (data: GuildInfoData) => this.onGuildInfo(data));
-    this.msgHandler.on(Proto.MSG_GUILD_ACTION_RESPONSE, (data: GuildActionResponseData) => this.onGuildActionResponse(data));
-    this.msgHandler.on(Proto.MSG_PARTY_UPDATE, (data: PartyUpdateData) => this.onPartyUpdate(data));
-    this.msgHandler.on(Proto.MSG_PARTY_INVITE, (data: PartyInviteData) => this.onPartyInvite(data));
-    this.msgHandler.on(Proto.MSG_PARTY_ACTION_RESPONSE, (data: PartyActionResponseData) => this.onPartyActionResponse(data));
-    this.msgHandler.on(Proto.MSG_TRADE_INCOMING, (data: TradeIncomingData) => this.onTradeIncoming(data));
-    this.msgHandler.on(Proto.MSG_TRADE_UPDATE, (data: TradeUpdateData) => this.onTradeUpdate(data));
-    this.msgHandler.on(Proto.MSG_TRADE_COMPLETE, (data: TradeCompleteData) => this.onTradeComplete(data));
-    this.msgHandler.on(Proto.MSG_PK_STATUS_UPDATE, (data: PKStatusData) => this.onPKStatus(data));
-    this.msgHandler.on(Proto.MSG_QUEST_LIST_UPDATE, (data: QuestListData) => this.onQuestList(data));
-    this.msgHandler.on(Proto.MSG_QUEST_PROGRESS, (data: QuestProgressData) => this.onQuestProgress(data));
-    this.msgHandler.on(Proto.MSG_QUEST_REWARD, (data: QuestRewardData) => this.onQuestReward(data));
-    this.msgHandler.on(Proto.MSG_MAP_CHANGE_RESPONSE, (data: any) => this.onMapChange(data));
+    // Handlers already registered at top of create() via registerNetworkHandlers()
 
-    // Keyboard shortcuts for UI
+    // Keyboard shortcuts for UI (must be after scene is created)
     this.input.keyboard!.on('keydown-I', () => this.toggleInventory());
     this.input.keyboard!.on('keydown-C', () => this.toggleStats());
     this.input.keyboard!.on('keydown-M', () => this.toggleSpellBar());
@@ -730,7 +819,13 @@ export class GameScene extends Phaser.Scene {
   // ---------------------------------------------------------------------------
 
   private createLocalPlayer(): void {
-    const gear = this.buildGearConfig(this.playerGender, this.playerSkinColor, this.playerHairStyle, this.playerUnderwearColor);
+    const gear = this.buildGearConfig({
+      gender: this.playerGender, skinColor: this.playerSkinColor,
+      hairStyle: this.playerHairStyle, underwearColor: this.playerUnderwearColor,
+      bodyArmor: this.playerBodyArmor, weapon: this.playerWeapon,
+      shield: this.playerShield, helm: this.playerHelm,
+      leggings: this.playerLeggings, boots: this.playerBoots, cape: this.playerCape,
+    });
     const dir = Math.max(0, this.playerDirection - 1);
     const state = PlayerState.IdlePeace;
 
@@ -751,7 +846,7 @@ export class GameScene extends Phaser.Scene {
     const layers: GameAsset[] = [];
     const framesPerDirection = PLAYER_ANIMATION_FRAME_COUNT[state] ?? 8;
 
-    // Layer 1: Human body
+    // Layer 0: Human body
     const bodySheetIndex = HUMAN_SPRITESHEET_BASE[state] + direction;
     const bodyAnimKey = `${gear.human}-${bodySheetIndex}`;
 
@@ -765,7 +860,7 @@ export class GameScene extends Phaser.Scene {
       layers.push(body);
     }
 
-    // Layer 2: Hair
+    // Layer 1: Hair
     const isFemale = gear.human === 'ww' || gear.human === 'yw' || gear.human === 'bw';
     const hairSprite = isFemale ? 'whr' : 'mhr';
     const hairStyleIndex = gear.hairStyleIndex ?? 0;
@@ -784,7 +879,7 @@ export class GameScene extends Phaser.Scene {
       layers.push(hair);
     }
 
-    // Layer 3: Underwear
+    // Layer 2: Underwear
     const underwearSprite = isFemale ? 'wpt' : 'mpt';
     const underwearColorIndex = gear.underwearColorIndex ?? 0;
     const underwearSheetIndex = underwearColorIndex * 12 + ARMOUR_SPRITESHEET_BASE[state];
@@ -802,15 +897,74 @@ export class GameScene extends Phaser.Scene {
       layers.push(underwear);
     }
 
+    // Equipment layers (armor, leggings, boots, helm, weapon, shield, cape)
+    const equipSlots: Array<{ key: keyof GearConfig }> = [
+      { key: 'armor' },
+      { key: 'leggings' },
+      { key: 'boots' },
+      { key: 'helm' },
+      { key: 'weapon' },
+      { key: 'shield' },
+      { key: 'cape' },
+    ];
+
+    for (const { key } of equipSlots) {
+      const equipData = gear[key];
+      if (equipData && typeof equipData === 'object' && 'spriteName' in equipData) {
+        const sheetIndex = equipData.sheetMultiplier * 12 + ARMOUR_SPRITESHEET_BASE[state];
+        const animKey = `${equipData.spriteName}-${sheetIndex}`;
+
+        if (this.anims.exists(animKey)) {
+          const equipLayer = new GameAsset(this, {
+            x: 0, y: 0,
+            spriteName: equipData.spriteName,
+            spriteSheetIndex: sheetIndex,
+            direction,
+            framesPerDirection,
+            animationType: AnimationType.DirectionalSubFrame,
+          });
+          layers.push(equipLayer);
+        }
+      }
+    }
+
     return layers;
   }
 
-  private buildGearConfig(gender: number, skinColor: number, hairStyle: number, underwearColor: number): GearConfig {
-    return {
+  private buildGearConfig(appearance: {
+    gender: number; skinColor: number; hairStyle: number; underwearColor: number;
+    bodyArmor?: number; weapon?: number; shield?: number;
+    helm?: number; leggings?: number; boots?: number; cape?: number;
+  }): GearConfig {
+    const { gender, skinColor, hairStyle, underwearColor } = appearance;
+    const gear: GearConfig = {
       human: getHumanSpriteName(gender, skinColor),
       hairStyleIndex: hairStyle,
       underwearColorIndex: underwearColor,
     };
+
+    const weapon = resolveEquipmentSprite('weapon', appearance.weapon ?? 0, gender);
+    if (weapon) gear.weapon = weapon;
+
+    const shield = resolveEquipmentSprite('shield', appearance.shield ?? 0, gender);
+    if (shield) gear.shield = shield;
+
+    const armor = resolveEquipmentSprite('armor', appearance.bodyArmor ?? 0, gender);
+    if (armor) gear.armor = armor;
+
+    const helm = resolveEquipmentSprite('helm', appearance.helm ?? 0, gender);
+    if (helm) gear.helm = helm;
+
+    const leggings = resolveEquipmentSprite('leggings', appearance.leggings ?? 0, gender);
+    if (leggings) gear.leggings = leggings;
+
+    const boots = resolveEquipmentSprite('boots', appearance.boots ?? 0, gender);
+    if (boots) gear.boots = boots;
+
+    const cape = resolveEquipmentSprite('cape', appearance.cape ?? 0, gender);
+    if (cape) gear.cape = cape;
+
+    return gear;
   }
 
   private setPlayerAssetsPosition(assets: PlayerAssets, worldX: number, worldY: number, tileY: number): void {
@@ -848,43 +1002,155 @@ export class GameScene extends Phaser.Scene {
     const isOneShot = isOneShotState(state);
     const repeat = isOneShot ? 0 : undefined;
 
+    // Helper: safely play animation, hiding the layer if animation is invalid
+    const safePlay = (layer: GameAsset, animKey: string, dir: number, fpv: number,
+      rep: number | undefined, fpd: number, animType: AnimationType) => {
+      try {
+        if (this.anims.exists(animKey)) {
+          layer.setVisible(true);
+          layer.playAnimationWithDirection(animKey, dir, fpv, undefined, rep, fpd, animType);
+        } else {
+          layer.setVisible(false);
+        }
+      } catch {
+        layer.setVisible(false);
+      }
+    };
+
     if (assets.layers[0]) {
       const bodySheetIndex = HUMAN_SPRITESHEET_BASE[state] + direction;
       const bodyAnimKey = `${gear.human}-${bodySheetIndex}`;
-      assets.layers[0].playAnimationWithDirection(
-        bodyAnimKey, 0, fps, undefined, repeat, framesPerDirection, AnimationType.FullFrame,
-      );
+      safePlay(assets.layers[0], bodyAnimKey, 0, fps, repeat, framesPerDirection, AnimationType.FullFrame);
     }
 
     if (assets.layers[1]) {
       const hairSprite = isFemale ? 'whr' : 'mhr';
       const hairSheetIndex = (gear.hairStyleIndex ?? 0) * 12 + ARMOUR_SPRITESHEET_BASE[state];
       const hairAnimKey = `${hairSprite}-${hairSheetIndex}`;
-      assets.layers[1].playAnimationWithDirection(
-        hairAnimKey, direction, fps, undefined, repeat, framesPerDirection, AnimationType.DirectionalSubFrame,
-      );
+      safePlay(assets.layers[1], hairAnimKey, direction, fps, repeat, framesPerDirection, AnimationType.DirectionalSubFrame);
     }
 
     if (assets.layers[2]) {
       const underwearSprite = isFemale ? 'wpt' : 'mpt';
       const underwearSheetIndex = (gear.underwearColorIndex ?? 0) * 12 + ARMOUR_SPRITESHEET_BASE[state];
       const underwearAnimKey = `${underwearSprite}-${underwearSheetIndex}`;
-      assets.layers[2].playAnimationWithDirection(
-        underwearAnimKey, direction, fps, undefined, repeat, framesPerDirection, AnimationType.DirectionalSubFrame,
-      );
+      safePlay(assets.layers[2], underwearAnimKey, direction, fps, repeat, framesPerDirection, AnimationType.DirectionalSubFrame);
     }
 
-    // Update additional equipment layers (3+) if present
-    for (let i = 3; i < assets.layers.length; i++) {
-      // Equipment layers beyond body/hair/underwear use directional sub-frames
-      const layer = assets.layers[i];
-      const currentAnim = layer.sprite?.anims?.currentAnim;
-      if (currentAnim) {
-        layer.playAnimationWithDirection(
-          currentAnim.key, direction, fps, undefined, repeat, framesPerDirection, AnimationType.DirectionalSubFrame,
-        );
+    // Update equipment layers (3+) by computing correct animation keys from gear config
+    const equipSlots: Array<keyof GearConfig> = ['armor', 'leggings', 'boots', 'helm', 'weapon', 'shield', 'cape'];
+    let layerIdx = 3;
+    for (const key of equipSlots) {
+      const equipData = gear[key];
+      if (equipData && typeof equipData === 'object' && 'spriteName' in equipData && layerIdx < assets.layers.length) {
+        const sheetIndex = equipData.sheetMultiplier * 12 + ARMOUR_SPRITESHEET_BASE[state];
+        const animKey = `${equipData.spriteName}-${sheetIndex}`;
+        safePlay(assets.layers[layerIdx], animKey, direction, fps, repeat, framesPerDirection, AnimationType.DirectionalSubFrame);
+        layerIdx++;
       }
     }
+  }
+
+  private updateLocalPlayerAppearance(info: any): void {
+    // Update stored equipment appearance from server
+    this.playerBodyArmor = info.appearance?.bodyArmor ?? 0;
+    this.playerWeapon = info.appearance?.weapon ?? 0;
+    this.playerShield = info.appearance?.shield ?? 0;
+    this.playerHelm = info.appearance?.helm ?? 0;
+    this.playerLeggings = info.appearance?.leggings ?? 0;
+    this.playerBoots = info.appearance?.boots ?? 0;
+    this.playerCape = info.appearance?.cape ?? 0;
+
+    // Rebuild player sprite layers with new equipment
+    const dir = this.playerDirection;
+    const state = this.playerState;
+    this.destroyPlayerAssets(this.playerAssets);
+
+    const gear = this.buildGearConfig({
+      gender: this.playerGender, skinColor: this.playerSkinColor,
+      hairStyle: this.playerHairStyle, underwearColor: this.playerUnderwearColor,
+      bodyArmor: this.playerBodyArmor, weapon: this.playerWeapon,
+      shield: this.playerShield, helm: this.playerHelm,
+      leggings: this.playerLeggings, boots: this.playerBoots, cape: this.playerCape,
+    });
+    const layers = this.createPlayerLayers(gear, dir, state);
+    this.playerAssets = { layers, gear };
+    this.setPlayerAssetsPosition(this.playerAssets, this.visualX, this.visualY, this.tileY);
+  }
+
+  private updateRemotePlayerAppearance(info: any): void {
+    const rp = this.remotePlayers.get(info.objectId);
+    if (!rp) return;
+    console.log(`[updateRemotePlayerAppearance] Updating appearance for ${rp.name} obj=${info.objectId}`);
+
+    // Destroy old sprite layers
+    this.destroyPlayerAssets(rp.assets);
+
+    // Rebuild with new appearance
+    const gender = info.appearance?.gender ?? rp.gender;
+    const skinColor = info.appearance?.skinColor ?? rp.skinColor;
+    const hairStyle = info.appearance?.hairStyle ?? rp.hairStyle;
+    const underwearColor = info.appearance?.underwearColor ?? rp.underwearColor;
+
+    const gear = this.buildGearConfig({
+      gender, skinColor, hairStyle, underwearColor,
+      bodyArmor: info.appearance?.bodyArmor ?? 0,
+      weapon: info.appearance?.weapon ?? 0,
+      shield: info.appearance?.shield ?? 0,
+      helm: info.appearance?.helm ?? 0,
+      leggings: info.appearance?.leggings ?? 0,
+      boots: info.appearance?.boots ?? 0,
+      cape: info.appearance?.cape ?? 0,
+    });
+
+    const spriteDir = Math.max(0, rp.direction - 1);
+    const layers = this.createPlayerLayers(gear, spriteDir, PlayerState.IdlePeace);
+    rp.assets = { layers, gear };
+    rp.gender = gender;
+    rp.skinColor = skinColor;
+    rp.hairStyle = hairStyle;
+    rp.underwearColor = underwearColor;
+    this.setPlayerAssetsPosition(rp.assets, rp.visualX, rp.visualY, rp.tileY);
+  }
+
+  private registerNetworkHandlers(): void {
+    this.msgHandler.on(Proto.MSG_MOTION_EVENT, (evt: MotionEvent) => this.onMotionEvent(evt));
+    this.msgHandler.on(Proto.MSG_PLAYER_APPEAR, (data: any) => this.addRemotePlayer(data));
+    this.msgHandler.on(Proto.MSG_PLAYER_DISAPPEAR, (data: any) => this.removeRemotePlayer(data.objectId));
+    this.msgHandler.on(Proto.MSG_CHAT_MESSAGE, (data: ChatMessageData) => this.onChatMessage(data));
+    this.msgHandler.on(Proto.MSG_NPC_APPEAR, (data: NpcAppearData) => this.addNPC(data));
+    this.msgHandler.on(Proto.MSG_NPC_DISAPPEAR, (data: any) => this.removeNPC(data.objectId));
+    this.msgHandler.on(Proto.MSG_NPC_MOTION, (data: NpcMotionData) => this.onNpcMotion(data));
+    this.msgHandler.on(Proto.MSG_DAMAGE_EVENT, (data: DamageEventData) => this.onDamageEvent(data));
+    this.msgHandler.on(Proto.MSG_STAT_UPDATE, (data: StatUpdateData) => this.onStatUpdate(data));
+    this.msgHandler.on(Proto.MSG_DEATH_EVENT, (data: DeathEventData) => this.onDeathEvent(data));
+    this.msgHandler.on(Proto.MSG_RESPAWN_EVENT, (data: RespawnEventData) => this.onRespawnEvent(data));
+    this.msgHandler.on(Proto.MSG_NOTIFICATION, (data: any) => this.onNotification(data));
+    this.msgHandler.on(Proto.MSG_INVENTORY_UPDATE, (data: InventoryUpdateData) => this.onInventoryUpdate(data));
+    this.msgHandler.on(Proto.MSG_GROUND_ITEM_APPEAR, (data: GroundItemAppearData) => this.onGroundItemAppear(data));
+    this.msgHandler.on(Proto.MSG_GROUND_ITEM_DISAPPEAR, (data: GroundItemDisappearData) => this.onGroundItemDisappear(data));
+    this.msgHandler.on(Proto.MSG_SHOP_OPEN, (data: ShopOpenData) => this.onShopOpen(data));
+    this.msgHandler.on(Proto.MSG_SHOP_RESPONSE, (data: ShopResponseData) => this.onShopResponse(data));
+    this.msgHandler.on(Proto.MSG_SPELL_EFFECT, (data: SpellEffectData) => this.onSpellEffect(data));
+    this.msgHandler.on(Proto.MSG_BUFF_UPDATE, (data: BuffUpdateData) => this.onBuffUpdate(data));
+    this.msgHandler.on(Proto.MSG_SPELL_LIST, (data: SpellListData) => this.onSpellList(data));
+    this.msgHandler.on(Proto.MSG_SKILL_LIST, (data: SkillListData) => this.onSkillList(data));
+    this.msgHandler.on(Proto.MSG_SKILL_RESULT, (data: SkillResultData) => this.onSkillResult(data));
+    this.msgHandler.on(Proto.MSG_CRAFT_RESULT, (data: CraftResultData) => this.onCraftResult(data));
+    this.msgHandler.on(Proto.MSG_FACTION_SELECT_RESPONSE, (data: FactionSelectResponseData) => this.onFactionResponse(data));
+    this.msgHandler.on(Proto.MSG_GUILD_INFO, (data: GuildInfoData) => this.onGuildInfo(data));
+    this.msgHandler.on(Proto.MSG_GUILD_ACTION_RESPONSE, (data: GuildActionResponseData) => this.onGuildActionResponse(data));
+    this.msgHandler.on(Proto.MSG_PARTY_UPDATE, (data: PartyUpdateData) => this.onPartyUpdate(data));
+    this.msgHandler.on(Proto.MSG_PARTY_INVITE, (data: PartyInviteData) => this.onPartyInvite(data));
+    this.msgHandler.on(Proto.MSG_PARTY_ACTION_RESPONSE, (data: PartyActionResponseData) => this.onPartyActionResponse(data));
+    this.msgHandler.on(Proto.MSG_TRADE_INCOMING, (data: TradeIncomingData) => this.onTradeIncoming(data));
+    this.msgHandler.on(Proto.MSG_TRADE_UPDATE, (data: TradeUpdateData) => this.onTradeUpdate(data));
+    this.msgHandler.on(Proto.MSG_TRADE_COMPLETE, (data: TradeCompleteData) => this.onTradeComplete(data));
+    this.msgHandler.on(Proto.MSG_PK_STATUS_UPDATE, (data: PKStatusData) => this.onPKStatus(data));
+    this.msgHandler.on(Proto.MSG_QUEST_LIST_UPDATE, (data: QuestListData) => this.onQuestList(data));
+    this.msgHandler.on(Proto.MSG_QUEST_PROGRESS, (data: QuestProgressData) => this.onQuestProgress(data));
+    this.msgHandler.on(Proto.MSG_QUEST_REWARD, (data: QuestRewardData) => this.onQuestReward(data));
+    this.msgHandler.on(Proto.MSG_MAP_CHANGE_RESPONSE, (data: any) => this.onMapChange(data));
   }
 
   private destroyPlayerAssets(assets: PlayerAssets | null): void {
@@ -988,6 +1254,7 @@ export class GameScene extends Phaser.Scene {
     if (this.playerState === PlayerState.MeleeAttack) return false;
     if (this.playerState === PlayerState.BowAttack) return false;
     if (this.playerState === PlayerState.Cast) return false;
+    if (this.playerState === PlayerState.PickUp) return false;
     if (this.playerState === PlayerState.TakeDamage) return false;
     if (this.playerState === PlayerState.TakeDamageWithKnockback) return false;
     if (this.playerState === PlayerState.Die) return false;
@@ -1424,8 +1691,16 @@ export class GameScene extends Phaser.Scene {
 
   private addRemotePlayer(info: EntityInfo | any): void {
     if (!info) { console.warn('[addRemotePlayer] null info'); return; }
-    if (this.remotePlayers.has(info.objectId)) { console.log(`[addRemotePlayer] skip duplicate obj=${info.objectId}`); return; }
-    if (info.objectId === this.playerObjectId) { console.log(`[addRemotePlayer] skip self obj=${info.objectId}`); return; }
+    if (info.objectId === this.playerObjectId) {
+      // Self appearance update (from equip/unequip) — rebuild local player sprite
+      this.updateLocalPlayerAppearance(info);
+      return;
+    }
+    if (this.remotePlayers.has(info.objectId)) {
+      // Existing remote player — update their appearance (e.g. equip/unequip)
+      this.updateRemotePlayerAppearance(info);
+      return;
+    }
     // Don't add NPCs as remote players
     if (this.npcs.has(info.objectId)) { console.log(`[addRemotePlayer] skip NPC obj=${info.objectId}`); return; }
     console.log(`[addRemotePlayer] Creating player ${info.name} obj=${info.objectId} at (${info.position?.x}, ${info.position?.y})`);
@@ -1435,7 +1710,16 @@ export class GameScene extends Phaser.Scene {
     const hairStyle = info.appearance?.hairStyle ?? 0;
     const underwearColor = info.appearance?.underwearColor ?? 0;
 
-    const gear = this.buildGearConfig(gender, skinColor, hairStyle, underwearColor);
+    const gear = this.buildGearConfig({
+      gender, skinColor, hairStyle, underwearColor,
+      bodyArmor: info.appearance?.bodyArmor ?? 0,
+      weapon: info.appearance?.weapon ?? 0,
+      shield: info.appearance?.shield ?? 0,
+      helm: info.appearance?.helm ?? 0,
+      leggings: info.appearance?.leggings ?? 0,
+      boots: info.appearance?.boots ?? 0,
+      cape: info.appearance?.cape ?? 0,
+    });
     const dir = Math.max(0, (info.direction ?? 5) - 1);
     const state = PlayerState.IdlePeace;
 
@@ -2571,7 +2855,37 @@ export class GameScene extends Phaser.Scene {
     const worldX = data.position.x * TILE_SIZE + TILE_SIZE / 2;
     const worldY = data.position.y * TILE_SIZE + TILE_SIZE / 2;
 
-    const sprite = this.add.rectangle(worldX, worldY, 12, 12, 0xFFD700, 0.8)
+    // Determine icon color based on item name hints
+    const nameLower = (data.name || '').toLowerCase();
+    let iconColor = 0xCCCCCC; // default gray
+    let iconChar = '?';
+    if (nameLower.includes('potion') || nameLower.includes('red') || nameLower.includes('green') || nameLower.includes('blue')) {
+      iconColor = nameLower.includes('blue') || nameLower.includes('mana') ? 0x4488FF :
+                  nameLower.includes('green') || nameLower.includes('revit') ? 0x44CC44 : 0xFF4444;
+      iconChar = 'P';
+    } else if (nameLower.includes('sword') || nameLower.includes('dagger') || nameLower.includes('axe') || nameLower.includes('hammer') || nameLower.includes('bow') || nameLower.includes('blade') || nameLower.includes('rapier')) {
+      iconColor = 0xCCCCDD; iconChar = 'W';
+    } else if (nameLower.includes('shield')) {
+      iconColor = 0x8888BB; iconChar = 'S';
+    } else if (nameLower.includes('mail') || nameLower.includes('armor') || nameLower.includes('shirt') || nameLower.includes('hauberk') || nameLower.includes('robe')) {
+      iconColor = 0x886644; iconChar = 'A';
+    } else if (nameLower.includes('helm') || nameLower.includes('cap') || nameLower.includes('hat')) {
+      iconColor = 0x999977; iconChar = 'H';
+    } else if (nameLower.includes('gold')) {
+      iconColor = 0xFFD700; iconChar = 'G';
+    }
+
+    // Draw a small icon with the item type indicator
+    const bg = this.add.circle(worldX, worldY, 8, 0x000000, 0.7)
+      .setDepth(data.position.y * DEPTH_MULTIPLIER + 1);
+    const icon = this.add.circle(worldX, worldY, 6, iconColor, 0.9)
+      .setDepth(data.position.y * DEPTH_MULTIPLIER + 1)
+      .setInteractive({ useHandCursor: true });
+    const charText = this.add.text(worldX, worldY, iconChar, {
+      fontSize: '8px', color: '#000', fontStyle: 'bold',
+    }).setOrigin(0.5, 0.5).setDepth(data.position.y * DEPTH_MULTIPLIER + 1);
+
+    const sprite = this.add.zone(worldX, worldY, 20, 20)
       .setDepth(data.position.y * DEPTH_MULTIPLIER + 1)
       .setInteractive({ useHandCursor: true });
 
@@ -2580,9 +2894,30 @@ export class GameScene extends Phaser.Scene {
       stroke: '#000000', strokeThickness: 2,
     }).setOrigin(0.5, 1).setDepth(data.position.y * DEPTH_MULTIPLIER + 2);
 
-    sprite.on('pointerdown', () => {
+    const pickupHandler = () => {
+      const dx = Math.abs(this.tileX - data.position.x);
+      const dy = Math.abs(this.tileY - data.position.y);
+      if (Math.max(dx, dy) > 1) {
+        this.onNotification({ message: 'Too far to pick up', type: 2 });
+        return;
+      }
+      // Play pickup (bend-down) animation before sending request
+      if (this.playerAssets && this.playerState !== PlayerState.Die) {
+        this.playerState = PlayerState.PickUp;
+        const spriteDir = Math.max(0, this.playerDirection - 1);
+        this.updatePlayerAnimation(this.playerAssets, PlayerState.PickUp, spriteDir);
+        // Return to idle after pickup animation completes
+        this.time.delayedCall(400, () => {
+          if (this.playerState === PlayerState.PickUp && this.playerAssets) {
+            this.playerState = PlayerState.IdlePeace;
+            this.updatePlayerAnimation(this.playerAssets, PlayerState.IdlePeace, Math.max(0, this.playerDirection - 1));
+          }
+        });
+      }
       this.msgHandler.sendMessage(Proto.MSG_ITEM_PICKUP_REQUEST, { groundId: data.groundId });
-    });
+    };
+    sprite.on('pointerdown', pickupHandler);
+    icon.on('pointerdown', pickupHandler);
 
     this.groundItems.set(data.groundId, {
       groundId: data.groundId,
@@ -2593,6 +2928,7 @@ export class GameScene extends Phaser.Scene {
       y: data.position.y,
       sprite,
       label,
+      extras: [bg, icon, charText],
     });
   }
 
@@ -2601,6 +2937,7 @@ export class GameScene extends Phaser.Scene {
     if (gi) {
       gi.sprite.destroy();
       gi.label.destroy();
+      if (gi.extras) { for (const e of gi.extras) e.destroy(); }
       this.groundItems.delete(data.groundId);
     }
   }

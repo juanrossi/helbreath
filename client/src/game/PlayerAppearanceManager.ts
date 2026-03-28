@@ -140,6 +140,98 @@ export function isMovementState(state: PlayerState): boolean {
 }
 
 // ---------------------------------------------------------------------------
+// Equipment ApprIndex Lookup Tables
+// ---------------------------------------------------------------------------
+
+/**
+ * Lookup tables mapping server ApprIndex values to sprite names.
+ * ApprIndex 0 means no equipment. Each entry is [maleSprite, femaleSprite, sheetMultiplier].
+ * For items with separate .spr files per variant, sheetMultiplier is 0.
+ * For items packed in a single .spr file (shields, leggings), sheetMultiplier varies.
+ */
+
+type EquipSpriteEntry = { male: string; female: string; sheetMultiplier: number };
+
+const WEAPON_APPR: Record<number, EquipSpriteEntry> = {
+    1: { male: 'msw',     female: 'wsw',     sheetMultiplier: 0 }, // Short Sword
+    2: { male: 'msw2',    female: 'wsw2',    sheetMultiplier: 0 }, // Long Sword
+    3: { male: 'maxe1',   female: 'waxe1',   sheetMultiplier: 0 }, // Battle Axe
+    4: { male: 'mhammer', female: 'whammer', sheetMultiplier: 0 }, // War Hammer
+    5: { male: 'mstaff1', female: 'wstaff1', sheetMultiplier: 0 }, // Staff
+    6: { male: 'msw',     female: 'wsw',     sheetMultiplier: 0 }, // Dagger (uses sword sprite)
+};
+
+const SHIELD_APPR: Record<number, EquipSpriteEntry> = {
+    1: { male: 'msh', female: 'wsh', sheetMultiplier: 0 }, // Wooden Shield
+    2: { male: 'msh', female: 'wsh', sheetMultiplier: 1 }, // Iron Shield
+    3: { male: 'msh', female: 'wsh', sheetMultiplier: 2 }, // Tower Shield
+};
+
+const BODY_ARMOR_APPR: Record<number, EquipSpriteEntry> = {
+    1: { male: 'mlarmor', female: 'wlarmor', sheetMultiplier: 0 }, // Leather Armor
+    2: { male: 'mcmail',  female: 'wcmail',  sheetMultiplier: 0 }, // Chain Mail
+    3: { male: 'mpmail',  female: 'wpmail',  sheetMultiplier: 0 }, // Plate Mail
+};
+
+const HELM_APPR: Record<number, EquipSpriteEntry> = {
+    1: { male: 'mhcap1', female: 'whcap1', sheetMultiplier: 0 }, // Leather Cap
+    2: { male: 'mhelm1', female: 'whelm1', sheetMultiplier: 0 }, // Iron Helm
+    3: { male: 'mhelm2', female: 'mhelm2', sheetMultiplier: 0 }, // Full Helm (female uses male sprite as fallback)
+};
+
+const LEGGINGS_APPR: Record<number, EquipSpriteEntry> = {
+    1: { male: 'mleggings', female: 'wleggings', sheetMultiplier: 0 }, // Leather Leggings
+    2: { male: 'mleggings', female: 'wleggings', sheetMultiplier: 1 }, // Chain Leggings
+    3: { male: 'mleggings', female: 'wleggings', sheetMultiplier: 2 }, // Plate Leggings
+};
+
+const BOOTS_APPR: Record<number, EquipSpriteEntry> = {
+    1: { male: 'mlboots', female: 'wlboots', sheetMultiplier: 0 }, // Leather Boots
+    2: { male: 'mshoes',  female: 'wshoes',  sheetMultiplier: 0 }, // Iron Boots
+};
+
+const CAPE_APPR: Record<number, EquipSpriteEntry> = {
+    1: { male: 'mmantle01', female: 'wmantle01', sheetMultiplier: 0 }, // Cloth Cape
+    2: { male: 'mmantle02', female: 'wmantle02', sheetMultiplier: 0 }, // Silk Mantle
+};
+
+/**
+ * Resolves an equipment ApprIndex value to a sprite name and sheet multiplier.
+ *
+ * @param slot - Equipment slot type
+ * @param apprIndex - ApprIndex value from server (0 = none)
+ * @param gender - 0 = male, 1 = female
+ * @returns Object with spriteName and sheetMultiplier, or undefined if no equipment
+ */
+export function resolveEquipmentSprite(
+    slot: 'weapon' | 'shield' | 'armor' | 'helm' | 'leggings' | 'boots' | 'cape',
+    apprIndex: number,
+    gender: number,
+): { spriteName: string; sheetMultiplier: number } | undefined {
+    if (apprIndex <= 0) return undefined;
+
+    const table: Record<number, EquipSpriteEntry> | undefined = {
+        weapon: WEAPON_APPR,
+        shield: SHIELD_APPR,
+        armor: BODY_ARMOR_APPR,
+        helm: HELM_APPR,
+        leggings: LEGGINGS_APPR,
+        boots: BOOTS_APPR,
+        cape: CAPE_APPR,
+    }[slot];
+
+    if (!table) return undefined;
+    const entry = table[apprIndex];
+    if (!entry) return undefined;
+
+    const isFemale = gender === 1;
+    return {
+        spriteName: isFemale ? entry.female : entry.male,
+        sheetMultiplier: entry.sheetMultiplier,
+    };
+}
+
+// ---------------------------------------------------------------------------
 // Gear Configuration
 // ---------------------------------------------------------------------------
 

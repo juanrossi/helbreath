@@ -206,7 +206,7 @@ func TestPlayerAttackPlayerTargetArmor(t *testing.T) {
 
 	// Armored target
 	armored := makeTestPlayerWithID(2, "Armored")
-	armor := items.NewItem(items.GetItemDef(40), 1) // Leather Armor
+	armor := items.NewItem(items.GetItemDef(454), 1) // Hauberk(M)
 	armored.Inventory.AddItem(armor)
 	armored.Inventory.Equip(0)
 	armored.RecalcCombatStats()
@@ -244,7 +244,7 @@ func TestPlayerAttackPlayerEquipmentDegrades(t *testing.T) {
 	attacker.RecalcCombatStats()
 
 	target := makeTestPlayerWithID(2, "Target")
-	armor := items.NewItem(items.GetItemDef(40), 1)
+	armor := items.NewItem(items.GetItemDef(453), 1) // Shirt(M)
 	target.Inventory.AddItem(armor)
 	target.Inventory.Equip(0)
 	target.RecalcCombatStats()
@@ -255,7 +255,8 @@ func TestPlayerAttackPlayerEquipmentDegrades(t *testing.T) {
 	}
 
 	weapon := attacker.Inventory.GetEquipped(items.EquipWeapon)
-	if weapon != nil && weapon.Durability >= 100 {
+	weaponDef := items.GetItemDef(1) // Dagger
+	if weapon != nil && weaponDef != nil && weapon.Durability >= weaponDef.Durability {
 		t.Error("Attacker weapon should degrade during PvP")
 	}
 }

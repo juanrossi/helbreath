@@ -246,6 +246,11 @@ func (e *Engine) handleItemEquip(client *network.Client, req *pb.ItemEquipReques
 	e.sendInventoryUpdate(p)
 	e.sendStatUpdate(p)
 
+	// Send appearance to self so client can update equipment sprites
+	selfAppear := p.ToPlayerAppear()
+	selfData, _ := network.Encode(network.MsgPlayerAppear, selfAppear)
+	p.Send(selfData)
+
 	// Broadcast appearance change to nearby players
 	gm, ok := e.maps[p.MapName]
 	if ok {

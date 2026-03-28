@@ -208,31 +208,65 @@ const EQUIPMENT_SPRITE_ASSETS: AssetData[] = [
     { key: 'mhr', fileName: 'mhr.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
     { key: 'whr', fileName: 'whr.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
 
-    // Swords (male / female) — starter weapon
+    // --- Weapons ---
+    // Swords (ApprIndex 1: Short Sword, ApprIndex 6: Dagger fallback)
     { key: 'msw', fileName: 'msw.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
     { key: 'wsw', fileName: 'wsw.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    // Long Sword (ApprIndex 2)
+    { key: 'msw2', fileName: 'msw2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'wsw2', fileName: 'wsw2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    // Battle Axe (ApprIndex 3)
+    { key: 'maxe1', fileName: 'maxe1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'waxe1', fileName: 'waxe1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    // War Hammer (ApprIndex 4)
+    { key: 'mhammer', fileName: 'mhammer.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'whammer', fileName: 'whammer.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    // Staff (ApprIndex 5)
+    { key: 'mstaff1', fileName: 'mstaff1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'wstaff1', fileName: 'wstaff1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
 
-    // Leather armor (male / female) — starter armor
+    // --- Body Armor ---
+    // Leather Armor (ApprIndex 1)
     { key: 'mlarmor', fileName: 'mlarmor.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
     { key: 'wlarmor', fileName: 'wlarmor.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    // Chain Mail (ApprIndex 2)
+    { key: 'mcmail', fileName: 'mcmail.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'wcmail', fileName: 'wcmail.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    // Plate Mail (ApprIndex 3)
+    { key: 'mpmail', fileName: 'mpmail.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'wpmail', fileName: 'wpmail.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
 
-    // Leggings (male / female) — starter leggings
+    // --- Leggings (all variants in one file) ---
     { key: 'mleggings', fileName: 'mleggings.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
     { key: 'wleggings', fileName: 'wleggings.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
 
-    // Caps (male / female) — starter helm
+    // --- Helms ---
+    // Leather Cap (ApprIndex 1)
     { key: 'mhcap1', fileName: 'mhcap1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
     { key: 'whcap1', fileName: 'whcap1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    // Iron Helm (ApprIndex 2)
+    { key: 'mhelm1', fileName: 'mhelm1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'whelm1', fileName: 'whelm1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    // Full Helm (ApprIndex 3)
+    { key: 'mhelm2', fileName: 'mhelm2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
 
-    // Capes/mantles (male / female) — starter cape
+    // --- Capes ---
+    // Cloth Cape (ApprIndex 1)
     { key: 'mmantle01', fileName: 'mmantle01.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
     { key: 'wmantle01', fileName: 'wmantle01.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    // Silk Mantle (ApprIndex 2)
+    { key: 'mmantle02', fileName: 'mmantle02.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'wmantle02', fileName: 'wmantle02.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
 
-    // Boots (male / female) — starter boots
+    // --- Boots ---
+    // Leather Boots (ApprIndex 1)
     { key: 'mlboots', fileName: 'mlboots.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
     { key: 'wlboots', fileName: 'wlboots.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    // Iron Boots (ApprIndex 2)
+    { key: 'mshoes', fileName: 'mshoes.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'wshoes', fileName: 'wshoes.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
 
-    // Shields (male / female)
+    // --- Shields (all variants in one file) ---
     { key: 'msh', fileName: 'msh.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Shields },
     { key: 'wsh', fileName: 'wsh.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Shields },
 ];
@@ -241,18 +275,84 @@ const EQUIPMENT_SPRITE_ASSETS: AssetData[] = [
 // Monster / NPC Sprites — all monster .spr files in assets/sprites/
 // ---------------------------------------------------------------------------
 
-// Only load sprites for NPC types actually spawned by the server.
-// Additional monster sprites can be loaded on-demand when new NPC types are added.
+// Register all monster / NPC sprites whose files exist in assets/sprites/.
+// Keys match the NPC_SPRITE_MAP in GameScene.ts; SpriteType IDs match NPC.cfg.
 const MONSTER_SPRITE_ASSETS: AssetData[] = [
-    // Currently spawned monsters (NpcType IDs 1-4)
-    { key: 'slm', fileName: 'slm.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },       // ID 1 - Slime
-    { key: 'ske', fileName: 'ske.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },       // ID 2 - Skeleton
-    { key: 'orc', fileName: 'orc.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },       // ID 3 - Orc
-    { key: 'demon', fileName: 'demon.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },   // ID 4 - Demon
+    // ---- Starter area (Level 10-20) ----
+    { key: 'slm', fileName: 'slm.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },           // 10 - Slime
+    { key: 'bunny', fileName: 'bunny.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },       // 55 - Rabbit
+    { key: 'cat', fileName: 'cat.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },           // 56 - Cat
+    { key: 'ant', fileName: 'ant.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },           // 16 - Giant-Ant
+    { key: 'amp', fileName: 'amp.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },           // 22 - Amphis
+    { key: 'orc', fileName: 'orc.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },           // 14 - Orc
 
-    // Shop / town NPCs (IDs 10-12)
-    { key: 'guard', fileName: 'guard.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },
-    { key: 'shopkpr', fileName: 'shopkpr.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },
+    // ---- Level 20-40 ----
+    { key: 'zom', fileName: 'zom.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },           // 18 - Zombie
+    { key: 'scp', fileName: 'scp.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },           // 17 - Scorpion
+    { key: 'ske', fileName: 'ske.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },           // 11 - Skeleton
+
+    // ---- Level 40-50 ----
+    { key: 'cla', fileName: 'cla.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },           // 23 - Clay-Golem
+    { key: 'gol', fileName: 'gol.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },           // 12 - Stone-Golem
+    { key: 'helb', fileName: 'helb.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },         // 27 - Hellbound
+    { key: 'giantfrog', fileName: 'giantfrog.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster }, // 57 - Frog
+    { key: 'rudolph', fileName: 'rudolph.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },   // 61 - Rudolph
+
+    // ---- Level 50-60 ----
+    { key: 'troll', fileName: 'troll.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },       // 28 - Troll
+    { key: 'cyc', fileName: 'cyc.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },           // 13 - Cyclops
+    { key: 'icegolem', fileName: 'icegolem.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster }, // 65 - Ice-Golem
+
+    // ---- Level 60-90 ----
+    { key: 'beholder', fileName: 'beholder.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster }, // 53 - Beholder
+    { key: 'giantplant', fileName: 'giantplant.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster }, // 60 - Plant / 76 - Giant-Tree (shared sprite)
+    { key: 'orge', fileName: 'orge.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },         // 29 - Ogre
+    { key: 'mtgiant', fileName: 'mtgiant.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },   // 58 - Mountain-Giant
+    { key: 'direboar', fileName: 'direboar.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster }, // 62 - DireBoar
+    { key: 'tentocle', fileName: 'tentocle.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster }, // 80 - Tentocle
+    { key: 'giantcrayfish', fileName: 'giantcrayfish.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster }, // 74 - Giant-Crayfish
+
+    // ---- Level 90+ ----
+    { key: 'liche', fileName: 'liche.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },       // 30 - Liche
+    { key: 'stalker', fileName: 'stalker.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },   // 48 - Stalker
+    { key: 'werewolf', fileName: 'werewolf.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster }, // 33 - WereWolf
+    { key: 'darkelf', fileName: 'darkelf.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },   // 54 - Dark-Elf
+    { key: 'frost', fileName: 'frost.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },       // 63 - Frost
+    { key: 'clawturtle', fileName: 'clawturtle.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster }, // 72 - Claw-Turtle
+    { key: 'giantlizard', fileName: 'giantlizard.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster }, // 75 - Giant-Lizard
+
+    // ---- Level 140+ (endgame) ----
+    { key: 'ettin', fileName: 'ettin.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },       // 59 - Ettin
+    { key: 'mastermageorc', fileName: 'mastermageorc.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster }, // 77 - MasterMage-Orc
+    { key: 'nizie', fileName: 'nizie.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },       // 79 - Nizie
+    { key: 'minotaurs', fileName: 'minotaurs.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster }, // 78 - Minotaurs
+    { key: 'centaurus', fileName: 'centaurus.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster }, // 71 - Centaurus
+    { key: 'unicorn', fileName: 'unicorn.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },   // 32 - Unicorn
+    { key: 'demon', fileName: 'demon.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },       // 31 - Demon
+    { key: 'gagoyle', fileName: 'gagoyle.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },   // 52 - Gagoyle
+
+    // ---- Boss monsters ----
+    { key: 'hellclaw', fileName: 'hellclaw.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster }, // 49 - Hellclaw
+    { key: 'tigerworm', fileName: 'tigerworm.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster }, // 50 - Tigerworm
+    { key: 'wyvern', fileName: 'wyvern.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },     // 66 - Wyvern
+    { key: 'firewyvern', fileName: 'firewyvern.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster }, // 73 - Fire-Wyvern
+
+    // ---- Town NPCs ----
+    { key: 'shopkpr', fileName: 'shopkpr.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },   // 15 - ShopKeeper-W
+    { key: 'gandlf', fileName: 'gandlf.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },     // 19 - Gandlf
+    { key: 'howard', fileName: 'howard.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },     // 20 - Howard
+    { key: 'guard', fileName: 'guard.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },       // 21 - Guard
+    { key: 'tom', fileName: 'tom.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },           // 24 - Tom
+    { key: 'william', fileName: 'william.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },   // 25 - William
+    { key: 'kennedy', fileName: 'kennedy.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },   // 26 - Kennedy
+    { key: 'mcgaffin', fileName: 'mcgaffin.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster }, // 67 - McGaffin
+    { key: 'perry', fileName: 'perry.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },       // 68 - Perry
+    { key: 'devlin', fileName: 'devlin.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },     // 69 - Devlin
+    { key: 'gail', fileName: 'gail.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },         // 90 - Gail
+
+    // ---- Misc ----
+    { key: 'dummy', fileName: 'dummy.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },       // 34 - Dummy
+    { key: 'crop', fileName: 'crop.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },         // 64 - Crops
 ];
 
 // ---------------------------------------------------------------------------

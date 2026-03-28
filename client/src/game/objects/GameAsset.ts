@@ -220,17 +220,25 @@ export class GameAsset {
             this.emitAnimationFrameChange(frame);
         });
 
-        // Play animation if it exists
+        // Play animation if it exists and has valid frames
         if (config.frameIndex === undefined) {
-            if (scene.anims.exists(animationKey)) {
+            const anim = scene.anims.get(animationKey);
+            if (anim && anim.frames && anim.frames.length > 0 && anim.frames[0]?.frame) {
                 this.isAnimationLooping = true;
-                this.sprite.play({
-                    key: animationKey,
-                    startFrame: this.directionStartFrame ?? 0,
-                    frameRate: config.frameRate ?? 10,
-                });
-            } else {
+                try {
+                    this.sprite.play({
+                        key: animationKey,
+                        startFrame: this.directionStartFrame ?? 0,
+                        frameRate: config.frameRate ?? 10,
+                    });
+                } catch {
+                    this.sprite.setVisible(false);
+                }
+            } else if (!scene.anims.exists(animationKey)) {
                 console.warn(`Animation key "${animationKey}" does not exist. Sprite created but not animating.`);
+            } else {
+                // Animation exists but has invalid frames — hide sprite
+                this.sprite.setVisible(false);
             }
         }
 
@@ -556,13 +564,37 @@ export class GameAsset {
 
             // Stop current animation if playing to ensure clean state
             if (this.sprite.anims.isPlaying) {
-                this.sprite.anims.stop();
+                // Guard: only stop if current frame exists (Phaser crashes otherwise)
+                if (this.sprite.anims.currentFrame) {
+                    this.sprite.anims.stop();
+                } else {
+                    // Force reset without emitting events
+                    this.sprite.anims.isPlaying = false;
+                }
             }
 
-            // Reset to frame 0 when starting from a non-zero frame to avoid carryover from previous animation
+            // Verify the target animation has valid frames before proceeding
+            const targetAnim = this.scene.anims.get(animationKey);
+            if (!targetAnim || !targetAnim.frames || targetAnim.frames.length === 0) {
+                this.sprite.setVisible(false);
+                return;
+            }
+
+            // Clamp startFrame to valid range to prevent out-of-bounds access
+            if (startFrame >= targetAnim.frames.length) {
+                startFrame = 0;
+            }
+
+            // Validate the target frame exists and has valid data
+            const targetFrame = targetAnim.frames[startFrame];
+            if (!targetFrame || !targetFrame.frame) {
+                this.sprite.setVisible(false);
+                return;
+            }
+
+            // Reset to frame 0 when starting from a non-zero frame to avoid carryover
             if (startFrame > 0) {
-                const anim = this.scene.anims.get(animationKey);
-                const firstFrame = anim?.frames?.[0];
+                const firstFrame = targetAnim.frames[0];
                 if (firstFrame?.frame) {
                     this.sprite.anims.setCurrentFrame(firstFrame);
                 }
@@ -589,7 +621,12 @@ export class GameAsset {
 
             this.sprite.play(playConfig);
         } catch (error) {
-            console.error(`Error playing animation with direction for GameAsset`, this, error);
+            // Animation failed — fully disable to prevent recurring preUpdate crashes
+            try {
+                this.sprite.anims.isPlaying = false;
+                this.sprite.anims.currentAnim = null;
+                this.sprite.setVisible(false);
+            } catch { /* ignore cleanup errors */ }
         }
     }
 

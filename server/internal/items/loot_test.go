@@ -89,29 +89,29 @@ func TestRollGoldDropZeroXP(t *testing.T) {
 
 func TestPotionTierByDifficulty(t *testing.T) {
 	// Low difficulty
-	lowPotions := map[int]bool{100: true, 103: true}
+	lowPotions := map[int]bool{91: true, 93: true}
 	for i := 0; i < 50; i++ {
 		id := PotionTierByDifficulty(10)
 		if !lowPotions[id] {
-			t.Errorf("Low difficulty potion should be small (100 or 103), got %d", id)
+			t.Errorf("Low difficulty potion should be basic (91 or 93), got %d", id)
 		}
 	}
 
 	// Medium difficulty
-	medPotions := map[int]bool{101: true, 104: true}
+	medPotions := map[int]bool{92: true, 94: true}
 	for i := 0; i < 50; i++ {
 		id := PotionTierByDifficulty(50)
 		if !medPotions[id] {
-			t.Errorf("Medium difficulty potion should be regular (101 or 104), got %d", id)
+			t.Errorf("Medium difficulty potion should be big (92 or 94), got %d", id)
 		}
 	}
 
 	// High difficulty
-	highPotions := map[int]bool{102: true, 105: true}
+	highPotions := map[int]bool{92: true, 94: true}
 	for i := 0; i < 50; i++ {
 		id := PotionTierByDifficulty(100)
 		if !highPotions[id] {
-			t.Errorf("High difficulty potion should be large (102 or 105), got %d", id)
+			t.Errorf("High difficulty potion should be big (92 or 94), got %d", id)
 		}
 	}
 }

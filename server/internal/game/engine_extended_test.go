@@ -2442,9 +2442,9 @@ func TestHandleItemUsePotion(t *testing.T) {
 	client := makeClientWithObjectID(p.ObjectID)
 
 	// Find a potion item
-	potionDef := items.GetItemDef(100) // HP Potion (Small)
+	potionDef := items.GetItemDef(91) // RedPotion
 	if potionDef == nil {
-		t.Skip("Potion item 100 not found")
+		t.Skip("Potion item 91 not found")
 	}
 	p.Inventory.AddItem(items.NewItem(potionDef, 5))
 
@@ -3245,9 +3245,9 @@ func TestHandleItemUseMPPotion(t *testing.T) {
 	addPlayerToEngine(e, p)
 	client := makeClientWithObjectID(p.ObjectID)
 
-	potionDef := items.GetItemDef(101) // MP Potion (Small)
+	potionDef := items.GetItemDef(93) // BluePotion (MP)
 	if potionDef == nil {
-		t.Skip("MP Potion 101 not found")
+		t.Skip("BluePotion 93 not found")
 	}
 	p.Inventory.AddItem(items.NewItem(potionDef, 1))
 
@@ -3262,9 +3262,9 @@ func TestHandleItemUseSPPotion(t *testing.T) {
 	addPlayerToEngine(e, p)
 	client := makeClientWithObjectID(p.ObjectID)
 
-	potionDef := items.GetItemDef(102) // SP Potion (Small)
+	potionDef := items.GetItemDef(95) // GreenPotion (SP)
 	if potionDef == nil {
-		t.Skip("SP Potion 102 not found")
+		t.Skip("GreenPotion 95 not found")
 	}
 	p.Inventory.AddItem(items.NewItem(potionDef, 1))
 
@@ -3287,9 +3287,9 @@ func TestHandleItemEquipArmor(t *testing.T) {
 	addPlayerToEngine(e, p)
 	client := makeClientWithObjectID(p.ObjectID)
 
-	armorDef := items.GetItemDef(40) // Leather Armor
+	armorDef := items.GetItemDef(453) // Shirt(M)
 	if armorDef == nil {
-		t.Skip("Armor item 40 not found")
+		t.Skip("Armor item 453 not found")
 	}
 	p.Inventory.AddItem(items.NewItem(armorDef, 1))
 
@@ -3347,7 +3347,7 @@ func TestExecuteTradeWithItems(t *testing.T) {
 	addPlayerToEngine(e, p2)
 
 	def1 := items.GetItemDef(1)
-	def2 := items.GetItemDef(100) // Try potion
+	def2 := items.GetItemDef(91) // RedPotion
 	if def1 == nil {
 		t.Skip("Item 1 not found")
 	}
@@ -3804,8 +3804,8 @@ func TestHandleItemEquipRequirementsFail(t *testing.T) {
 	addPlayerToEngine(e, p)
 	client := makeClientWithObjectID(p.ObjectID)
 
-	// Battle Axe requires level 8 + STR 15
-	axe := items.NewItem(items.GetItemDef(3), 1)
+	// Dagger+1 requires level 10
+	axe := items.NewItem(items.GetItemDef(4), 1)
 	p.Inventory.AddItem(axe)
 
 	req := &pb.ItemEquipRequest{SlotIndex: 0}
@@ -4485,9 +4485,9 @@ func TestHandleItemUseHPPotionCapped(t *testing.T) {
 	addPlayerToEngine(e, p)
 	client := makeClientWithObjectID(p.ObjectID)
 
-	potion := items.NewItem(items.GetItemDef(200), 1) // HP Potion
+	potion := items.NewItem(items.GetItemDef(91), 1) // RedPotion
 	if potion == nil {
-		t.Skip("HP Potion (200) not found")
+		t.Skip("RedPotion (91) not found")
 	}
 	p.Inventory.AddItem(potion)
 

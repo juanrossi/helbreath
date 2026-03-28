@@ -747,7 +747,7 @@ func TestHandleItemUse(t *testing.T) {
 	client := makeClientWithObjectID(1)
 
 	// Add a HP potion
-	potion := items.NewItem(items.GetItemDef(100), 3) // HP Potion
+	potion := items.NewItem(items.GetItemDef(91), 3) // RedPotion
 	p.Inventory.AddItem(potion)
 
 	e.handleItemUse(client, &pb.ItemUseRequest{SlotIndex: 0})

@@ -97,9 +97,10 @@ func TestPlayerAttackNPCWithWeapon(t *testing.T) {
 		t.Error("Expected at least some hits with weapon")
 	}
 
-	// Check weapon degraded
+	// Check weapon degraded (started at def's max durability)
 	weapon := p.Inventory.GetEquipped(items.EquipWeapon)
-	if weapon != nil && weapon.Durability >= 100 {
+	weaponDef := items.GetItemDef(1)
+	if weapon != nil && weaponDef != nil && weapon.Durability >= weaponDef.Durability {
 		t.Error("Weapon should have degraded during combat")
 	}
 }
@@ -108,15 +109,15 @@ func TestNPCAttackPlayerWithArmor(t *testing.T) {
 	p := makeTestPlayer()
 	n := makeTestNPC(11) // Skeleton
 
-	// Equip Leather Armor (defense=4)
-	armor := items.NewItem(items.GetItemDef(40), 1)
+	// Equip Hauberk(M) (defense=8)
+	armor := items.NewItem(items.GetItemDef(454), 1)
 	p.Inventory.AddItem(armor)
 	p.Inventory.Equip(0)
 	p.RecalcCombatStats()
 
 	totalDefense := p.Inventory.TotalDefense()
-	if totalDefense != 4 {
-		t.Errorf("Expected total defense=4, got %d", totalDefense)
+	if totalDefense != 8 {
+		t.Errorf("Expected total defense=8, got %d", totalDefense)
 	}
 
 	// Attack the player several times

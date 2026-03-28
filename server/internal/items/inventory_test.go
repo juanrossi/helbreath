@@ -24,7 +24,7 @@ func TestInventoryAddItem(t *testing.T) {
 
 func TestInventoryStacking(t *testing.T) {
 	inv := NewInventory()
-	def := GetItemDef(100) // Small HP Potion (MaxStack=20)
+	def := GetItemDef(91) // RedPotion (MaxStack=20)
 
 	// Add 10 potions
 	slot := inv.AddItem(NewItem(def, 10))
@@ -53,7 +53,7 @@ func TestInventoryStacking(t *testing.T) {
 
 func TestInventoryRemoveItem(t *testing.T) {
 	inv := NewInventory()
-	def := GetItemDef(100)
+	def := GetItemDef(91)
 	inv.AddItem(NewItem(def, 10))
 
 	// Remove 5
@@ -112,29 +112,29 @@ func TestInventoryEquip(t *testing.T) {
 
 func TestInventoryEquipSwap(t *testing.T) {
 	inv := NewInventory()
-	sword := GetItemDef(1)  // Short Sword
-	lsword := GetItemDef(2) // Long Sword
+	dagger := GetItemDef(1)    // Dagger
+	shortSwd := GetItemDef(8)  // ShortSword
 
-	inv.AddItem(NewItem(sword, 1))
+	inv.AddItem(NewItem(dagger, 1))
 	inv.Equip(0)
 
-	// Now add Long Sword and equip it - should swap
-	inv.AddItem(NewItem(lsword, 1))
+	// Now add ShortSword and equip it - should swap
+	inv.AddItem(NewItem(shortSwd, 1))
 	err := inv.Equip(0)
 	if err != nil {
 		t.Fatalf("Failed to equip swap: %v", err)
 	}
 
-	// Weapon slot should have Long Sword
+	// Weapon slot should have ShortSword
 	eq := inv.GetEquipped(EquipWeapon)
-	if eq == nil || eq.DefID != 2 {
-		t.Error("Weapon slot should have Long Sword after swap")
+	if eq == nil || eq.DefID != 8 {
+		t.Error("Weapon slot should have ShortSword after swap")
 	}
 
-	// Inventory should have Short Sword
+	// Inventory should have Dagger
 	item := inv.GetItem(0)
 	if item == nil || item.DefID != 1 {
-		t.Error("Inventory should have Short Sword after swap")
+		t.Error("Inventory should have Dagger after swap")
 	}
 }
 
@@ -169,7 +169,7 @@ func TestInventoryUnequipFull(t *testing.T) {
 	inv := NewInventory()
 
 	// Fill all inventory slots
-	potDef := GetItemDef(100)
+	potDef := GetItemDef(91)
 	for i := 0; i < MaxInventorySlots; i++ {
 		inv.Slots[i] = NewItem(potDef, 1)
 	}
@@ -185,7 +185,7 @@ func TestInventoryUnequipFull(t *testing.T) {
 
 func TestInventoryEquipNonEquippable(t *testing.T) {
 	inv := NewInventory()
-	potDef := GetItemDef(100)
+	potDef := GetItemDef(91)
 	inv.AddItem(NewItem(potDef, 5))
 
 	err := inv.Equip(0)
@@ -215,11 +215,11 @@ func TestTotalDefense(t *testing.T) {
 		t.Error("Empty equipment should have 0 defense")
 	}
 
-	// Equip Leather Armor (defense=4) and Leather Cap (defense=1)
-	inv.Equipment[EquipBody] = NewItem(GetItemDef(40), 1)
-	inv.Equipment[EquipHelm] = NewItem(GetItemDef(30), 1)
+	// Equip Hauberk(M) (defense=8) and Helm (defense=5)
+	inv.Equipment[EquipBody] = NewItem(GetItemDef(454), 1)
+	inv.Equipment[EquipHelm] = NewItem(GetItemDef(600), 1)
 
-	expected := 4 + 1
+	expected := 8 + 5
 	if inv.TotalDefense() != expected {
 		t.Errorf("Expected total defense=%d, got %d", expected, inv.TotalDefense())
 	}
@@ -234,22 +234,22 @@ func TestWeaponDamage(t *testing.T) {
 		t.Errorf("Unarmed should be 1-3, got %d-%d", min, max)
 	}
 
-	// Equip Short Sword (3-7)
+	// Equip Dagger (1-5)
 	inv.Equipment[EquipWeapon] = NewItem(GetItemDef(1), 1)
 	min, max = inv.WeaponDamage()
-	if min != 3 || max != 7 {
-		t.Errorf("Short Sword should be 3-7, got %d-%d", min, max)
+	if min != 1 || max != 5 {
+		t.Errorf("Dagger should be 1-5, got %d-%d", min, max)
 	}
 }
 
 func TestDegradeWeapon(t *testing.T) {
 	inv := NewInventory()
-	sword := NewItem(GetItemDef(1), 1) // durability=100
+	sword := NewItem(GetItemDef(1), 1) // Dagger, durability=300
 	inv.Equipment[EquipWeapon] = sword
 
 	inv.DegradeWeapon()
-	if sword.Durability != 99 {
-		t.Errorf("Expected durability 99 after degrade, got %d", sword.Durability)
+	if sword.Durability != 299 {
+		t.Errorf("Expected durability 299 after degrade, got %d", sword.Durability)
 	}
 
 	// Degrade to 0 - weapon should break
@@ -262,12 +262,12 @@ func TestDegradeWeapon(t *testing.T) {
 
 func TestDegradeArmor(t *testing.T) {
 	inv := NewInventory()
-	armor := NewItem(GetItemDef(40), 1) // Leather Armor, durability=80
+	armor := NewItem(GetItemDef(453), 1) // Shirt(M), durability=300
 	inv.Equipment[EquipBody] = armor
 
 	inv.DegradeArmor()
-	if armor.Durability != 79 {
-		t.Errorf("Expected durability 79, got %d", armor.Durability)
+	if armor.Durability != 299 {
+		t.Errorf("Expected durability 299, got %d", armor.Durability)
 	}
 
 	// Degrade to 0 - armor breaks
@@ -326,7 +326,7 @@ func TestHasItemsEmpty(t *testing.T) {
 
 func TestHasItemsWithSlotItem(t *testing.T) {
 	inv := NewInventory()
-	inv.AddItem(NewItem(GetItemDef(100), 1))
+	inv.AddItem(NewItem(GetItemDef(91), 1))
 	if !inv.HasItems() {
 		t.Error("Inventory with slot item should return true")
 	}
@@ -342,13 +342,13 @@ func TestHasItemsWithEquipment(t *testing.T) {
 
 func TestCountItem(t *testing.T) {
 	inv := NewInventory()
-	potDef := GetItemDef(100)
+	potDef := GetItemDef(91)
 
 	inv.AddItem(NewItem(potDef, 10))
 	inv.AddItem(NewItem(potDef, 5))
 
-	if inv.CountItem(100) != 15 {
-		t.Errorf("Expected 15 potions total, got %d", inv.CountItem(100))
+	if inv.CountItem(91) != 15 {
+		t.Errorf("Expected 15 potions total, got %d", inv.CountItem(91))
 	}
 	if inv.CountItem(999) != 0 {
 		t.Error("Non-existent item should count as 0")

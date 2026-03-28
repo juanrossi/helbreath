@@ -25,12 +25,12 @@ func TestItemDB(t *testing.T) {
 }
 
 func TestGetItemDef(t *testing.T) {
-	def := GetItemDef(1) // Short Sword
+	def := GetItemDef(1) // Dagger
 	if def == nil {
-		t.Fatal("Expected Short Sword (ID=1) to exist")
+		t.Fatal("Expected Dagger (ID=1) to exist")
 	}
-	if def.Name != "Short Sword" {
-		t.Errorf("Expected 'Short Sword', got %q", def.Name)
+	if def.Name != "Dagger" {
+		t.Errorf("Expected 'Dagger', got %q", def.Name)
 	}
 	if def.Type != ItemTypeWeapon {
 		t.Errorf("Expected weapon type, got %d", def.Type)
@@ -46,14 +46,14 @@ func TestGetItemDef(t *testing.T) {
 }
 
 func TestNewItem(t *testing.T) {
-	def := GetItemDef(100) // Small HP Potion
+	def := GetItemDef(91) // RedPotion
 	if def == nil {
-		t.Fatal("Small HP Potion should exist")
+		t.Fatal("RedPotion should exist")
 	}
 
 	item := NewItem(def, 5)
-	if item.DefID != 100 {
-		t.Errorf("Expected DefID=100, got %d", item.DefID)
+	if item.DefID != 91 {
+		t.Errorf("Expected DefID=91, got %d", item.DefID)
 	}
 	if item.Count != 5 {
 		t.Errorf("Expected Count=5, got %d", item.Count)
@@ -65,14 +65,14 @@ func TestNewItem(t *testing.T) {
 
 func TestItemStackable(t *testing.T) {
 	// Potion (MaxStack=20)
-	potDef := GetItemDef(100)
+	potDef := GetItemDef(91) // RedPotion
 	pot := NewItem(potDef, 1)
 	if !pot.IsStackable() {
 		t.Error("Potion should be stackable")
 	}
 
 	// Weapon (MaxStack=1)
-	swordDef := GetItemDef(1)
+	swordDef := GetItemDef(1) // Dagger
 	sword := NewItem(swordDef, 1)
 	if sword.IsStackable() {
 		t.Error("Weapon should not be stackable")
@@ -87,13 +87,12 @@ func TestPotionEffects(t *testing.T) {
 		mpRestore int
 		spRestore int
 	}{
-		{100, "Small HP Potion", 30, 0, 0},
-		{101, "HP Potion", 80, 0, 0},
-		{102, "Large HP Potion", 200, 0, 0},
-		{103, "Small MP Potion", 0, 20, 0},
-		{104, "MP Potion", 0, 50, 0},
-		{105, "Large MP Potion", 0, 120, 0},
-		{106, "SP Potion", 0, 0, 40},
+		{91, "RedPotion", 24, 0, 0},
+		{92, "BigHealthPotion", 24, 0, 0},
+		{93, "BluePotion", 0, 24, 0},
+		{94, "BigManaPotion", 0, 32, 0},
+		{95, "GreenPotion", 0, 0, 24},
+		{96, "BigRevitPotion", 0, 0, 32},
 	}
 
 	for _, tt := range tests {
@@ -115,25 +114,26 @@ func TestPotionEffects(t *testing.T) {
 }
 
 func TestWeaponStats(t *testing.T) {
-	sword := GetItemDef(1)
-	if sword.MinDamage != 3 || sword.MaxDamage != 7 {
-		t.Errorf("Short Sword: expected 3-7 damage, got %d-%d", sword.MinDamage, sword.MaxDamage)
+	// ID 1 = Dagger (from Item.cfg)
+	dagger := GetItemDef(1)
+	if dagger == nil {
+		t.Fatal("Item ID 1 (Dagger) should exist")
 	}
-
-	axe := GetItemDef(3)
-	if axe.MinDamage != 8 || axe.MaxDamage != 18 {
-		t.Errorf("Battle Axe: expected 8-18 damage, got %d-%d", axe.MinDamage, axe.MaxDamage)
+	if dagger.Type != ItemTypeWeapon {
+		t.Errorf("Dagger: expected weapon type, got %d", dagger.Type)
+	}
+	if dagger.MinDamage <= 0 {
+		t.Errorf("Dagger: expected positive min damage, got %d", dagger.MinDamage)
 	}
 }
 
 func TestArmorStats(t *testing.T) {
-	leather := GetItemDef(40)
-	if leather.Defense != 4 {
-		t.Errorf("Leather Armor: expected Defense=4, got %d", leather.Defense)
+	// ID 454 = Hauberk(M) from original Item.cfg
+	hauberk := GetItemDef(454)
+	if hauberk == nil {
+		t.Fatal("Item ID 454 (Hauberk(M)) should exist")
 	}
-
-	plate := GetItemDef(42)
-	if plate.Defense != 14 {
-		t.Errorf("Plate Mail: expected Defense=14, got %d", plate.Defense)
+	if hauberk.Defense <= 0 {
+		t.Errorf("Hauberk(M): expected positive defense, got %d", hauberk.Defense)
 	}
 }

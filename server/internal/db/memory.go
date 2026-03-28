@@ -127,6 +127,7 @@ func (m *MemoryStore) CreateCharacter(_ context.Context, accountID int, name str
 		PosY:           50,
 		Direction:      5,
 		Hunger:         100,
+		AdminLevel:     4, // Dev mode: all characters start as Super GM
 	}
 	return id, nil
 }

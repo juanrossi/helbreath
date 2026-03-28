@@ -284,6 +284,17 @@ var NpcTypes = map[int]*NpcType{
 		RespawnDelay: 3 * time.Second},
 }
 
+// NpcTypeByName returns the first NpcType with the given name, or nil if none found.
+// This is useful for faction-variant NPCs that share a SpriteType (e.g. "Guard-Aresden").
+func NpcTypeByName(name string) *NpcType {
+	for _, t := range NpcTypes {
+		if t.Name == name {
+			return t
+		}
+	}
+	return nil
+}
+
 // IsShopNPC returns true if this NPC type is a shop vendor or town NPC.
 func IsShopNPC(npcTypeID int) bool {
 	switch npcTypeID {
