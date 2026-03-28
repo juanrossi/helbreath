@@ -325,6 +325,25 @@ export class GameScene extends Phaser.Scene {
 
   create(): void {
     this.msgHandler = this.registry.get('msgHandler') as MessageHandler;
+    // Clear GameScene-specific handlers to prevent duplicates on scene restart
+    // (Don't use removeAllListeners — that would kill CharSelectScene's handlers too)
+    const gameSceneMsgTypes = [
+      Proto.MSG_MOTION_EVENT, Proto.MSG_PLAYER_APPEAR, Proto.MSG_PLAYER_DISAPPEAR,
+      Proto.MSG_CHAT_MESSAGE, Proto.MSG_NPC_APPEAR, Proto.MSG_NPC_DISAPPEAR,
+      Proto.MSG_NPC_MOTION, Proto.MSG_DAMAGE_EVENT, Proto.MSG_STAT_UPDATE,
+      Proto.MSG_DEATH_EVENT, Proto.MSG_RESPAWN_EVENT, Proto.MSG_NOTIFICATION,
+      Proto.MSG_INVENTORY_UPDATE, Proto.MSG_GROUND_ITEM_APPEAR, Proto.MSG_GROUND_ITEM_DISAPPEAR,
+      Proto.MSG_SHOP_OPEN, Proto.MSG_SHOP_RESPONSE, Proto.MSG_SPELL_EFFECT,
+      Proto.MSG_BUFF_UPDATE, Proto.MSG_SPELL_LIST, Proto.MSG_SKILL_LIST,
+      Proto.MSG_SKILL_RESULT, Proto.MSG_CRAFT_RESULT, Proto.MSG_FACTION_SELECT_RESPONSE,
+      Proto.MSG_GUILD_INFO, Proto.MSG_GUILD_ACTION_RESPONSE,
+      Proto.MSG_PARTY_UPDATE, Proto.MSG_PARTY_INVITE, Proto.MSG_PARTY_ACTION_RESPONSE,
+      Proto.MSG_TRADE_INCOMING, Proto.MSG_TRADE_UPDATE, Proto.MSG_TRADE_COMPLETE,
+      Proto.MSG_PK_STATUS_UPDATE, Proto.MSG_QUEST_LIST_UPDATE, Proto.MSG_QUEST_PROGRESS,
+      Proto.MSG_MAP_CHANGE_RESPONSE,
+    ];
+    for (const t of gameSceneMsgTypes) this.msgHandler.off(t);
+
     const enterData = this.registry.get('enterGameData') as EnterGameResponse;
 
     if (!enterData) {
@@ -570,6 +589,23 @@ export class GameScene extends Phaser.Scene {
 
     const fileName = mapName.toLowerCase().replace(/\.amd$/i, '') + '.amd';
 
+    // Check if map binary is already in cache (preloaded or previously fetched)
+    if (this.cache.binary.has(fileName)) {
+      this.renderLoadedMap(fileName);
+    } else {
+      // Fetch on-demand
+      console.log(`[MAP] Fetching on-demand: ${fileName}`);
+      fetch(`/assets/maps/${fileName}`)
+        .then(r => r.arrayBuffer())
+        .then(buffer => {
+          this.cache.binary.add(fileName, buffer);
+          this.renderLoadedMap(fileName);
+        })
+        .catch(err => console.error(`Failed to fetch map ${fileName}:`, err));
+    }
+  }
+
+  private renderLoadedMap(fileName: string): void {
     try {
       this.hbMap = new HBMap(fileName);
       this.hbMap.load(this);
@@ -578,7 +614,7 @@ export class GameScene extends Phaser.Scene {
       this.hbMap.renderMapObjects(this, true);
       console.log(`Map loaded and rendered: ${fileName}`);
     } catch (err) {
-      console.error(`Failed to load map ${fileName}:`, err);
+      console.error(`Failed to render map ${fileName}:`, err);
     }
   }
 
@@ -908,6 +944,12 @@ export class GameScene extends Phaser.Scene {
       rp.tileY = rp.targetTileY;
       rp.visualX = rp.tileX * TILE_SIZE;
       rp.visualY = rp.tileY * TILE_SIZE;
+
+      // Switch to idle animation when movement completes
+      if (rp.assets) {
+        const spriteDir = Math.max(0, rp.direction - 1);
+        this.updatePlayerAnimation(rp.assets, PlayerState.IdlePeace, spriteDir);
+      }
     }
   }
 
@@ -1570,112 +1612,99 @@ export class GameScene extends Phaser.Scene {
   // Minimap
   // ---------------------------------------------------------------------------
 
+  // Cache of minimap canvases by map name (persists across teleports)
+  private static minimapCache = new Map<string, HTMLCanvasElement>();
+
   private createMinimap(): void {
     const MINIMAP_SIZE = 140;
     const padding = 10;
+    const mmX = padding;
+    const mmY = padding;
 
-    // Create a container fixed to the camera
     this.minimapContainer = this.add.container(0, 0).setScrollFactor(0).setDepth(20000);
 
-    // Border background
     this.minimapBorder = this.add.graphics().setScrollFactor(0);
-    this.minimapBorder.fillStyle(0x000000, 0.8);
-    this.minimapBorder.fillRect(
-      this.cameras.main.width - MINIMAP_SIZE - padding - 4,
-      this.cameras.main.height - MINIMAP_SIZE - padding - 4,
-      MINIMAP_SIZE + 8,
-      MINIMAP_SIZE + 8,
-    );
+    this.minimapBorder.fillStyle(0x000000, 0.7);
+    this.minimapBorder.fillRect(mmX - 4, mmY - 4, MINIMAP_SIZE + 8, MINIMAP_SIZE + 8);
     this.minimapBorder.lineStyle(1, 0x888888, 1);
-    this.minimapBorder.strokeRect(
-      this.cameras.main.width - MINIMAP_SIZE - padding - 4,
-      this.cameras.main.height - MINIMAP_SIZE - padding - 4,
-      MINIMAP_SIZE + 8,
-      MINIMAP_SIZE + 8,
-    );
+    this.minimapBorder.strokeRect(mmX - 4, mmY - 4, MINIMAP_SIZE + 8, MINIMAP_SIZE + 8);
     this.minimapBorder.setDepth(20000);
 
-    // Create a canvas texture for the minimap
-    const canvas = document.createElement('canvas');
-    canvas.width = this.mapWidth;
-    canvas.height = this.mapHeight;
-    const ctx = canvas.getContext('2d')!;
+    this.minimapPlayerDot = this.add.graphics().setScrollFactor(0).setDepth(20002);
 
-    // Terrain color mapping based on tile sprite IDs
-    // These colors approximate the actual terrain types in Helbreath maps
-    const getTerrainColor = (tileSprite: number, objSprite: number, blocked: boolean): [number, number, number] => {
-      // Water tiles (sprite 19)
-      if (tileSprite === 19) return [30, 60, 140];
-      // Buildings/walls (blocked tiles with object sprites)
-      if (blocked && objSprite > 0) return [90, 70, 55];
-      // Blocked terrain (rocks, cliffs)
-      if (blocked) return [70, 65, 55];
-      // Road/path tiles (common road sprite IDs)
-      if (tileSprite >= 10 && tileSprite <= 14) return [140, 130, 100];
-      // Sand/desert tiles
-      if (tileSprite >= 15 && tileSprite <= 18) return [160, 145, 95];
-      // Snow/ice tiles
-      if (tileSprite >= 22 && tileSprite <= 25) return [190, 200, 210];
-      // Dark ground/dungeon tiles
-      if (tileSprite >= 26 && tileSprite <= 30) return [50, 45, 40];
-      // Farmland
-      if (tileSprite >= 5 && tileSprite <= 9) return [65, 100, 40];
-      // Default grass (most common)
-      if (tileSprite >= 1 && tileSprite <= 4) return [45, 95, 35];
-      // Trees/dense objects on walkable ground
-      if (objSprite > 0 && !blocked) return [30, 75, 25];
-      // Fallback walkable
-      if (!blocked) return [50, 90, 40];
-      // Fallback blocked
-      return [60, 55, 50];
-    };
-
-    // Draw terrain using tile sprite data from the loaded map
-    const imageData = ctx.createImageData(this.mapWidth, this.mapHeight);
-    for (let y = 0; y < this.mapHeight; y++) {
-      for (let x = 0; x < this.mapWidth; x++) {
-        const idx = y * this.mapWidth + x;
-        const byteIdx = Math.floor(idx / 8);
-        const bitIdx = idx % 8;
-        const blocked = byteIdx < this.collisionGrid.length && (this.collisionGrid[byteIdx] & (1 << bitIdx)) !== 0;
-
-        // Get tile sprite data from the loaded HBMap if available
-        let tileSprite = 0;
-        let objSprite = 0;
-        if (this.hbMap && this.hbMap.tiles && y < this.hbMap.tiles.length && x < this.hbMap.tiles[y].length) {
-          const tile = this.hbMap.tiles[y][x];
-          tileSprite = tile.sprite;
-          objSprite = tile.objectSprite;
-        }
-
-        const [r, g, b] = getTerrainColor(tileSprite, objSprite, blocked);
-        const pixelIdx = (y * this.mapWidth + x) * 4;
-        imageData.data[pixelIdx] = r;
-        imageData.data[pixelIdx + 1] = g;
-        imageData.data[pixelIdx + 2] = b;
-        imageData.data[pixelIdx + 3] = 255;
-      }
+    // Check cache
+    let mmCanvas = GameScene.minimapCache.get(this.currentMapName);
+    if (!mmCanvas) {
+      mmCanvas = this.generateMinimapCanvas();
+      GameScene.minimapCache.set(this.currentMapName, mmCanvas);
     }
-    ctx.putImageData(imageData, 0, 0);
 
-    // Add the minimap texture
     const texKey = 'minimap-' + this.currentMapName;
     if (this.textures.exists(texKey)) this.textures.remove(texKey);
-    this.textures.addCanvas(texKey, canvas);
+    this.textures.addCanvas(texKey, mmCanvas);
 
-    const minimapX = this.cameras.main.width - MINIMAP_SIZE - padding;
-    const minimapY = this.cameras.main.height - MINIMAP_SIZE - padding;
-
-    const minimapImg = this.add.image(minimapX, minimapY, texKey)
+    const minimapImg = this.add.image(mmX, mmY, texKey)
       .setOrigin(0, 0)
       .setDisplaySize(MINIMAP_SIZE, MINIMAP_SIZE)
       .setScrollFactor(0)
       .setDepth(20001);
 
-    // Player dot
-    this.minimapPlayerDot = this.add.graphics().setScrollFactor(0).setDepth(20002);
-
     this.minimapContainer.add([minimapImg]);
+  }
+
+  /**
+   * Generates a minimap using tile properties from the loaded map data.
+   * Fast approach — no GPU readback, just tile metadata.
+   */
+  private generateMinimapCanvas(): HTMLCanvasElement {
+    const canvas = document.createElement('canvas');
+    canvas.width = this.mapWidth;
+    canvas.height = this.mapHeight;
+    const ctx = canvas.getContext('2d', { willReadFrequently: false })!;
+    const imageData = ctx.createImageData(this.mapWidth, this.mapHeight);
+
+    for (let y = 0; y < this.mapHeight; y++) {
+      for (let x = 0; x < this.mapWidth; x++) {
+        let r = 50, g = 90, b = 40;
+
+        if (this.hbMap?.tiles && y < this.hbMap.tiles.length && x < this.hbMap.tiles[y].length) {
+          const tile = this.hbMap.tiles[y][x];
+          const s = tile.sprite;
+          const obj = tile.objectSprite;
+
+          if (tile.isWater) {
+            r = 45; g = 85; b = 175;
+          } else if (!tile.isMoveAllowed) {
+            // Blocked — differentiate buildings vs terrain
+            if (obj > 0) { r = 120; g = 100; b = 75; } // building/structure
+            else { r = 95; g = 85; b = 65; }             // rock/cliff
+          } else if (tile.isTeleport) {
+            r = 200; g = 180; b = 60; // teleport = gold highlight
+          } else if (obj >= 100 && obj < 150) {
+            r = 40; g = 95; b = 35; // trees
+          } else if (obj > 0) {
+            r = 55; g = 105; b = 45; // other objects
+          } else if (s >= 50 && s < 70) {
+            r = 165; g = 155; b = 125; // roads/structures
+          } else if (s >= 70 && s < 100) {
+            r = 135; g = 115; b = 90; // interior
+          } else if (s >= 300) {
+            r = 70; g = 115; b = 50; // maptiles2+
+          } else {
+            r = 60; g = 125; b = 45; // grass (default)
+          }
+        }
+
+        const idx = (y * this.mapWidth + x) * 4;
+        imageData.data[idx] = r;
+        imageData.data[idx + 1] = g;
+        imageData.data[idx + 2] = b;
+        imageData.data[idx + 3] = 255;
+      }
+    }
+
+    ctx.putImageData(imageData, 0, 0);
+    return canvas;
   }
 
   private updateNameHover(): void {
@@ -1708,16 +1737,16 @@ export class GameScene extends Phaser.Scene {
 
     this.minimapPlayerDot.clear();
 
-    // Player dot (white)
-    const dotX = this.cameras.main.width - MINIMAP_SIZE - padding + (this.tileX / this.mapWidth) * MINIMAP_SIZE;
-    const dotY = this.cameras.main.height - MINIMAP_SIZE - padding + (this.tileY / this.mapHeight) * MINIMAP_SIZE;
+    // Player dot (white) — top-left position
+    const dotX = padding + (this.tileX / this.mapWidth) * MINIMAP_SIZE;
+    const dotY = padding + (this.tileY / this.mapHeight) * MINIMAP_SIZE;
     this.minimapPlayerDot.fillStyle(0xffffff, 1);
     this.minimapPlayerDot.fillCircle(dotX, dotY, 2);
 
     // Remote player dots (cyan)
     for (const rp of this.remotePlayers.values()) {
-      const rpX = this.cameras.main.width - MINIMAP_SIZE - padding + (rp.tileX / this.mapWidth) * MINIMAP_SIZE;
-      const rpY = this.cameras.main.height - MINIMAP_SIZE - padding + (rp.tileY / this.mapHeight) * MINIMAP_SIZE;
+      const rpX = padding + (rp.tileX / this.mapWidth) * MINIMAP_SIZE;
+      const rpY = padding + (rp.tileY / this.mapHeight) * MINIMAP_SIZE;
       this.minimapPlayerDot.fillStyle(0x00ffff, 1);
       this.minimapPlayerDot.fillCircle(rpX, rpY, 1.5);
     }
@@ -1745,31 +1774,28 @@ export class GameScene extends Phaser.Scene {
     let fallbackSprite: Phaser.GameObjects.Ellipse | null = null;
 
     if (spriteName) {
-      // Monster sprites have sprite sheet 0 with directional frames
-      const textureKey = `${spriteName}-0`;
+      // Monster sprites: each direction is a separate sprite sheet
+      // Idle: sheets 0-7, Walk: sheets 8-15, Attack: sheets 16-23
+      const dirIdx = Math.max(0, dir - 1); // convert 1-8 to 0-7
+      const sheetIndex = dirIdx; // idle = direction index
+      const textureKey = `${spriteName}-${sheetIndex}`;
       const texExists = this.textures.exists(textureKey);
-      console.log(`[addNPC] sprite=${spriteName}, textureKey=${textureKey}, exists=${texExists}`);
       if (texExists) {
         try {
           asset = new GameAsset(this, {
             x: worldX,
             y: worldY,
             spriteName: spriteName,
-            spriteSheetIndex: 0,
-            direction: Math.max(0, dir - 1), // convert 1-8 to 0-7
-            framesPerDirection: 8,
+            spriteSheetIndex: sheetIndex,
             frameRate: 6,
-            animationType: AnimationType.DirectionalSubFrame,
+            animationType: AnimationType.FullFrame,
           });
           asset.setDepth(py * DEPTH_MULTIPLIER + 1);
-          console.log(`[addNPC] GameAsset created successfully for ${data.name}`);
         } catch (err) {
           console.warn(`[addNPC] Failed to create GameAsset for type ${npcTypeId} (${spriteName}):`, err);
           asset = null;
         }
       }
-    } else {
-      console.warn(`[addNPC] No sprite mapping for npcType=${npcTypeId}`);
     }
 
     // Fallback to colored ellipse if sprite creation failed
@@ -1911,21 +1937,41 @@ export class GameScene extends Phaser.Scene {
       npcEntity.isMoving = true;
       npcEntity.direction = data.direction;
 
-      // Update sprite animation direction
+      // Update sprite animation — switch to walk sprite sheet for this direction
       if (npcEntity.asset && data.direction >= 1 && data.direction <= 8) {
         const spriteName = NPC_SPRITE_MAP[npcEntity.npcType];
         if (spriteName) {
-          const animKey = `${spriteName}-0`;
-          npcEntity.asset.playAnimationWithDirection(
-            animKey, data.direction - 1, 6, undefined, undefined, 8,
-            AnimationType.DirectionalSubFrame,
-          );
+          const dirIdx = data.direction - 1; // 0-7
+          const walkSheet = 8 + dirIdx; // walk sheets start at 8
+          const animKey = `${spriteName}-${walkSheet}`;
+          if (this.anims.exists(animKey)) {
+            npcEntity.asset.playAnimationWithDirection(
+              animKey, 0, 6, undefined, undefined, undefined,
+              AnimationType.FullFrame,
+            );
+          }
         }
       }
     } else {
       npcEntity.tileX = data.position?.x ?? npcEntity.tileX;
       npcEntity.tileY = data.position?.y ?? npcEntity.tileY;
       npcEntity.isMoving = false;
+
+      // Switch back to idle sprite sheet for current direction
+      if (npcEntity.asset && npcEntity.direction >= 1 && npcEntity.direction <= 8) {
+        const spriteName = NPC_SPRITE_MAP[npcEntity.npcType];
+        if (spriteName) {
+          const dirIdx = npcEntity.direction - 1;
+          const idleSheet = dirIdx; // idle sheets are 0-7
+          const animKey = `${spriteName}-${idleSheet}`;
+          if (this.anims.exists(animKey)) {
+            npcEntity.asset.playAnimationWithDirection(
+              animKey, 0, 4, undefined, undefined, undefined,
+              AnimationType.FullFrame,
+            );
+          }
+        }
+      }
     }
   }
 

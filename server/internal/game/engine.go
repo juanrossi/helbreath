@@ -17,6 +17,7 @@ import (
 	"github.com/juanrossi/hbonline/server/internal/db"
 	"github.com/juanrossi/hbonline/server/internal/guild"
 	"github.com/juanrossi/hbonline/server/internal/items"
+	"github.com/juanrossi/hbonline/server/internal/magic"
 	"github.com/juanrossi/hbonline/server/internal/mapdata"
 	"github.com/juanrossi/hbonline/server/internal/network"
 	"github.com/juanrossi/hbonline/server/internal/npc"
@@ -49,10 +50,11 @@ type Engine struct {
 	nextGroundID  atomic.Int32
 
 	// Regen timers
-	lastRegenHP   time.Time
-	lastRegenMP   time.Time
-	lastRegenSP   time.Time
-	lastBuffCheck time.Time
+	lastRegenHP     time.Time
+	lastRegenMP     time.Time
+	lastRegenSP     time.Time
+	lastBuffCheck   time.Time
+	lastEffectCheck time.Time
 
 	// Social systems
 	guilds  *guild.GuildRegistry
@@ -64,6 +66,13 @@ type Engine struct {
 	events        *world.EventState
 	lastWorldSync time.Time
 	lastWeatherCheck time.Time
+
+	// Current world phase and weather cached for combat checks
+	CurrentWorldPhase int // world.DayPhase, DuskPhase, NightPhase, DawnPhase
+	CurrentWeather    int // world.WeatherClear, WeatherRain, WeatherSnow, WeatherFog
+
+	// PK decay timer
+	lastPKDecayCheck time.Time
 
 	// Teleport config
 	teleports mapdata.TeleportConfig
@@ -77,7 +86,8 @@ func NewEngine(store db.DataStore) *Engine {
 		lastRegenHP:   now,
 		lastRegenMP:   now,
 		lastRegenSP:   now,
-		lastBuffCheck: now,
+		lastBuffCheck:   now,
+		lastEffectCheck: now,
 		guilds:           guild.NewGuildRegistry(),
 		parties:          party.NewPartyManager(),
 		trades:           trade.NewTradeManager(),
@@ -85,6 +95,7 @@ func NewEngine(store db.DataStore) *Engine {
 		events:           world.NewEventState(),
 		lastWorldSync:    now,
 		lastWeatherCheck: now,
+		lastPKDecayCheck: now,
 		teleports:        mapdata.BuildTeleportConfig(),
 	}
 	e.nextObjID.Store(1000) // start IDs above reserved range
@@ -154,6 +165,12 @@ func (e *Engine) processTick() {
 		e.checkBuffExpiry()
 	}
 
+	// Effect tick processing every second
+	if now.Sub(e.lastEffectCheck) >= 1*time.Second {
+		e.lastEffectCheck = now
+		e.processEffectTicks(now)
+	}
+
 	// World state sync every 30 seconds
 	if now.Sub(e.lastWorldSync) >= 30*time.Second {
 		e.lastWorldSync = now
@@ -166,6 +183,16 @@ func (e *Engine) processTick() {
 		if e.worldState.RandomWeather() {
 			e.broadcastWorldState()
 		}
+	}
+
+	// Update cached world phase and weather for combat checks
+	e.CurrentWorldPhase = e.worldState.GetTimeOfDay()
+	e.CurrentWeather = e.worldState.GetWeather()
+
+	// PK decay: every 60 seconds, check each player for 10-minute online decay
+	if now.Sub(e.lastPKDecayCheck) >= 60*time.Second {
+		e.lastPKDecayCheck = now
+		e.processPKDecay(now)
 	}
 
 	// NPC AI tick
@@ -215,112 +242,85 @@ func (e *Engine) regenAllPlayers(stat string) {
 	})
 }
 
+// processPKDecay reduces PKCount by 1 for each player who has been online
+// for at least 10 minutes since their last PK decay. This encourages good behavior.
+func (e *Engine) processPKDecay(now time.Time) {
+	e.players.Range(func(key, value any) bool {
+		p := value.(*player.Player)
+		if p.PKCount > 0 && now.Sub(p.LastPKDecayTime) >= 10*time.Minute {
+			p.PKCount--
+			p.LastPKDecayTime = now
+			e.sendPKStatus(p)
+			e.sendStatUpdate(p)
+		}
+		return true
+	})
+}
+
 // SpawnNPCs creates initial NPCs across all loaded maps.
+// It attempts to load spawn configuration from a JSON file; if none exists,
+// falls back to the hardcoded default configuration.
 func (e *Engine) SpawnNPCs() {
-	spawns := []npc.SpawnPoint{
-		// === DEFAULT MAP (starter zone) ===
-		// Monsters
-		{NpcTypeID: 1, MapName: "default", X: 55, Y: 55},
-		{NpcTypeID: 1, MapName: "default", X: 58, Y: 52},
-		{NpcTypeID: 1, MapName: "default", X: 45, Y: 48},
-		{NpcTypeID: 1, MapName: "default", X: 70, Y: 70},
-		{NpcTypeID: 1, MapName: "default", X: 35, Y: 65},
-		{NpcTypeID: 2, MapName: "default", X: 60, Y: 60},
-		{NpcTypeID: 2, MapName: "default", X: 40, Y: 55},
-		{NpcTypeID: 3, MapName: "default", X: 65, Y: 50},
-		// Shop NPCs
-		{NpcTypeID: 10, MapName: "default", X: 82, Y: 82},
-		{NpcTypeID: 11, MapName: "default", X: 84, Y: 82},
-		{NpcTypeID: 12, MapName: "default", X: 86, Y: 82},
+	e.SpawnNPCsWithConfigPath("data/spawns.json")
+}
 
-		// === ARESDEN (city) ===
-		// Shop NPCs in marketplace area
-		{NpcTypeID: 10, MapName: "aresden", X: 160, Y: 190},
-		{NpcTypeID: 11, MapName: "aresden", X: 162, Y: 190},
-		{NpcTypeID: 12, MapName: "aresden", X: 164, Y: 190},
-
-		// === ELVINE (city) ===
-		// Shop NPCs in marketplace area
-		{NpcTypeID: 10, MapName: "elvine", X: 232, Y: 105},
-		{NpcTypeID: 11, MapName: "elvine", X: 234, Y: 105},
-		{NpcTypeID: 12, MapName: "elvine", X: 236, Y: 105},
-
-		// === MIDDLELAND (open PvP zone - stronger mobs) ===
-		// Slimes near Aresden side
-		{NpcTypeID: 1, MapName: "middleland", X: 160, Y: 480},
-		{NpcTypeID: 1, MapName: "middleland", X: 170, Y: 470},
-		{NpcTypeID: 1, MapName: "middleland", X: 180, Y: 490},
-		{NpcTypeID: 1, MapName: "middleland", X: 340, Y: 480},
-		{NpcTypeID: 1, MapName: "middleland", X: 350, Y: 470},
-		// Skeletons mid-south
-		{NpcTypeID: 2, MapName: "middleland", X: 200, Y: 400},
-		{NpcTypeID: 2, MapName: "middleland", X: 220, Y: 410},
-		{NpcTypeID: 2, MapName: "middleland", X: 240, Y: 390},
-		{NpcTypeID: 2, MapName: "middleland", X: 300, Y: 400},
-		{NpcTypeID: 2, MapName: "middleland", X: 280, Y: 420},
-		// Orcs center
-		{NpcTypeID: 3, MapName: "middleland", X: 250, Y: 300},
-		{NpcTypeID: 3, MapName: "middleland", X: 260, Y: 280},
-		{NpcTypeID: 3, MapName: "middleland", X: 230, Y: 310},
-		{NpcTypeID: 3, MapName: "middleland", X: 270, Y: 320},
-		// Demons near center
-		{NpcTypeID: 4, MapName: "middleland", X: 250, Y: 250},
-		{NpcTypeID: 4, MapName: "middleland", X: 260, Y: 240},
-		// Slimes near Elvine side
-		{NpcTypeID: 1, MapName: "middleland", X: 110, Y: 40},
-		{NpcTypeID: 1, MapName: "middleland", X: 120, Y: 50},
-		{NpcTypeID: 1, MapName: "middleland", X: 310, Y: 40},
-		{NpcTypeID: 1, MapName: "middleland", X: 320, Y: 50},
-		// Skeletons mid-north
-		{NpcTypeID: 2, MapName: "middleland", X: 200, Y: 100},
-		{NpcTypeID: 2, MapName: "middleland", X: 220, Y: 120},
-		{NpcTypeID: 2, MapName: "middleland", X: 300, Y: 110},
-
-		// === ARESDEND1 (Aresden dungeon) ===
-		{NpcTypeID: 2, MapName: "aresdend1", X: 100, Y: 100},
-		{NpcTypeID: 2, MapName: "aresdend1", X: 110, Y: 90},
-		{NpcTypeID: 2, MapName: "aresdend1", X: 90, Y: 110},
-		{NpcTypeID: 3, MapName: "aresdend1", X: 120, Y: 120},
-		{NpcTypeID: 3, MapName: "aresdend1", X: 80, Y: 80},
-		{NpcTypeID: 4, MapName: "aresdend1", X: 100, Y: 50},
-
-		// === ELVINED1 (Elvine dungeon) - same layout ===
-		{NpcTypeID: 2, MapName: "elvined1", X: 100, Y: 100},
-		{NpcTypeID: 2, MapName: "elvined1", X: 110, Y: 90},
-		{NpcTypeID: 2, MapName: "elvined1", X: 90, Y: 110},
-		{NpcTypeID: 3, MapName: "elvined1", X: 120, Y: 120},
-		{NpcTypeID: 3, MapName: "elvined1", X: 80, Y: 80},
-		{NpcTypeID: 4, MapName: "elvined1", X: 100, Y: 50},
-
-		// === 2NDMIDDLE (secondary continent) ===
-		{NpcTypeID: 3, MapName: "2ndmiddle", X: 130, Y: 130},
-		{NpcTypeID: 3, MapName: "2ndmiddle", X: 140, Y: 120},
-		{NpcTypeID: 4, MapName: "2ndmiddle", X: 150, Y: 100},
-		{NpcTypeID: 4, MapName: "2ndmiddle", X: 120, Y: 110},
+// SpawnNPCsWithConfigPath loads spawn config from the given path (or defaults)
+// and creates all initial NPCs.
+func (e *Engine) SpawnNPCsWithConfigPath(configPath string) {
+	cfg, err := LoadSpawnConfig(configPath)
+	if err != nil {
+		log.Printf("Warning: failed to load spawn config from %s: %v (using defaults)", configPath, err)
+		cfg = nil
+	}
+	if cfg == nil {
+		cfg = DefaultSpawnConfig()
+		log.Printf("Using default spawn configuration (%d entries)", len(cfg.Spawns))
+	} else {
+		log.Printf("Loaded spawn configuration from %s (%d entries)", configPath, len(cfg.Spawns))
 	}
 
-	for _, sp := range spawns {
-		npcType, ok := npc.NpcTypes[sp.NpcTypeID]
+	for i := range cfg.Spawns {
+		entry := &cfg.Spawns[i]
+		count := entry.Count
+		if count <= 0 {
+			count = 1
+		}
+
+		npcType, ok := npc.NpcTypes[entry.NpcTypeID]
 		if !ok {
+			log.Printf("Warning: unknown NPC type %d in spawn config, skipping", entry.NpcTypeID)
 			continue
 		}
 
-		gm, ok := e.maps[sp.MapName]
+		gm, ok := e.maps[entry.MapName]
 		if !ok {
 			continue // skip spawns for maps not loaded
 		}
 
-		// Find walkable position near spawn
-		x, y := sp.X, sp.Y
-		if !gm.IsWalkable(x, y) {
-			x, y = e.findWalkable(gm, x, y)
+		for j := 0; j < count; j++ {
+			// Calculate spawn position with optional radius offset
+			x, y := entry.SpawnX, entry.SpawnY
+			if entry.SpawnRadius > 0 {
+				x += rand.Intn(entry.SpawnRadius*2+1) - entry.SpawnRadius
+				y += rand.Intn(entry.SpawnRadius*2+1) - entry.SpawnRadius
+			}
+
+			if !gm.IsWalkable(x, y) {
+				x, y = e.findWalkable(gm, x, y)
+			}
+
+			objectID := e.nextObjID.Add(1)
+			n := npc.NewNPC(objectID, npcType, entry.MapName, x, y)
+
+			// Apply respawn delay override from spawn config
+			overrideDelay := entry.RespawnDelayDuration()
+			if overrideDelay > 0 {
+				n.RespawnDelay = overrideDelay
+			}
+
+			e.npcs.Store(objectID, n)
+			log.Printf("Spawned NPC %s (ID: %d) at %s (%d,%d)", npcType.Name, objectID, entry.MapName, x, y)
 		}
-
-		objectID := e.nextObjID.Add(1)
-		n := npc.NewNPC(objectID, npcType, sp.MapName, x, y)
-		e.npcs.Store(objectID, n)
-
-		log.Printf("Spawned NPC %s (ID: %d) at %s (%d,%d)", npcType.Name, objectID, sp.MapName, x, y)
 	}
 }
 
@@ -360,8 +360,9 @@ func (e *Engine) giveStartingItems(p *player.Player) {
 		}
 	}
 
-	// Update appearance to reflect equipped gear
+	// Update appearance and combat stats to reflect equipped gear
 	p.SyncEquipmentAppearance()
+	p.RecalcCombatStats()
 	log.Printf("Gave starting items to new character %s", p.Name)
 }
 
@@ -395,9 +396,18 @@ func (e *Engine) processNPCTick(n *npc.NPC, now time.Time) {
 	// Find nearest player in aggro range
 	nearestPlayer, nearestDist := e.findNearestPlayer(n, gm)
 
+	// Calculate effective aggro range (fog reduces it by 30%)
+	aggroRange := n.Type.AggroRange
+	if e.CurrentWeather == world.WeatherFog {
+		aggroRange = aggroRange * 7 / 10
+		if aggroRange < 1 && n.Type.AggroRange > 0 {
+			aggroRange = 1
+		}
+	}
+
 	switch n.State {
 	case npc.StateIdle:
-		if nearestPlayer != nil && nearestDist <= n.Type.AggroRange {
+		if nearestPlayer != nil && nearestDist <= aggroRange {
 			n.TargetID = nearestPlayer.ObjectID
 			n.State = npc.StateChase
 		} else if rand.Intn(5) == 0 {
@@ -406,7 +416,7 @@ func (e *Engine) processNPCTick(n *npc.NPC, now time.Time) {
 		}
 
 	case npc.StateWander:
-		if nearestPlayer != nil && nearestDist <= n.Type.AggroRange {
+		if nearestPlayer != nil && nearestDist <= aggroRange {
 			n.TargetID = nearestPlayer.ObjectID
 			n.State = npc.StateChase
 			return
@@ -446,6 +456,14 @@ func (e *Engine) processNPCTick(n *npc.NPC, now time.Time) {
 		}
 
 	case npc.StateChase:
+		// Check if NPC should flee instead of continuing chase
+		if n.ShouldFlee() {
+			n.State = npc.StateFlee
+			n.FleeStartX = n.X
+			n.FleeStartY = n.Y
+			return
+		}
+
 		target := e.getPlayerByID(n.TargetID)
 		if target == nil || target.HP <= 0 || target.MapName != n.MapName {
 			n.TargetID = 0
@@ -484,6 +502,14 @@ func (e *Engine) processNPCTick(n *npc.NPC, now time.Time) {
 		n.LastMoveTime = now
 
 	case npc.StateAttack:
+		// Check if NPC should flee instead of continuing attack
+		if n.ShouldFlee() {
+			n.State = npc.StateFlee
+			n.FleeStartX = n.X
+			n.FleeStartY = n.Y
+			return
+		}
+
 		target := e.getPlayerByID(n.TargetID)
 		if target == nil || target.HP <= 0 || target.MapName != n.MapName {
 			n.TargetID = 0
@@ -545,6 +571,42 @@ func (e *Engine) processNPCTick(n *npc.NPC, now time.Time) {
 		if result.Killed {
 			e.handlePlayerDeath(target, n.ObjectID, n.Type.Name)
 		}
+
+	case npc.StateFlee:
+		target := e.getPlayerByID(n.TargetID)
+
+		// Stop fleeing if: fled 5+ tiles, or target gone/out of aggro range
+		targetGone := target == nil || target.HP <= 0 || target.MapName != n.MapName
+		fleeDistReached := n.FleeDistance() >= 5
+		outOfSight := !targetGone && n.DistanceTo(target.X, target.Y) > n.Type.AggroRange
+
+		if targetGone || fleeDistReached || outOfSight {
+			n.TargetID = 0
+			n.State = npc.StateWander
+			return
+		}
+
+		// Move away from target
+		if now.Sub(n.LastMoveTime) < time.Duration(n.Type.MoveSpeed)*time.Millisecond {
+			return
+		}
+
+		dir := n.DirectionAwayFrom(target.X, target.Y)
+		newX := n.X + dirDX[dir]
+		newY := n.Y + dirDY[dir]
+
+		if gm.IsWalkable(newX, newY) {
+			e.moveNPC(n, gm, newX, newY, dir)
+		} else {
+			// If blocked, try a random adjacent direction
+			altDir := 1 + rand.Intn(8)
+			altX := n.X + dirDX[altDir]
+			altY := n.Y + dirDY[altDir]
+			if gm.IsWalkable(altX, altY) {
+				e.moveNPC(n, gm, altX, altY, altDir)
+			}
+		}
+		n.LastMoveTime = now
 	}
 }
 
@@ -583,6 +645,22 @@ func (e *Engine) findNearestPlayer(n *npc.NPC, gm *mapdata.GameMap) (*player.Pla
 		if p.HP <= 0 || p.MapName != n.MapName {
 			continue
 		}
+
+		// Admin immunity: skip players with AdminLevel > 0
+		if p.AdminLevel > 0 {
+			continue
+		}
+
+		// Invisibility: skip invisible players
+		if p.Effects != nil && p.Effects.HasEffect(magic.EffectInvisibility) {
+			continue
+		}
+
+		// Faction-aware targeting
+		if !e.npcCanTarget(n, p) {
+			continue
+		}
+
 		dist := n.DistanceTo(p.X, p.Y)
 		if dist < nearestDist {
 			nearestDist = dist
@@ -590,6 +668,28 @@ func (e *Engine) findNearestPlayer(n *npc.NPC, gm *mapdata.GameMap) (*player.Pla
 		}
 	}
 	return nearest, nearestDist
+}
+
+// npcCanTarget returns true if the NPC should be hostile toward the player
+// based on faction rules.
+func (e *Engine) npcCanTarget(n *npc.NPC, p *player.Player) bool {
+	// Monsters (Side=10) attack everyone
+	if n.Type.Side == npc.SideMonster {
+		return true
+	}
+
+	// Non-aggressive NPCs (shop NPCs, neutrals with no aggro)
+	if n.Type.AggroRange <= 0 {
+		return false
+	}
+
+	// For faction NPCs (Aresden/Elvine/Special guards):
+	// Attack players of different side, or criminals (PKCount >= 3)
+	if n.Type.Side != p.Side || p.PKCount >= 3 {
+		return true
+	}
+
+	return false
 }
 
 func (e *Engine) getPlayerByID(objectID int32) *player.Player {
@@ -639,12 +739,38 @@ func (e *Engine) handlePlayerDeath(p *player.Player, killerID int32, killerName 
 	}
 	e.broadcastToNearby(gm, p.X, p.Y, -1, network.MsgDeathEvent, deathEvt)
 
-	// XP penalty: lose 5% of current level XP
-	xpLoss := XPForLevel(p.Level) * 5 / 100
-	p.Experience -= xpLoss
-	if p.Experience < 0 {
-		p.Experience = 0
+	// XP penalty based on PK tier (matches original Helbreath death penalties)
+	var xpPenaltyPct int64
+	switch {
+	case p.PKCount >= 12: // slaughterer
+		xpPenaltyPct = 20
+	case p.PKCount >= 4: // murderer
+		xpPenaltyPct = 10
+	case p.PKCount >= 1: // criminal
+		xpPenaltyPct = 5
+	default: // innocent
+		xpPenaltyPct = 2
 	}
+
+	// Skip XP loss on safe zone and arena maps
+	if gm.Type == mapdata.MapTypeNormal {
+		xpLoss := XPForLevel(p.Level) * xpPenaltyPct / 100
+		p.Experience -= xpLoss
+		if p.Experience < 0 {
+			p.Experience = 0
+		}
+	}
+
+	// Clear all magic effects and buffs on death
+	if p.Effects != nil {
+		p.Effects.ClearAll()
+	}
+	if p.Buffs != nil {
+		p.Buffs.ClearAll()
+	}
+
+	// Reset derived stats after clearing buffs
+	p.RecalcCombatStats()
 
 	// Respawn after 3 seconds
 	go func() {
@@ -713,10 +839,12 @@ func (e *Engine) OnDisconnect(client *network.Client) {
 		p := val.(*player.Player)
 		log.Printf("Player %s disconnected", p.Name)
 
-		// Save position
+		// Save all player state including inventory
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
-		e.store.SaveCharacterPosition(ctx, p.CharacterID, p.MapName, p.X, p.Y, p.Direction)
+		if err := savePlayerToDB(e.store, ctx, p); err != nil {
+			log.Printf("Failed to save player %s on disconnect: %v", p.Name, err)
+		}
 
 		// Remove from map
 		if gm, ok := e.maps[p.MapName]; ok {
@@ -943,6 +1071,9 @@ func (e *Engine) handleEnterGame(client *network.Client, req *pb.EnterGameReques
 	client.ObjectID = objectID
 	client.CharacterID = charRow.ID
 
+	// Load saved inventory from database
+	loadPlayerInventory(p, charRow)
+
 	// Give starting items to new characters (level 1 with empty inventory)
 	if p.Level == 1 && !p.Inventory.HasItems() {
 		e.giveStartingItems(p)
@@ -1051,6 +1182,14 @@ func (e *Engine) handleMotion(client *network.Client, req *pb.MotionRequest) {
 		minInterval := 250 * time.Millisecond // run speed (relaxed for latency)
 		if action == 1 {
 			minInterval = 300 * time.Millisecond // walk speed (relaxed for latency)
+		}
+		// Ice effect: increase move delay by 50% per level
+		if p.Effects != nil {
+			iceLevel := p.Effects.GetEffectLevel(magic.EffectIce)
+			if iceLevel > 0 {
+				extraMs := int64(minInterval.Milliseconds()) * int64(iceLevel) * 50 / 100
+				minInterval += time.Duration(extraMs) * time.Millisecond
+			}
 		}
 		if !p.LastMoveTime.IsZero() && now.Sub(p.LastMoveTime) < minInterval {
 			// Too fast - send correction
@@ -1309,6 +1448,19 @@ func (e *Engine) handleChat(client *network.Client, req *pb.ChatRequest) {
 		return
 	}
 
+	// Check for admin commands (messages starting with "/")
+	if strings.HasPrefix(msg, "/") {
+		if e.handleAdminCommand(p, msg) {
+			return // command handled, don't broadcast
+		}
+	}
+
+	// Check if player is muted
+	if !p.MutedUntil.IsZero() && time.Now().Before(p.MutedUntil) {
+		e.sendNotification(p, "You are muted", 2)
+		return
+	}
+
 	chatMsg := &pb.ChatMessage{
 		ObjectId:   p.ObjectID,
 		SenderName: p.Name,
@@ -1420,6 +1572,21 @@ func (e *Engine) handleAttack(client *network.Client, req *pb.MotionRequest) {
 		// Calculate damage
 		result := PlayerAttackNPC(p, n)
 
+		// Apply day/night weapon bonus
+		if !result.Miss {
+			dayNightBonus := CalcDayNightBonus(p, e.CurrentWorldPhase)
+			if dayNightBonus > 0 {
+				result.Damage += dayNightBonus
+				// Apply bonus damage to NPC
+				if n.IsAlive() {
+					killed := n.TakeDamage(dayNightBonus)
+					if killed && !result.Killed {
+						result.Killed = true
+					}
+				}
+			}
+		}
+
 		// Send damage event to nearby
 		dmgEvent := &pb.DamageEvent{
 			AttackerId:  p.ObjectID,
@@ -1478,12 +1645,36 @@ func (e *Engine) handleNPCDeath(n *npc.NPC, killer *player.Player, gm *mapdata.G
 	killer.Experience += int64(n.Type.XP)
 	leveledUp := CheckLevelUp(killer)
 
-	// Award gold
-	goldDrop := int64(rand.Intn(n.Type.XP) + 1)
+	// Award gold (multi-tier: always drops, amount based on NPC XP)
+	goldDrop := items.RollGoldDrop(n.Type.XP)
 	killer.Gold += goldDrop
 
-	// Roll loot and drop items on ground
-	lootDrops := items.RollLoot(n.Type.ID)
+	// Roll loot based on NPC type (boss vs regular)
+	var lootDrops []*items.Item
+	if n.Type.BossType > 0 {
+		lootDrops = items.RollBossLoot()
+	} else {
+		lootDrops = items.RollMultiTierLoot(n.Type.ID, n.Type.XP)
+	}
+
+	// Apply random attributes to equipment drops (4.6)
+	for _, drop := range lootDrops {
+		def := drop.Def()
+		if def == nil {
+			continue
+		}
+		// Only equipment (weapons + armor, not potions/materials) can get attributes
+		if def.Type >= items.ItemTypeWeapon && def.Type <= items.ItemTypeCape {
+			roll := rand.Float64()
+			switch {
+			case roll < 0.01: // 1% Ancient
+				drop.Attribute = uint32(items.AttrAncient) << 20
+			case roll < 0.06: // 5% Sharp (cumulative: 1%+5%=6% total, but 5% of the remaining)
+				drop.Attribute = uint32(items.AttrSharp) << 20
+			}
+		}
+	}
+
 	for _, drop := range lootDrops {
 		e.dropGroundItem(drop, n.MapName, n.X, n.Y, gm)
 	}
@@ -1713,8 +1904,11 @@ func (e *Engine) SaveAllPlayers() {
 
 	e.players.Range(func(key, value any) bool {
 		p := value.(*player.Player)
-		e.store.SaveCharacterPosition(ctx, p.CharacterID, p.MapName, p.X, p.Y, p.Direction)
-		log.Printf("Saved player %s", p.Name)
+		if err := savePlayerToDB(e.store, ctx, p); err != nil {
+			log.Printf("Failed to save player %s: %v", p.Name, err)
+		} else {
+			log.Printf("Saved player %s", p.Name)
+		}
 		return true
 	})
 }

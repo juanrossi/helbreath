@@ -3,8 +3,11 @@ package game
 import (
 	"math/rand"
 
+	"github.com/juanrossi/hbonline/server/internal/items"
+	"github.com/juanrossi/hbonline/server/internal/magic"
 	"github.com/juanrossi/hbonline/server/internal/npc"
 	"github.com/juanrossi/hbonline/server/internal/player"
+	"github.com/juanrossi/hbonline/server/internal/skills"
 )
 
 // CombatResult holds the outcome of a single attack.
@@ -16,52 +19,78 @@ type CombatResult struct {
 }
 
 // PlayerAttackNPC calculates damage from a player attacking an NPC.
+// Ported from C++ iCalculateAttackEffect (Game.cpp:60905).
 func PlayerAttackNPC(p *player.Player, n *npc.NPC) CombatResult {
-	// Hit chance: 50% + (attacker DEX - target DEX) * 2, clamped 10-95%
-	hitChance := 50 + (p.DEX-n.Type.DEX)*2
-	if hitChance < 10 {
-		hitChance = 10
-	}
-	if hitChance > 95 {
-		hitChance = 95
-	}
-
-	roll := rand.Intn(100) + 1
-	if roll > hitChance {
+	// Hit check: player hit ratio vs NPC defense ratio
+	hitChance := clamp(50+p.HitRatio-n.Type.Defense, 5, 95)
+	if rand.Intn(100)+1 > hitChance {
 		return CombatResult{Miss: true}
 	}
 
-	// Use weapon damage if equipped, otherwise STR-based
-	minDmg, maxDmg := p.Inventory.WeaponDamage()
-	baseDamage := minDmg
-	if maxDmg > minDmg {
-		baseDamage += rand.Intn(maxDmg - minDmg + 1)
+	// Roll weapon dice based on NPC size (SM vs L dice sets)
+	var damage int
+	if n.Type.Size >= npc.SizeLarge && p.AttDiceThrowL > 0 {
+		damage = iDice(p.AttDiceThrowL, p.AttDiceRangeL)
+	} else {
+		damage = iDice(p.AttDiceThrowSM, p.AttDiceRangeSM)
 	}
-	// Add STR bonus and level bonus
-	baseDamage += p.STR/3 + p.Level
+	damage += p.AttBonus
 
-	// Defense reduction (capped at 80% of base damage)
-	reduction := n.Type.Defense
-	maxReduction := baseDamage * 80 / 100
-	if reduction > maxReduction {
-		reduction = maxReduction
+	// Multiplicative STR scaling: damage * (1 + STR/500)
+	// Ported from C++: iDamage += (iDamage * iStr / 500)
+	str := p.EffectiveSTR()
+	damage += damage * str / 500
+
+	// Level bonus
+	damage += p.Level
+
+	// Critical hit via attack mode (C++ triggers when iAttackMode >= 20)
+	critical := false
+	if p.AttackMode >= 20 && p.SuperAttackLeft > 0 {
+		critical = true
+		// Bonus = level/100 as percentage of current damage
+		damage += damage * p.Level / 100
+		p.SuperAttackLeft--
+		if p.SuperAttackLeft <= 0 {
+			p.AttackMode = 0
+		}
 	}
-	damage := baseDamage - reduction
+
+	// Berserk effect: multiply damage by (1 + level * 0.2)
+	if p.Effects != nil {
+		berserkLevel := p.Effects.GetEffectLevel(magic.EffectBerserk)
+		if berserkLevel > 0 {
+			damage = damage * (100 + berserkLevel*20) / 100
+		}
+	}
+
+	// NPC defense absorption
+	damage -= n.Type.Defense
 	if damage < 1 {
 		damage = 1
 	}
 
-	// Critical hit: 10% chance, 1.5x damage
-	critical := false
-	if rand.Intn(100) < 10 {
-		critical = true
-		damage = damage * 3 / 2
+	// God mode: multiply damage by 10
+	if p.GodMode {
+		damage *= 10
 	}
 
 	killed := n.TakeDamage(damage)
 
-	// Degrade weapon durability
-	p.Inventory.DegradeWeapon()
+	// Break invisibility on attack
+	if p.Effects != nil && p.Effects.HasEffect(magic.EffectInvisibility) {
+		p.Effects.RemoveEffect(magic.EffectInvisibility)
+	}
+
+	// Train weapon skill (20% chance per attack)
+	trainWeaponSkill(p)
+
+	// Degrade weapon durability (special attacks cost more)
+	if critical {
+		p.Inventory.DegradeWeaponBy(15)
+	} else {
+		p.Inventory.DegradeWeapon()
+	}
 
 	return CombatResult{
 		Damage:   damage,
@@ -71,36 +100,65 @@ func PlayerAttackNPC(p *player.Player, n *npc.NPC) CombatResult {
 }
 
 // NPCAttackPlayer calculates damage from an NPC attacking a player.
+// Ported from C++ NPC attack logic with dice-based damage and layered defense.
 func NPCAttackPlayer(n *npc.NPC, p *player.Player) CombatResult {
-	// Hit chance: 50% + (NPC DEX - player DEX) * 2
-	hitChance := 50 + (n.Type.DEX-p.DEX)*2
-	if hitChance < 10 {
-		hitChance = 10
-	}
-	if hitChance > 95 {
-		hitChance = 95
+	// God mode: target is invulnerable
+	if p.GodMode {
+		return CombatResult{Damage: 0, Miss: true}
 	}
 
-	roll := rand.Intn(100) + 1
-	if roll > hitChance {
+	// Hit check: NPC DEX vs player defense ratio
+	hitChance := clamp(50+n.Type.DEX-p.DefenseRatio, 5, 95)
+	if rand.Intn(100)+1 > hitChance {
 		return CombatResult{Miss: true}
 	}
 
-	// NPC damage: random in range [MinDamage, MaxDamage]
-	dmgRange := n.Type.MaxDamage - n.Type.MinDamage
-	baseDamage := n.Type.MinDamage
-	if dmgRange > 0 {
-		baseDamage += rand.Intn(dmgRange + 1)
+	// Roll NPC dice damage (or fallback to MinDamage/MaxDamage)
+	var baseDamage int
+	if n.Type.DiceThrow > 0 {
+		baseDamage = iDice(n.Type.DiceThrow, n.Type.DiceRange) + n.Type.AttackBonus
+	} else {
+		dmgRange := n.Type.MaxDamage - n.Type.MinDamage
+		baseDamage = n.Type.MinDamage
+		if dmgRange > 0 {
+			baseDamage += rand.Intn(dmgRange + 1)
+		}
 	}
 
-	// Player defense from VIT + equipped armor
-	armorDef := p.Inventory.TotalDefense()
-	reduction := p.VIT/5 + armorDef
-	maxReduction := baseDamage * 80 / 100
-	if reduction > maxReduction {
-		reduction = maxReduction
+	// Layered defense: subtract each armor layer independently
+	// Ported from C++: AP_Abs_Armor, AP_Abs_Shield, AP_Abs_Cape, etc.
+	damage := baseDamage
+	damage -= p.ArmorAbs
+	damage -= p.ShieldAbs
+	damage -= p.CapeAbs
+	damage -= p.HelmAbs
+	damage -= p.LeggingsAbs
+	damage -= p.BootsAbs
+
+	// Defense shield effect: absorb additional flat damage
+	if p.Effects != nil {
+		shieldLevel := p.Effects.GetEffectLevel(magic.EffectDefenseShield)
+		if shieldLevel > 0 {
+			damage -= magic.CalcDefenseShieldAbsorb(shieldLevel)
+		}
 	}
-	damage := baseDamage - reduction
+
+	// Ice effect on target: reduced defense effectiveness (take 20% more damage per level)
+	if p.Effects != nil {
+		iceLevel := p.Effects.GetEffectLevel(magic.EffectIce)
+		if iceLevel > 0 && damage > 0 {
+			damage = damage * (100 + iceLevel*20) / 100
+		}
+	}
+
+	// Berserk effect on target: reduced defense (take 20% more damage per level)
+	if p.Effects != nil {
+		berserkLevel := p.Effects.GetEffectLevel(magic.EffectBerserk)
+		if berserkLevel > 0 && damage > 0 {
+			damage = damage * (100 + berserkLevel*20) / 100
+		}
+	}
+
 	if damage < 1 {
 		damage = 1
 	}
@@ -112,8 +170,21 @@ func NPCAttackPlayer(n *npc.NPC, p *player.Player) CombatResult {
 		killed = true
 	}
 
+	// Break invisibility when taking damage
+	if p.Effects != nil && p.Effects.HasEffect(magic.EffectInvisibility) {
+		p.Effects.RemoveEffect(magic.EffectInvisibility)
+	}
+
 	// Degrade a random armor piece
 	p.Inventory.DegradeArmor()
+
+	// Train defense skill (20% chance when hit)
+	if rand.Intn(5) == 0 {
+		p.Skills.GainMastery(skills.SkillDefense)
+		if p.Inventory.GetEquipped(items.EquipShield) != nil {
+			p.Skills.GainMastery(skills.SkillShield)
+		}
+	}
 
 	return CombatResult{
 		Damage:   damage,
@@ -123,50 +194,87 @@ func NPCAttackPlayer(n *npc.NPC, p *player.Player) CombatResult {
 }
 
 // PlayerAttackPlayer calculates damage from a player attacking another player.
+// Uses the same dice/STR/defense model as PlayerAttackNPC but with player defense layers.
 func PlayerAttackPlayer(attacker, target *player.Player) CombatResult {
-	// Hit chance: 50% + (attacker DEX - target DEX) * 2, clamped 10-95%
-	hitChance := 50 + (attacker.DEX-target.DEX)*2
-	if hitChance < 10 {
-		hitChance = 10
-	}
-	if hitChance > 95 {
-		hitChance = 95
+	// God mode: target is invulnerable
+	if target.GodMode {
+		return CombatResult{Damage: 0, Miss: true}
 	}
 
-	roll := rand.Intn(100) + 1
-	if roll > hitChance {
+	// Hit check: attacker hit ratio vs target defense ratio
+	hitChance := clamp(50+attacker.HitRatio-target.DefenseRatio, 5, 95)
+	if rand.Intn(100)+1 > hitChance {
 		return CombatResult{Miss: true}
 	}
 
-	// Weapon damage
-	minDmg, maxDmg := attacker.Inventory.WeaponDamage()
-	baseDamage := minDmg
-	if maxDmg > minDmg {
-		baseDamage += rand.Intn(maxDmg - minDmg + 1)
-	}
-	baseDamage += attacker.STR/3 + attacker.Level
+	// Roll weapon dice (players are always "medium" size)
+	damage := iDice(attacker.AttDiceThrowSM, attacker.AttDiceRangeSM) + attacker.AttBonus
 
-	// Target defense from VIT + armor
-	armorDef := target.Inventory.TotalDefense()
-	reduction := target.VIT/5 + armorDef
-	maxReduction := baseDamage * 80 / 100
-	if reduction > maxReduction {
-		reduction = maxReduction
+	// Multiplicative STR scaling
+	str := attacker.EffectiveSTR()
+	damage += damage * str / 500
+
+	// Level bonus
+	damage += attacker.Level
+
+	// Critical hit via attack mode
+	critical := false
+	if attacker.AttackMode >= 20 && attacker.SuperAttackLeft > 0 {
+		critical = true
+		damage += damage * attacker.Level / 100
+		attacker.SuperAttackLeft--
+		if attacker.SuperAttackLeft <= 0 {
+			attacker.AttackMode = 0
+		}
 	}
-	damage := baseDamage - reduction
+
+	// Berserk effect on attacker: multiply damage
+	if attacker.Effects != nil {
+		berserkLevel := attacker.Effects.GetEffectLevel(magic.EffectBerserk)
+		if berserkLevel > 0 {
+			damage = damage * (100 + berserkLevel*20) / 100
+		}
+	}
+
+	// Layered defense absorption
+	damage -= target.ArmorAbs
+	damage -= target.ShieldAbs
+	damage -= target.CapeAbs
+	damage -= target.HelmAbs
+	damage -= target.LeggingsAbs
+	damage -= target.BootsAbs
+
+	// Defense shield on target
+	if target.Effects != nil {
+		shieldLevel := target.Effects.GetEffectLevel(magic.EffectDefenseShield)
+		if shieldLevel > 0 {
+			damage -= magic.CalcDefenseShieldAbsorb(shieldLevel)
+		}
+	}
+
+	// Ice effect on target: reduced defense
+	if target.Effects != nil {
+		iceLevel := target.Effects.GetEffectLevel(magic.EffectIce)
+		if iceLevel > 0 && damage > 0 {
+			damage = damage * (100 + iceLevel*20) / 100
+		}
+	}
+
+	// Berserk effect on target: reduced defense
+	if target.Effects != nil {
+		berserkLevel := target.Effects.GetEffectLevel(magic.EffectBerserk)
+		if berserkLevel > 0 && damage > 0 {
+			damage = damage * (100 + berserkLevel*20) / 100
+		}
+	}
+
 	if damage < 1 {
 		damage = 1
 	}
 
-	// Critical hit: Level% chance, 1.5x damage
-	critical := false
-	critChance := attacker.Level
-	if critChance > 30 {
-		critChance = 30
-	}
-	if rand.Intn(100) < critChance {
-		critical = true
-		damage = damage * 3 / 2
+	// God mode: attacker deals 10x damage
+	if attacker.GodMode {
+		damage *= 10
 	}
 
 	target.HP -= damage
@@ -176,8 +284,29 @@ func PlayerAttackPlayer(attacker, target *player.Player) CombatResult {
 		killed = true
 	}
 
+	// Break invisibility on attack or when taking damage
+	if attacker.Effects != nil && attacker.Effects.HasEffect(magic.EffectInvisibility) {
+		attacker.Effects.RemoveEffect(magic.EffectInvisibility)
+	}
+	if target.Effects != nil && target.Effects.HasEffect(magic.EffectInvisibility) {
+		target.Effects.RemoveEffect(magic.EffectInvisibility)
+	}
+
+	// Train weapon skill for attacker, defense for target
+	trainWeaponSkill(attacker)
+	if rand.Intn(5) == 0 {
+		target.Skills.GainMastery(skills.SkillDefense)
+		if target.Inventory.GetEquipped(items.EquipShield) != nil {
+			target.Skills.GainMastery(skills.SkillShield)
+		}
+	}
+
 	// Degrade equipment
-	attacker.Inventory.DegradeWeapon()
+	if critical {
+		attacker.Inventory.DegradeWeaponBy(15)
+	} else {
+		attacker.Inventory.DegradeWeapon()
+	}
 	target.Inventory.DegradeArmor()
 
 	return CombatResult{
@@ -187,24 +316,72 @@ func PlayerAttackPlayer(attacker, target *player.Player) CombatResult {
 	}
 }
 
-func abs(x int) int {
-	if x < 0 {
-		return -x
+// trainWeaponSkill trains the appropriate weapon skill for the player's equipped weapon.
+// 20% chance to gain mastery per attack, matching C++ training rates.
+func trainWeaponSkill(p *player.Player) {
+	weapon := p.Inventory.GetEquipped(items.EquipWeapon)
+	skillID := skills.SkillHandCombat // unarmed default
+	if weapon != nil {
+		def := weapon.Def()
+		if def != nil && def.WeaponSkillID > 0 {
+			skillID = skills.SkillID(def.WeaponSkillID)
+		}
 	}
-	return x
+	// 20% chance to gain mastery on attack
+	if rand.Intn(5) == 0 {
+		p.Skills.GainMastery(skillID)
+		// Also train general Attack skill
+		p.Skills.GainMastery(skills.SkillAttack)
+	}
 }
 
 // XPForLevel returns the total XP needed to reach a given level.
+// Ported from C++ iGetLevelExp (Game.cpp:25858):
+//
+//	XP(n) = XP(n-1) + n * (50 + (n/17)^2)
+//
+// This produces a steeper curve at high levels than the old level^2 * 100 formula.
 func XPForLevel(level int) int64 {
-	// Exponential scaling: level^2 * 100
-	return int64(level) * int64(level) * 100
+	if level <= 1 {
+		return 0
+	}
+	var total int64
+	for i := 2; i <= level; i++ {
+		q := int64(i / 17)
+		total += int64(i) * (50 + q*q)
+	}
+	return total
 }
 
+// MaxLevel is the maximum player level. Once reached, excess XP converts to Gizon points.
+const MaxLevel = 100
+
+// GizonXPRate is the amount of excess XP required per 1 Gizon point.
+const GizonXPRate = 10000
+
 // CheckLevelUp checks if a player has enough XP to level up and applies it.
-// Returns true if level changed.
+// Returns true if level changed or Gizon points were awarded.
 func CheckLevelUp(p *player.Player) bool {
+	// At max level, convert excess XP to Gizon points
+	if p.Level >= MaxLevel {
+		needed := XPForLevel(MaxLevel)
+		excess := p.Experience - needed
+		if excess > 0 {
+			gizonGained := excess / GizonXPRate
+			if gizonGained > 0 {
+				p.GizonPoints += gizonGained
+				p.Experience = needed + (excess % GizonXPRate)
+				return true
+			}
+		}
+		return false
+	}
+
 	changed := false
 	for {
+		if p.Level >= MaxLevel {
+			break
+		}
 		needed := XPForLevel(p.Level + 1)
 		if p.Experience < needed {
 			break
@@ -221,5 +398,42 @@ func CheckLevelUp(p *player.Player) bool {
 		p.SP = p.MaxSP
 		changed = true
 	}
+	if changed {
+		p.RecalcCombatStats()
+	}
 	return changed
+}
+
+// MaxStatValue is the cap for each individual stat (STR, VIT, DEX, INT, MAG, CHR).
+const MaxStatValue = 100
+
+// CalcDayNightBonus returns the bonus damage for a player's equipped weapon
+// based on the current world phase. Weapons with DayBonus get +bonus during day,
+// weapons with NightBonus get +bonus during night.
+func CalcDayNightBonus(p *player.Player, worldPhase int) int {
+	weapon := p.Inventory.GetEquipped(items.EquipWeapon)
+	if weapon == nil {
+		return 0
+	}
+	def := weapon.Def()
+	if def == nil {
+		return 0
+	}
+	bonus := 0
+	// Day phase (phase 0) gives day bonus
+	if worldPhase == 0 && def.DayBonus > 0 {
+		bonus += def.DayBonus
+	}
+	// Night phase (phase 2) gives night bonus
+	if worldPhase == 2 && def.NightBonus > 0 {
+		bonus += def.NightBonus
+	}
+	return bonus
+}
+
+func abs(x int) int {
+	if x < 0 {
+		return -x
+	}
+	return x
 }

@@ -34,6 +34,7 @@ type Sector struct {
 
 type GameMap struct {
 	Name    string
+	Type    MapType    // Normal, SafeZone, or Arena
 	Width   int
 	Height  int
 	Tiles   [][]Tile   // [y][x]
@@ -72,6 +73,7 @@ func LoadAMD(path string) (*GameMap, error) {
 	name := strings.TrimSuffix(filepath.Base(path), filepath.Ext(path))
 	gm := &GameMap{
 		Name:   name,
+		Type:   MapTypeForName(name),
 		Width:  width,
 		Height: height,
 		Tiles:  make([][]Tile, height),

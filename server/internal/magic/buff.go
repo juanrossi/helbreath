@@ -94,6 +94,11 @@ func (bt *BuffTracker) Count() int {
 	return len(bt.Buffs)
 }
 
+// ClearAll removes all buffs.
+func (bt *BuffTracker) ClearAll() {
+	bt.Buffs = nil
+}
+
 // HasBuff returns true if a buff from the given spell is active.
 func (bt *BuffTracker) HasBuff(spellID int) bool {
 	for _, b := range bt.Buffs {

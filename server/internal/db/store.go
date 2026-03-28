@@ -73,6 +73,8 @@ type CharacterRow struct {
 	RewardGold     int
 	Hunger         int
 	Gold           int64
+	InventoryJSON  string // JSON-serialized inventory items
+	EquipmentJSON  string // JSON-serialized equipment items
 }
 
 func (s *Store) GetCharactersByAccount(ctx context.Context, accountID int) ([]CharacterRow, error) {
@@ -80,7 +82,8 @@ func (s *Store) GetCharactersByAccount(ctx context.Context, accountID int) ([]Ch
 		`SELECT id, account_id, name, gender, skin_color, hair_style, hair_color,
 		        underwear_color, side, level, experience, str, vit, dex, int_stat,
 		        mag, charisma, lu_pool, hp, mp, sp, map_name, pos_x, pos_y,
-		        direction, admin_level, pk_count, ek_count, reward_gold, hunger, gold
+		        direction, admin_level, pk_count, ek_count, reward_gold, hunger, gold,
+		        COALESCE(inventory_data, ''), COALESCE(equipment_data, '')
 		 FROM characters WHERE account_id = $1 ORDER BY id`, accountID)
 	if err != nil {
 		return nil, err
@@ -95,7 +98,7 @@ func (s *Store) GetCharactersByAccount(ctx context.Context, accountID int) ([]Ch
 			&c.Experience, &c.STR, &c.VIT, &c.DEX, &c.INT, &c.MAG, &c.CHR,
 			&c.LUPool, &c.HP, &c.MP, &c.SP, &c.MapName, &c.PosX, &c.PosY,
 			&c.Direction, &c.AdminLevel, &c.PKCount, &c.EKCount, &c.RewardGold,
-			&c.Hunger, &c.Gold)
+			&c.Hunger, &c.Gold, &c.InventoryJSON, &c.EquipmentJSON)
 		if err != nil {
 			return nil, err
 		}
@@ -110,14 +113,15 @@ func (s *Store) GetCharacterByID(ctx context.Context, charID, accountID int) (*C
 		`SELECT id, account_id, name, gender, skin_color, hair_style, hair_color,
 		        underwear_color, side, level, experience, str, vit, dex, int_stat,
 		        mag, charisma, lu_pool, hp, mp, sp, map_name, pos_x, pos_y,
-		        direction, admin_level, pk_count, ek_count, reward_gold, hunger, gold
+		        direction, admin_level, pk_count, ek_count, reward_gold, hunger, gold,
+		        COALESCE(inventory_data, ''), COALESCE(equipment_data, '')
 		 FROM characters WHERE id = $1 AND account_id = $2`,
 		charID, accountID).Scan(&c.ID, &c.AccountID, &c.Name, &c.Gender, &c.SkinColor,
 		&c.HairStyle, &c.HairColor, &c.UnderwearColor, &c.Side, &c.Level,
 		&c.Experience, &c.STR, &c.VIT, &c.DEX, &c.INT, &c.MAG, &c.CHR,
 		&c.LUPool, &c.HP, &c.MP, &c.SP, &c.MapName, &c.PosX, &c.PosY,
 		&c.Direction, &c.AdminLevel, &c.PKCount, &c.EKCount, &c.RewardGold,
-		&c.Hunger, &c.Gold)
+		&c.Hunger, &c.Gold, &c.InventoryJSON, &c.EquipmentJSON)
 	if err != nil {
 		return nil, err
 	}
@@ -139,6 +143,26 @@ func (s *Store) DeleteCharacter(ctx context.Context, charID, accountID int) erro
 	_, err := s.pool.Exec(ctx,
 		`DELETE FROM characters WHERE id = $1 AND account_id = $2`,
 		charID, accountID)
+	return err
+}
+
+func (s *Store) SaveCharacter(ctx context.Context, charID int, mapName string, x, y, direction int,
+	level int, experience int64, hp, mp, sp int,
+	str, vit, dex, intStat, mag, chr, luPool int,
+	side int, gold int64, pkCount, ekCount, hunger int,
+	inventoryJSON, equipmentJSON string) error {
+	_, err := s.pool.Exec(ctx,
+		`UPDATE characters SET map_name = $2, pos_x = $3, pos_y = $4, direction = $5,
+		        level = $6, experience = $7, hp = $8, mp = $9, sp = $10,
+		        str = $11, vit = $12, dex = $13, int_stat = $14, mag = $15, charisma = $16, lu_pool = $17,
+		        side = $18, gold = $19, pk_count = $20, ek_count = $21, hunger = $22,
+		        inventory_data = $23, equipment_data = $24, last_played = NOW()
+		 WHERE id = $1`,
+		charID, mapName, x, y, direction,
+		level, experience, hp, mp, sp,
+		str, vit, dex, intStat, mag, chr, luPool,
+		side, gold, pkCount, ekCount, hunger,
+		inventoryJSON, equipmentJSON)
 	return err
 }
 

@@ -167,7 +167,7 @@ func (inv *Inventory) CountItem(itemID int) int {
 	return total
 }
 
-// TotalDefense returns total defense from all equipped armor.
+// TotalDefense returns total defense from all equipped armor (legacy, for backward compat).
 func (inv *Inventory) TotalDefense() int {
 	total := 0
 	for i := 1; i <= MaxEquipSlots; i++ {
@@ -181,7 +181,85 @@ func (inv *Inventory) TotalDefense() int {
 	return total
 }
 
-// WeaponDamage returns the min/max damage of equipped weapon. Returns (0,0) for unarmed.
+// ArmorAbsorption returns the flat defense from the equipped body armor.
+func (inv *Inventory) ArmorAbsorption() int {
+	item := inv.Equipment[EquipBody]
+	if item == nil {
+		return 0
+	}
+	def := item.Def()
+	if def == nil {
+		return 0
+	}
+	return def.Defense
+}
+
+// ShieldAbsorption returns the flat defense from the equipped shield.
+func (inv *Inventory) ShieldAbsorption() int {
+	item := inv.Equipment[EquipShield]
+	if item == nil {
+		return 0
+	}
+	def := item.Def()
+	if def == nil {
+		return 0
+	}
+	return def.Defense
+}
+
+// CapeAbsorption returns the flat defense from the equipped cape.
+func (inv *Inventory) CapeAbsorption() int {
+	item := inv.Equipment[EquipCape]
+	if item == nil {
+		return 0
+	}
+	def := item.Def()
+	if def == nil {
+		return 0
+	}
+	return def.Defense
+}
+
+// HelmAbsorption returns the flat defense from the equipped helm.
+func (inv *Inventory) HelmAbsorption() int {
+	item := inv.Equipment[EquipHelm]
+	if item == nil {
+		return 0
+	}
+	def := item.Def()
+	if def == nil {
+		return 0
+	}
+	return def.Defense
+}
+
+// LeggingsAbsorption returns the flat defense from the equipped leggings.
+func (inv *Inventory) LeggingsAbsorption() int {
+	item := inv.Equipment[EquipLeggings]
+	if item == nil {
+		return 0
+	}
+	def := item.Def()
+	if def == nil {
+		return 0
+	}
+	return def.Defense
+}
+
+// BootsAbsorption returns the flat defense from the equipped boots.
+func (inv *Inventory) BootsAbsorption() int {
+	item := inv.Equipment[EquipBoots]
+	if item == nil {
+		return 0
+	}
+	def := item.Def()
+	if def == nil {
+		return 0
+	}
+	return def.Defense
+}
+
+// WeaponDamage returns the min/max damage of equipped weapon. Returns (1,3) for unarmed.
 func (inv *Inventory) WeaponDamage() (int, int) {
 	weapon := inv.Equipment[EquipWeapon]
 	if weapon == nil {
@@ -196,9 +274,14 @@ func (inv *Inventory) WeaponDamage() (int, int) {
 
 // DegradeWeapon reduces durability of equipped weapon by 1.
 func (inv *Inventory) DegradeWeapon() {
+	inv.DegradeWeaponBy(1)
+}
+
+// DegradeWeaponBy reduces durability of equipped weapon by the given amount.
+func (inv *Inventory) DegradeWeaponBy(amount int) {
 	weapon := inv.Equipment[EquipWeapon]
 	if weapon != nil && weapon.Durability > 0 {
-		weapon.Durability--
+		weapon.Durability -= amount
 		if weapon.Durability <= 0 {
 			inv.Equipment[EquipWeapon] = nil // weapon broke
 		}

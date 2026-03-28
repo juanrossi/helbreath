@@ -158,6 +158,44 @@ func (m *MemoryStore) SaveCharacterPosition(_ context.Context, charID int, mapNa
 	return nil
 }
 
+func (m *MemoryStore) SaveCharacter(_ context.Context, charID int, mapName string, x, y, direction int,
+	level int, experience int64, hp, mp, sp int,
+	str, vit, dex, intStat, mag, chr, luPool int,
+	side int, gold int64, pkCount, ekCount, hunger int,
+	inventoryJSON, equipmentJSON string) error {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+
+	c, ok := m.characters[charID]
+	if !ok {
+		return fmt.Errorf("character not found")
+	}
+	c.MapName = mapName
+	c.PosX = x
+	c.PosY = y
+	c.Direction = direction
+	c.Level = level
+	c.Experience = experience
+	c.HP = hp
+	c.MP = mp
+	c.SP = sp
+	c.STR = str
+	c.VIT = vit
+	c.DEX = dex
+	c.INT = intStat
+	c.MAG = mag
+	c.CHR = chr
+	c.LUPool = luPool
+	c.Side = side
+	c.Gold = gold
+	c.PKCount = pkCount
+	c.EKCount = ekCount
+	c.Hunger = hunger
+	c.InventoryJSON = inventoryJSON
+	c.EquipmentJSON = equipmentJSON
+	return nil
+}
+
 func (m *MemoryStore) CountCharacters(_ context.Context, accountID int) (int, error) {
 	m.mu.RLock()
 	defer m.mu.RUnlock()

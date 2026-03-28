@@ -140,7 +140,116 @@ func TestBuffSpellStats(t *testing.T) {
 }
 
 func TestSpellDBCount(t *testing.T) {
-	if len(SpellDB) < 14 {
-		t.Errorf("Expected at least 14 spells in SpellDB, got %d", len(SpellDB))
+	if len(SpellDB) < 26 {
+		t.Errorf("Expected at least 26 spells in SpellDB, got %d", len(SpellDB))
+	}
+}
+
+func TestStatusEffectSpells(t *testing.T) {
+	tests := []struct {
+		id          int
+		name        string
+		effectType  EffectType
+		effectLevel int
+	}{
+		{50, "Poison Cloud", EffectPoison, 1},
+		{51, "Toxic Cloud", EffectPoison, 2},
+		{52, "Freeze", EffectIce, 1},
+		{53, "Deep Freeze", EffectIce, 2},
+		{54, "Berserk", EffectBerserk, 1},
+		{55, "Greater Berserk", EffectBerserk, 2},
+		{56, "Invisibility", EffectInvisibility, 1},
+		{57, "Silence", EffectInhibition, 1},
+		{58, "Defense Shield", EffectDefenseShield, 1},
+		{59, "Greater Defense Shield", EffectDefenseShield, 2},
+		{60, "Magic Protection", EffectMagicProtection, 1},
+		{61, "Greater Magic Protection", EffectMagicProtection, 2},
+	}
+
+	for _, tt := range tests {
+		spell := GetSpellDef(tt.id)
+		if spell == nil {
+			t.Errorf("Spell %d (%s) not found", tt.id, tt.name)
+			continue
+		}
+		if spell.Name != tt.name {
+			t.Errorf("ID %d: expected name=%s, got %s", tt.id, tt.name, spell.Name)
+		}
+		if spell.ApplyEffect != tt.effectType {
+			t.Errorf("ID %d: expected effect type=%d, got %d", tt.id, tt.effectType, spell.ApplyEffect)
+		}
+		if spell.EffectLevel != tt.effectLevel {
+			t.Errorf("ID %d: expected effect level=%d, got %d", tt.id, tt.effectLevel, spell.EffectLevel)
+		}
+	}
+}
+
+func TestPoisonSpellHasTickDamage(t *testing.T) {
+	pc := GetSpellDef(50) // Poison Cloud
+	if pc.TickDamage != 5 {
+		t.Errorf("Poison Cloud tick damage: expected 5, got %d", pc.TickDamage)
+	}
+	if pc.TickIntervalMs != 3000 {
+		t.Errorf("Poison Cloud tick interval: expected 3000ms, got %d", pc.TickIntervalMs)
+	}
+	if pc.Duration != 15 {
+		t.Errorf("Poison Cloud duration: expected 15s, got %d", pc.Duration)
+	}
+
+	tc := GetSpellDef(51) // Toxic Cloud
+	if tc.TickDamage != 8 {
+		t.Errorf("Toxic Cloud tick damage: expected 8, got %d", tc.TickDamage)
+	}
+	if tc.EffectLevel != 2 {
+		t.Errorf("Toxic Cloud effect level: expected 2, got %d", tc.EffectLevel)
+	}
+}
+
+func TestBuffSpellsWithEffects(t *testing.T) {
+	// Berserk should be a buff type with an effect
+	berserk := GetSpellDef(54)
+	if berserk.Type != SpellTypeBuff {
+		t.Errorf("Berserk should be buff type, got %d", berserk.Type)
+	}
+	if berserk.ApplyEffect != EffectBerserk {
+		t.Errorf("Berserk should apply EffectBerserk, got %d", berserk.ApplyEffect)
+	}
+
+	// Defense Shield should be a buff type
+	ds := GetSpellDef(58)
+	if ds.Type != SpellTypeBuff {
+		t.Errorf("Defense Shield should be buff type, got %d", ds.Type)
+	}
+	if ds.ApplyEffect != EffectDefenseShield {
+		t.Errorf("Defense Shield should apply EffectDefenseShield, got %d", ds.ApplyEffect)
+	}
+
+	// Magic Protection should be a buff type
+	mp := GetSpellDef(60)
+	if mp.Type != SpellTypeBuff {
+		t.Errorf("Magic Protection should be buff type, got %d", mp.Type)
+	}
+	if mp.ApplyEffect != EffectMagicProtection {
+		t.Errorf("Magic Protection should apply EffectMagicProtection, got %d", mp.ApplyEffect)
+	}
+}
+
+func TestDebuffSpellsWithEffects(t *testing.T) {
+	// Freeze should be a debuff
+	freeze := GetSpellDef(52)
+	if freeze.Type != SpellTypeDebuff {
+		t.Errorf("Freeze should be debuff type, got %d", freeze.Type)
+	}
+	if freeze.Element != ElementIce {
+		t.Errorf("Freeze should be ice element, got %d", freeze.Element)
+	}
+
+	// Silence should be a debuff
+	silence := GetSpellDef(57)
+	if silence.Type != SpellTypeDebuff {
+		t.Errorf("Silence should be debuff type, got %d", silence.Type)
+	}
+	if silence.ApplyEffect != EffectInhibition {
+		t.Errorf("Silence should apply EffectInhibition, got %d", silence.ApplyEffect)
 	}
 }

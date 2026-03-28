@@ -59,10 +59,9 @@ export class BootScene extends Phaser.Scene {
       this.load.binary(asset.key, `/assets/sprites/${asset.fileName}`);
     }
 
-    // Load AMD map files as binary
-    const mapAssets = allAssets.filter(a => a.assetType === AssetType.MAP);
+    // Load AMD map files as binary — only preload starter maps, rest loaded on-demand
+    const mapAssets = allAssets.filter(a => a.assetType === AssetType.MAP && a.preload);
     for (const asset of mapAssets) {
-      // Store with the raw filename as key (used by HBMap.load)
       this.load.binary(asset.fileName, `/assets/maps/${asset.fileName}`);
     }
 

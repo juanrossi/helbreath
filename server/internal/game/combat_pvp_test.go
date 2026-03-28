@@ -6,6 +6,7 @@ import (
 	"github.com/juanrossi/hbonline/server/internal/items"
 	"github.com/juanrossi/hbonline/server/internal/magic"
 	"github.com/juanrossi/hbonline/server/internal/player"
+	"github.com/juanrossi/hbonline/server/internal/skills"
 )
 
 func makeTestPlayerWithID(id int32, name string) *player.Player {
@@ -27,7 +28,11 @@ func makeTestPlayerWithID(id int32, name string) *player.Player {
 		MaxSP:     40,
 		LUPool:    0,
 		Inventory: items.NewInventory(),
+		Skills:    skills.NewPlayerSkills(),
+		Buffs:     magic.NewBuffTracker(),
+		Effects:   magic.NewEffectTracker(),
 	}
+	p.RecalcCombatStats()
 	return p
 }
 
@@ -66,6 +71,7 @@ func TestPlayerAttackPlayerKill(t *testing.T) {
 	attacker := makeTestPlayerWithID(1, "Attacker")
 	attacker.STR = 50
 	attacker.Level = 30
+	attacker.RecalcCombatStats()
 
 	target := makeTestPlayerWithID(2, "Target")
 	target.HP = 1
@@ -86,16 +92,22 @@ func TestPlayerAttackPlayerKill(t *testing.T) {
 	}
 }
 
-func TestPlayerAttackPlayerCriticalChance(t *testing.T) {
+func TestPlayerAttackPlayerCriticalWithAttackMode(t *testing.T) {
+	// Criticals now trigger via AttackMode >= 20 (ported from C++)
 	attacker := makeTestPlayerWithID(1, "Attacker")
-	attacker.Level = 30 // 30% crit chance (capped at 30)
-	attacker.DEX = 50   // high hit chance
+	attacker.Level = 30
+	attacker.DEX = 50
+	attacker.AttackMode = 20       // activate critical mode
+	attacker.SuperAttackLeft = 5000 // enough for all iterations
+	attacker.RecalcCombatStats()
+	attacker.AttackMode = 20
+	attacker.SuperAttackLeft = 5000
 
 	target := makeTestPlayerWithID(2, "Target")
 
 	critCount := 0
 	hitCount := 0
-	for i := 0; i < 5000; i++ {
+	for i := 0; i < 500; i++ {
 		target.HP = target.MaxHP
 		result := PlayerAttackPlayer(attacker, target)
 		if !result.Miss {
@@ -109,25 +121,26 @@ func TestPlayerAttackPlayerCriticalChance(t *testing.T) {
 	if hitCount == 0 {
 		t.Fatal("Expected at least some hits")
 	}
+	// All hits should be critical when AttackMode >= 20 and SuperAttackLeft > 0
 	critRate := float64(critCount) / float64(hitCount)
-	// Level 30 = 30% crit chance (capped). Should be roughly ~0.30.
-	if critRate < 0.15 || critRate > 0.45 {
-		t.Errorf("Critical rate %.2f seems off for level 30 (expected ~0.30)", critRate)
+	if critRate < 0.95 {
+		t.Errorf("Critical rate %.2f — all hits should be critical with AttackMode=20", critRate)
 	}
 	t.Logf("Crit rate: %.2f (%d crits / %d hits)", critRate, critCount, hitCount)
 }
 
-func TestPlayerAttackPlayerCritCapAt30(t *testing.T) {
-	// Level 50 player should still have 30% crit (capped)
+func TestPlayerAttackPlayerNoCritWithoutAttackMode(t *testing.T) {
+	// Without AttackMode, no criticals should happen
 	attacker := makeTestPlayerWithID(1, "Attacker")
 	attacker.Level = 50
 	attacker.DEX = 50
+	attacker.AttackMode = 0 // normal mode
 
 	target := makeTestPlayerWithID(2, "Target")
 
 	critCount := 0
 	hitCount := 0
-	for i := 0; i < 5000; i++ {
+	for i := 0; i < 500; i++ {
 		target.HP = target.MaxHP
 		result := PlayerAttackPlayer(attacker, target)
 		if !result.Miss {
@@ -141,10 +154,8 @@ func TestPlayerAttackPlayerCritCapAt30(t *testing.T) {
 	if hitCount == 0 {
 		t.Fatal("No hits at all")
 	}
-	critRate := float64(critCount) / float64(hitCount)
-	// Should still be ~30% due to cap
-	if critRate > 0.45 {
-		t.Errorf("Critical rate %.2f exceeds cap expectation (max 30%%)", critRate)
+	if critCount > 0 {
+		t.Errorf("Got %d crits with AttackMode=0 — should be 0", critCount)
 	}
 }
 
@@ -153,6 +164,7 @@ func TestPlayerAttackPlayerWithWeapon(t *testing.T) {
 	sword := items.NewItem(items.GetItemDef(1), 1) // Short Sword
 	attacker.Inventory.AddItem(sword)
 	attacker.Inventory.Equip(0)
+	attacker.RecalcCombatStats()
 
 	target := makeTestPlayerWithID(2, "Target")
 
@@ -190,12 +202,14 @@ func TestPlayerAttackPlayerWithWeapon(t *testing.T) {
 func TestPlayerAttackPlayerTargetArmor(t *testing.T) {
 	attacker := makeTestPlayerWithID(1, "Attacker")
 	attacker.STR = 20
+	attacker.RecalcCombatStats()
 
 	// Armored target
 	armored := makeTestPlayerWithID(2, "Armored")
 	armor := items.NewItem(items.GetItemDef(40), 1) // Leather Armor
 	armored.Inventory.AddItem(armor)
 	armored.Inventory.Equip(0)
+	armored.RecalcCombatStats()
 
 	// Unarmored target
 	naked := makeTestPlayerWithID(3, "Naked")
@@ -227,11 +241,13 @@ func TestPlayerAttackPlayerEquipmentDegrades(t *testing.T) {
 	sword := items.NewItem(items.GetItemDef(1), 1)
 	attacker.Inventory.AddItem(sword)
 	attacker.Inventory.Equip(0)
+	attacker.RecalcCombatStats()
 
 	target := makeTestPlayerWithID(2, "Target")
 	armor := items.NewItem(items.GetItemDef(40), 1)
 	target.Inventory.AddItem(armor)
 	target.Inventory.Equip(0)
+	target.RecalcCombatStats()
 
 	for i := 0; i < 100; i++ {
 		target.HP = target.MaxHP
@@ -265,8 +281,11 @@ func TestXPForLevelEdgeCases(t *testing.T) {
 	if XPForLevel(0) != 0 {
 		t.Error("XPForLevel(0) should be 0")
 	}
-	if XPForLevel(100) != 1000000 {
-		t.Errorf("XPForLevel(100) = %d, expected 1000000", XPForLevel(100))
+	if XPForLevel(1) != 0 {
+		t.Errorf("XPForLevel(1) = %d, expected 0", XPForLevel(1))
+	}
+	if XPForLevel(100) != 322430 {
+		t.Errorf("XPForLevel(100) = %d, expected 322430", XPForLevel(100))
 	}
 }
 
@@ -293,11 +312,11 @@ func TestCheckLevelUpHighXP(t *testing.T) {
 
 // Test CheckLevelUp maxHP/maxMP recalculation
 func TestCheckLevelUpRecalcsStats(t *testing.T) {
-	p := makeTestPlayer()
+	p := makeTestPlayerWithID(1, "LevelUp")
 	p.Level = 1
 	p.VIT = 20
 	p.MAG = 15
-	p.Experience = 500
+	p.Experience = 150 // XPForLevel(2)=100, XPForLevel(3)=250 — should reach level 2
 
 	oldMaxHP := p.MaxHP
 	oldMaxMP := p.MaxMP
@@ -305,7 +324,7 @@ func TestCheckLevelUpRecalcsStats(t *testing.T) {
 	CheckLevelUp(p)
 
 	if p.Level != 2 {
-		t.Fatal("Should be level 2")
+		t.Fatalf("Should be level 2, got %d (XP=%d, next=%d)", p.Level, p.Experience, XPForLevel(p.Level+1))
 	}
 	expectedMaxHP := 30 + (2-1)*3 + 20*2 // 30+3+40=73
 	if p.MaxHP != expectedMaxHP {
@@ -433,7 +452,8 @@ func TestHitChanceClamping(t *testing.T) {
 	// Very high DEX attacker vs low DEX NPC
 	p := makeTestPlayer()
 	p.DEX = 100
-	n := makeTestNPC(1) // Slime with low DEX
+	p.RecalcCombatStats() // recalc HitRatio after changing DEX
+	n := makeTestNPC(1)   // Slime with low DEX
 
 	hitCount := 0
 	for i := 0; i < 1000; i++ {

@@ -438,7 +438,36 @@ func TestFromDBInitializesNewFields(t *testing.T) {
 	if p.Buffs == nil {
 		t.Error("Buffs should be initialized")
 	}
+	if p.Effects == nil {
+		t.Error("Effects should be initialized")
+	}
 	if p.Cooldowns == nil {
 		t.Error("Cooldowns should be initialized")
+	}
+}
+
+func TestCanCastSpellSilenced(t *testing.T) {
+	p := makeTestPlayer()
+	p.LearnSpell(1)
+
+	// Should be able to cast normally
+	can, _ := p.CanCastSpell(magic.GetSpellDef(1))
+	if !can {
+		t.Error("Should be able to cast before silence")
+	}
+
+	// Apply silence effect
+	p.Effects.AddEffect(&magic.ActiveEffect{
+		Type:      magic.EffectInhibition,
+		Level:     1,
+		ExpiresAt: time.Now().Add(10 * time.Second),
+	})
+
+	can, reason := p.CanCastSpell(magic.GetSpellDef(1))
+	if can {
+		t.Error("Should not cast while silenced")
+	}
+	if reason != "You are silenced" {
+		t.Errorf("Expected silenced reason, got: %s", reason)
 	}
 }

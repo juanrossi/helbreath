@@ -20,19 +20,22 @@ export interface AssetData {
     music?: string;
     spriteType?: SpriteType;
     tileStartIndex?: number;
+    /** If true, load at boot. If false/undefined for MAPs, load on-demand. */
+    preload?: boolean;
 }
 
 // ---------------------------------------------------------------------------
-// Maps
+// Maps — every .amd file in client/public/assets/maps/
 // ---------------------------------------------------------------------------
 
 const MAP_ASSETS: AssetData[] = [
-    // Towns
-    { key: 'aresden', fileName: 'aresden.amd', assetType: AssetType.MAP, mapName: 'aresden', music: 'aresden' },
-    { key: 'elvine', fileName: 'elvine.amd', assetType: AssetType.MAP, mapName: 'elvine', music: 'elvine' },
-    { key: 'middleland', fileName: 'middleland.amd', assetType: AssetType.MAP, mapName: 'middleland', music: 'middleland' },
+    // Towns — preloaded at boot (starter maps)
+    { key: 'aresden', fileName: 'aresden.amd', assetType: AssetType.MAP, mapName: 'aresden', music: 'aresden', preload: true },
+    { key: 'elvine', fileName: 'elvine.amd', assetType: AssetType.MAP, mapName: 'elvine', music: 'elvine', preload: true },
+    { key: 'middleland', fileName: 'middleland.amd', assetType: AssetType.MAP, mapName: 'middleland', music: 'middleland', preload: true },
     { key: '2ndmiddle', fileName: '2ndmiddle.amd', assetType: AssetType.MAP, mapName: '2ndmiddle', music: 'middleland' },
-    { key: 'default', fileName: 'default.amd', assetType: AssetType.MAP, mapName: 'default', music: 'default' },
+    { key: 'default', fileName: 'default.amd', assetType: AssetType.MAP, mapName: 'default', music: 'default', preload: true },
+    { key: 'druncncity', fileName: 'druncncity.amd', assetType: AssetType.MAP, mapName: 'druncncity', music: 'druncncity' },
 
     // Town dungeons
     { key: 'aresdend1', fileName: 'aresdend1.amd', assetType: AssetType.MAP, mapName: 'aresdend1', music: 'dungeon' },
@@ -46,42 +49,79 @@ const MAP_ASSETS: AssetData[] = [
 
     // Fight zones
     { key: 'fightzone1', fileName: 'fightzone1.amd', assetType: AssetType.MAP, mapName: 'fightzone1', music: 'middleland' },
+    { key: 'fightzone2', fileName: 'fightzone2.amd', assetType: AssetType.MAP, mapName: 'fightzone2', music: 'middleland' },
+    { key: 'fightzone3', fileName: 'fightzone3.amd', assetType: AssetType.MAP, mapName: 'fightzone3', music: 'middleland' },
+    { key: 'fightzone4', fileName: 'fightzone4.amd', assetType: AssetType.MAP, mapName: 'fightzone4', music: 'middleland' },
+    { key: 'fightzone5', fileName: 'fightzone5.amd', assetType: AssetType.MAP, mapName: 'fightzone5', music: 'middleland' },
+    { key: 'fightzone6', fileName: 'fightzone6.amd', assetType: AssetType.MAP, mapName: 'fightzone6', music: 'middleland' },
+    { key: 'fightzone7', fileName: 'fightzone7.amd', assetType: AssetType.MAP, mapName: 'fightzone7', music: 'middleland' },
+    { key: 'fightzone8', fileName: 'fightzone8.amd', assetType: AssetType.MAP, mapName: 'fightzone8', music: 'middleland' },
+    { key: 'fightzone9', fileName: 'fightzone9.amd', assetType: AssetType.MAP, mapName: 'fightzone9', music: 'middleland' },
 
     // Deep dungeons
     { key: 'dglv2', fileName: 'dglv2.amd', assetType: AssetType.MAP, mapName: 'dglv2', music: 'dungeon' },
     { key: 'dglv3', fileName: 'dglv3.amd', assetType: AssetType.MAP, mapName: 'dglv3', music: 'dungeon' },
     { key: 'dglv4', fileName: 'dglv4.amd', assetType: AssetType.MAP, mapName: 'dglv4', music: 'dungeon' },
 
-    // Town buildings
+    // Aresden buildings
     { key: 'bsmith_1', fileName: 'bsmith_1.amd', assetType: AssetType.MAP, mapName: 'bsmith_1', music: 'default' },
+    { key: 'bsmith_1f', fileName: 'bsmith_1f.amd', assetType: AssetType.MAP, mapName: 'bsmith_1f', music: 'default' },
     { key: 'gshop_1', fileName: 'gshop_1.amd', assetType: AssetType.MAP, mapName: 'gshop_1', music: 'default' },
+    { key: 'gshop_1f', fileName: 'gshop_1f.amd', assetType: AssetType.MAP, mapName: 'gshop_1f', music: 'default' },
     { key: 'wrhus_1', fileName: 'wrhus_1.amd', assetType: AssetType.MAP, mapName: 'wrhus_1', music: 'default' },
+    { key: 'wrhus_1f', fileName: 'wrhus_1f.amd', assetType: AssetType.MAP, mapName: 'wrhus_1f', music: 'default' },
+    { key: 'arewrhus', fileName: 'arewrhus.amd', assetType: AssetType.MAP, mapName: 'arewrhus', music: 'default' },
     { key: 'cityhall_1', fileName: 'cityhall_1.amd', assetType: AssetType.MAP, mapName: 'cityhall_1', music: 'default' },
     { key: 'cmdhall_1', fileName: 'cmdhall_1.amd', assetType: AssetType.MAP, mapName: 'cmdhall_1', music: 'default' },
     { key: 'cath_1', fileName: 'cath_1.amd', assetType: AssetType.MAP, mapName: 'cath_1', music: 'default' },
     { key: 'wzdtwr_1', fileName: 'wzdtwr_1.amd', assetType: AssetType.MAP, mapName: 'wzdtwr_1', music: 'default' },
+    { key: 'gldhall_1', fileName: 'gldhall_1.amd', assetType: AssetType.MAP, mapName: 'gldhall_1', music: 'default' },
 
-    // Farms and universities
+    // Elvine buildings
+    { key: 'bsmith_2', fileName: 'bsmith_2.amd', assetType: AssetType.MAP, mapName: 'bsmith_2', music: 'default' },
+    { key: 'bsmith_2f', fileName: 'bsmith_2f.amd', assetType: AssetType.MAP, mapName: 'bsmith_2f', music: 'default' },
+    { key: 'gshop_2', fileName: 'gshop_2.amd', assetType: AssetType.MAP, mapName: 'gshop_2', music: 'default' },
+    { key: 'gshop_2f', fileName: 'gshop_2f.amd', assetType: AssetType.MAP, mapName: 'gshop_2f', music: 'default' },
+    { key: 'wrhus_2', fileName: 'wrhus_2.amd', assetType: AssetType.MAP, mapName: 'wrhus_2', music: 'default' },
+    { key: 'wrhus_2f', fileName: 'wrhus_2f.amd', assetType: AssetType.MAP, mapName: 'wrhus_2f', music: 'default' },
+    { key: 'elvwrhus', fileName: 'elvwrhus.amd', assetType: AssetType.MAP, mapName: 'elvwrhus', music: 'default' },
+    { key: 'cityhall_2', fileName: 'cityhall_2.amd', assetType: AssetType.MAP, mapName: 'cityhall_2', music: 'default' },
+    { key: 'cmdhall_2', fileName: 'cmdhall_2.amd', assetType: AssetType.MAP, mapName: 'cmdhall_2', music: 'default' },
+    { key: 'cath_2', fileName: 'cath_2.amd', assetType: AssetType.MAP, mapName: 'cath_2', music: 'default' },
+    { key: 'wzdtwr_2', fileName: 'wzdtwr_2.amd', assetType: AssetType.MAP, mapName: 'wzdtwr_2', music: 'default' },
+    { key: 'gldhall_2', fileName: 'gldhall_2.amd', assetType: AssetType.MAP, mapName: 'gldhall_2', music: 'default' },
+
+    // Farms, universities, jails
     { key: 'arefarm', fileName: 'arefarm.amd', assetType: AssetType.MAP, mapName: 'arefarm', music: 'aresden' },
     { key: 'elvfarm', fileName: 'elvfarm.amd', assetType: AssetType.MAP, mapName: 'elvfarm', music: 'elvine' },
     { key: 'areuni', fileName: 'areuni.amd', assetType: AssetType.MAP, mapName: 'areuni', music: 'aresden' },
     { key: 'elvuni', fileName: 'elvuni.amd', assetType: AssetType.MAP, mapName: 'elvuni', music: 'elvine' },
     { key: 'arejail', fileName: 'arejail.amd', assetType: AssetType.MAP, mapName: 'arejail', music: 'aresden' },
+    { key: 'elvjail', fileName: 'elvjail.amd', assetType: AssetType.MAP, mapName: 'elvjail', music: 'elvine' },
 
-    // Crusade barracks
+    // Aresden barracks
     { key: 'arebrk11', fileName: 'arebrk11.amd', assetType: AssetType.MAP, mapName: 'arebrk11', music: 'aresden' },
     { key: 'arebrk12', fileName: 'arebrk12.amd', assetType: AssetType.MAP, mapName: 'arebrk12', music: 'aresden' },
     { key: 'arebrk21', fileName: 'arebrk21.amd', assetType: AssetType.MAP, mapName: 'arebrk21', music: 'aresden' },
     { key: 'arebrk22', fileName: 'arebrk22.amd', assetType: AssetType.MAP, mapName: 'arebrk22', music: 'aresden' },
 
-    // Special maps
+    // Elvine barracks
+    { key: 'elvbrk11', fileName: 'elvbrk11.amd', assetType: AssetType.MAP, mapName: 'elvbrk11', music: 'elvine' },
+    { key: 'elvbrk12', fileName: 'elvbrk12.amd', assetType: AssetType.MAP, mapName: 'elvbrk12', music: 'elvine' },
+    { key: 'elvbrk21', fileName: 'elvbrk21.amd', assetType: AssetType.MAP, mapName: 'elvbrk21', music: 'elvine' },
+    { key: 'elvbrk22', fileName: 'elvbrk22.amd', assetType: AssetType.MAP, mapName: 'elvbrk22', music: 'elvine' },
+
+    // Special / event maps
     { key: 'bisle', fileName: 'bisle.amd', assetType: AssetType.MAP, mapName: 'bisle', music: 'middleland' },
     { key: 'resurr1', fileName: 'resurr1.amd', assetType: AssetType.MAP, mapName: 'resurr1', music: 'dungeon' },
+    { key: 'resurr2', fileName: 'resurr2.amd', assetType: AssetType.MAP, mapName: 'resurr2', music: 'dungeon' },
     { key: 'middled1n', fileName: 'middled1n.amd', assetType: AssetType.MAP, mapName: 'middled1n', music: 'dungeon' },
     { key: 'middled1x', fileName: 'middled1x.amd', assetType: AssetType.MAP, mapName: 'middled1x', music: 'dungeon' },
+    { key: 'inferniaA', fileName: 'inferniaA.amd', assetType: AssetType.MAP, mapName: 'inferniaA', music: 'dungeon' },
+    { key: 'inferniaB', fileName: 'inferniaB.amd', assetType: AssetType.MAP, mapName: 'inferniaB', music: 'dungeon' },
 
     // Endgame / event maps
-    { key: 'abaddon', fileName: 'abaddon.amd', assetType: AssetType.MAP, mapName: 'abaddon', music: 'dungeon' },
+    { key: 'abaddon', fileName: 'abaddon.amd', assetType: AssetType.MAP, mapName: 'abaddon', music: 'abaddon' },
     { key: 'icebound', fileName: 'icebound.amd', assetType: AssetType.MAP, mapName: 'icebound', music: 'dungeon' },
     { key: 'procella', fileName: 'procella.amd', assetType: AssetType.MAP, mapName: 'procella', music: 'dungeon' },
     { key: 'toh1', fileName: 'toh1.amd', assetType: AssetType.MAP, mapName: 'toh1', music: 'dungeon' },
@@ -136,6 +176,7 @@ const TILE_SPRITE_ASSETS: AssetData[] = [
     { key: 'tile523-530', fileName: 'tile523-530.spr', assetType: AssetType.TILE_SPRITE, spriteType: SpriteType.Tiles, tileStartIndex: 523 },
     { key: 'tile531-540', fileName: 'tile531-540.spr', assetType: AssetType.TILE_SPRITE, spriteType: SpriteType.Tiles, tileStartIndex: 531 },
     { key: 'tile541-545', fileName: 'tile541-545.spr', assetType: AssetType.TILE_SPRITE, spriteType: SpriteType.Tiles, tileStartIndex: 541 },
+    { key: 'newmaps', fileName: 'newmaps.spr', assetType: AssetType.TILE_SPRITE, spriteType: SpriteType.Tiles, tileStartIndex: 550 },
 ];
 
 // ---------------------------------------------------------------------------
@@ -166,22 +207,56 @@ const EQUIPMENT_SPRITE_ASSETS: AssetData[] = [
     // Hair (male / female)
     { key: 'mhr', fileName: 'mhr.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
     { key: 'whr', fileName: 'whr.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+
+    // Swords (male / female) — starter weapon
+    { key: 'msw', fileName: 'msw.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'wsw', fileName: 'wsw.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+
+    // Leather armor (male / female) — starter armor
+    { key: 'mlarmor', fileName: 'mlarmor.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'wlarmor', fileName: 'wlarmor.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+
+    // Leggings (male / female) — starter leggings
+    { key: 'mleggings', fileName: 'mleggings.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'wleggings', fileName: 'wleggings.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+
+    // Caps (male / female) — starter helm
+    { key: 'mhcap1', fileName: 'mhcap1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'whcap1', fileName: 'whcap1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+
+    // Capes/mantles (male / female) — starter cape
+    { key: 'mmantle01', fileName: 'mmantle01.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'wmantle01', fileName: 'wmantle01.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+
+    // Boots (male / female) — starter boots
+    { key: 'mlboots', fileName: 'mlboots.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'wlboots', fileName: 'wlboots.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+
+    // Shields (male / female)
+    { key: 'msh', fileName: 'msh.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Shields },
+    { key: 'wsh', fileName: 'wsh.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Shields },
 ];
 
 // ---------------------------------------------------------------------------
-// Monster / NPC Sprites
+// Monster / NPC Sprites — all monster .spr files in assets/sprites/
 // ---------------------------------------------------------------------------
 
+// Only load sprites for NPC types actually spawned by the server.
+// Additional monster sprites can be loaded on-demand when new NPC types are added.
 const MONSTER_SPRITE_ASSETS: AssetData[] = [
-    { key: 'slm', fileName: 'slm.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },
-    { key: 'ske', fileName: 'ske.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },
-    { key: 'orc', fileName: 'orc.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },
-    { key: 'demon', fileName: 'demon.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },
+    // Currently spawned monsters (NpcType IDs 1-4)
+    { key: 'slm', fileName: 'slm.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },       // ID 1 - Slime
+    { key: 'ske', fileName: 'ske.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },       // ID 2 - Skeleton
+    { key: 'orc', fileName: 'orc.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },       // ID 3 - Orc
+    { key: 'demon', fileName: 'demon.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },   // ID 4 - Demon
+
+    // Shop / town NPCs (IDs 10-12)
     { key: 'guard', fileName: 'guard.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },
+    { key: 'shopkpr', fileName: 'shopkpr.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Monster },
 ];
 
 // ---------------------------------------------------------------------------
-// Music
+// Music — all .wav files in assets/music/
 // ---------------------------------------------------------------------------
 
 const MUSIC_ASSETS: AssetData[] = [
@@ -190,6 +265,8 @@ const MUSIC_ASSETS: AssetData[] = [
     { key: 'music-middleland', fileName: 'middleland.wav', assetType: AssetType.MUSIC },
     { key: 'music-default', fileName: 'MainTm.wav', assetType: AssetType.MUSIC },
     { key: 'music-dungeon', fileName: 'dungeon.wav', assetType: AssetType.MUSIC },
+    { key: 'music-abaddon', fileName: 'abaddon.wav', assetType: AssetType.MUSIC },
+    { key: 'music-druncncity', fileName: 'druncncity.wav', assetType: AssetType.MUSIC },
 ];
 
 // ---------------------------------------------------------------------------
@@ -230,8 +307,6 @@ const SOUND_ASSETS: AssetData[] = [
 
     // Spells
     { key: 'sound-lightning', fileName: 'E40.WAV', assetType: AssetType.SOUND },
-    { key: 'sound-ice-shard', fileName: 'E46.WAV', assetType: AssetType.SOUND },
-    { key: 'sound-fire-ball', fileName: 'E47.WAV', assetType: AssetType.SOUND },
 
     // Weather
     { key: 'sound-rain', fileName: 'E38.WAV', assetType: AssetType.SOUND },
@@ -260,8 +335,6 @@ const ASSETS: AssetData[] = [
 
 /**
  * Returns all assets that need to be loaded.
- * For now this simply returns the static ASSETS array. Once monster, NPC, item,
- * and effect sprite registries are added they will be merged in here.
  */
 export function getAssets(): AssetData[] {
     return ASSETS;

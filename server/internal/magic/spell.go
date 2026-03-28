@@ -46,6 +46,12 @@ type SpellDef struct {
 	ReqINT      int
 	SpriteID    int // client spell effect sprite
 	SoundID     int // client sound effect
+
+	// Status effect fields (for spells that apply effects)
+	ApplyEffect EffectType // which status effect to apply (0 = none)
+	EffectLevel int        // intensity of the effect (1-3)
+	TickDamage  int        // for poison: damage per tick
+	TickIntervalMs int     // for poison: ms between ticks
 }
 
 // SpellDB is the global spell definition registry.
@@ -130,4 +136,78 @@ func init() {
 		ManaCost: 12, CastTime: 500, Cooldown: 8000, Range: 5,
 		Duration: 30, BuffStat: 1, BuffAmount: -5, // STR -5 for 30s
 		ReqLevel: 7, ReqMAG: 16, SpriteID: 41, SoundID: 1}
+
+	// === STATUS EFFECT SPELLS ===
+
+	// Poison Cloud: applies poison (5 damage every 3 seconds for 15 seconds)
+	SpellDB[50] = &SpellDef{ID: 50, Name: "Poison Cloud", Type: SpellTypeDebuff, Element: ElementEarth,
+		ManaCost: 18, CastTime: 600, Cooldown: 10000, Range: 6,
+		Duration: 15, ReqLevel: 6, ReqMAG: 14, SpriteID: 50, SoundID: 7,
+		ApplyEffect: EffectPoison, EffectLevel: 1, TickDamage: 5, TickIntervalMs: 3000}
+
+	// Toxic Cloud: stronger poison (8 damage every 3 seconds for 21 seconds)
+	SpellDB[51] = &SpellDef{ID: 51, Name: "Toxic Cloud", Type: SpellTypeDebuff, Element: ElementEarth,
+		ManaCost: 35, CastTime: 800, Cooldown: 12000, Range: 7,
+		Duration: 21, ReqLevel: 15, ReqMAG: 22, ReqINT: 16, SpriteID: 51, SoundID: 7,
+		ApplyEffect: EffectPoison, EffectLevel: 2, TickDamage: 8, TickIntervalMs: 3000}
+
+	// Freeze: applies ice effect (slows movement and reduces defense)
+	SpellDB[52] = &SpellDef{ID: 52, Name: "Freeze", Type: SpellTypeDebuff, Element: ElementIce,
+		ManaCost: 20, CastTime: 500, Cooldown: 8000, Range: 6,
+		Duration: 10, ReqLevel: 8, ReqMAG: 16, SpriteID: 52, SoundID: 46,
+		ApplyEffect: EffectIce, EffectLevel: 1}
+
+	// Deep Freeze: stronger ice effect
+	SpellDB[53] = &SpellDef{ID: 53, Name: "Deep Freeze", Type: SpellTypeDebuff, Element: ElementIce,
+		ManaCost: 40, CastTime: 700, Cooldown: 12000, Range: 7,
+		Duration: 15, ReqLevel: 18, ReqMAG: 24, ReqINT: 18, SpriteID: 53, SoundID: 46,
+		ApplyEffect: EffectIce, EffectLevel: 2}
+
+	// Berserk: self-buff that increases damage but reduces defense
+	SpellDB[54] = &SpellDef{ID: 54, Name: "Berserk", Type: SpellTypeBuff,
+		ManaCost: 25, CastTime: 500, Cooldown: 30000, Range: 0,
+		Duration: 30, ReqLevel: 12, ReqMAG: 18, SpriteID: 54, SoundID: 8,
+		ApplyEffect: EffectBerserk, EffectLevel: 1}
+
+	// Greater Berserk: stronger berserk
+	SpellDB[55] = &SpellDef{ID: 55, Name: "Greater Berserk", Type: SpellTypeBuff,
+		ManaCost: 45, CastTime: 700, Cooldown: 45000, Range: 0,
+		Duration: 30, ReqLevel: 22, ReqMAG: 26, SpriteID: 55, SoundID: 8,
+		ApplyEffect: EffectBerserk, EffectLevel: 2}
+
+	// Invisibility: self-buff that hides from NPCs (breaks on attack/damage)
+	SpellDB[56] = &SpellDef{ID: 56, Name: "Invisibility", Type: SpellTypeBuff,
+		ManaCost: 30, CastTime: 800, Cooldown: 60000, Range: 0,
+		Duration: 20, ReqLevel: 10, ReqMAG: 18, ReqINT: 14, SpriteID: 56, SoundID: 9,
+		ApplyEffect: EffectInvisibility, EffectLevel: 1}
+
+	// Silence: prevents target from casting spells
+	SpellDB[57] = &SpellDef{ID: 57, Name: "Silence", Type: SpellTypeDebuff,
+		ManaCost: 22, CastTime: 600, Cooldown: 15000, Range: 6,
+		Duration: 8, ReqLevel: 10, ReqMAG: 18, ReqINT: 14, SpriteID: 57, SoundID: 10,
+		ApplyEffect: EffectInhibition, EffectLevel: 1}
+
+	// Defense Shield: self-buff that absorbs physical damage
+	SpellDB[58] = &SpellDef{ID: 58, Name: "Defense Shield", Type: SpellTypeBuff,
+		ManaCost: 20, CastTime: 600, Cooldown: 20000, Range: 0,
+		Duration: 45, ReqLevel: 6, ReqMAG: 14, SpriteID: 58, SoundID: 11,
+		ApplyEffect: EffectDefenseShield, EffectLevel: 1}
+
+	// Greater Defense Shield
+	SpellDB[59] = &SpellDef{ID: 59, Name: "Greater Defense Shield", Type: SpellTypeBuff,
+		ManaCost: 40, CastTime: 800, Cooldown: 30000, Range: 0,
+		Duration: 60, ReqLevel: 16, ReqMAG: 22, SpriteID: 59, SoundID: 11,
+		ApplyEffect: EffectDefenseShield, EffectLevel: 2}
+
+	// Magic Protection: self-buff that reduces spell damage
+	SpellDB[60] = &SpellDef{ID: 60, Name: "Magic Protection", Type: SpellTypeBuff,
+		ManaCost: 25, CastTime: 600, Cooldown: 25000, Range: 0,
+		Duration: 45, ReqLevel: 8, ReqMAG: 16, ReqINT: 12, SpriteID: 60, SoundID: 12,
+		ApplyEffect: EffectMagicProtection, EffectLevel: 1}
+
+	// Greater Magic Protection
+	SpellDB[61] = &SpellDef{ID: 61, Name: "Greater Magic Protection", Type: SpellTypeBuff,
+		ManaCost: 45, CastTime: 800, Cooldown: 35000, Range: 0,
+		Duration: 60, ReqLevel: 18, ReqMAG: 24, ReqINT: 18, SpriteID: 61, SoundID: 12,
+		ApplyEffect: EffectMagicProtection, EffectLevel: 2}
 }

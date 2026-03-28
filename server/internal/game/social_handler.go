@@ -775,6 +775,19 @@ func (e *Engine) handlePvPAttack(attacker, target *player.Player) {
 	// Calculate PvP damage (similar to NPC but with player defense)
 	result := PlayerAttackPlayer(attacker, target)
 
+	// Apply day/night weapon bonus for PvP
+	if !result.Miss {
+		dayNightBonus := CalcDayNightBonus(attacker, e.CurrentWorldPhase)
+		if dayNightBonus > 0 {
+			result.Damage += dayNightBonus
+			target.HP -= dayNightBonus
+			if target.HP <= 0 {
+				target.HP = 0
+				result.Killed = true
+			}
+		}
+	}
+
 	// Broadcast attack animation
 	attackMotion := &pb.MotionEvent{
 		ObjectId:  attacker.ObjectID,
@@ -803,14 +816,43 @@ func (e *Engine) handlePvPAttack(attacker, target *player.Player) {
 
 	if result.Killed {
 		// PK tracking
-		if target.Side != 0 && attacker.Side != 0 {
-			if target.Side == attacker.Side {
-				attacker.PKCount++
-			} else {
-				attacker.EKCount++
-			}
+		sameFaction := target.Side != 0 && attacker.Side != 0 && target.Side == attacker.Side
+		enemyFaction := target.Side != 0 && attacker.Side != 0 && target.Side != attacker.Side
+
+		if enemyFaction {
+			attacker.EKCount++
 		} else {
 			attacker.PKCount++
+		}
+
+		// Reputation system
+		if sameFaction && target.PKCount == 0 {
+			// Killing an innocent same-faction player: heavy reputation loss
+			attacker.Reputation -= 50
+		} else if target.PKCount >= 3 {
+			// Killing a criminal: reputation gain
+			attacker.Reputation += 20
+		} else if enemyFaction {
+			// Killing an enemy faction player: small reputation gain
+			attacker.Reputation += 10
+		}
+		// Clamp reputation to -10000..+10000
+		if attacker.Reputation > 10000 {
+			attacker.Reputation = 10000
+		}
+		if attacker.Reputation < -10000 {
+			attacker.Reputation = -10000
+		}
+
+		// Kill rewards
+		if target.PKCount >= 3 {
+			// Bounty for killing criminals: victim.Level * 10 gold
+			bounty := int64(target.Level) * 10
+			attacker.Gold += bounty
+		} else if enemyFaction {
+			// Gold for killing enemy faction: victim.Level * 5
+			reward := int64(target.Level) * 5
+			attacker.Gold += reward
 		}
 
 		e.sendPKStatus(attacker)

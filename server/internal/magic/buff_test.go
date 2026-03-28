@@ -194,6 +194,29 @@ func TestRemainingSeconds(t *testing.T) {
 	}
 }
 
+func TestClearAllBuffs(t *testing.T) {
+	bt := NewBuffTracker()
+	bt.AddBuff(30, "Protection", 2, 5, 60)
+	bt.AddBuff(31, "Strength", 1, 10, 60)
+	bt.AddBuff(32, "Haste", 3, 5, 45)
+
+	if bt.Count() != 3 {
+		t.Fatalf("Expected 3 buffs before clear, got %d", bt.Count())
+	}
+
+	bt.ClearAll()
+
+	if bt.Count() != 0 {
+		t.Errorf("Expected 0 buffs after ClearAll, got %d", bt.Count())
+	}
+	// Stat modifiers should all be zero
+	for stat := 1; stat <= 5; stat++ {
+		if bt.GetStatModifier(stat) != 0 {
+			t.Errorf("Stat modifier %d should be 0 after ClearAll, got %d", stat, bt.GetStatModifier(stat))
+		}
+	}
+}
+
 func TestGetStatModifierIgnoresExpired(t *testing.T) {
 	bt := NewBuffTracker()
 	bt.Buffs = append(bt.Buffs, &Buff{

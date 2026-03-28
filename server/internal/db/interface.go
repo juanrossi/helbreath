@@ -13,6 +13,11 @@ type DataStore interface {
 	CreateCharacter(ctx context.Context, accountID int, name string, gender, skinColor, hairStyle, hairColor, underwearColor, str, vit, dex, intStat, mag, chr int) (int, error)
 	DeleteCharacter(ctx context.Context, charID, accountID int) error
 	SaveCharacterPosition(ctx context.Context, charID int, mapName string, x, y, direction int) error
+	SaveCharacter(ctx context.Context, charID int, mapName string, x, y, direction int,
+		level int, experience int64, hp, mp, sp int,
+		str, vit, dex, intStat, mag, chr, luPool int,
+		side int, gold int64, pkCount, ekCount, hunger int,
+		inventoryJSON, equipmentJSON string) error
 	CountCharacters(ctx context.Context, accountID int) (int, error)
 }
 

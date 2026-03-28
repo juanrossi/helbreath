@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
+	"time"
 
 	"github.com/juanrossi/hbonline/server/internal/items"
 	"github.com/juanrossi/hbonline/server/internal/magic"
@@ -120,6 +121,11 @@ func (e *Engine) handleDamageSpell(p *player.Player, spell *magic.SpellDef, targ
 		damage -= reduction
 		if damage < 1 {
 			damage = 1
+		}
+
+		// Break invisibility on spell cast
+		if p.Effects != nil && p.Effects.HasEffect(magic.EffectInvisibility) {
+			p.Effects.RemoveEffect(magic.EffectInvisibility)
 		}
 
 		killed := n.TakeDamage(damage)
@@ -258,22 +264,43 @@ func (e *Engine) handleHealSpell(p *player.Player, spell *magic.SpellDef, gm *ma
 
 // handleBuffSpell handles self-buff spells.
 func (e *Engine) handleBuffSpell(p *player.Player, spell *magic.SpellDef, gm *mapdata.GameMap) {
-	buff := p.Buffs.AddBuff(spell.ID, spell.Name, spell.BuffStat, spell.BuffAmount, spell.Duration)
-
-	// Send buff update to player
-	buffUpdate := &pb.BuffUpdate{
-		ObjectId:         p.ObjectID,
-		SpellId:          int32(spell.ID),
-		Name:             spell.Name,
-		StatType:         int32(spell.BuffStat),
-		Amount:           int32(spell.BuffAmount),
-		RemainingSeconds: int32(buff.RemainingSeconds()),
+	// Apply status effect if the spell has one
+	if spell.ApplyEffect != 0 && p.Effects != nil {
+		eff := &magic.ActiveEffect{
+			Type:      spell.ApplyEffect,
+			Level:     spell.EffectLevel,
+			ExpiresAt: time.Now().Add(time.Duration(spell.Duration) * time.Second),
+			SourceID:  p.ObjectID,
+		}
+		if spell.TickDamage > 0 {
+			eff.TickDamage = spell.TickDamage
+			eff.TickInterval = time.Duration(spell.TickIntervalMs) * time.Millisecond
+			eff.LastTick = time.Now()
+		}
+		p.Effects.AddEffect(eff)
+		log.Printf("Player %s gained effect %s (level %d for %ds)", p.Name, spell.Name, spell.EffectLevel, spell.Duration)
 	}
-	data, _ := network.Encode(network.MsgBuffUpdate, buffUpdate)
-	p.Send(data)
+
+	// Apply stat buff if the spell has one
+	if spell.BuffStat > 0 {
+		buff := p.Buffs.AddBuff(spell.ID, spell.Name, spell.BuffStat, spell.BuffAmount, spell.Duration)
+
+		// Send buff update to player
+		buffUpdate := &pb.BuffUpdate{
+			ObjectId:         p.ObjectID,
+			SpellId:          int32(spell.ID),
+			Name:             spell.Name,
+			StatType:         int32(spell.BuffStat),
+			Amount:           int32(spell.BuffAmount),
+			RemainingSeconds: int32(buff.RemainingSeconds()),
+		}
+		data, _ := network.Encode(network.MsgBuffUpdate, buffUpdate)
+		p.Send(data)
+
+		log.Printf("Player %s gained buff %s (+%d to stat %d for %ds)", p.Name, spell.Name, spell.BuffAmount, spell.BuffStat, spell.Duration)
+	}
 
 	e.broadcastSpellEffect(p, spell, p.ObjectID, p.X, p.Y, p.X, p.Y, 0, 0, false, gm)
-	log.Printf("Player %s gained buff %s (+%d to stat %d for %ds)", p.Name, spell.Name, spell.BuffAmount, spell.BuffStat, spell.Duration)
 }
 
 // handleDebuffSpell handles debuff spells on targets.
@@ -281,6 +308,11 @@ func (e *Engine) handleDebuffSpell(p *player.Player, spell *magic.SpellDef, targ
 	if targetID == 0 {
 		e.sendNotification(p, "No target selected", 2)
 		return
+	}
+
+	// Break invisibility on spell cast
+	if p.Effects != nil && p.Effects.HasEffect(magic.EffectInvisibility) {
+		p.Effects.RemoveEffect(magic.EffectInvisibility)
 	}
 
 	// Check if target is NPC - debuffs don't apply stat modifiers to NPCs,
@@ -297,10 +329,62 @@ func (e *Engine) handleDebuffSpell(p *player.Player, spell *magic.SpellDef, targ
 			return
 		}
 
+		// Check magic resistance for NPC (use NPC INT as resistance)
+		if spell.ApplyEffect != 0 && magic.CheckMagicResistance(p.EffectiveMAG(), n.Type.INT, spell.EffectLevel) {
+			e.broadcastSpellEffect(p, spell, targetID, p.X, p.Y, n.X, n.Y, 0, 0, true, gm)
+			e.sendNotification(p, n.Type.Name+" resisted the spell", 2)
+			log.Printf("NPC %s resisted %s from player %s", n.Type.Name, spell.Name, p.Name)
+			return
+		}
+
 		e.broadcastSpellEffect(p, spell, targetID, p.X, p.Y, n.X, n.Y, 0, 0, false, gm)
 		log.Printf("Player %s cast %s on NPC %s", p.Name, spell.Name, n.Type.Name)
+		return
 	}
-	// TODO: PvP debuffs in Phase 5
+
+	// PvP debuffs: apply status effect to target player
+	targetPlayer := e.getPlayerByID(targetID)
+	if targetPlayer != nil && targetPlayer.HP > 0 && targetPlayer.MapName == p.MapName {
+		dist := abs(p.X-targetPlayer.X) + abs(p.Y-targetPlayer.Y)
+		if dist > spell.Range {
+			e.sendNotification(p, "Target out of range", 2)
+			return
+		}
+
+		// Check magic resistance
+		if spell.ApplyEffect != 0 && magic.CheckMagicResistance(p.EffectiveMAG(), targetPlayer.EffectiveINT(), spell.EffectLevel) {
+			e.broadcastSpellEffect(p, spell, targetID, p.X, p.Y, targetPlayer.X, targetPlayer.Y, 0, 0, true, gm)
+			e.sendNotification(p, targetPlayer.Name+" resisted the spell", 2)
+			e.sendNotification(targetPlayer, "You resisted "+spell.Name, 3)
+			log.Printf("Player %s resisted %s from player %s", targetPlayer.Name, spell.Name, p.Name)
+			return
+		}
+
+		// Apply status effect
+		if spell.ApplyEffect != 0 && targetPlayer.Effects != nil {
+			eff := &magic.ActiveEffect{
+				Type:      spell.ApplyEffect,
+				Level:     spell.EffectLevel,
+				ExpiresAt: time.Now().Add(time.Duration(spell.Duration) * time.Second),
+				SourceID:  p.ObjectID,
+			}
+			if spell.TickDamage > 0 {
+				eff.TickDamage = spell.TickDamage
+				eff.TickInterval = time.Duration(spell.TickIntervalMs) * time.Millisecond
+				eff.LastTick = time.Now()
+			}
+			targetPlayer.Effects.AddEffect(eff)
+			e.sendNotification(targetPlayer, "You have been affected by "+spell.Name, 2)
+		}
+
+		// Apply stat debuff
+		if spell.BuffStat > 0 {
+			targetPlayer.Buffs.AddBuff(spell.ID, spell.Name, spell.BuffStat, spell.BuffAmount, spell.Duration)
+		}
+
+		e.broadcastSpellEffect(p, spell, targetID, p.X, p.Y, targetPlayer.X, targetPlayer.Y, 0, 0, false, gm)
+		log.Printf("Player %s cast %s on player %s", p.Name, spell.Name, targetPlayer.Name)
+	}
 }
 
 // handleLearnSpell handles learning a new spell.
@@ -566,6 +650,75 @@ func (e *Engine) sendSkillList(p *player.Player) {
 	update := p.ToSkillList()
 	data, _ := network.Encode(network.MsgSkillList, update)
 	p.Send(data)
+}
+
+// processEffectTicks processes status effect ticks for all players.
+func (e *Engine) processEffectTicks(now time.Time) {
+	e.players.Range(func(key, value any) bool {
+		p := value.(*player.Player)
+		if p.Effects == nil || p.HP <= 0 {
+			return true
+		}
+
+		events := p.Effects.ProcessTick(now)
+		for _, evt := range events {
+			switch evt.EventType {
+			case magic.EffectEventPoisonDamage:
+				p.HP -= evt.Damage
+				if p.HP <= 0 {
+					p.HP = 0
+				}
+
+				// Send damage event for poison tick
+				gm, ok := e.maps[p.MapName]
+				if ok {
+					dmgEvent := &pb.DamageEvent{
+						AttackerId:  0, // environmental/poison
+						TargetId:    p.ObjectID,
+						TargetType:  1, // player
+						Damage:      int32(evt.Damage),
+						TargetHp:    int32(p.HP),
+						TargetMaxHp: int32(p.MaxHP),
+					}
+					e.broadcastToNearby(gm, p.X, p.Y, -1, network.MsgDamageEvent, dmgEvent)
+				}
+				e.sendStatUpdate(p)
+
+				// Handle death by poison
+				if p.HP <= 0 {
+					e.handlePlayerDeath(p, 0, "Poison")
+				}
+
+			case magic.EffectEventExpired:
+				// Notify player about effect expiring
+				effectName := effectTypeName(evt.EffectType)
+				e.sendNotification(p, effectName+" has worn off", 0)
+			}
+		}
+		return true
+	})
+}
+
+// effectTypeName returns a human-readable name for an effect type.
+func effectTypeName(t magic.EffectType) string {
+	switch t {
+	case magic.EffectPoison:
+		return "Poison"
+	case magic.EffectIce:
+		return "Freeze"
+	case magic.EffectBerserk:
+		return "Berserk"
+	case magic.EffectInvisibility:
+		return "Invisibility"
+	case magic.EffectInhibition:
+		return "Silence"
+	case magic.EffectDefenseShield:
+		return "Defense Shield"
+	case magic.EffectMagicProtection:
+		return "Magic Protection"
+	default:
+		return "Status Effect"
+	}
 }
 
 // checkBuffExpiry checks all players for expired buffs and removes them.

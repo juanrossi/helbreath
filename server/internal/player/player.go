@@ -56,15 +56,47 @@ type Player struct {
 	EKCount    int
 	Hunger     int
 	AdminLevel int
+	GodMode    bool      // admin god mode: invulnerable + max damage
+	MutedUntil time.Time // chat mute expiry (zero = not muted)
+
+	// Derived combat stats (call RecalcCombatStats to update)
+	HitRatio       int // attack accuracy from DEX + weapon skill + equipment
+	DefenseRatio   int // dodge from DEX + defense skill + shield skill
+	ArmorAbs       int // flat absorption from body armor
+	ShieldAbs      int // flat absorption from shield
+	CapeAbs        int // flat absorption from cape
+	HelmAbs        int // flat absorption from helm
+	LeggingsAbs    int // flat absorption from leggings
+	BootsAbs       int // flat absorption from boots
+	AttDiceThrowSM int // equipped weapon dice (small/medium targets)
+	AttDiceRangeSM int
+	AttDiceThrowL  int // equipped weapon dice (large targets)
+	AttDiceRangeL  int
+	AttBonus       int // equipped weapon flat bonus
+
+	// Combat state
+	AttackMode      int // 0=normal, >=20=critical
+	SuperAttackLeft int // remaining combo attacks (max = level/10)
+
+	// Reputation
+	Reputation int // -10000 to +10000
+
+	// Gizon system (endgame progression after max level)
+	GizonPoints          int64 // accumulated Gizon points from excess XP at max level
+	GizonItemUpgradeLeft int   // remaining Gizon-based item upgrade attempts
+
+	// PK decay tracking
+	LastPKDecayTime time.Time // last time PKCount was decremented from online decay
 
 	// Inventory & Equipment
 	Inventory *items.Inventory
 
 	// Skills & Magic
-	Skills       *skills.PlayerSkills
-	LearnedSpells map[int]bool         // spell IDs the player knows
-	Buffs        *magic.BuffTracker
-	Cooldowns    map[int]time.Time     // spell ID -> when cooldown expires
+	Skills        *skills.PlayerSkills
+	LearnedSpells map[int]bool     // spell IDs the player knows
+	Buffs         *magic.BuffTracker
+	Effects       *magic.EffectTracker
+	Cooldowns     map[int]time.Time // spell ID -> when cooldown expires
 
 	// Quests
 	Quests *quest.QuestTracker
@@ -114,10 +146,12 @@ func FromDB(row *db.CharacterRow, objectID int32, client *network.Client) *Playe
 		Skills:         skills.NewPlayerSkills(),
 		LearnedSpells:  make(map[int]bool),
 		Buffs:          magic.NewBuffTracker(),
+		Effects:        magic.NewEffectTracker(),
 		Cooldowns:      make(map[int]time.Time),
 		Quests:         quest.NewQuestTracker(),
-		LastMoveTime:   time.Now(),
-		Client:         client,
+		LastMoveTime:    time.Now(),
+		LastPKDecayTime: time.Now(),
+		Client:          client,
 	}
 
 	// Calculate max stats based on level and VIT/INT
@@ -134,7 +168,79 @@ func FromDB(row *db.CharacterRow, objectID int32, client *network.Client) *Playe
 		p.SP = p.MaxSP
 	}
 
+	// Initialize derived combat stats (will be unarmed defaults until inventory loads)
+	p.RecalcCombatStats()
+
 	return p
+}
+
+// RecalcCombatStats recalculates all derived combat stats from equipment and skills.
+// This is the Go equivalent of C++ CalcTotalItemEffect (Game.cpp:34964).
+// Must be called after any equip/unequip, level up, stat change, or buff change.
+func (p *Player) RecalcCombatStats() {
+	// Reset weapon dice to unarmed defaults
+	p.AttDiceThrowSM = 1
+	p.AttDiceRangeSM = 3
+	p.AttDiceThrowL = 1
+	p.AttDiceRangeL = 2
+	p.AttBonus = 0
+
+	// Determine weapon dice and skill
+	weaponSkillID := int(skills.SkillHandCombat)
+	weapon := p.Inventory.GetEquipped(items.EquipWeapon)
+	if weapon != nil {
+		def := weapon.Def()
+		if def != nil && def.DiceThrowSM > 0 {
+			p.AttDiceThrowSM = def.DiceThrowSM
+			p.AttDiceRangeSM = def.DiceRangeSM
+			p.AttDiceThrowL = def.DiceThrowL
+			p.AttDiceRangeL = def.DiceRangeL
+			p.AttBonus = def.AttackBonus
+
+			// Apply per-instance item attribute bonuses
+			attr := weapon.GetAttribute()
+			switch attr {
+			case items.AttrSharp:
+				p.AttDiceRangeSM++
+				p.AttDiceRangeL++
+			case items.AttrAncient:
+				p.AttDiceRangeSM += 2
+				p.AttDiceRangeL += 2
+			}
+
+			if def.WeaponSkillID > 0 {
+				weaponSkillID = def.WeaponSkillID
+			}
+		}
+	}
+
+	// Layered armor absorption (each slot contributes independently)
+	p.ArmorAbs = p.Inventory.ArmorAbsorption()
+	p.ShieldAbs = p.Inventory.ShieldAbsorption()
+	p.CapeAbs = p.Inventory.CapeAbsorption()
+	p.HelmAbs = p.Inventory.HelmAbsorption()
+	p.LeggingsAbs = p.Inventory.LeggingsAbsorption()
+	p.BootsAbs = p.Inventory.BootsAbsorption()
+
+	// Hit ratio: DEX + weapon skill mastery / 2
+	weaponMastery := p.Skills.GetMastery(skills.SkillID(weaponSkillID))
+	p.HitRatio = p.EffectiveDEX() + weaponMastery/2
+
+	// Defense ratio: DEX + defense skill / 2 + shield skill / 3
+	defMastery := p.Skills.GetMastery(skills.SkillDefense)
+	shieldMastery := 0
+	if p.Inventory.GetEquipped(items.EquipShield) != nil {
+		shieldMastery = p.Skills.GetMastery(skills.SkillShield)
+	}
+	p.DefenseRatio = p.EffectiveDEX() + defMastery/2 + shieldMastery/3
+
+	// Super attack counter resets on recalc
+	p.SuperAttackLeft = p.Level / 10
+}
+
+// TotalAbsorption returns the sum of all armor absorption layers.
+func (p *Player) TotalAbsorption() int {
+	return p.ArmorAbs + p.ShieldAbs + p.CapeAbs + p.HelmAbs + p.LeggingsAbs + p.BootsAbs
 }
 
 func (p *Player) ToContents() *pb.PlayerContents {
@@ -304,6 +410,10 @@ func (p *Player) EffectiveMAG() int {
 func (p *Player) CanCastSpell(spellDef *magic.SpellDef) (bool, string) {
 	if !p.LearnedSpells[spellDef.ID] {
 		return false, "You haven't learned this spell"
+	}
+	// Check silence (Inhibition) effect
+	if p.Effects != nil && p.Effects.HasEffect(magic.EffectInhibition) {
+		return false, "You are silenced"
 	}
 	if p.Level < spellDef.ReqLevel {
 		return false, "Your level is too low"

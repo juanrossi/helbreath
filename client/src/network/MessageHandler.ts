@@ -512,6 +512,16 @@ export class MessageHandler {
     this.listeners.get(msgType)!.push(listener);
   }
 
+  /** Remove all listeners for a specific message type. */
+  off(msgType: number): void {
+    this.listeners.delete(msgType);
+  }
+
+  /** Remove all listeners for all message types. Call before re-registering. */
+  removeAllListeners(): void {
+    this.listeners.clear();
+  }
+
   handleMessage(msgType: number, payload: Uint8Array): void {
     const listeners = this.listeners.get(msgType);
     if (!listeners || listeners.length === 0) {

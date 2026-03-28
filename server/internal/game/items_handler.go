@@ -159,6 +159,14 @@ func (e *Engine) handleItemUse(client *network.Client, req *pb.ItemUseRequest) {
 	}
 
 	if def.Type != items.ItemTypePotion {
+		if def.EquipSlot != items.EquipNone {
+			// Redirect: "Use" on equipment means "Equip"
+			e.handleItemEquip(client, &pb.ItemEquipRequest{
+				SlotIndex: req.SlotIndex,
+				EquipSlot: 0,
+			})
+			return
+		}
 		e.sendNotification(p, "Cannot use this item", 2)
 		return
 	}
@@ -230,8 +238,9 @@ func (e *Engine) handleItemEquip(client *network.Client, req *pb.ItemEquipReques
 		}
 	}
 
-	// Update appearance
+	// Update appearance and recalculate combat stats
 	p.SyncEquipmentAppearance()
+	p.RecalcCombatStats()
 
 	// Send updated inventory
 	e.sendInventoryUpdate(p)
@@ -425,33 +434,77 @@ func (e *Engine) handleStatAlloc(client *network.Client, req *pb.StatAllocReques
 		return
 	}
 
+	// Helper to enforce stat cap: returns actual points that can be allocated
+	capPoints := func(current, requested int) int {
+		room := MaxStatValue - current
+		if room <= 0 {
+			return 0
+		}
+		if requested > room {
+			return room
+		}
+		return requested
+	}
+
+	var allocated int
 	switch req.StatType {
 	case 1:
-		p.STR += points
+		allocated = capPoints(p.STR, points)
+		if allocated == 0 {
+			e.sendNotification(p, "STR is already at maximum", 2)
+			return
+		}
+		p.STR += allocated
 	case 2:
-		p.VIT += points
+		allocated = capPoints(p.VIT, points)
+		if allocated == 0 {
+			e.sendNotification(p, "VIT is already at maximum", 2)
+			return
+		}
+		p.VIT += allocated
 		p.MaxHP = 30 + (p.Level-1)*3 + p.VIT*2
 		if p.HP > p.MaxHP {
 			p.HP = p.MaxHP
 		}
 	case 3:
-		p.DEX += points
+		allocated = capPoints(p.DEX, points)
+		if allocated == 0 {
+			e.sendNotification(p, "DEX is already at maximum", 2)
+			return
+		}
+		p.DEX += allocated
 	case 4:
-		p.INT += points
+		allocated = capPoints(p.INT, points)
+		if allocated == 0 {
+			e.sendNotification(p, "INT is already at maximum", 2)
+			return
+		}
+		p.INT += allocated
 	case 5:
-		p.MAG += points
+		allocated = capPoints(p.MAG, points)
+		if allocated == 0 {
+			e.sendNotification(p, "MAG is already at maximum", 2)
+			return
+		}
+		p.MAG += allocated
 		p.MaxMP = 10 + (p.Level-1)*2 + p.MAG*2
 		if p.MP > p.MaxMP {
 			p.MP = p.MaxMP
 		}
 	case 6:
-		p.CHR += points
+		allocated = capPoints(p.CHR, points)
+		if allocated == 0 {
+			e.sendNotification(p, "CHR is already at maximum", 2)
+			return
+		}
+		p.CHR += allocated
 	default:
 		e.sendNotification(p, "Invalid stat", 2)
 		return
 	}
 
-	p.LUPool -= points
+	p.LUPool -= allocated
+	p.RecalcCombatStats()
 	e.sendStatUpdate(p)
 }
 

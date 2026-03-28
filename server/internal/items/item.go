@@ -29,22 +29,47 @@ const (
 	EquipCape     EquipSlot = 7
 )
 
+// Item attribute values (encoded in bits 20-23 of the Attribute field).
+const (
+	AttrNone    = 0
+	AttrSharp   = 7 // +1 dice range
+	AttrAncient = 9 // +2 dice range
+)
+
 // ItemDef is a static item definition (template).
 type ItemDef struct {
-	ID          int
-	Name        string
-	Type        ItemType
-	EquipSlot   EquipSlot
-	Weight      int
-	Price       int64
-	MaxStack    int // 1 for equipment, >1 for consumables
-	Durability  int // max durability (0 = indestructible/consumable)
-	SpriteID    int // client sprite index
+	ID        int
+	Name      string
+	Type      ItemType
+	EquipSlot EquipSlot
+	Weight    int
+	Price     int64
+	MaxStack  int // 1 for equipment, >1 for consumables
+	Durability int // max durability (0 = indestructible/consumable)
+	SpriteID  int // client sprite index
 
-	// Weapon stats
+	// Weapon stats (legacy range, kept for UI display)
 	MinDamage   int
 	MaxDamage   int
 	AttackSpeed int // ms between swings
+
+	// Dice-based weapon damage (C++ port — authoritative for combat)
+	DiceThrowSM int // number of dice vs small/medium creatures
+	DiceRangeSM int // sides per die vs small/medium creatures
+	DiceThrowL  int // number of dice vs large creatures
+	DiceRangeL  int // sides per die vs large creatures
+	AttackBonus int // flat damage added after dice roll
+
+	// Weapon classification
+	WeaponSkillID int  // skill ID this weapon trains (15=sword,16=axe,17=hammer,18=staff,19=dagger,20=bow,14=hand)
+	TwoHanded     bool // blocks shield slot when equipped
+
+	// Item attributes (bit field — bits 20-23 for special properties)
+	Attribute uint32
+
+	// Day/Night weapon bonuses (endgame PvP system)
+	DayBonus   int // bonus damage during day phase
+	NightBonus int // bonus damage during night phase
 
 	// Armor stats
 	Defense int
@@ -65,11 +90,17 @@ type ItemDef struct {
 	ApprIndex int
 }
 
+// GetAttribute extracts the special attribute value from bits 20-23.
+func (def *ItemDef) GetAttribute() int {
+	return int((def.Attribute >> 20) & 0xF)
+}
+
 // Item is a runtime item instance (in inventory or on ground).
 type Item struct {
 	DefID      int
 	Count      int
 	Durability int
+	Attribute  uint32 // per-instance attribute (can differ from def for dropped loot)
 }
 
 // NewItem creates an item from a definition.
@@ -78,6 +109,7 @@ func NewItem(def *ItemDef, count int) *Item {
 		DefID:      def.ID,
 		Count:      count,
 		Durability: def.Durability,
+		Attribute:  def.Attribute,
 	}
 }
 
@@ -90,6 +122,11 @@ func (it *Item) Def() *ItemDef {
 func (it *Item) IsStackable() bool {
 	def := it.Def()
 	return def != nil && def.MaxStack > 1
+}
+
+// GetAttribute extracts the special attribute value from the item instance.
+func (it *Item) GetAttribute() int {
+	return int((it.Attribute >> 20) & 0xF)
 }
 
 // GroundItem is an item sitting on the map floor.
@@ -111,29 +148,50 @@ func GetItemDef(id int) *ItemDef {
 
 func init() {
 	// === WEAPONS ===
+	// Dice values: DiceThrowSM d DiceRangeSM + AttackBonus (small/medium targets)
+	//              DiceThrowL  d DiceRangeL  + AttackBonus (large targets)
+
 	ItemDB[1] = &ItemDef{ID: 1, Name: "Short Sword", Type: ItemTypeWeapon, EquipSlot: EquipWeapon,
 		Weight: 10, Price: 150, MaxStack: 1, Durability: 100, SpriteID: 1,
-		MinDamage: 3, MaxDamage: 7, AttackSpeed: 800, ReqLevel: 1, ApprIndex: 1}
+		MinDamage: 3, MaxDamage: 7, AttackSpeed: 800,
+		DiceThrowSM: 1, DiceRangeSM: 5, DiceThrowL: 1, DiceRangeL: 4, AttackBonus: 2,
+		WeaponSkillID: 15, // SkillSword
+		ReqLevel: 1, ApprIndex: 1}
 
 	ItemDB[2] = &ItemDef{ID: 2, Name: "Long Sword", Type: ItemTypeWeapon, EquipSlot: EquipWeapon,
 		Weight: 15, Price: 500, MaxStack: 1, Durability: 120, SpriteID: 2,
-		MinDamage: 5, MaxDamage: 12, AttackSpeed: 900, ReqLevel: 5, ReqSTR: 12, ApprIndex: 2}
+		MinDamage: 5, MaxDamage: 12, AttackSpeed: 900,
+		DiceThrowSM: 2, DiceRangeSM: 4, DiceThrowL: 1, DiceRangeL: 6, AttackBonus: 3,
+		WeaponSkillID: 15, // SkillSword
+		ReqLevel: 5, ReqSTR: 12, ApprIndex: 2}
 
 	ItemDB[3] = &ItemDef{ID: 3, Name: "Battle Axe", Type: ItemTypeWeapon, EquipSlot: EquipWeapon,
 		Weight: 25, Price: 800, MaxStack: 1, Durability: 100, SpriteID: 3,
-		MinDamage: 8, MaxDamage: 18, AttackSpeed: 1100, ReqLevel: 8, ReqSTR: 15, ApprIndex: 3}
+		MinDamage: 8, MaxDamage: 18, AttackSpeed: 1100,
+		DiceThrowSM: 2, DiceRangeSM: 5, DiceThrowL: 2, DiceRangeL: 4, AttackBonus: 6,
+		WeaponSkillID: 16, // SkillAxe
+		ReqLevel: 8, ReqSTR: 15, ApprIndex: 3}
 
 	ItemDB[4] = &ItemDef{ID: 4, Name: "War Hammer", Type: ItemTypeWeapon, EquipSlot: EquipWeapon,
 		Weight: 30, Price: 1200, MaxStack: 1, Durability: 150, SpriteID: 4,
-		MinDamage: 10, MaxDamage: 22, AttackSpeed: 1200, ReqLevel: 12, ReqSTR: 18, ApprIndex: 4}
+		MinDamage: 10, MaxDamage: 22, AttackSpeed: 1200,
+		DiceThrowSM: 2, DiceRangeSM: 6, DiceThrowL: 2, DiceRangeL: 5, AttackBonus: 8,
+		WeaponSkillID: 17, // SkillHammer
+		ReqLevel: 12, ReqSTR: 18, ApprIndex: 4}
 
 	ItemDB[5] = &ItemDef{ID: 5, Name: "Staff", Type: ItemTypeWeapon, EquipSlot: EquipWeapon,
 		Weight: 8, Price: 300, MaxStack: 1, Durability: 80, SpriteID: 5,
-		MinDamage: 2, MaxDamage: 6, AttackSpeed: 850, ReqLevel: 3, ReqMAG: 12, ApprIndex: 5}
+		MinDamage: 2, MaxDamage: 6, AttackSpeed: 850,
+		DiceThrowSM: 1, DiceRangeSM: 4, DiceThrowL: 1, DiceRangeL: 3, AttackBonus: 1,
+		WeaponSkillID: 18, // SkillStaff
+		ReqLevel: 3, ReqMAG: 12, ApprIndex: 5}
 
 	ItemDB[6] = &ItemDef{ID: 6, Name: "Dagger", Type: ItemTypeWeapon, EquipSlot: EquipWeapon,
 		Weight: 5, Price: 80, MaxStack: 1, Durability: 60, SpriteID: 6,
-		MinDamage: 2, MaxDamage: 5, AttackSpeed: 600, ReqLevel: 1, ApprIndex: 6}
+		MinDamage: 2, MaxDamage: 5, AttackSpeed: 600,
+		DiceThrowSM: 1, DiceRangeSM: 4, DiceThrowL: 1, DiceRangeL: 3, AttackBonus: 1,
+		WeaponSkillID: 19, // SkillDagger
+		ReqLevel: 1, ApprIndex: 6}
 
 	// === SHIELDS ===
 	ItemDB[20] = &ItemDef{ID: 20, Name: "Wooden Shield", Type: ItemTypeShield, EquipSlot: EquipShield,

@@ -64,3 +64,144 @@ func TestShopInventoriesValid(t *testing.T) {
 		}
 	}
 }
+
+// === Phase 4: Multi-tier Loot Tests ===
+
+func TestRollGoldDrop(t *testing.T) {
+	// Gold should always be at least 1
+	for i := 0; i < 100; i++ {
+		gold := RollGoldDrop(15) // Slime XP
+		if gold < 1 {
+			t.Errorf("Gold drop should be >= 1, got %d", gold)
+		}
+		if gold > 30 { // max is XP*2 = 30
+			t.Errorf("Gold drop should be <= 30 for XP=15, got %d", gold)
+		}
+	}
+}
+
+func TestRollGoldDropZeroXP(t *testing.T) {
+	gold := RollGoldDrop(0)
+	if gold != 1 {
+		t.Errorf("Gold drop for 0 XP should be 1, got %d", gold)
+	}
+}
+
+func TestPotionTierByDifficulty(t *testing.T) {
+	// Low difficulty
+	lowPotions := map[int]bool{100: true, 103: true}
+	for i := 0; i < 50; i++ {
+		id := PotionTierByDifficulty(10)
+		if !lowPotions[id] {
+			t.Errorf("Low difficulty potion should be small (100 or 103), got %d", id)
+		}
+	}
+
+	// Medium difficulty
+	medPotions := map[int]bool{101: true, 104: true}
+	for i := 0; i < 50; i++ {
+		id := PotionTierByDifficulty(50)
+		if !medPotions[id] {
+			t.Errorf("Medium difficulty potion should be regular (101 or 104), got %d", id)
+		}
+	}
+
+	// High difficulty
+	highPotions := map[int]bool{102: true, 105: true}
+	for i := 0; i < 50; i++ {
+		id := PotionTierByDifficulty(100)
+		if !highPotions[id] {
+			t.Errorf("High difficulty potion should be large (102 or 105), got %d", id)
+		}
+	}
+}
+
+func TestRollMultiTierLoot(t *testing.T) {
+	// Run many rolls to verify structure
+	gotPotion := false
+	gotEquipment := false
+	for i := 0; i < 500; i++ {
+		drops := RollMultiTierLoot(2, 35) // Skeleton
+		for _, drop := range drops {
+			def := drop.Def()
+			if def == nil {
+				t.Error("Got drop with nil definition")
+				continue
+			}
+			if def.Type == ItemTypePotion {
+				gotPotion = true
+			}
+			if def.Type >= ItemTypeWeapon && def.Type <= ItemTypeCape {
+				gotEquipment = true
+			}
+		}
+	}
+	if !gotPotion {
+		t.Error("Expected at least one potion drop from 500 multi-tier rolls")
+	}
+	if !gotEquipment {
+		t.Error("Expected at least one equipment drop from 500 multi-tier rolls")
+	}
+}
+
+func TestRollMultiTierLootNonExistentNPC(t *testing.T) {
+	// Should still potentially get potions even for non-existent NPC tables
+	gotPotion := false
+	for i := 0; i < 100; i++ {
+		drops := RollMultiTierLoot(9999, 50)
+		for _, drop := range drops {
+			def := drop.Def()
+			if def != nil && def.Type == ItemTypePotion {
+				gotPotion = true
+			}
+		}
+	}
+	if !gotPotion {
+		t.Error("Expected at least one potion from tier-2 roll even with no NPC loot table")
+	}
+}
+
+func TestRollBossLoot(t *testing.T) {
+	// Boss loot should always include guaranteed potions
+	gotPotions := false
+	gotEquip := false
+	for i := 0; i < 50; i++ {
+		drops := RollBossLoot()
+		for _, drop := range drops {
+			def := drop.Def()
+			if def == nil {
+				continue
+			}
+			if def.Type == ItemTypePotion {
+				gotPotions = true
+			}
+			if def.Type >= ItemTypeWeapon && def.Type <= ItemTypeCape {
+				gotEquip = true
+			}
+		}
+	}
+	if !gotPotions {
+		t.Error("Boss loot should always drop potions (100% chance)")
+	}
+	if !gotEquip {
+		t.Error("Expected at least some equipment from 50 boss rolls")
+	}
+}
+
+func TestBossLootTableValid(t *testing.T) {
+	for _, entry := range BossLootTable {
+		def := GetItemDef(entry.ItemID)
+		if def == nil {
+			t.Errorf("Boss loot table references non-existent item %d", entry.ItemID)
+		}
+		if entry.DropChance <= 0 || entry.DropChance > 1.0 {
+			t.Errorf("Boss loot item %d: invalid drop chance %f", entry.ItemID, entry.DropChance)
+		}
+		if entry.MinCount < 1 {
+			t.Errorf("Boss loot item %d: min count must be >= 1", entry.ItemID)
+		}
+		if entry.MaxCount < entry.MinCount {
+			t.Errorf("Boss loot item %d: max count < min count", entry.ItemID)
+		}
+	}
+}

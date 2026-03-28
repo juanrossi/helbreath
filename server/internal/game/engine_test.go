@@ -99,6 +99,7 @@ func makeFullTestPlayer(id int32, name string) *player.Player {
 		Skills:        skills.NewPlayerSkills(),
 		LearnedSpells: make(map[int]bool),
 		Buffs:         magic.NewBuffTracker(),
+		Effects:       magic.NewEffectTracker(),
 		Cooldowns:     make(map[int]time.Time),
 		Quests:        quest.NewQuestTracker(),
 		Client:        nil, // no real connection, Send() is no-op
@@ -1333,15 +1334,131 @@ func TestHandlePlayerDeath(t *testing.T) {
 	p := makeFullTestPlayer(1, "Victim")
 	p.Level = 10
 	p.Experience = 50000
+	p.PKCount = 0 // innocent
 	addPlayerToEngine(e, p)
 
 	origExp := p.Experience
 	e.handlePlayerDeath(p, 2, "Killer")
 
-	// Should lose 5% of level XP
-	expectedLoss := XPForLevel(10) * 5 / 100
+	// Innocent (PK 0) should lose 2% of level XP
+	expectedLoss := XPForLevel(10) * 2 / 100
 	if p.Experience != origExp-expectedLoss {
-		t.Errorf("Expected XP=%d after death, got %d", origExp-expectedLoss, p.Experience)
+		t.Errorf("Expected XP=%d after death (2%% innocent penalty), got %d", origExp-expectedLoss, p.Experience)
+	}
+}
+
+// === Phase 4: PK-Based Death Penalty Tiers ===
+
+func TestHandlePlayerDeathPKTiers(t *testing.T) {
+	tests := []struct {
+		name       string
+		pkCount    int
+		xpPenaltyPct int64
+	}{
+		{"innocent PK=0", 0, 2},
+		{"criminal PK=1", 1, 5},
+		{"criminal PK=3", 3, 5},
+		{"murderer PK=4", 4, 10},
+		{"murderer PK=11", 11, 10},
+		{"slaughterer PK=12", 12, 20},
+		{"slaughterer PK=50", 50, 20},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			e := makeTestEngine()
+			gm := makeTestGameMap(100, 100)
+			e.maps["test"] = gm
+
+			p := makeFullTestPlayer(1, "Victim")
+			p.Level = 10
+			p.Experience = 50000
+			p.PKCount = tt.pkCount
+			addPlayerToEngine(e, p)
+
+			origExp := p.Experience
+			e.handlePlayerDeath(p, 2, "Killer")
+
+			expectedLoss := XPForLevel(10) * tt.xpPenaltyPct / 100
+			if p.Experience != origExp-expectedLoss {
+				t.Errorf("PK=%d: expected XP=%d (%d%% loss), got %d",
+					tt.pkCount, origExp-expectedLoss, tt.xpPenaltyPct, p.Experience)
+			}
+		})
+	}
+}
+
+func TestHandlePlayerDeathClearsEffectsAndBuffs(t *testing.T) {
+	e := makeTestEngine()
+	gm := makeTestGameMap(100, 100)
+	e.maps["test"] = gm
+
+	p := makeFullTestPlayer(1, "Victim")
+	p.Level = 5
+	p.Experience = 5000
+	addPlayerToEngine(e, p)
+
+	// Add some buffs and effects
+	p.Buffs.AddBuff(30, "Protection", 2, 5, 60)
+	p.Buffs.AddBuff(31, "Strength", 1, 10, 60)
+	p.Effects.AddEffect(&magic.ActiveEffect{
+		Type:      magic.EffectBerserk,
+		Level:     2,
+		ExpiresAt: time.Now().Add(60 * time.Second),
+	})
+
+	if p.Buffs.Count() != 2 {
+		t.Fatalf("Expected 2 buffs before death, got %d", p.Buffs.Count())
+	}
+	if p.Effects.Count() != 1 {
+		t.Fatalf("Expected 1 effect before death, got %d", p.Effects.Count())
+	}
+
+	e.handlePlayerDeath(p, 2, "Killer")
+
+	if p.Buffs.Count() != 0 {
+		t.Errorf("Expected 0 buffs after death, got %d", p.Buffs.Count())
+	}
+	if p.Effects.Count() != 0 {
+		t.Errorf("Expected 0 effects after death, got %d", p.Effects.Count())
+	}
+}
+
+func TestHandlePlayerDeathSafeZoneNoXPLoss(t *testing.T) {
+	e := makeTestEngine()
+	gm := makeTestGameMap(100, 100)
+	gm.Type = mapdata.MapTypeSafeZone
+	e.maps["test"] = gm
+
+	p := makeFullTestPlayer(1, "Victim")
+	p.Level = 10
+	p.Experience = 50000
+	addPlayerToEngine(e, p)
+
+	origExp := p.Experience
+	e.handlePlayerDeath(p, 2, "Killer")
+
+	if p.Experience != origExp {
+		t.Errorf("Expected no XP loss on SafeZone map, got XP=%d (was %d)", p.Experience, origExp)
+	}
+}
+
+func TestHandlePlayerDeathArenaNoXPLoss(t *testing.T) {
+	e := makeTestEngine()
+	gm := makeTestGameMap(100, 100)
+	gm.Type = mapdata.MapTypeArena
+	e.maps["test"] = gm
+
+	p := makeFullTestPlayer(1, "Victim")
+	p.Level = 10
+	p.Experience = 50000
+	addPlayerToEngine(e, p)
+
+	origExp := p.Experience
+	e.handlePlayerDeath(p, 2, "Killer")
+
+	if p.Experience != origExp {
+		t.Errorf("Expected no XP loss on Arena map, got XP=%d (was %d)", p.Experience, origExp)
 	}
 }
 
