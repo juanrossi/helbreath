@@ -140,8 +140,9 @@ func TestBuffSpellStats(t *testing.T) {
 }
 
 func TestSpellDBCount(t *testing.T) {
-	if len(SpellDB) < 26 {
-		t.Errorf("Expected at least 26 spells in SpellDB, got %d", len(SpellDB))
+	// 28 hand-written + generated from Magic.cfg (90 total, minus overlaps)
+	if len(SpellDB) < 80 {
+		t.Errorf("Expected at least 80 spells in SpellDB, got %d", len(SpellDB))
 	}
 }
 
@@ -251,5 +252,84 @@ func TestDebuffSpellsWithEffects(t *testing.T) {
 	}
 	if silence.ApplyEffect != EffectInhibition {
 		t.Errorf("Silence should apply EffectInhibition, got %d", silence.ApplyEffect)
+	}
+}
+
+func TestOriginalHelbreathSpells(t *testing.T) {
+	// Verify key spells from original Magic.cfg are present at their original IDs.
+	tests := []struct {
+		id   int
+		name string
+	}{
+		{0, "Magic Missile"},
+		{6, "Forge's Breath"},
+		{13, "Defense Shield"},
+		{14, "Celebrating Light"},
+		{15, "Staminar Recovery"},
+		{16, "Peace"},
+		{17, "Wood Mantle"},
+		{23, "Great Staminar Recovery"},
+		{24, "Protection From Arrow"},
+		{25, "Hold Person"},
+		{26, "Possession"},
+		{27, "Poison"},
+		{28, "Mass Staminar Recov"},
+		{33, "Protection From Magic"},
+		{34, "Detect Invisibility"},
+		{35, "Paralyze"},
+		{36, "Cure"},
+		{37, "Lightning Arrow"},
+		{38, "Prayer"},
+		{42, "Confuse Language"},
+		{43, "Lightning"},
+		{44, "Great Defense Shield"},
+		{45, "Chill Wind"},
+		{47, "Triple Energy Bolt"},
+		{48, "Critical Heal"},
+		{62, "Confusion"},
+		{63, "Mass Chill Wind"},
+		{64, "Earthworm Strike"},
+		{65, "Absolute Magic Protect"},
+		{66, "Armor Break"},
+		{67, "Scan"},
+		{68, "Mass Heal"},
+		{70, "Bloody Shock Wave"},
+		{71, "Mass Confusion"},
+		{72, "Mass Ice Strike"},
+		{73, "Cloud Kill"},
+		{74, "Lightning Strike"},
+		{75, "Trance"},
+		{76, "Cancellation"},
+		{77, "Illusion Movement"},
+		{78, "Divine Revenge"},
+		{80, "Illusion"},
+		{81, "Meteor Strike"},
+		{82, "Warrior Spirit"},
+		{83, "Inhibition Casting"},
+		{84, "Magic Drain"},
+		{85, "Blizzard"},
+		{86, "Regenerate"},
+		{87, "Magic Mantle"},
+		{88, "Entangle"},
+		{90, "Mass Illusion"},
+		{91, "Mass Blizzard"},
+		{92, "Mass Armor Break"},
+		{93, "Mass Lightning Strike"},
+		{94, "Resurrection"},
+		{95, "Mass Illusion Movement"},
+		{96, "Earth Shock Wave"},
+		{97, "Explosion"},
+		{98, "Medusa Kiss"},
+	}
+
+	for _, tt := range tests {
+		spell := GetSpellDef(tt.id)
+		if spell == nil {
+			t.Errorf("Original spell %d (%s) not found in SpellDB", tt.id, tt.name)
+			continue
+		}
+		if spell.Name != tt.name {
+			t.Errorf("Spell %d: expected name=%q, got %q", tt.id, tt.name, spell.Name)
+		}
 	}
 }

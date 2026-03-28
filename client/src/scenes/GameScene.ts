@@ -1905,35 +1905,77 @@ export class GameScene extends Phaser.Scene {
     const mmX = padding;
     const mmY = padding;
 
-    this.minimapContainer = this.add.container(0, 0).setScrollFactor(0).setDepth(20000);
+    const MM_DEPTH = 9999900; // above everything including weather (999990) and all game objects
+
+    this.minimapContainer = this.add.container(0, 0).setScrollFactor(0).setDepth(MM_DEPTH + 1);
 
     this.minimapBorder = this.add.graphics().setScrollFactor(0);
-    this.minimapBorder.fillStyle(0x000000, 0.7);
+    this.minimapBorder.fillStyle(0x000000, 1.0);
     this.minimapBorder.fillRect(mmX - 4, mmY - 4, MINIMAP_SIZE + 8, MINIMAP_SIZE + 8);
-    this.minimapBorder.lineStyle(1, 0x888888, 1);
+    this.minimapBorder.lineStyle(1, 0xaaaaaa, 1);
     this.minimapBorder.strokeRect(mmX - 4, mmY - 4, MINIMAP_SIZE + 8, MINIMAP_SIZE + 8);
-    this.minimapBorder.setDepth(20000);
+    this.minimapBorder.setDepth(MM_DEPTH);
 
-    this.minimapPlayerDot = this.add.graphics().setScrollFactor(0).setDepth(20002);
+    this.minimapPlayerDot = this.add.graphics().setScrollFactor(0).setDepth(MM_DEPTH + 3);
 
-    // Check cache
+    const texKey = 'minimap-' + this.currentMapName;
+
+    // Try to use pre-rendered minimap JPEG from assets/minimaps/
+    const mapBaseName = this.currentMapName.toLowerCase().replace(/\.amd$/i, '');
+    const minimapJpgKey = `minimap-jpg-${mapBaseName}`;
+
+    if (this.textures.exists(minimapJpgKey)) {
+      // JPEG already loaded — use it directly
+      const minimapImg = this.add.image(mmX, mmY, minimapJpgKey)
+        .setOrigin(0, 0)
+        .setDisplaySize(MINIMAP_SIZE, MINIMAP_SIZE)
+        .setScrollFactor(0)
+        .setDepth(9999901);
+      this.minimapContainer.add([minimapImg]);
+    } else {
+      // Try to load the JPEG dynamically
+      const jpgPath = `assets/minimaps/${mapBaseName}.jpg`;
+      this.load.image(minimapJpgKey, jpgPath);
+      this.load.once('complete', () => {
+        if (this.textures.exists(minimapJpgKey) && this.minimapContainer) {
+          const minimapImg = this.add.image(mmX, mmY, minimapJpgKey)
+            .setOrigin(0, 0)
+            .setDisplaySize(MINIMAP_SIZE, MINIMAP_SIZE)
+            .setScrollFactor(0)
+            .setDepth(9999901);
+          this.minimapContainer.add([minimapImg]);
+        } else {
+          // JPEG not found — fall back to generated canvas minimap
+          this.createMinimapFallback(mmX, mmY, MINIMAP_SIZE, texKey);
+        }
+      });
+      this.load.once('loaderror', () => {
+        // JPEG failed to load — fall back to generated canvas
+        this.createMinimapFallback(mmX, mmY, MINIMAP_SIZE, texKey);
+      });
+      this.load.start();
+    }
+  }
+
+  private createMinimapFallback(mmX: number, mmY: number, size: number, texKey: string): void {
     let mmCanvas = GameScene.minimapCache.get(this.currentMapName);
     if (!mmCanvas) {
       mmCanvas = this.generateMinimapCanvas();
       GameScene.minimapCache.set(this.currentMapName, mmCanvas);
     }
 
-    const texKey = 'minimap-' + this.currentMapName;
     if (this.textures.exists(texKey)) this.textures.remove(texKey);
     this.textures.addCanvas(texKey, mmCanvas);
 
     const minimapImg = this.add.image(mmX, mmY, texKey)
       .setOrigin(0, 0)
-      .setDisplaySize(MINIMAP_SIZE, MINIMAP_SIZE)
+      .setDisplaySize(size, size)
       .setScrollFactor(0)
-      .setDepth(20001);
+      .setDepth(9999901);
 
-    this.minimapContainer.add([minimapImg]);
+    if (this.minimapContainer) {
+      this.minimapContainer.add([minimapImg]);
+    }
   }
 
   /**
@@ -2052,19 +2094,20 @@ export class GameScene extends Phaser.Scene {
     const npcTypeId = data.npcType ?? 1;
     const dir = data.direction ?? 5;
 
-    // Try to create a GameAsset with the monster sprite
+    // Always create a visible colored ellipse for the NPC (guaranteed visibility)
+    const color = NPC_COLORS[npcTypeId] ?? 0xff00ff;
+    const fallbackSprite = this.add.ellipse(worldX + TILE_SIZE / 2, worldY + TILE_SIZE / 2, 24, 24, color, 0.85)
+      .setDepth(py * DEPTH_MULTIPLIER + 1);
+
+    // Try to create a GameAsset with the monster sprite (overlays the ellipse)
     const spriteName = NPC_SPRITE_MAP[npcTypeId];
     let asset: GameAsset | null = null;
-    let fallbackSprite: Phaser.GameObjects.Ellipse | null = null;
 
     if (spriteName) {
-      // Monster sprites: each direction is a separate sprite sheet
-      // Idle: sheets 0-7, Walk: sheets 8-15, Attack: sheets 16-23
-      const dirIdx = Math.max(0, dir - 1); // convert 1-8 to 0-7
-      const sheetIndex = dirIdx; // idle = direction index
+      const dirIdx = Math.max(0, dir - 1);
+      const sheetIndex = dirIdx;
       const textureKey = `${spriteName}-${sheetIndex}`;
-      const texExists = this.textures.exists(textureKey);
-      if (texExists) {
+      if (this.textures.exists(textureKey)) {
         try {
           asset = new GameAsset(this, {
             x: worldX,
@@ -2074,20 +2117,14 @@ export class GameScene extends Phaser.Scene {
             frameRate: 6,
             animationType: AnimationType.FullFrame,
           });
-          asset.setDepth(py * DEPTH_MULTIPLIER + 1);
+          asset.setDepth(py * DEPTH_MULTIPLIER + 2);
+          // If sprite loaded successfully, hide the fallback ellipse
+          fallbackSprite.setVisible(false);
         } catch (err) {
-          console.warn(`[addNPC] Failed to create GameAsset for type ${npcTypeId} (${spriteName}):`, err);
+          console.warn(`[addNPC] GameAsset failed for type ${npcTypeId} (${spriteName}):`, err);
           asset = null;
         }
       }
-    }
-
-    // Fallback to colored ellipse if sprite creation failed
-    if (!asset) {
-      const color = NPC_COLORS[npcTypeId] ?? 0xff00ff;
-      console.log(`[addNPC] Using fallback ellipse for ${data.name}, color=0x${color.toString(16)}`);
-      fallbackSprite = this.add.ellipse(worldX + TILE_SIZE / 2, worldY + TILE_SIZE / 2, 24, 24, color, 0.9)
-        .setDepth(py * DEPTH_MULTIPLIER + 1);
     }
 
     const nameText = this.add.text(worldX + TILE_SIZE / 2, worldY - 2, data.name || 'NPC', {
@@ -2165,8 +2202,9 @@ export class GameScene extends Phaser.Scene {
 
     if (npcEntity.asset) {
       npcEntity.asset.setPosition(npcEntity.visualX, npcEntity.visualY);
-      npcEntity.asset.setDepth(baseDepth);
-    } else if (npcEntity.fallbackSprite) {
+      npcEntity.asset.setDepth(baseDepth + 1);
+    }
+    if (npcEntity.fallbackSprite) {
       npcEntity.fallbackSprite.setPosition(cx, cy);
       npcEntity.fallbackSprite.setDepth(baseDepth);
     }
@@ -2520,6 +2558,12 @@ export class GameScene extends Phaser.Scene {
   }
 
   private onNotification(data: any): void {
+    // Type 10 = world state update (time and weather from server)
+    if (data.type === 10 && typeof data.message === 'string') {
+      this.parseWorldState(data.message);
+      return;
+    }
+
     const log = document.getElementById('chat-log');
     if (log) {
       const line = document.createElement('div');
@@ -2528,6 +2572,25 @@ export class GameScene extends Phaser.Scene {
       line.style.fontWeight = 'bold';
       log.appendChild(line);
       log.scrollTop = log.scrollHeight;
+    }
+  }
+
+  private parseWorldState(message: string): void {
+    // Server format: "time:day|weather:rain"
+    const parts = message.split('|');
+    for (const part of parts) {
+      const [key, value] = part.split(':');
+      if (key === 'time' && value) {
+        this.timeOfDay = value;
+        if (['day', 'dusk', 'night', 'dawn'].includes(value)) {
+          this.weatherManager.setTimeOfDay(value as any);
+        }
+      } else if (key === 'weather' && value) {
+        this.weather = value;
+        if (['clear', 'rain', 'snow', 'fog'].includes(value)) {
+          this.weatherManager.setWeather(value as any);
+        }
+      }
     }
   }
 

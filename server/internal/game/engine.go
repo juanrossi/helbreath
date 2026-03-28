@@ -1077,6 +1077,9 @@ func (e *Engine) handleEnterGame(client *network.Client, req *pb.EnterGameReques
 	client.ObjectID = objectID
 	client.CharacterID = charRow.ID
 
+	log.Printf("[ENTER] Loaded character %s (ID=%d): Level=%d, XP=%d, HP=%d, Gold=%d, AdminLevel=%d",
+		p.Name, charRow.ID, charRow.Level, charRow.Experience, charRow.HP, charRow.Gold, charRow.AdminLevel)
+
 	// Load saved inventory from database
 	loadPlayerInventory(p, charRow)
 

@@ -200,75 +200,216 @@ const CHARACTER_SPRITE_ASSETS: AssetData[] = [
 // ---------------------------------------------------------------------------
 
 const EQUIPMENT_SPRITE_ASSETS: AssetData[] = [
-    // Underwear (male / female)
+    // --- Base character (underwear + hair) ---
     { key: 'mpt', fileName: 'mpt.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
     { key: 'wpt', fileName: 'wpt.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
-
-    // Hair (male / female)
     { key: 'mhr', fileName: 'mhr.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
     { key: 'whr', fileName: 'whr.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
 
-    // --- Weapons ---
-    // Swords (ApprIndex 1: Short Sword, ApprIndex 6: Dagger fallback)
+    // --- Swords (msw = multi-weapon sprite with startSpriteSheetIndex offsets) ---
     { key: 'msw', fileName: 'msw.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
     { key: 'wsw', fileName: 'wsw.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
-    // Long Sword (ApprIndex 2)
     { key: 'msw2', fileName: 'msw2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
     { key: 'wsw2', fileName: 'wsw2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
-    // Battle Axe (ApprIndex 3)
+    { key: 'msw3', fileName: 'msw3.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'wsw3', fileName: 'wsw3.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'mswx', fileName: 'mswx.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'wswx', fileName: 'wswx.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+
+    // --- Axes ---
     { key: 'maxe1', fileName: 'maxe1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
     { key: 'waxe1', fileName: 'waxe1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
-    // War Hammer (ApprIndex 4)
+    { key: 'maxe2', fileName: 'maxe2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'waxe2', fileName: 'waxe2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'maxe3', fileName: 'maxe3.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'waxe3', fileName: 'waxe3.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'maxe4', fileName: 'maxe4.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'waxe4', fileName: 'waxe4.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'maxe5', fileName: 'maxe5.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'waxe5', fileName: 'waxe5.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'maxe6', fileName: 'maxe6.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'waxe6', fileName: 'waxe6.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+
+    // --- Hammers ---
     { key: 'mhammer', fileName: 'mhammer.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
     { key: 'whammer', fileName: 'whammer.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
-    // Staff (ApprIndex 5)
+    { key: 'mbhammer', fileName: 'mbhammer.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'wbhammer', fileName: 'wbhammer.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'mbabhammer', fileName: 'mbabhammer.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'wbabhammer', fileName: 'wbabhammer.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+
+    // --- Staves / Wands ---
     { key: 'mstaff1', fileName: 'mstaff1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
     { key: 'wstaff1', fileName: 'wstaff1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'mstaff2', fileName: 'mstaff2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'wstaff2', fileName: 'wstaff2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'mstaff3', fileName: 'mstaff3.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'wstaff3', fileName: 'wstaff3.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'mstaff4', fileName: 'mstaff4.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'wstaff4', fileName: 'wstaff4.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'mberserkwand', fileName: 'mberserkwand.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'wberserkwand', fileName: 'wberserkwand.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'mremagicwand', fileName: 'mremagicwand.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'wremagicwand', fileName: 'wremagicwand.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'mklonesswand', fileName: 'mklonesswand.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'wklonesswand', fileName: 'wklonesswand.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
 
-    // --- Body Armor ---
-    // Leather Armor (ApprIndex 1)
+    // --- Bows ---
+    { key: 'mbo', fileName: 'mbo.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'wbo', fileName: 'wbo.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'mdirectbow', fileName: 'mdirectbow.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'wdirectbow', fileName: 'wdirectbow.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'mfirebow', fileName: 'mfirebow.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'wfirebow', fileName: 'wfirebow.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+
+    // --- Special weapons ---
+    { key: 'mstormbringer', fileName: 'mstormbringer.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'wstormbringer', fileName: 'wstormbringer.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'mbshadowsword', fileName: 'mbshadowsword.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'wbshadowsword', fileName: 'wbshadowsword.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'mdebastator', fileName: 'mdebastator.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'wdebastator', fileName: 'wdebastator.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'mdarkexec', fileName: 'mdarkexec.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'wdarkexec', fileName: 'wdarkexec.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'mlightblade', fileName: 'mlightblade.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'wlightblade', fileName: 'wlightblade.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'mdragonblade', fileName: 'mdragonblade.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'wdragonblade', fileName: 'wdragonblade.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'mklonessblade', fileName: 'mklonessblade.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'wklonessblade', fileName: 'wklonessblade.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'mklonessaxe', fileName: 'mklonessaxe.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'wklonessaxe', fileName: 'wklonessaxe.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'mklonessastock', fileName: 'mklonessastock.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'wklonessastock', fileName: 'wklonessastock.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+
+    // --- Tools ---
+    { key: 'mpickaxe1', fileName: 'mpickaxe1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'wpickaxe1', fileName: 'wpickaxe1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'mhoe', fileName: 'mhoe.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+    { key: 'whoe', fileName: 'whoe.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Weapons },
+
+    // --- Body Armor (standard) ---
+    { key: 'mshirt', fileName: 'mshirt.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'wshirt', fileName: 'wshirt.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'mhauberk', fileName: 'mhauberk.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'whauberk', fileName: 'whauberk.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
     { key: 'mlarmor', fileName: 'mlarmor.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
     { key: 'wlarmor', fileName: 'wlarmor.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
-    // Chain Mail (ApprIndex 2)
     { key: 'mcmail', fileName: 'mcmail.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
     { key: 'wcmail', fileName: 'wcmail.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
-    // Plate Mail (ApprIndex 3)
+    { key: 'msmail', fileName: 'msmail.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'wsmail', fileName: 'wsmail.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
     { key: 'mpmail', fileName: 'mpmail.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
     { key: 'wpmail', fileName: 'wpmail.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'mtunic', fileName: 'mtunic.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'wchemiss', fileName: 'wchemiss.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'wbodice1', fileName: 'wbodice1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'wbodice2', fileName: 'wbodice2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'mrobe1', fileName: 'mrobe1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'wrobe1', fileName: 'wrobe1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'msanta', fileName: 'msanta.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'wsanta', fileName: 'wsanta.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
 
-    // --- Leggings (all variants in one file) ---
+    // --- Body Armor (hero / special) ---
+    { key: 'mhpmail1', fileName: 'mhpmail1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'whpmail1', fileName: 'whpmail1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'mhpmail2', fileName: 'mhpmail2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'whpmail2', fileName: 'whpmail2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'mhlarmor1', fileName: 'mhlarmor1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'whlarmor1', fileName: 'whlarmor1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'mhlarmor2', fileName: 'mhlarmor2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'whlarmor2', fileName: 'whlarmor2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'mhhauberk1', fileName: 'mhhauberk1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'whhauberk1', fileName: 'whhauberk1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'mhhauberk2', fileName: 'mhhauberk2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'whhauberk2', fileName: 'whhauberk2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'mhbplate1', fileName: 'mhbplate1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'whbplate1', fileName: 'whbplate1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'mhbplate2', fileName: 'mhbplate2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'whbplate2', fileName: 'whbplate2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'mhrobe1', fileName: 'mhrobe1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'whrobe1', fileName: 'whrobe1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'mhrobe2', fileName: 'mhrobe2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'whrobe2', fileName: 'whrobe2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+
+    // --- Leggings ---
+    { key: 'mtrouser', fileName: 'mtrouser.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'wtrouser', fileName: 'wtrouser.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'mhtrouser', fileName: 'mhtrouser.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'whtrouser', fileName: 'whtrouser.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'mchoses', fileName: 'mchoses.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'wchoses', fileName: 'wchoses.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
     { key: 'mleggings', fileName: 'mleggings.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
     { key: 'wleggings', fileName: 'wleggings.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'wskirt', fileName: 'wskirt.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'mhleggings1', fileName: 'mhleggings1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'whleggings1', fileName: 'whleggings1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'mhleggings2', fileName: 'mhleggings2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'whleggings2', fileName: 'whleggings2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
 
-    // --- Helms ---
-    // Leather Cap (ApprIndex 1)
-    { key: 'mhcap1', fileName: 'mhcap1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
-    { key: 'whcap1', fileName: 'whcap1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
-    // Iron Helm (ApprIndex 2)
+    // --- Helms (standard) ---
     { key: 'mhelm1', fileName: 'mhelm1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
     { key: 'whelm1', fileName: 'whelm1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
-    // Full Helm (ApprIndex 3)
     { key: 'mhelm2', fileName: 'mhelm2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'mhelm3', fileName: 'mhelm3.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'mhelm4', fileName: 'mhelm4.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'whelm4', fileName: 'whelm4.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
 
-    // --- Capes ---
-    // Cloth Cape (ApprIndex 1)
+    // --- Helms (horned / winged / wizard) ---
+    { key: 'nmhelm1', fileName: 'nmhelm1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'nwhelm1', fileName: 'nwhelm1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'nmhelm2', fileName: 'nmhelm2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'nwhelm2', fileName: 'nwhelm2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'nmhelm3', fileName: 'nmhelm3.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'nwhelm3', fileName: 'nwhelm3.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'nmhelm4', fileName: 'nmhelm4.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'nwhelm4', fileName: 'nwhelm4.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+
+    // --- Helms (hero / caps / hoods) ---
+    { key: 'mhhelm1', fileName: 'mhhelm1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'whhelm1', fileName: 'whhelm1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'mhhelm2', fileName: 'mhhelm2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'whhelm2', fileName: 'whhelm2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'mhcap1', fileName: 'mhcap1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'whcap1', fileName: 'whcap1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'mhcap2', fileName: 'mhcap2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'whcap2', fileName: 'whcap2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'mbcap', fileName: 'mbcap.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'wbcap', fileName: 'wbcap.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'mhhood1', fileName: 'mhhood1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'whhood1', fileName: 'whhood1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'mhhood2', fileName: 'mhhood2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'whhood2', fileName: 'whhood2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+
+    // --- Capes (all 6 variants) ---
     { key: 'mmantle01', fileName: 'mmantle01.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
     { key: 'wmantle01', fileName: 'wmantle01.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
-    // Silk Mantle (ApprIndex 2)
     { key: 'mmantle02', fileName: 'mmantle02.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
     { key: 'wmantle02', fileName: 'wmantle02.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'mmantle03', fileName: 'mmantle03.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'wmantle03', fileName: 'wmantle03.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'mmantle04', fileName: 'mmantle04.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'wmantle04', fileName: 'wmantle04.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'mmantle05', fileName: 'mmantle05.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'wmantle05', fileName: 'wmantle05.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'mmantle06', fileName: 'mmantle06.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'wmantle06', fileName: 'wmantle06.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
 
     // --- Boots ---
-    // Leather Boots (ApprIndex 1)
-    { key: 'mlboots', fileName: 'mlboots.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
-    { key: 'wlboots', fileName: 'wlboots.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
-    // Iron Boots (ApprIndex 2)
     { key: 'mshoes', fileName: 'mshoes.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
     { key: 'wshoes', fileName: 'wshoes.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'mlboots', fileName: 'mlboots.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'wlboots', fileName: 'wlboots.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
 
     // --- Shields (all variants in one file) ---
     { key: 'msh', fileName: 'msh.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Shields },
     { key: 'wsh', fileName: 'wsh.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Shields },
+
+    // --- Accessories (angelic pendants) ---
+    { key: 'tutelarangel1', fileName: 'tutelarangel1.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'tutelarangel2', fileName: 'tutelarangel2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'tutelarangel3', fileName: 'tutelarangel3.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
+    { key: 'tutelarangel4', fileName: 'tutelarangel4.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.EquipmentPack },
 ];
 
 // ---------------------------------------------------------------------------
