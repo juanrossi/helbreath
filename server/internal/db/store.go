@@ -16,11 +16,11 @@ func NewStore(pool *pgxpool.Pool) *Store {
 
 // Account operations
 
-func (s *Store) CreateAccount(ctx context.Context, username, passwordHash string) (int, error) {
+func (s *Store) CreateAccount(ctx context.Context, username, passwordHash, email string) (int, error) {
 	var id int
 	err := s.pool.QueryRow(ctx,
-		`INSERT INTO accounts (username, password_hash) VALUES ($1, $2) RETURNING id`,
-		username, passwordHash).Scan(&id)
+		`INSERT INTO accounts (username, password_hash, email) VALUES ($1, $2, $3) RETURNING id`,
+		username, passwordHash, email).Scan(&id)
 	return id, err
 }
 

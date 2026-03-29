@@ -108,12 +108,18 @@ func main() {
 		select {
 		case <-sigCh:
 			log.Println("OS signal received, shutting down...")
+			// Block new WebSocket connections immediately
+			wsServer.SetShuttingDown()
+			// Run full shutdown: 5s countdown, notify players, save, disconnect
+			engine.GracefulShutdown(5)
 		case <-engine.ShutdownChan():
-			log.Println("Admin shutdown signal received...")
+			log.Println("Admin shutdown completed...")
 		}
 		cancel()
-		engine.SaveAllPlayers()
-		httpServer.Close()
+		// Gracefully shut down HTTP server (give in-flight requests 2s to finish)
+		shutdownCtx, shutdownCancel := context.WithTimeout(context.Background(), 2*time.Second)
+		defer shutdownCancel()
+		httpServer.Shutdown(shutdownCtx)
 	}()
 
 	log.Printf("Helbreath.xyz server starting on %s", *addr)

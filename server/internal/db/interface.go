@@ -4,7 +4,7 @@ import "context"
 
 // DataStore defines the persistence interface used by the game engine.
 type DataStore interface {
-	CreateAccount(ctx context.Context, username, passwordHash string) (int, error)
+	CreateAccount(ctx context.Context, username, passwordHash, email string) (int, error)
 	GetAccountByUsername(ctx context.Context, username string) (int, string, string, error) // returns (id, hash, uuid, err)
 	GetAccountUUID(ctx context.Context, accountID int) (string, error)
 	GetAccountIDByUUID(ctx context.Context, uuid string) (int, error) // resolve UUID → account_id

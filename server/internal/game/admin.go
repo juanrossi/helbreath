@@ -792,6 +792,9 @@ func (e *Engine) adminShutdown(p *player.Player, args []string) {
 
 // initiateShutdown broadcasts countdown warnings, saves all players, and signals main to exit.
 func (e *Engine) initiateShutdown(seconds int) {
+	// Mark as shutting down so new logins are rejected
+	e.shuttingDown.Store(true)
+
 	for remaining := seconds; remaining > 0; remaining-- {
 		// Broadcast every second for last 10, every 10 seconds before that
 		if remaining <= 10 || remaining%10 == 0 {
@@ -802,7 +805,7 @@ func (e *Engine) initiateShutdown(seconds int) {
 	}
 
 	e.broadcastNotification("Server is shutting down NOW. Goodbye!", 3)
-	time.Sleep(500 * time.Millisecond) // let the message send
+	time.Sleep(500 * time.Millisecond) // let the message flush
 
 	log.Println("Shutdown: saving all players...")
 	e.SaveAllPlayers()
@@ -830,12 +833,14 @@ func (e *Engine) broadcastNotification(msg string, notifType int32) {
 	})
 }
 
-// disconnectAllClients closes the connection for every online player.
+// disconnectAllClients gracefully closes every player's connection.
+// It closes the send channel first so the WritePump flushes pending messages,
+// then closes the underlying WebSocket.
 func (e *Engine) disconnectAllClients() {
 	e.players.Range(func(_, value any) bool {
 		p := value.(*player.Player)
 		if p.Client != nil {
-			p.Client.Close()
+			p.Client.CloseGracefully()
 		}
 		return true
 	})

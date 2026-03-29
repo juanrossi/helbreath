@@ -35,7 +35,7 @@ func NewMemoryStore() *MemoryStore {
 
 var _ DataStore = (*MemoryStore)(nil)
 
-func (m *MemoryStore) CreateAccount(_ context.Context, username, passwordHash string) (int, error) {
+func (m *MemoryStore) CreateAccount(_ context.Context, username, passwordHash, email string) (int, error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 

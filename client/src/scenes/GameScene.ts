@@ -560,7 +560,9 @@ export class GameScene extends Phaser.Scene {
     this.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
       if (this.isDead) return;
       if (pointer.rightButtonDown()) {
-        this.handleAttackClick(pointer);
+        if (!GameScene.INDOOR_MAPS.has(this.currentMapName)) {
+          this.handleAttackClick(pointer);
+        }
       } else if (pointer.leftButtonDown()) {
         // Check if clicking on or near an NPC first
         if (!this.tryAttackNPCAtPointer(pointer)) {
@@ -601,14 +603,19 @@ export class GameScene extends Phaser.Scene {
 
     // Handlers already registered at top of create() via registerNetworkHandlers()
 
-    // Keyboard shortcuts for UI (must be after scene is created)
-    this.input.keyboard!.on('keydown-I', () => this.toggleInventory());
-    this.input.keyboard!.on('keydown-C', () => this.toggleStats());
-    this.input.keyboard!.on('keydown-M', () => this.toggleSpellBar());
-    this.input.keyboard!.on('keydown-K', () => this.toggleSkills());
-    this.input.keyboard!.on('keydown-G', () => this.toggleGuild());
-    this.input.keyboard!.on('keydown-P', () => this.toggleParty());
-    this.input.keyboard!.on('keydown-J', () => this.toggleQuests());
+    // Keyboard shortcuts for UI — disabled when typing in an input field
+    const ifNotTyping = (fn: () => void) => () => {
+      const el = document.activeElement;
+      if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || (el as HTMLElement).isContentEditable)) return;
+      fn();
+    };
+    this.input.keyboard!.on('keydown-I', ifNotTyping(() => this.toggleInventory()));
+    this.input.keyboard!.on('keydown-C', ifNotTyping(() => this.toggleStats()));
+    this.input.keyboard!.on('keydown-M', ifNotTyping(() => this.toggleSpellBar()));
+    this.input.keyboard!.on('keydown-K', ifNotTyping(() => this.toggleSkills()));
+    this.input.keyboard!.on('keydown-G', ifNotTyping(() => this.toggleGuild()));
+    this.input.keyboard!.on('keydown-P', ifNotTyping(() => this.toggleParty()));
+    this.input.keyboard!.on('keydown-J', ifNotTyping(() => this.toggleQuests()));
 
     // Debug shortcuts
     this.input.keyboard!.on('keydown-F12', () => this.toggleDebugMode());
@@ -2503,12 +2510,11 @@ export class GameScene extends Phaser.Scene {
   // Combat
   // ---------------------------------------------------------------------------
 
-  /** Returns true if there's an NPC near the click position and attack was initiated. */
-  private tryAttackNPCAtPointer(pointer: Phaser.Input.Pointer): boolean {
-    if (!this.canAttack()) return false;
-    const now = this.time.now;
-    if (now - this.lastAttackTime < this.attackCooldown) return false;
+  // Shop/town NPC type IDs (must match server's IsShopNPC)
+  private static readonly SHOP_NPC_TYPES = new Set([15, 19, 20, 24, 25, 26, 67, 68, 69, 90]);
 
+  /** Returns true if there's an NPC near the click position and attack/interact was initiated. */
+  private tryAttackNPCAtPointer(pointer: Phaser.Input.Pointer): boolean {
     const worldPoint = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
     const clickTileX = Math.floor(worldPoint.x / TILE_SIZE);
     const clickTileY = Math.floor(worldPoint.y / TILE_SIZE);
@@ -2518,11 +2524,32 @@ export class GameScene extends Phaser.Scene {
       const dx = Math.abs(clickTileX - npcEntity.tileX);
       const dy = Math.abs(clickTileY - npcEntity.tileY);
       if (dx <= 1 && dy <= 1) {
-        // Check if player is within attack range of this NPC
         const playerDist = Math.max(
           Math.abs(this.tileX - npcEntity.tileX),
           Math.abs(this.tileY - npcEntity.tileY),
         );
+
+        // Shop NPC: interact (open shop), not attack
+        if (GameScene.SHOP_NPC_TYPES.has(npcEntity.npcType)) {
+          if (playerDist <= 3) {
+            // Send as attack request — server will redirect to shop interaction
+            this.msgHandler.sendMessage(Proto.MSG_ATTACK_REQUEST, {
+              direction: this.playerDirection,
+              action: 3,
+              position: { x: this.tileX, y: this.tileY },
+              targetId: npcEntity.objectId,
+            });
+            return true;
+          }
+          return false;
+        }
+
+        // Combat NPC: attack (blocked indoors)
+        if (GameScene.INDOOR_MAPS.has(this.currentMapName)) return false;
+        if (!this.canAttack()) return false;
+        const now = this.time.now;
+        if (now - this.lastAttackTime < this.attackCooldown) return false;
+
         if (playerDist <= 2) {
           this.handleAttackClick(pointer);
           return true;
@@ -3087,12 +3114,25 @@ export class GameScene extends Phaser.Scene {
       return;
     }
     if (data.secondsRemaining === 0) {
-      // Server confirmed logout — redirect to login
-      this.cancelLogoutUI();
-      window.location.reload();
+      // Server confirmed logout — go to character select
+      this.doLogoutComplete();
       return;
     }
     this.startLogoutCountdown(data.secondsRemaining);
+  }
+
+  private doLogoutComplete(): void {
+    this.cancelLogoutUI();
+    // Disconnect WS cleanly and remove from registry so CharSelectScene creates a fresh one
+    const ws = this.registry.get('ws') as import('../network/WebSocketClient').WebSocketClient | undefined;
+    if (ws) ws.disconnect();
+    this.registry.remove('ws');
+    this.registry.remove('msgHandler');
+    // Clean up HUD DOM elements
+    document.getElementById('hud-bar')?.parentElement?.remove();
+    document.getElementById('chat-container')?.parentElement?.remove();
+    // Go back to character select (will create new WS connection)
+    this.scene.start('CharSelectScene');
   }
 
   private startLogoutCountdown(seconds: number): void {
@@ -3103,7 +3143,8 @@ export class GameScene extends Phaser.Scene {
     this.logoutInterval = setInterval(() => {
       this.logoutCountdown--;
       if (this.logoutCountdown <= 0) {
-        this.cancelLogoutUI();
+        // Client-side countdown expired — server will disconnect us
+        this.doLogoutComplete();
         return;
       }
       this.updateLogoutOverlay();

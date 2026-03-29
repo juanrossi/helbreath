@@ -88,16 +88,6 @@ export class CharSelectScene extends Phaser.Scene {
 
         btn.on('pointerover', () => btn.setStyle({ color: '#FFD700' }));
         btn.on('pointerout', () => btn.setStyle({ color: '#fff' }));
-
-        // Delete button
-        const delBtn = this.add.text(centerX + 150, y, 'X', {
-          fontSize: '14px', color: '#ff4444', backgroundColor: '#333',
-          padding: { x: 8, y: 10 },
-        }).setOrigin(0.5).setInteractive({ useHandCursor: true });
-
-        delBtn.on('pointerdown', () => {
-          this.deleteCharacter(char.id);
-        });
       } else {
         const btn = this.add.text(centerX, y, '[ Empty Slot ]', {
           fontSize: '16px', color: '#666', backgroundColor: '#222',
@@ -138,34 +128,6 @@ export class CharSelectScene extends Phaser.Scene {
     this.msgHandler.sendMessage(Proto.MSG_ENTER_GAME_REQUEST, {
       characterId,
     });
-  }
-
-  private async deleteCharacter(characterId: number): Promise<void> {
-    const token = localStorage.getItem('hb_token') || '';
-    const host = window.location.hostname;
-    const isLocal = host === 'localhost' || host === '127.0.0.1';
-    const apiBase = isLocal ? `http://${host}:8080` : '';
-
-    try {
-      const resp = await fetch(`${apiBase}/api/characters/delete`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({ characterId }),
-      });
-      const data = await resp.json();
-      if (data.success) {
-        this.characters = data.characters || [];
-        this.registry.set('characters', this.characters);
-        // Re-render by restarting scene
-        this.cleanup();
-        this.scene.restart();
-      }
-    } catch (err) {
-      console.error('Failed to delete character:', err);
-    }
   }
 
   private cleanup(): void {

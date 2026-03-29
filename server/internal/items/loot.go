@@ -176,38 +176,38 @@ func RollBossLoot() []*Item {
 
 // ShopInventory defines what items each shop NPC sells.
 // Map from NPC type ID to list of sellable item IDs (from original Item.cfg).
+// NPC type IDs match the C++ NPC.cfg: 15=ShopKeeper-W, 24=Tom, 20=Howard, etc.
 var ShopInventories = map[int][]int{
-	// Weapon Smith (type 10) — weapons
-	10: {
+	// ShopKeeper-W (type 15) — general shop, sells everything
+	15: {
+		1, 8, 34, 402, // Dagger, ShortSword, Rapier, Cape
+		79, 80, 450, 451, // WoodShield, LeatherShield, Shoes, LongBoots
+		453, 454, 456, 459, 460, // Shirt(M), Hauberk(M), ChainMail(M), Trousers(M), KneeTrousers(M)
+		471, 472, 476, 479, 480, // Shirt(W), Hauberk(W), ChainMail(W), Skirt(W), Trousers(W)
+		600, // Helm
+		91, 92, 93, 94, 95, 96, // Potions
+	},
+	// Tom the Blacksmith (type 24) — weapons and armor
+	24: {
 		1,   // Dagger
 		8,   // ShortSword
-		10,  // MainGauche (shield)
+		10,  // MainGauche
 		17,  // Gradius+2
 		26,  // KnightScimitar
 		30,  // Falchion+2
 		34,  // Rapier
 		402, // Cape
-	},
-	// Armorer (type 11) — armor, shields, helms, boots
-	11: {
 		79,  // WoodShield
 		80,  // LeatherShield
-		450, // Shoes
-		451, // LongBoots
-		453, // Shirt(M)
-		454, // Hauberk(M)
-		456, // ChainMail(M)
-		459, // Trousers(M)
-		460, // KneeTrousers(M)
-		471, // Shirt(W)
-		472, // Hauberk(W)
-		476, // ChainMail(W)
-		479, // Skirt(W)
-		480, // Trousers(W)
+		453, 454, 456, // Shirt(M), Hauberk(M), ChainMail(M)
+		471, 472, 476, // Shirt(W), Hauberk(W), ChainMail(W)
+		459, 460, // Trousers(M), KneeTrousers(M)
+		479, 480, // Skirt(W), Trousers(W)
+		450, 451, // Shoes, LongBoots
 		600, // Helm
 	},
-	// Potion Merchant (type 12) -- potions
-	12: {
+	// Howard the Warehouse Keeper (type 20) — potions and supplies
+	20: {
 		91, // RedPotion (HP)
 		92, // BigHealthPotion
 		93, // BluePotion (MP)

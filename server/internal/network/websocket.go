@@ -4,6 +4,8 @@ import (
 	"log"
 	"net/http"
 	"sync"
+	"sync/atomic"
+	"time"
 
 	"github.com/gorilla/websocket"
 	"github.com/juanrossi/hbonline/server/internal/auth"
@@ -31,13 +33,24 @@ type Server struct {
 	clients      sync.Map // map[*Client]bool
 	jwtManager   *auth.JWTManager
 	uuidResolver UUIDResolver
+	shuttingDown atomic.Bool
 }
 
 func NewServer(handler MessageHandler, jwtManager *auth.JWTManager, resolver UUIDResolver) *Server {
 	return &Server{handler: handler, jwtManager: jwtManager, uuidResolver: resolver}
 }
 
+// SetShuttingDown marks the server as shutting down, rejecting new WS connections.
+func (s *Server) SetShuttingDown() {
+	s.shuttingDown.Store(true)
+}
+
 func (s *Server) HandleWebSocket(w http.ResponseWriter, r *http.Request) {
+	if s.shuttingDown.Load() {
+		http.Error(w, "Server is shutting down", http.StatusServiceUnavailable)
+		return
+	}
+
 	// Check for JWT token in query parameter (pre-authenticated via HTTP)
 	token := r.URL.Query().Get("token")
 	var claims *auth.Claims
@@ -87,10 +100,11 @@ func (s *Server) RemoveClient(client *Client) {
 
 // Client represents a single WebSocket connection.
 type Client struct {
-	conn     *websocket.Conn
-	server   *Server
-	sendChan chan []byte
-	mu       sync.Mutex
+	conn      *websocket.Conn
+	server    *Server
+	sendChan  chan []byte
+	closeOnce sync.Once
+	mu        sync.Mutex
 
 	// Set by game engine after auth
 	AccountID     int
@@ -121,6 +135,15 @@ func (c *Client) Close() {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	c.conn.Close()
+}
+
+// CloseGracefully closes the send channel so WritePump drains all pending
+// messages, then closes the underlying WebSocket connection.
+func (c *Client) CloseGracefully() {
+	c.closeOnce.Do(func() { close(c.sendChan) })
+	// Give WritePump a moment to flush remaining messages
+	time.Sleep(100 * time.Millisecond)
+	c.Close()
 }
 
 func (c *Client) ReadPump() {

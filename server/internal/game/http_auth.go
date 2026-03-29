@@ -77,6 +77,7 @@ func (e *Engine) HandleHTTPLogin(w http.ResponseWriter, r *http.Request) {
 	var req struct {
 		Username string `json:"username"`
 		Password string `json:"password"`
+		Email    string `json:"email"`
 		Register bool   `json:"register"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -97,12 +98,18 @@ func (e *Engine) HandleHTTPLogin(w http.ResponseWriter, r *http.Request) {
 	defer cancel()
 
 	if req.Register {
+		// Validate email for registration
+		if req.Email == "" || !strings.Contains(req.Email, "@") || len(req.Email) > 255 {
+			writeJSON(w, http.StatusBadRequest, map[string]any{"success": false, "error": "A valid email address is required"})
+			return
+		}
+
 		hash, err := bcrypt.GenerateFromPassword([]byte(req.Password), 12)
 		if err != nil {
 			writeJSON(w, http.StatusInternalServerError, map[string]any{"success": false, "error": "Internal error"})
 			return
 		}
-		accountID, err := e.store.CreateAccount(ctx, req.Username, string(hash))
+		accountID, err := e.store.CreateAccount(ctx, req.Username, string(hash), req.Email)
 		if err != nil {
 			writeJSON(w, http.StatusConflict, map[string]any{"success": false, "error": "Username already taken"})
 			return

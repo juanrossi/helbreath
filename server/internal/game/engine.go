@@ -79,8 +79,9 @@ type Engine struct {
 	// Teleport config
 	teleports mapdata.TeleportConfig
 
-	// Graceful shutdown channel
+	// Graceful shutdown
 	shutdownChan chan struct{}
+	shuttingDown atomic.Bool
 }
 
 func NewEngine(store db.DataStore, jwtManager *auth.JWTManager) *Engine {
@@ -112,6 +113,23 @@ func NewEngine(store db.DataStore, jwtManager *auth.JWTManager) *Engine {
 // ShutdownChan returns a channel that is closed when the admin /shutdown command completes.
 func (e *Engine) ShutdownChan() <-chan struct{} {
 	return e.shutdownChan
+}
+
+// IsShuttingDown returns true if a shutdown sequence is in progress.
+func (e *Engine) IsShuttingDown() bool {
+	return e.shuttingDown.Load()
+}
+
+// GracefulShutdown runs the full shutdown sequence (notify, save, disconnect)
+// synchronously with the given countdown seconds. Safe to call from main.go signal handler.
+func (e *Engine) GracefulShutdown(seconds int) {
+	if !e.shuttingDown.CompareAndSwap(false, true) {
+		// Already shutting down (e.g. admin /shutdown was already running)
+		// Just wait for the existing shutdown to finish.
+		<-e.shutdownChan
+		return
+	}
+	e.initiateShutdown(seconds)
 }
 
 func (e *Engine) LoadMaps(dir string) error {
@@ -887,7 +905,7 @@ func (e *Engine) OnDisconnect(client *network.Client) {
 }
 
 // LogoutCountdownSeconds is how long a player must wait before logging out.
-const LogoutCountdownSeconds = 10
+const LogoutCountdownSeconds = 5
 
 func (e *Engine) handleLogout(client *network.Client, req *pb.LogoutRequest) {
 	val, ok := e.players.Load(client.ObjectID)
@@ -924,15 +942,19 @@ func (e *Engine) processLogouts(now time.Time) {
 		if now.Before(p.LogoutTime) {
 			return true
 		}
-		// Countdown finished — disconnect the player
+		// Countdown finished — disconnect the player after a brief delay
+		// to allow the final LogoutResponse to flush through the write pump.
 		p.LogoutPending = false
 		log.Printf("Player %s logged out via countdown", p.Name)
 		resp := &pb.LogoutResponse{SecondsRemaining: 0}
 		data, _ := network.Encode(network.MsgLogoutResponse, resp)
 		p.Send(data)
-		// Close the connection, which triggers OnDisconnect for cleanup
-		if p.Client != nil {
-			p.Client.Close()
+		client := p.Client
+		if client != nil {
+			go func() {
+				time.Sleep(200 * time.Millisecond)
+				client.Close()
+			}()
 		}
 		return true
 	})
@@ -1045,7 +1067,7 @@ func (e *Engine) handleLogin(client *network.Client, req *pb.LoginRequest) {
 			e.sendLoginError(client, "Internal error")
 			return
 		}
-		accountID, err := e.store.CreateAccount(ctx, req.Username, string(hash))
+		accountID, err := e.store.CreateAccount(ctx, req.Username, string(hash), "")
 		if err != nil {
 			e.sendLoginError(client, "Username already taken")
 			return
@@ -1174,6 +1196,10 @@ func (e *Engine) handleDeleteCharacter(client *network.Client, req *pb.DeleteCha
 }
 
 func (e *Engine) handleEnterGame(client *network.Client, req *pb.EnterGameRequest) {
+	if e.IsShuttingDown() {
+		return
+	}
+
 	ctx := context.Background()
 	if client.AccountID == 0 {
 		return

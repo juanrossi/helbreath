@@ -9,7 +9,7 @@ func TestMemoryStoreCreateAccount(t *testing.T) {
 	store := NewMemoryStore()
 	ctx := context.Background()
 
-	id, err := store.CreateAccount(ctx, "testuser", "hashedpw")
+	id, err := store.CreateAccount(ctx, "testuser", "hashedpw", "")
 	if err != nil {
 		t.Fatalf("CreateAccount failed: %v", err)
 	}
@@ -18,7 +18,7 @@ func TestMemoryStoreCreateAccount(t *testing.T) {
 	}
 
 	// Duplicate should fail
-	_, err = store.CreateAccount(ctx, "testuser", "hashedpw")
+	_, err = store.CreateAccount(ctx, "testuser", "hashedpw", "")
 	if err == nil {
 		t.Error("Duplicate username should fail")
 	}
@@ -28,7 +28,7 @@ func TestMemoryStoreGetAccount(t *testing.T) {
 	store := NewMemoryStore()
 	ctx := context.Background()
 
-	store.CreateAccount(ctx, "user1", "hash1")
+	store.CreateAccount(ctx, "user1", "hash1", "")
 
 	id, hash, uuid, err := store.GetAccountByUsername(ctx, "user1")
 	if err != nil {
@@ -65,7 +65,7 @@ func TestMemoryStoreCreateCharacter(t *testing.T) {
 	store := NewMemoryStore()
 	ctx := context.Background()
 
-	accID, _ := store.CreateAccount(ctx, "user1", "hash")
+	accID, _ := store.CreateAccount(ctx, "user1", "hash", "")
 
 	charID, err := store.CreateCharacter(ctx, accID, "Hero", 0, 0, 0, 0, 0, 12, 12, 12, 12, 12, 10)
 	if err != nil {
@@ -86,7 +86,7 @@ func TestMemoryStoreGetCharacters(t *testing.T) {
 	store := NewMemoryStore()
 	ctx := context.Background()
 
-	accID, _ := store.CreateAccount(ctx, "user1", "hash")
+	accID, _ := store.CreateAccount(ctx, "user1", "hash", "")
 	store.CreateCharacter(ctx, accID, "Char1", 0, 0, 0, 0, 0, 12, 12, 12, 12, 12, 10)
 	store.CreateCharacter(ctx, accID, "Char2", 1, 0, 0, 0, 0, 10, 10, 10, 10, 10, 10)
 
@@ -103,7 +103,7 @@ func TestMemoryStoreGetCharacterByID(t *testing.T) {
 	store := NewMemoryStore()
 	ctx := context.Background()
 
-	accID, _ := store.CreateAccount(ctx, "user1", "hash")
+	accID, _ := store.CreateAccount(ctx, "user1", "hash", "")
 	charID, _ := store.CreateCharacter(ctx, accID, "Hero", 0, 1, 3, 2, 0, 15, 12, 13, 10, 10, 10)
 
 	char, err := store.GetCharacterByID(ctx, charID, accID)
@@ -137,7 +137,7 @@ func TestMemoryStoreDeleteCharacter(t *testing.T) {
 	store := NewMemoryStore()
 	ctx := context.Background()
 
-	accID, _ := store.CreateAccount(ctx, "user1", "hash")
+	accID, _ := store.CreateAccount(ctx, "user1", "hash", "")
 	charID, _ := store.CreateCharacter(ctx, accID, "Hero", 0, 0, 0, 0, 0, 10, 10, 10, 10, 10, 10)
 
 	err := store.DeleteCharacter(ctx, charID, accID)
@@ -168,7 +168,7 @@ func TestMemoryStoreSavePosition(t *testing.T) {
 	store := NewMemoryStore()
 	ctx := context.Background()
 
-	accID, _ := store.CreateAccount(ctx, "user1", "hash")
+	accID, _ := store.CreateAccount(ctx, "user1", "hash", "")
 	charID, _ := store.CreateCharacter(ctx, accID, "Hero", 0, 0, 0, 0, 0, 10, 10, 10, 10, 10, 10)
 
 	err := store.SaveCharacterPosition(ctx, charID, "aresden", 100, 200, 3)
@@ -198,7 +198,7 @@ func TestMemoryStoreCountCharacters(t *testing.T) {
 	store := NewMemoryStore()
 	ctx := context.Background()
 
-	accID, _ := store.CreateAccount(ctx, "user1", "hash")
+	accID, _ := store.CreateAccount(ctx, "user1", "hash", "")
 	count, _ := store.CountCharacters(ctx, accID)
 	if count != 0 {
 		t.Errorf("Expected 0 characters, got %d", count)
@@ -213,7 +213,7 @@ func TestMemoryStoreCountCharacters(t *testing.T) {
 	}
 
 	// Different account
-	accID2, _ := store.CreateAccount(ctx, "user2", "hash")
+	accID2, _ := store.CreateAccount(ctx, "user2", "hash", "")
 	count, _ = store.CountCharacters(ctx, accID2)
 	if count != 0 {
 		t.Errorf("Expected 0 characters for user2, got %d", count)
