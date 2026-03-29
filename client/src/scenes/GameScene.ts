@@ -3106,45 +3106,45 @@ export class GameScene extends Phaser.Scene {
 
     const worldX = data.position.x * TILE_SIZE + TILE_SIZE / 2;
     const worldY = data.position.y * TILE_SIZE + TILE_SIZE / 2;
+    const depthBase = data.position.y * DEPTH_MULTIPLIER + 1;
 
-    // Determine icon color based on item name hints
-    const nameLower = (data.name || '').toLowerCase();
-    let iconColor = 0xCCCCCC; // default gray
-    let iconChar = '?';
-    if (nameLower.includes('potion') || nameLower.includes('red') || nameLower.includes('green') || nameLower.includes('blue')) {
-      iconColor = nameLower.includes('blue') || nameLower.includes('mana') ? 0x4488FF :
-                  nameLower.includes('green') || nameLower.includes('revit') ? 0x44CC44 : 0xFF4444;
-      iconChar = 'P';
-    } else if (nameLower.includes('sword') || nameLower.includes('dagger') || nameLower.includes('axe') || nameLower.includes('hammer') || nameLower.includes('bow') || nameLower.includes('blade') || nameLower.includes('rapier')) {
-      iconColor = 0xCCCCDD; iconChar = 'W';
-    } else if (nameLower.includes('shield')) {
-      iconColor = 0x8888BB; iconChar = 'S';
-    } else if (nameLower.includes('mail') || nameLower.includes('armor') || nameLower.includes('shirt') || nameLower.includes('hauberk') || nameLower.includes('robe')) {
-      iconColor = 0x886644; iconChar = 'A';
-    } else if (nameLower.includes('helm') || nameLower.includes('cap') || nameLower.includes('hat')) {
-      iconColor = 0x999977; iconChar = 'H';
-    } else if (nameLower.includes('gold')) {
-      iconColor = 0xFFD700; iconChar = 'G';
+    // Try to render using item-ground atlas sprite
+    const groundFrame = getItemGroundFrame(data.itemId);
+    const frameName = `spr${groundFrame.sheet}_f${groundFrame.frame}`;
+    const extras: Phaser.GameObjects.GameObject[] = [];
+    let sprite: Phaser.GameObjects.GameObject;
+
+    if (this.textures.exists('item-ground') && this.textures.get('item-ground').has(frameName)) {
+      const img = this.add.image(worldX, worldY, 'item-ground', frameName)
+        .setDepth(depthBase)
+        .setInteractive({ useHandCursor: true });
+      sprite = img;
+    } else {
+      // Fallback: colored circle for items without atlas frames
+      const nameLower = (data.name || '').toLowerCase();
+      let iconColor = 0xCCCCCC;
+      if (nameLower.includes('potion') || nameLower.includes('red') || nameLower.includes('green') || nameLower.includes('blue')) {
+        iconColor = nameLower.includes('blue') || nameLower.includes('mana') ? 0x4488FF :
+                    nameLower.includes('green') || nameLower.includes('revit') ? 0x44CC44 : 0xFF4444;
+      } else if (nameLower.includes('sword') || nameLower.includes('dagger') || nameLower.includes('axe')) {
+        iconColor = 0xCCCCDD;
+      } else if (nameLower.includes('shield')) {
+        iconColor = 0x8888BB;
+      } else if (nameLower.includes('gold')) {
+        iconColor = 0xFFD700;
+      }
+      const bg = this.add.circle(worldX, worldY, 8, 0x000000, 0.7).setDepth(depthBase);
+      const icon = this.add.circle(worldX, worldY, 6, iconColor, 0.9)
+        .setDepth(depthBase)
+        .setInteractive({ useHandCursor: true });
+      extras.push(bg, icon);
+      sprite = icon;
     }
-
-    // Draw a small icon with the item type indicator
-    const bg = this.add.circle(worldX, worldY, 8, 0x000000, 0.7)
-      .setDepth(data.position.y * DEPTH_MULTIPLIER + 1);
-    const icon = this.add.circle(worldX, worldY, 6, iconColor, 0.9)
-      .setDepth(data.position.y * DEPTH_MULTIPLIER + 1)
-      .setInteractive({ useHandCursor: true });
-    const charText = this.add.text(worldX, worldY, iconChar, {
-      fontSize: '8px', color: '#000', fontStyle: 'bold',
-    }).setOrigin(0.5, 0.5).setDepth(data.position.y * DEPTH_MULTIPLIER + 1);
-
-    const sprite = this.add.zone(worldX, worldY, 20, 20)
-      .setDepth(data.position.y * DEPTH_MULTIPLIER + 1)
-      .setInteractive({ useHandCursor: true });
 
     const label = this.add.text(worldX, worldY - 14, data.count > 1 ? `${data.name} x${data.count}` : data.name, {
       fontSize: '9px', color: '#FFD700',
       stroke: '#000000', strokeThickness: 2,
-    }).setOrigin(0.5, 1).setDepth(data.position.y * DEPTH_MULTIPLIER + 2);
+    }).setOrigin(0.5, 1).setDepth(depthBase + 1);
 
     const pickupHandler = () => {
       const dx = Math.abs(this.tileX - data.position.x);
@@ -3169,7 +3169,6 @@ export class GameScene extends Phaser.Scene {
       this.msgHandler.sendMessage(Proto.MSG_ITEM_PICKUP_REQUEST, { groundId: data.groundId });
     };
     sprite.on('pointerdown', pickupHandler);
-    icon.on('pointerdown', pickupHandler);
 
     this.groundItems.set(data.groundId, {
       groundId: data.groundId,
@@ -3180,7 +3179,7 @@ export class GameScene extends Phaser.Scene {
       y: data.position.y,
       sprite,
       label,
-      extras: [bg, icon, charText],
+      extras: extras.length > 0 ? extras : undefined,
     });
   }
 

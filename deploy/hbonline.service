@@ -1,0 +1,33 @@
+[Unit]
+Description=Helbreath Online Game Server
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+Type=simple
+User=helbreath.xyz
+Group=helbreath.xyz
+WorkingDirectory=/opt/helbreath.xyz/server
+ExecStart=/opt/helbreath.xyz/server/gameserver
+Restart=always
+RestartSec=5
+
+# Environment file with DB creds, JWT secret, etc.
+EnvironmentFile=/opt/helbreath.xyz/.env
+
+# Logging — stdout/stderr captured by journald AND written to file
+StandardOutput=append:/var/log/helbreath.xyz/server.log
+StandardError=append:/var/log/helbreath.xyz/server.log
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/log/helbreath.xyz
+PrivateTmp=true
+
+# Resource limits
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target

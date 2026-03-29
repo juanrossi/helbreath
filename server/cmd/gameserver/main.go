@@ -95,8 +95,9 @@ func main() {
 	mux.HandleFunc("/api/characters/create", engine.HandleHTTPCreateCharacter)
 	mux.HandleFunc("/api/characters/delete", engine.HandleHTTPDeleteCharacter)
 
-	// Wrap with CORS middleware for development (client on :3000, server on :8080)
-	handler := corsMiddleware(mux)
+	// Wrap with CORS middleware
+	allowedOrigins := envOrDefault("ALLOWED_ORIGINS", "http://localhost:3000")
+	handler := corsMiddleware(mux, allowedOrigins)
 	httpServer := &http.Server{Addr: *addr, Handler: handler}
 
 	// Graceful shutdown
@@ -122,10 +123,22 @@ func main() {
 	log.Println("Server stopped")
 }
 
-// corsMiddleware adds CORS headers to all responses for cross-origin development.
-func corsMiddleware(next http.Handler) http.Handler {
+// corsMiddleware adds CORS headers. allowedOrigins is a comma-separated list.
+func corsMiddleware(next http.Handler, allowedOrigins string) http.Handler {
+	origins := make(map[string]bool)
+	for _, o := range strings.Split(allowedOrigins, ",") {
+		o = strings.TrimSpace(o)
+		if o != "" {
+			origins[o] = true
+		}
+	}
+
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "*")
+		origin := r.Header.Get("Origin")
+		if origins[origin] || origins["*"] {
+			w.Header().Set("Access-Control-Allow-Origin", origin)
+			w.Header().Set("Vary", "Origin")
+		}
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 		if r.Method == http.MethodOptions {
