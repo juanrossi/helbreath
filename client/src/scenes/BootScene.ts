@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { HBSpriteFile, SpriteType } from '../game/assets/HBSprite';
-import { getAssets, AssetType, type AssetData } from '../constants/Assets';
+import { getAssets, getDeferredAssets, AssetType, type AssetData } from '../constants/Assets';
 import { ASSET_BASE } from '../env';
 
 /**
@@ -127,14 +127,28 @@ export class BootScene extends Phaser.Scene {
         30,
       );
 
-      // Yield to browser every 5 sprites to keep UI responsive
-      if (processed % 5 === 0) {
-        await new Promise(resolve => setTimeout(resolve, 0));
+      // Yield to browser every 3 sprites to prevent GPU overload and WebGL context loss
+      if (processed % 3 === 0) {
+        await new Promise(resolve => setTimeout(resolve, 10));
       }
     }
 
     console.log(`All sprites processed: ${processed}/${spriteAssets.length}`);
     this.statusText.setText('Ready!');
+
+    // Handle WebGL context loss — warn user and attempt recovery
+    const canvas = this.game.canvas;
+    canvas.addEventListener('webglcontextlost', (e) => {
+      e.preventDefault();
+      console.error('WebGL context lost — too many textures loaded. Attempting recovery...');
+    });
+    canvas.addEventListener('webglcontextrestored', () => {
+      console.log('WebGL context restored');
+      window.location.reload(); // simplest recovery: reload the page
+    });
+
+    // Store deferred assets in registry for lazy loading by GameScene
+    this.registry.set('deferredAssets', getDeferredAssets());
 
     // Short delay so user can see "Ready!" text
     await new Promise(resolve => setTimeout(resolve, 300));

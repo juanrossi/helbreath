@@ -560,14 +560,20 @@ const SOUND_ASSETS: AssetData[] = [
 // Combined static registry
 // ---------------------------------------------------------------------------
 
+// Boot assets — only essentials (tiles, human base sprites, audio)
+// Equipment and monster sprites are loaded on-demand to prevent WebGL context loss
 const ASSETS: AssetData[] = [
     ...MAP_ASSETS,
     ...TILE_SPRITE_ASSETS,
     ...CHARACTER_SPRITE_ASSETS,
-    ...EQUIPMENT_SPRITE_ASSETS,
-    ...MONSTER_SPRITE_ASSETS,
     ...MUSIC_ASSETS,
     ...SOUND_ASSETS,
+];
+
+// Deferred assets — loaded on-demand by GameScene when first needed
+const DEFERRED_ASSETS: AssetData[] = [
+    ...EQUIPMENT_SPRITE_ASSETS,
+    ...MONSTER_SPRITE_ASSETS,
 ];
 
 // ---------------------------------------------------------------------------
@@ -575,20 +581,27 @@ const ASSETS: AssetData[] = [
 // ---------------------------------------------------------------------------
 
 /**
- * Returns all assets that need to be loaded.
+ * Returns essential assets loaded at boot (tiles, human base, sounds).
  */
 export function getAssets(): AssetData[] {
     return ASSETS;
 }
 
-/** Returns all assets matching the given AssetType. */
-export function getAssetsByType(type: AssetType): AssetData[] {
-    return ASSETS.filter((a) => a.assetType === type);
+/**
+ * Returns deferred assets (equipment, monsters) loaded on-demand to save GPU memory.
+ */
+export function getDeferredAssets(): AssetData[] {
+    return DEFERRED_ASSETS;
 }
 
-/** Returns a single asset by its unique key, or undefined if not found. */
+/** Returns all assets matching the given AssetType (from both essential and deferred). */
+export function getAssetsByType(type: AssetType): AssetData[] {
+    return [...ASSETS, ...DEFERRED_ASSETS].filter((a) => a.assetType === type);
+}
+
+/** Returns a single asset by its unique key (searches both essential and deferred). */
 export function getAssetByKey(key: string): AssetData | undefined {
-    return ASSETS.find((a) => a.key === key);
+    return ASSETS.find((a) => a.key === key) || DEFERRED_ASSETS.find((a) => a.key === key);
 }
 
 /** Returns all map assets (convenience shorthand). */

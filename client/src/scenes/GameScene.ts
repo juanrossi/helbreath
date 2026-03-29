@@ -45,6 +45,8 @@ import {
   type GearConfig,
 } from '../game/PlayerAppearanceManager';
 import { ASSET_BASE } from '../env';
+import { HBSpriteFile } from '../game/assets/HBSprite';
+import { SpriteType } from '../game/assets/HBSprite';
 import { SoundManager } from '../audio/SoundManager';
 import { MusicManager } from '../audio/MusicManager';
 import { SoundTracker } from '../audio/SoundTracker';
@@ -61,6 +63,7 @@ import { getItemGroundFrame } from '../constants/ItemGroundSprites';
 interface PlayerAssets {
   layers: GameAsset[];
   gear: GearConfig;
+  equipLayerMap: Map<string, number>; // slot name → layer index
 }
 
 interface RemotePlayer {
@@ -964,7 +967,7 @@ export class GameScene extends Phaser.Scene {
     const state = PlayerState.IdlePeace;
 
     const layers = this.createPlayerLayers(gear, dir, state);
-    this.playerAssets = { layers, gear };
+    this.playerAssets = { layers, gear, equipLayerMap: this._lastEquipLayerMap };
 
     this.setPlayerAssetsPosition(this.playerAssets, this.visualX, this.visualY, this.tileY);
 
@@ -979,6 +982,7 @@ export class GameScene extends Phaser.Scene {
   private createPlayerLayers(gear: GearConfig, direction: number, state: PlayerState): GameAsset[] {
     const layers: GameAsset[] = [];
     const framesPerDirection = PLAYER_ANIMATION_FRAME_COUNT[state] ?? 8;
+    this._lastEquipLayerMap = new Map<string, number>();
 
     // Layer 0: Human body
     const bodySheetIndex = HUMAN_SPRITESHEET_BASE[state] + direction;
@@ -1046,24 +1050,24 @@ export class GameScene extends Phaser.Scene {
       const equipData = gear[key];
       if (!equipData || typeof equipData !== 'object' || !('spriteName' in equipData)) continue;
 
+      // Trigger lazy loading for equipment sprites
+      this.ensureSpriteLoaded(equipData.spriteName);
+
       if (key === 'weapon') {
-        // Weapon: FullFrame with armament state index
         const armStateIdx = ARMAMENT_STATE_INDEX[state] ?? -1;
-        if (armStateIdx < 0) continue; // weapon hidden in this state
+        if (armStateIdx < 0) continue;
         const base = (equipData as { startSpriteSheetIndex?: number }).startSpriteSheetIndex ?? 0;
         const sheetIndex = base + armStateIdx * 8 + direction;
         const animKey = `${equipData.spriteName}-${sheetIndex}`;
         if (this.anims.exists(animKey)) {
           const layer = new GameAsset(this, {
-            x: 0, y: 0,
-            spriteName: equipData.spriteName,
-            spriteSheetIndex: sheetIndex,
-            animationType: AnimationType.FullFrame,
+            x: 0, y: 0, spriteName: equipData.spriteName,
+            spriteSheetIndex: sheetIndex, animationType: AnimationType.FullFrame,
           });
+          this._lastEquipLayerMap.set(key, layers.length);
           layers.push(layer);
         }
       } else if (key === 'shield') {
-        // Shield: DirectionalSubFrame with armament state
         const armStateIdx = ARMAMENT_STATE_INDEX[state] ?? 1;
         const effectiveIdx = Math.max(armStateIdx, 1);
         const base = (equipData as { startSpriteSheetIndex?: number }).startSpriteSheetIndex ?? 0;
@@ -1071,28 +1075,23 @@ export class GameScene extends Phaser.Scene {
         const animKey = `${equipData.spriteName}-${sheetIndex}`;
         if (this.anims.exists(animKey)) {
           const layer = new GameAsset(this, {
-            x: 0, y: 0,
-            spriteName: equipData.spriteName,
-            spriteSheetIndex: sheetIndex,
-            direction,
-            framesPerDirection,
+            x: 0, y: 0, spriteName: equipData.spriteName,
+            spriteSheetIndex: sheetIndex, direction, framesPerDirection,
             animationType: AnimationType.DirectionalSubFrame,
           });
+          this._lastEquipLayerMap.set(key, layers.length);
           layers.push(layer);
         }
       } else {
-        // Armor/helm/leggings/boots/cape: DirectionalSubFrame with armour base
         const sheetIndex = ARMOUR_SPRITESHEET_BASE[state];
         const animKey = `${equipData.spriteName}-${sheetIndex}`;
         if (this.anims.exists(animKey)) {
           const equipLayer = new GameAsset(this, {
-            x: 0, y: 0,
-            spriteName: equipData.spriteName,
-            spriteSheetIndex: sheetIndex,
-            direction,
-            framesPerDirection,
+            x: 0, y: 0, spriteName: equipData.spriteName,
+            spriteSheetIndex: sheetIndex, direction, framesPerDirection,
             animationType: AnimationType.DirectionalSubFrame,
           });
+          this._lastEquipLayerMap.set(key, layers.length);
           layers.push(equipLayer);
         }
       }
@@ -1207,38 +1206,36 @@ export class GameScene extends Phaser.Scene {
       safePlay(assets.layers[2], underwearAnimKey, direction, fps, repeat, framesPerDirection, AnimationType.DirectionalSubFrame);
     }
 
-    // Update equipment layers (3+) by computing correct animation keys from gear config
+    // Update equipment layers using the slot→layerIndex map (avoids index mismatch from skipped slots)
+    const eqMap = assets.equipLayerMap;
     const equipSlots: Array<keyof GearConfig> = ['armor', 'leggings', 'boots', 'helm', 'weapon', 'shield', 'cape'];
-    let layerIdx = 3;
     for (const key of equipSlots) {
+      const layerIdx = eqMap.get(key);
+      if (layerIdx === undefined || layerIdx >= assets.layers.length) continue;
       const equipData = gear[key];
-      if (equipData && typeof equipData === 'object' && 'spriteName' in equipData && layerIdx < assets.layers.length) {
-        if (key === 'weapon') {
-          // Weapon: FullFrame with armament state index
-          const armStateIdx = ARMAMENT_STATE_INDEX[state] ?? -1;
-          if (armStateIdx < 0) {
-            assets.layers[layerIdx].setVisible(false);
-          } else {
-            const base = (equipData as { startSpriteSheetIndex?: number }).startSpriteSheetIndex ?? 0;
-            const sheetIndex = base + armStateIdx * 8 + direction;
-            const animKey = `${equipData.spriteName}-${sheetIndex}`;
-            safePlay(assets.layers[layerIdx], animKey, 0, fps, repeat, framesPerDirection, AnimationType.FullFrame);
-          }
-        } else if (key === 'shield') {
-          // Shield: DirectionalSubFrame with armament state
-          const armStateIdx = ARMAMENT_STATE_INDEX[state] ?? 1;
-          const effectiveIdx = Math.max(armStateIdx, 1);
-          const base = (equipData as { startSpriteSheetIndex?: number }).startSpriteSheetIndex ?? 0;
-          const sheetIndex = base + effectiveIdx;
-          const animKey = `${equipData.spriteName}-${sheetIndex}`;
-          safePlay(assets.layers[layerIdx], animKey, direction, fps, repeat, framesPerDirection, AnimationType.DirectionalSubFrame);
+      if (!equipData || typeof equipData !== 'object' || !('spriteName' in equipData)) continue;
+
+      if (key === 'weapon') {
+        const armStateIdx = ARMAMENT_STATE_INDEX[state] ?? -1;
+        if (armStateIdx < 0) {
+          assets.layers[layerIdx].setVisible(false);
         } else {
-          // Armor/helm/leggings/boots/cape: DirectionalSubFrame with armour base
-          const sheetIndex = ARMOUR_SPRITESHEET_BASE[state];
+          const base = (equipData as { startSpriteSheetIndex?: number }).startSpriteSheetIndex ?? 0;
+          const sheetIndex = base + armStateIdx * 8 + direction;
           const animKey = `${equipData.spriteName}-${sheetIndex}`;
-          safePlay(assets.layers[layerIdx], animKey, direction, fps, repeat, framesPerDirection, AnimationType.DirectionalSubFrame);
+          safePlay(assets.layers[layerIdx], animKey, 0, fps, repeat, framesPerDirection, AnimationType.FullFrame);
         }
-        layerIdx++;
+      } else if (key === 'shield') {
+        const armStateIdx = ARMAMENT_STATE_INDEX[state] ?? 1;
+        const effectiveIdx = Math.max(armStateIdx, 1);
+        const base = (equipData as { startSpriteSheetIndex?: number }).startSpriteSheetIndex ?? 0;
+        const sheetIndex = base + effectiveIdx;
+        const animKey = `${equipData.spriteName}-${sheetIndex}`;
+        safePlay(assets.layers[layerIdx], animKey, direction, fps, repeat, framesPerDirection, AnimationType.DirectionalSubFrame);
+      } else {
+        const sheetIndex = ARMOUR_SPRITESHEET_BASE[state];
+        const animKey = `${equipData.spriteName}-${sheetIndex}`;
+        safePlay(assets.layers[layerIdx], animKey, direction, fps, repeat, framesPerDirection, AnimationType.DirectionalSubFrame);
       }
     }
   }
@@ -1266,7 +1263,7 @@ export class GameScene extends Phaser.Scene {
       leggings: this.playerLeggings, boots: this.playerBoots, cape: this.playerCape,
     });
     const layers = this.createPlayerLayers(gear, dir, state);
-    this.playerAssets = { layers, gear };
+    this.playerAssets = { layers, gear, equipLayerMap: this._lastEquipLayerMap };
     this.setPlayerAssetsPosition(this.playerAssets, this.visualX, this.visualY, this.tileY);
   }
 
@@ -1297,7 +1294,7 @@ export class GameScene extends Phaser.Scene {
 
     const spriteDir = Math.max(0, rp.direction - 1);
     const layers = this.createPlayerLayers(gear, spriteDir, PlayerState.IdlePeace);
-    rp.assets = { layers, gear };
+    rp.assets = { layers, gear, equipLayerMap: this._lastEquipLayerMap };
     rp.gender = gender;
     rp.skinColor = skinColor;
     rp.hairStyle = hairStyle;
@@ -1344,6 +1341,140 @@ export class GameScene extends Phaser.Scene {
     this.msgHandler.on(Proto.MSG_QUEST_REWARD, (data: QuestRewardData) => this.onQuestReward(data));
     this.msgHandler.on(Proto.MSG_MAP_CHANGE_RESPONSE, (data: any) => this.onMapChange(data));
     this.msgHandler.on(Proto.MSG_LOGOUT_RESPONSE, (data: LogoutResponseData) => this.onLogoutResponse(data));
+  }
+
+  // Track which deferred sprites are already loaded or loading
+  private loadedDeferredSprites = new Set<string>();
+  private _lastEquipLayerMap = new Map<string, number>();
+  private loadingDeferredSprites = new Set<string>();
+
+  /**
+   * Lazily loads a deferred sprite (.spr file) on demand.
+   * Returns true if the sprite is already loaded, false if loading was triggered.
+   */
+  private ensureSpriteLoaded(spriteName: string): boolean {
+    // Already loaded — animations exist
+    if (this.loadedDeferredSprites.has(spriteName)) return true;
+    if (this.anims.exists(`${spriteName}-0`)) {
+      this.loadedDeferredSprites.add(spriteName);
+      return true;
+    }
+    // Already loading
+    if (this.loadingDeferredSprites.has(spriteName)) return false;
+
+    // Find the deferred asset definition
+    const deferred = (this.registry.get('deferredAssets') || []) as any[];
+    const asset = deferred.find((a: any) => a.key === spriteName);
+    if (!asset) return false;
+
+    this.loadingDeferredSprites.add(spriteName);
+    console.log(`[LAZY] Loading sprite: ${spriteName} (${asset.fileName})`);
+
+    // Load the binary .spr file
+    const loadKey = `deferred-${spriteName}`;
+    this.load.binary(loadKey, `${ASSET_BASE}/assets/sprites/${asset.fileName}`);
+    this.load.once('complete', async () => {
+      const buffer = this.cache.binary.get(loadKey) as ArrayBuffer | undefined;
+      if (buffer) {
+        try {
+          const spriteFile = new HBSpriteFile(
+            asset.fileName.replace('.spr', ''),
+            asset.spriteType ?? SpriteType.Tiles,
+          );
+          await spriteFile.load(this, buffer);
+          this.cache.binary.remove(loadKey);
+          this.loadedDeferredSprites.add(spriteName);
+          console.log(`[LAZY] Loaded sprite: ${spriteName}`);
+
+          // Refresh any NPCs/players using this sprite
+          this.onDeferredSpriteReady(spriteName);
+        } catch (err) {
+          console.warn(`[LAZY] Failed to load sprite ${spriteName}:`, err);
+        }
+      }
+      this.loadingDeferredSprites.delete(spriteName);
+    });
+    this.load.start();
+    return false;
+  }
+
+  /**
+   * Called after a deferred sprite finishes loading.
+   * Rebuilds any NPC or player visuals that were waiting for this sprite.
+   */
+  private onDeferredSpriteReady(spriteName: string): void {
+    // Refresh NPCs that use this sprite
+    for (const [, npcEntity] of this.npcs) {
+      const npcSprite = NPC_SPRITE_MAP[npcEntity.npcType];
+      if (npcSprite === spriteName && !npcEntity.asset) {
+        // NPC was using fallback ellipse — try to create the real sprite now
+        const dirIdx = Math.max(0, npcEntity.direction - 1);
+        const sheetIndex = dirIdx;
+        const animKey = `${spriteName}-${sheetIndex}`;
+        if (this.anims.exists(animKey)) {
+          try {
+            npcEntity.asset = new GameAsset(this, {
+              x: npcEntity.visualX,
+              y: npcEntity.visualY,
+              spriteName,
+              spriteSheetIndex: sheetIndex,
+              frameRate: 6,
+              animationType: AnimationType.FullFrame,
+            });
+            npcEntity.asset.setDepth(npcEntity.tileY * DEPTH_MULTIPLIER + 2);
+            // Hide fallback ellipse
+            if (npcEntity.fallbackSprite) npcEntity.fallbackSprite.setVisible(false);
+          } catch { /* ignore */ }
+        }
+      }
+    }
+
+    // Refresh local player equipment if it uses this sprite
+    if (this.playerAssets) {
+      const gear = this.playerAssets.gear;
+      const equipSlots: (keyof GearConfig)[] = ['armor', 'leggings', 'boots', 'helm', 'weapon', 'shield', 'cape'];
+      let needsRebuild = false;
+      for (const slot of equipSlots) {
+        const equipData = gear[slot];
+        if (equipData && typeof equipData === 'object' && 'spriteName' in equipData && equipData.spriteName === spriteName) {
+          needsRebuild = true;
+          break;
+        }
+      }
+      if (needsRebuild) {
+        console.log(`[LAZY] Rebuilding player layers after ${spriteName} loaded`);
+        const dir = Math.max(0, this.playerDirection - 1);
+        this.destroyPlayerAssets(this.playerAssets);
+        const layers = this.createPlayerLayers(gear, dir, this.playerState);
+        this.playerAssets = { layers, gear, equipLayerMap: this._lastEquipLayerMap };
+        this.setPlayerAssetsPosition(this.playerAssets, this.visualX, this.visualY, this.tileY);
+      }
+    }
+
+    // Refresh remote players that may use this sprite
+    for (const [, rp] of this.remotePlayers) {
+      if (rp.assets) {
+        const gear = rp.assets.gear;
+        const equipSlots: (keyof GearConfig)[] = ['armor', 'leggings', 'boots', 'helm', 'weapon', 'shield', 'cape'];
+        let needsRebuild = false;
+        for (const slot of equipSlots) {
+          const equipData = gear[slot];
+          if (equipData && typeof equipData === 'object' && 'spriteName' in equipData && equipData.spriteName === spriteName) {
+            needsRebuild = true;
+            break;
+          }
+        }
+        if (needsRebuild) {
+          try {
+            const dir = Math.max(0, rp.direction - 1);
+            this.destroyPlayerAssets(rp.assets);
+            const layers = this.createPlayerLayers(gear, dir, PlayerState.IdlePeace);
+            rp.assets = { layers, gear, equipLayerMap: this._lastEquipLayerMap };
+            this.setPlayerAssetsPosition(rp.assets, rp.visualX, rp.visualY, rp.tileY);
+          } catch { /* ignore rebuild errors for remote players */ }
+        }
+      }
+    }
   }
 
   private destroyPlayerAssets(assets: PlayerAssets | null): void {
@@ -1919,7 +2050,7 @@ export class GameScene extends Phaser.Scene {
     let assets: PlayerAssets | null = null;
     try {
       const layers = this.createPlayerLayers(gear, dir, state);
-      assets = { layers, gear };
+      assets = { layers, gear, equipLayerMap: this._lastEquipLayerMap };
     } catch (err) {
       console.warn(`Failed to create sprites for remote player ${info.name}:`, err);
     }
@@ -2313,6 +2444,9 @@ export class GameScene extends Phaser.Scene {
     let asset: GameAsset | null = null;
 
     if (spriteName) {
+      // Trigger lazy loading if not yet loaded
+      this.ensureSpriteLoaded(spriteName);
+
       const dirIdx = Math.max(0, dir - 1);
       const sheetIndex = dirIdx;
       const textureKey = `${spriteName}-${sheetIndex}`;

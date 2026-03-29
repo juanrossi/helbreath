@@ -69,6 +69,10 @@ func (e *Engine) HandleHTTPLogin(w http.ResponseWriter, r *http.Request) {
 	if handleCORS(w, r) {
 		return
 	}
+	if e.IsShuttingDown() {
+		writeJSON(w, http.StatusServiceUnavailable, map[string]any{"success": false, "error": "Server is shutting down"})
+		return
+	}
 	if r.Method != http.MethodPost {
 		writeJSON(w, http.StatusMethodNotAllowed, map[string]any{"success": false, "error": "Method not allowed"})
 		return
