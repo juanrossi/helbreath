@@ -3,6 +3,7 @@ import { WebSocketClient } from '../network/WebSocketClient';
 import { MessageHandler, CharacterSummary, EnterGameResponse } from '../network/MessageHandler';
 import * as Proto from '../network/Protocol';
 import type { AuthResult } from '../login';
+import { WS_BASE } from '../env';
 
 export class CharSelectScene extends Phaser.Scene {
   private msgHandler!: MessageHandler;
@@ -20,12 +21,8 @@ export class CharSelectScene extends Phaser.Scene {
 
     if (!ws || !msgHandler) {
       // First time: create WebSocket connection with auth token
-      const host = window.location.hostname;
-      const isLocal = host === 'localhost' || host === '127.0.0.1';
-      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-      const port = isLocal ? ':8080' : '';
       const token = localStorage.getItem('hb_token') || '';
-      const wsUrl = `${protocol}//${host}${port}/ws?token=${encodeURIComponent(token)}`;
+      const wsUrl = `${WS_BASE}/ws?token=${encodeURIComponent(token)}`;
 
       ws = new WebSocketClient(wsUrl, (type, data) => {
         this.msgHandler.handleMessage(type, data);

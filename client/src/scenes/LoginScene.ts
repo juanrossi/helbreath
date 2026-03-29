@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { WebSocketClient } from '../network/WebSocketClient';
 import { MessageHandler, LoginResponse } from '../network/MessageHandler';
 import * as Proto from '../network/Protocol';
+import { WS_BASE } from '../env';
 
 export class LoginScene extends Phaser.Scene {
   private ws!: WebSocketClient;
@@ -13,11 +14,7 @@ export class LoginScene extends Phaser.Scene {
 
   create(): void {
     // Initialize network
-    const host = window.location.hostname;
-    const isLocal = host === 'localhost' || host === '127.0.0.1';
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const port = isLocal ? ':8080' : '';
-    const wsUrl = `${protocol}//${host}${port}/ws`;
+    const wsUrl = `${WS_BASE}/ws`;
     this.ws = new WebSocketClient(wsUrl, (type, data) => {
       this.msgHandler.handleMessage(type, data);
     });

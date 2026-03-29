@@ -35,6 +35,7 @@ import {
   PlayerState,
   HUMAN_SPRITESHEET_BASE,
   ARMOUR_SPRITESHEET_BASE,
+  ARMAMENT_STATE_INDEX,
   PLAYER_ANIMATION_FRAME_COUNT,
   getHumanSpriteName,
   isOneShotState,
@@ -42,6 +43,7 @@ import {
   resolveEquipmentSprite,
   type GearConfig,
 } from '../game/PlayerAppearanceManager';
+import { ASSET_BASE } from '../env';
 import { SoundManager } from '../audio/SoundManager';
 import { MusicManager } from '../audio/MusicManager';
 import { SoundTracker } from '../audio/SoundTracker';
@@ -49,6 +51,7 @@ import { PLAYER_WALKING, PLAYER_RUNNING, PLAYER_MELEE_ATTACK, PLAYER_CAST, TAKE_
 import { showDamageNumber } from '../game/effects/FloatingText';
 import { WeatherManager } from '../game/effects/WeatherManager';
 import { getAssetByKey } from '../constants/Assets';
+import { getItemGroundFrame } from '../constants/ItemGroundSprites';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -315,6 +318,9 @@ export class GameScene extends Phaser.Scene {
 
   // Ghost trail (single persistent sprite, repositioned each frame)
   private ghostSprite: Phaser.GameObjects.Sprite | null = null;
+
+  // Custom cursor sprite (from interface spritesheet)
+  private cursorSprite: Phaser.GameObjects.Sprite | null = null;
 
   // Sound system
   private soundManager!: SoundManager;
@@ -623,6 +629,54 @@ export class GameScene extends Phaser.Scene {
 
     // Player health bar (in-world)
     this.playerHealthBar = this.add.graphics();
+
+    // Custom cursor: hide browser cursor and create a sprite that follows the mouse
+    this.input.setDefaultCursor('none');
+    this.initCursor();
+  }
+
+  /**
+   * Initializes the custom cursor sprite from the interface spritesheet.
+   * If the atlas is not yet loaded, loads it first then creates the sprite.
+   */
+  private initCursor(): void {
+    if (this.textures.exists('interface')) {
+      this.createCursorSprite();
+    } else {
+      // Load the pre-extracted interface atlas on demand
+      this.load.atlas('interface', `${ASSET_BASE}/assets/spritesheets/interface.png`, `${ASSET_BASE}/assets/spritesheets/interface.json`);
+      this.load.once('complete', () => {
+        this.createCursorSprite();
+      });
+      this.load.start();
+    }
+  }
+
+  /**
+   * Creates the cursor sprite once the interface atlas is available.
+   */
+  private createCursorSprite(): void {
+    if (!this.textures.exists('interface')) return;
+    this.cursorSprite = this.add.sprite(0, 0, 'interface', 'spr0_f0')
+      .setScrollFactor(0)
+      .setDepth(99999999)
+      .setOrigin(0, 0);
+  }
+
+  /**
+   * Sets the cursor sprite frame.
+   * Frame mapping:
+   *   0 = Normal pointer
+   *   1 = Grab cursor 1
+   *   2 = Grab cursor 2
+   *   3 = Attack cursor (sword)
+   *   4 = Casting cursor
+   *   5 = Cast ready cursor
+   */
+  private setCursorFrame(frame: number): void {
+    if (this.cursorSprite && this.textures.exists('interface')) {
+      this.cursorSprite.setFrame(`spr0_f${frame}`);
+    }
   }
 
   update(time: number, delta: number): void {
@@ -663,6 +717,13 @@ export class GameScene extends Phaser.Scene {
     // Update minimap player dot
     this.updateMinimapDot();
 
+    // Update custom cursor position and context frame
+    if (this.cursorSprite) {
+      const pointer = this.input.activePointer;
+      this.cursorSprite.setPosition(pointer.x, pointer.y);
+      this.updateCursorContext(pointer);
+    }
+
     // Clean up expired chat bubbles
     const now = Date.now();
     this.chatBubbles = this.chatBubbles.filter(cb => {
@@ -683,6 +744,36 @@ export class GameScene extends Phaser.Scene {
     });
   }
 
+  /**
+   * Updates the cursor frame based on the current context:
+   * - Default: frame 0 (pointer)
+   * - Hovering over hostile NPC: frame 3 (attack/sword)
+   * - Mouse button down: frame 1 (grab)
+   */
+  private updateCursorContext(pointer: Phaser.Input.Pointer): void {
+    // Mouse button down = grab cursor
+    if (pointer.isDown) {
+      this.setCursorFrame(1);
+      return;
+    }
+
+    // Check if hovering over an NPC (potential attack target)
+    const worldX = pointer.worldX;
+    const worldY = pointer.worldY;
+    const hoverTileX = Math.floor(worldX / TILE_SIZE);
+    const hoverTileY = Math.floor(worldY / TILE_SIZE);
+
+    for (const npc of this.npcs.values()) {
+      if (npc.tileX === hoverTileX && npc.tileY === hoverTileY) {
+        this.setCursorFrame(3); // attack cursor
+        return;
+      }
+    }
+
+    // Default: pointer cursor
+    this.setCursorFrame(0);
+  }
+
   // ---------------------------------------------------------------------------
   // Map loading
   // ---------------------------------------------------------------------------
@@ -701,7 +792,7 @@ export class GameScene extends Phaser.Scene {
     } else {
       // Fetch on-demand
       console.log(`[MAP] Fetching on-demand: ${fileName}`);
-      fetch(`/assets/maps/${fileName}`)
+      fetch(`${ASSET_BASE}/assets/maps/${fileName}`)
         .then(r => r.arrayBuffer())
         .then(buffer => {
           this.cache.binary.add(fileName, buffer);
@@ -927,10 +1018,46 @@ export class GameScene extends Phaser.Scene {
 
     for (const { key } of equipSlots) {
       const equipData = gear[key];
-      if (equipData && typeof equipData === 'object' && 'spriteName' in equipData) {
-        const sheetIndex = equipData.sheetMultiplier * 12 + ARMOUR_SPRITESHEET_BASE[state];
-        const animKey = `${equipData.spriteName}-${sheetIndex}`;
+      if (!equipData || typeof equipData !== 'object' || !('spriteName' in equipData)) continue;
 
+      if (key === 'weapon') {
+        // Weapon: FullFrame with armament state index
+        const armStateIdx = ARMAMENT_STATE_INDEX[state] ?? -1;
+        if (armStateIdx < 0) continue; // weapon hidden in this state
+        const base = (equipData as { startSpriteSheetIndex?: number }).startSpriteSheetIndex ?? 0;
+        const sheetIndex = base + armStateIdx * 8 + direction;
+        const animKey = `${equipData.spriteName}-${sheetIndex}`;
+        if (this.anims.exists(animKey)) {
+          const layer = new GameAsset(this, {
+            x: 0, y: 0,
+            spriteName: equipData.spriteName,
+            spriteSheetIndex: sheetIndex,
+            animationType: AnimationType.FullFrame,
+          });
+          layers.push(layer);
+        }
+      } else if (key === 'shield') {
+        // Shield: DirectionalSubFrame with armament state
+        const armStateIdx = ARMAMENT_STATE_INDEX[state] ?? 1;
+        const effectiveIdx = Math.max(armStateIdx, 1);
+        const base = (equipData as { startSpriteSheetIndex?: number }).startSpriteSheetIndex ?? 0;
+        const sheetIndex = base + effectiveIdx;
+        const animKey = `${equipData.spriteName}-${sheetIndex}`;
+        if (this.anims.exists(animKey)) {
+          const layer = new GameAsset(this, {
+            x: 0, y: 0,
+            spriteName: equipData.spriteName,
+            spriteSheetIndex: sheetIndex,
+            direction,
+            framesPerDirection,
+            animationType: AnimationType.DirectionalSubFrame,
+          });
+          layers.push(layer);
+        }
+      } else {
+        // Armor/helm/leggings/boots/cape: DirectionalSubFrame with armour base
+        const sheetIndex = ARMOUR_SPRITESHEET_BASE[state];
+        const animKey = `${equipData.spriteName}-${sheetIndex}`;
         if (this.anims.exists(animKey)) {
           const equipLayer = new GameAsset(this, {
             x: 0, y: 0,
@@ -1060,9 +1187,31 @@ export class GameScene extends Phaser.Scene {
     for (const key of equipSlots) {
       const equipData = gear[key];
       if (equipData && typeof equipData === 'object' && 'spriteName' in equipData && layerIdx < assets.layers.length) {
-        const sheetIndex = equipData.sheetMultiplier * 12 + ARMOUR_SPRITESHEET_BASE[state];
-        const animKey = `${equipData.spriteName}-${sheetIndex}`;
-        safePlay(assets.layers[layerIdx], animKey, direction, fps, repeat, framesPerDirection, AnimationType.DirectionalSubFrame);
+        if (key === 'weapon') {
+          // Weapon: FullFrame with armament state index
+          const armStateIdx = ARMAMENT_STATE_INDEX[state] ?? -1;
+          if (armStateIdx < 0) {
+            assets.layers[layerIdx].setVisible(false);
+          } else {
+            const base = (equipData as { startSpriteSheetIndex?: number }).startSpriteSheetIndex ?? 0;
+            const sheetIndex = base + armStateIdx * 8 + direction;
+            const animKey = `${equipData.spriteName}-${sheetIndex}`;
+            safePlay(assets.layers[layerIdx], animKey, 0, fps, repeat, framesPerDirection, AnimationType.FullFrame);
+          }
+        } else if (key === 'shield') {
+          // Shield: DirectionalSubFrame with armament state
+          const armStateIdx = ARMAMENT_STATE_INDEX[state] ?? 1;
+          const effectiveIdx = Math.max(armStateIdx, 1);
+          const base = (equipData as { startSpriteSheetIndex?: number }).startSpriteSheetIndex ?? 0;
+          const sheetIndex = base + effectiveIdx;
+          const animKey = `${equipData.spriteName}-${sheetIndex}`;
+          safePlay(assets.layers[layerIdx], animKey, direction, fps, repeat, framesPerDirection, AnimationType.DirectionalSubFrame);
+        } else {
+          // Armor/helm/leggings/boots/cape: DirectionalSubFrame with armour base
+          const sheetIndex = ARMOUR_SPRITESHEET_BASE[state];
+          const animKey = `${equipData.spriteName}-${sheetIndex}`;
+          safePlay(assets.layers[layerIdx], animKey, direction, fps, repeat, framesPerDirection, AnimationType.DirectionalSubFrame);
+        }
         layerIdx++;
       }
     }
@@ -1951,7 +2100,7 @@ export class GameScene extends Phaser.Scene {
       this.minimapContainer.add([minimapImg]);
     } else {
       // Try to load the JPEG dynamically
-      const jpgPath = `assets/minimaps/${mapBaseName}.jpg`;
+      const jpgPath = `${ASSET_BASE}/assets/minimaps/${mapBaseName}.jpg`;
       this.load.image(minimapJpgKey, jpgPath);
       this.load.once('complete', () => {
         if (this.textures.exists(minimapJpgKey) && this.minimapContainer) {

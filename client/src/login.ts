@@ -2,6 +2,7 @@
  * Pre-Phaser HTTP-based authentication module.
  * Handles login/register via REST API before any game assets are loaded.
  */
+import { API_BASE } from './env';
 
 export interface AuthResult {
   token: string;
@@ -18,9 +19,7 @@ export interface CharacterInfo {
 }
 
 function getApiBase(): string {
-  const host = window.location.hostname;
-  const isLocal = host === 'localhost' || host === '127.0.0.1';
-  return isLocal ? `http://${host}:8080` : '';
+  return API_BASE;
 }
 
 async function fetchCharacters(token: string): Promise<CharacterInfo[]> {

@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { HBSpriteFile, SpriteType } from '../game/assets/HBSprite';
 import { getAssets, AssetType, type AssetData } from '../constants/Assets';
+import { ASSET_BASE } from '../env';
 
 /**
  * BootScene: Loads all game assets (SPR sprite files, AMD maps, music, sounds)
@@ -56,26 +57,30 @@ export class BootScene extends Phaser.Scene {
       a => a.assetType === AssetType.SPRITE || a.assetType === AssetType.TILE_SPRITE
     );
     for (const asset of spriteAssets) {
-      this.load.binary(asset.key, `/assets/sprites/${asset.fileName}`);
+      this.load.binary(asset.key, `${ASSET_BASE}/assets/sprites/${asset.fileName}`);
     }
 
     // Load AMD map files as binary — only preload starter maps, rest loaded on-demand
     const mapAssets = allAssets.filter(a => a.assetType === AssetType.MAP && a.preload);
     for (const asset of mapAssets) {
-      this.load.binary(asset.fileName, `/assets/maps/${asset.fileName}`);
+      this.load.binary(asset.fileName, `${ASSET_BASE}/assets/maps/${asset.fileName}`);
     }
 
     // Load music files
     const musicAssets = allAssets.filter(a => a.assetType === AssetType.MUSIC);
     for (const asset of musicAssets) {
-      this.load.audio(asset.key, `/assets/music/${asset.fileName}`);
+      this.load.audio(asset.key, `${ASSET_BASE}/assets/music/${asset.fileName}`);
     }
 
     // Load sound files
     const soundAssets = allAssets.filter(a => a.assetType === AssetType.SOUND);
     for (const asset of soundAssets) {
-      this.load.audio(asset.key, `/assets/sounds/${asset.fileName}`);
+      this.load.audio(asset.key, `${ASSET_BASE}/assets/sounds/${asset.fileName}`);
     }
+
+    // Load item-ground sprite atlases (pre-packed PNG + JSON)
+    this.load.atlas('item-ground', `${ASSET_BASE}/assets/spritesheets/item-ground.png`, `${ASSET_BASE}/assets/spritesheets/item-ground.json`);
+    this.load.atlas('item2-ground', `${ASSET_BASE}/assets/spritesheets/item2-ground.png`, `${ASSET_BASE}/assets/spritesheets/item2-ground.json`);
   }
 
   async create(): Promise<void> {
