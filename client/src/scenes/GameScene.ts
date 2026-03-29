@@ -2403,19 +2403,11 @@ export class GameScene extends Phaser.Scene {
 
     this.minimapPlayerDot.clear();
 
-    // Player dot (white) — top-left position
+    // Only show own player dot (white)
     const dotX = padding + (this.tileX / this.mapWidth) * MINIMAP_SIZE;
     const dotY = padding + (this.tileY / this.mapHeight) * MINIMAP_SIZE;
     this.minimapPlayerDot.fillStyle(0xffffff, 1);
     this.minimapPlayerDot.fillCircle(dotX, dotY, 2);
-
-    // Remote player dots (cyan)
-    for (const rp of this.remotePlayers.values()) {
-      const rpX = padding + (rp.tileX / this.mapWidth) * MINIMAP_SIZE;
-      const rpY = padding + (rp.tileY / this.mapHeight) * MINIMAP_SIZE;
-      this.minimapPlayerDot.fillStyle(0x00ffff, 1);
-      this.minimapPlayerDot.fillCircle(rpX, rpY, 1.5);
-    }
   }
 
   // ---------------------------------------------------------------------------
