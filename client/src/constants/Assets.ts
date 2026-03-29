@@ -497,63 +497,63 @@ const MONSTER_SPRITE_ASSETS: AssetData[] = [
 ];
 
 // ---------------------------------------------------------------------------
-// Music — all .wav files in assets/music/
+// Music — MP3 files in assets/music/ (converted from WAV for 64% size reduction)
 // ---------------------------------------------------------------------------
 
 const MUSIC_ASSETS: AssetData[] = [
-    { key: 'music-aresden', fileName: 'aresden.wav', assetType: AssetType.MUSIC },
-    { key: 'music-elvine', fileName: 'elvine.wav', assetType: AssetType.MUSIC },
-    { key: 'music-middleland', fileName: 'middleland.wav', assetType: AssetType.MUSIC },
-    { key: 'music-default', fileName: 'MainTm.wav', assetType: AssetType.MUSIC },
-    { key: 'music-dungeon', fileName: 'dungeon.wav', assetType: AssetType.MUSIC },
-    { key: 'music-abaddon', fileName: 'abaddon.wav', assetType: AssetType.MUSIC },
-    { key: 'music-druncncity', fileName: 'druncncity.wav', assetType: AssetType.MUSIC },
+    { key: 'music-aresden', fileName: 'aresden.mp3', assetType: AssetType.MUSIC },
+    { key: 'music-elvine', fileName: 'elvine.mp3', assetType: AssetType.MUSIC },
+    { key: 'music-middleland', fileName: 'middleland.mp3', assetType: AssetType.MUSIC },
+    { key: 'music-default', fileName: 'MainTm.mp3', assetType: AssetType.MUSIC },
+    { key: 'music-dungeon', fileName: 'dungeon.mp3', assetType: AssetType.MUSIC },
+    { key: 'music-abaddon', fileName: 'abaddon.mp3', assetType: AssetType.MUSIC },
+    { key: 'music-druncncity', fileName: 'druncncity.mp3', assetType: AssetType.MUSIC },
 ];
 
 // ---------------------------------------------------------------------------
-// Sounds
+// Sounds — MP3 files in assets/sounds/ (converted from WAV)
 // ---------------------------------------------------------------------------
 
 const SOUND_ASSETS: AssetData[] = [
     // Movement
-    { key: 'sound-walk', fileName: 'C8.WAV', assetType: AssetType.SOUND },
-    { key: 'sound-run', fileName: 'C10.WAV', assetType: AssetType.SOUND },
+    { key: 'sound-walk', fileName: 'C8.mp3', assetType: AssetType.SOUND },
+    { key: 'sound-run', fileName: 'C10.mp3', assetType: AssetType.SOUND },
 
     // Melee combat
-    { key: 'sound-melee-attack', fileName: 'C18.WAV', assetType: AssetType.SOUND },
-    { key: 'sound-damage-blade', fileName: 'C6.WAV', assetType: AssetType.SOUND },
+    { key: 'sound-melee-attack', fileName: 'C18.mp3', assetType: AssetType.SOUND },
+    { key: 'sound-damage-blade', fileName: 'C6.mp3', assetType: AssetType.SOUND },
 
     // Ranged
-    { key: 'sound-bow-attack', fileName: 'C19.WAV', assetType: AssetType.SOUND },
+    { key: 'sound-bow-attack', fileName: 'C19.mp3', assetType: AssetType.SOUND },
 
     // Magic
-    { key: 'sound-cast', fileName: 'C16.WAV', assetType: AssetType.SOUND },
-    { key: 'sound-energy-bolt', fileName: 'E1.WAV', assetType: AssetType.SOUND },
+    { key: 'sound-cast', fileName: 'C16.mp3', assetType: AssetType.SOUND },
+    { key: 'sound-energy-bolt', fileName: 'E1.mp3', assetType: AssetType.SOUND },
 
     // Critical / death
-    { key: 'sound-male-critical', fileName: 'C23.WAV', assetType: AssetType.SOUND },
-    { key: 'sound-female-critical', fileName: 'C24.WAV', assetType: AssetType.SOUND },
-    { key: 'sound-male-death', fileName: 'C14.WAV', assetType: AssetType.SOUND },
-    { key: 'sound-female-death', fileName: 'C15.WAV', assetType: AssetType.SOUND },
+    { key: 'sound-male-critical', fileName: 'C23.mp3', assetType: AssetType.SOUND },
+    { key: 'sound-female-critical', fileName: 'C24.mp3', assetType: AssetType.SOUND },
+    { key: 'sound-male-death', fileName: 'C14.mp3', assetType: AssetType.SOUND },
+    { key: 'sound-female-death', fileName: 'C15.mp3', assetType: AssetType.SOUND },
 
     // Items
-    { key: 'sound-item-equip', fileName: 'E28.WAV', assetType: AssetType.SOUND },
-    { key: 'sound-item-drop', fileName: 'E12.WAV', assetType: AssetType.SOUND },
-    { key: 'sound-item-pickup', fileName: 'E20.WAV', assetType: AssetType.SOUND },
+    { key: 'sound-item-equip', fileName: 'E28.mp3', assetType: AssetType.SOUND },
+    { key: 'sound-item-drop', fileName: 'E12.mp3', assetType: AssetType.SOUND },
+    { key: 'sound-item-pickup', fileName: 'E20.mp3', assetType: AssetType.SOUND },
 
     // Effects
-    { key: 'sound-explosion', fileName: 'E4.WAV', assetType: AssetType.SOUND },
-    { key: 'sound-energy-explosion', fileName: 'E2.WAV', assetType: AssetType.SOUND },
-    { key: 'sound-level-up', fileName: 'E5.WAV', assetType: AssetType.SOUND },
+    { key: 'sound-explosion', fileName: 'E4.mp3', assetType: AssetType.SOUND },
+    { key: 'sound-energy-explosion', fileName: 'E2.mp3', assetType: AssetType.SOUND },
+    { key: 'sound-level-up', fileName: 'E5.mp3', assetType: AssetType.SOUND },
 
     // Spells
-    { key: 'sound-lightning', fileName: 'E40.WAV', assetType: AssetType.SOUND },
+    { key: 'sound-lightning', fileName: 'E40.mp3', assetType: AssetType.SOUND },
 
     // Weather
-    { key: 'sound-rain', fileName: 'E38.WAV', assetType: AssetType.SOUND },
+    { key: 'sound-rain', fileName: 'E38.mp3', assetType: AssetType.SOUND },
 
     // UI
-    { key: 'sound-button-click', fileName: 'C1.WAV', assetType: AssetType.SOUND },
+    { key: 'sound-button-click', fileName: 'C1.mp3', assetType: AssetType.SOUND },
 ];
 
 // ---------------------------------------------------------------------------
