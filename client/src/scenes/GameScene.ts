@@ -466,7 +466,7 @@ export class GameScene extends Phaser.Scene {
     const enterData = this.registry.get('enterGameData') as EnterGameResponse;
 
     if (!enterData) {
-      this.scene.start('LoginScene');
+      this.scene.start('CharSelectScene');
       return;
     }
 
@@ -596,6 +596,23 @@ export class GameScene extends Phaser.Scene {
     this.input.keyboard!.on('keydown-F12', () => this.toggleDebugMode());
     this.input.keyboard!.on('keydown-F10', () => { if (this.debugMode) this.toggleBlockedCells(); });
     this.input.keyboard!.on('keydown-F9', () => { if (this.debugMode) this.toggleGridDisplay(); });
+
+    // Warn user before closing/refreshing while in-game
+    this._beforeUnloadHandler = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      // Standard: returnValue must be set for the browser to show the dialog
+      e.returnValue = 'Your character will be logged out. Are you sure?';
+      return e.returnValue;
+    };
+    window.addEventListener('beforeunload', this._beforeUnloadHandler);
+
+    // Clean up on scene shutdown
+    this.events.on('shutdown', () => {
+      if (this._beforeUnloadHandler) {
+        window.removeEventListener('beforeunload', this._beforeUnloadHandler);
+        this._beforeUnloadHandler = null;
+      }
+    });
 
     // Chat UI
     this.createChatUI();
@@ -2564,6 +2581,18 @@ export class GameScene extends Phaser.Scene {
       return;
     }
 
+    // Shutdown warning (type 3 = system)
+    if (data.type === 3 && typeof data.message === 'string' && data.message.includes('shutting down')) {
+      this.showShutdownWarning(data.message);
+      if (data.message.includes('NOW')) {
+        // Server is shutting down — disconnect gracefully
+        setTimeout(() => {
+          localStorage.removeItem('hb_token');
+          window.location.reload();
+        }, 1500);
+      }
+    }
+
     const log = document.getElementById('chat-log');
     if (log) {
       const line = document.createElement('div');
@@ -2573,6 +2602,17 @@ export class GameScene extends Phaser.Scene {
       log.appendChild(line);
       log.scrollTop = log.scrollHeight;
     }
+  }
+
+  private shutdownOverlay: HTMLDivElement | null = null;
+  private _beforeUnloadHandler: ((e: BeforeUnloadEvent) => string) | null = null;
+  private showShutdownWarning(message: string): void {
+    if (!this.shutdownOverlay) {
+      this.shutdownOverlay = document.createElement('div');
+      this.shutdownOverlay.style.cssText = 'position:fixed; top:0; left:0; right:0; z-index:999999; background:rgba(180,0,0,0.95); color:white; padding:12px; font-size:16px; font-weight:bold; text-align:center;';
+      document.body.appendChild(this.shutdownOverlay);
+    }
+    this.shutdownOverlay.textContent = 'WARNING: ' + message;
   }
 
   private parseWorldState(message: string): void {

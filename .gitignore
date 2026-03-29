@@ -8,3 +8,4 @@ node_modules/
 helbreath-base-game-master/
 client/dist/
 helbreath-v3.82-master/
+.env

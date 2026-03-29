@@ -3,6 +3,8 @@ import { MessageHandler, CreateCharacterResponse } from '../network/MessageHandl
 import * as Proto from '../network/Protocol';
 
 export class CharCreateScene extends Phaser.Scene {
+  private formDiv: HTMLDivElement | null = null;
+
   constructor() {
     super({ key: 'CharCreateScene' });
   }
@@ -50,6 +52,7 @@ export class CharCreateScene extends Phaser.Scene {
     const div = document.createElement('div');
     div.innerHTML = formHtml;
     document.body.appendChild(div);
+    this.formDiv = div;
 
     // Stat total tracker
     const statInputs = ['str', 'vit', 'dex', 'int', 'mag', 'chr'].map(
@@ -65,7 +68,7 @@ export class CharCreateScene extends Phaser.Scene {
     };
     statInputs.forEach(el => el.addEventListener('input', updateTotal));
 
-    document.getElementById('create-btn')?.addEventListener('click', () => {
+    document.getElementById('create-btn')?.addEventListener('click', async () => {
       const name = (document.getElementById('char-name') as HTMLInputElement)?.value || '';
       const gender = parseInt((document.querySelector('input[name="gender"]:checked') as HTMLInputElement)?.value || '0');
       const skinColor = parseInt((document.getElementById('skin-color') as HTMLSelectElement)?.value || '0');
@@ -86,19 +89,51 @@ export class CharCreateScene extends Phaser.Scene {
         return;
       }
 
-      msgHandler.sendMessage(Proto.MSG_CREATE_CHARACTER_REQUEST, {
-        name, gender, skinColor, hairStyle, hairColor, underwearColor,
-        str, vit, dex, intStat, mag, charisma,
-      });
+      // Use HTTP API for character creation
+      const token = localStorage.getItem('hb_token') || '';
+      const host = window.location.hostname;
+      const isLocal = host === 'localhost' || host === '127.0.0.1';
+      const apiBase = isLocal ? `http://${host}:8080` : '';
+
+      try {
+        const resp = await fetch(`${apiBase}/api/characters/create`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            name, gender, skinColor, hairStyle, hairColor, underwearColor,
+            str, vit, dex, intStat, mag, charisma,
+          }),
+        });
+        const data = await resp.json();
+
+        if (data.success) {
+          this.registry.set('characters', data.characters);
+          this.cleanup();
+          this.scene.start('CharSelectScene');
+        } else {
+          const el = document.getElementById('create-error');
+          if (el) el.textContent = data.error || 'Creation failed';
+        }
+      } catch (_err) {
+        const el = document.getElementById('create-error');
+        if (el) el.textContent = 'Connection failed. Is the server running?';
+      }
     });
 
     document.getElementById('back-btn')?.addEventListener('click', () => {
+      this.cleanup();
       this.scene.start('CharSelectScene');
     });
 
+    // Keep WS-based fallback handler
+    msgHandler.off(Proto.MSG_CREATE_CHAR_RESPONSE);
     msgHandler.on(Proto.MSG_CREATE_CHAR_RESPONSE, (resp: CreateCharacterResponse) => {
       if (resp.success) {
         this.registry.set('characters', resp.characters);
+        this.cleanup();
         this.scene.start('CharSelectScene');
       } else {
         const el = document.getElementById('create-error');
@@ -107,7 +142,14 @@ export class CharCreateScene extends Phaser.Scene {
     });
 
     this.events.on('shutdown', () => {
-      div.remove();
+      this.cleanup();
     });
+  }
+
+  private cleanup(): void {
+    if (this.formDiv) {
+      this.formDiv.remove();
+      this.formDiv = null;
+    }
   }
 }

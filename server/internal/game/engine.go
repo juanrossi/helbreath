@@ -14,6 +14,7 @@ import (
 
 	"math/rand"
 
+	"github.com/juanrossi/hbonline/server/internal/auth"
 	"github.com/juanrossi/hbonline/server/internal/db"
 	"github.com/juanrossi/hbonline/server/internal/guild"
 	"github.com/juanrossi/hbonline/server/internal/items"
@@ -38,8 +39,9 @@ var usernameRegex = regexp.MustCompile(`^[a-zA-Z0-9]{3,20}$`)
 var charNameRegex = regexp.MustCompile(`^[a-zA-Z0-9]{3,10}$`)
 
 type Engine struct {
-	store     db.DataStore
-	maps      map[string]*mapdata.GameMap
+	store      db.DataStore
+	jwtManager *auth.JWTManager
+	maps       map[string]*mapdata.GameMap
 	players   sync.Map // map[int32]*player.Player (by object ID)
 	npcs      sync.Map // map[int32]*npc.NPC (by object ID)
 	nextObjID atomic.Int32
@@ -76,12 +78,16 @@ type Engine struct {
 
 	// Teleport config
 	teleports mapdata.TeleportConfig
+
+	// Graceful shutdown channel
+	shutdownChan chan struct{}
 }
 
-func NewEngine(store db.DataStore) *Engine {
+func NewEngine(store db.DataStore, jwtManager *auth.JWTManager) *Engine {
 	now := time.Now()
 	e := &Engine{
 		store:       store,
+		jwtManager:  jwtManager,
 		maps:        make(map[string]*mapdata.GameMap),
 		lastRegenHP:   now,
 		lastRegenMP:   now,
@@ -97,9 +103,15 @@ func NewEngine(store db.DataStore) *Engine {
 		lastWeatherCheck: now,
 		lastPKDecayCheck: now,
 		teleports:        mapdata.BuildTeleportConfig(),
+		shutdownChan:     make(chan struct{}),
 	}
 	e.nextObjID.Store(1000) // start IDs above reserved range
 	return e
+}
+
+// ShutdownChan returns a channel that is closed when the admin /shutdown command completes.
+func (e *Engine) ShutdownChan() <-chan struct{} {
+	return e.shutdownChan
 }
 
 func (e *Engine) LoadMaps(dir string) error {
@@ -874,6 +886,12 @@ func (e *Engine) OnMessage(client *network.Client, msgType byte, rawData []byte)
 		return
 	}
 
+	// Login is always allowed; everything else requires authentication
+	if msgType != network.MsgLoginRequest && !client.Authenticated {
+		log.Printf("Unauthenticated client attempted message type 0x%02x, ignoring", msgType)
+		return
+	}
+
 	switch msgType {
 	case network.MsgLoginRequest:
 		e.handleLogin(client, msg.(*pb.LoginRequest))
@@ -962,12 +980,27 @@ func (e *Engine) handleLogin(client *network.Client, req *pb.LoginRequest) {
 			return
 		}
 		client.AccountID = accountID
-		e.sendLoginSuccess(client, nil)
+		client.Username = req.Username
+		client.Authenticated = true
+
+		// Get UUID for JWT generation
+		uuid, err := e.store.GetAccountUUID(ctx, accountID)
+		if err != nil {
+			log.Printf("Failed to get UUID for new account %d: %v", accountID, err)
+			e.sendLoginSuccess(client, nil, "")
+			return
+		}
+		token, err := e.jwtManager.GenerateToken(req.Username, uuid)
+		if err != nil {
+			log.Printf("Failed to generate JWT for account %d: %v", accountID, err)
+		}
+		client.AuthToken = token
+		e.sendLoginSuccess(client, nil, token)
 		return
 	}
 
 	// Login
-	accountID, hash, err := e.store.GetAccountByUsername(ctx, req.Username)
+	accountID, hash, uuid, err := e.store.GetAccountByUsername(ctx, req.Username)
 	if err != nil {
 		e.sendLoginError(client, "Invalid username or password")
 		return
@@ -978,14 +1011,23 @@ func (e *Engine) handleLogin(client *network.Client, req *pb.LoginRequest) {
 	}
 
 	client.AccountID = accountID
+	client.Username = req.Username
+	client.Authenticated = true
 	e.store.UpdateLastLogin(ctx, accountID)
+
+	// Generate JWT
+	token, err := e.jwtManager.GenerateToken(req.Username, uuid)
+	if err != nil {
+		log.Printf("Failed to generate JWT for account %d: %v", accountID, err)
+	}
+	client.AuthToken = token
 
 	chars, err := e.store.GetCharactersByAccount(ctx, accountID)
 	if err != nil {
 		e.sendLoginError(client, "Failed to load characters")
 		return
 	}
-	e.sendLoginSuccess(client, chars)
+	e.sendLoginSuccess(client, chars, token)
 }
 
 func (e *Engine) handleCreateCharacter(client *network.Client, req *pb.CreateCharacterRequest) {
@@ -1064,6 +1106,21 @@ func (e *Engine) handleEnterGame(client *network.Client, req *pb.EnterGameReques
 	ctx := context.Background()
 	if client.AccountID == 0 {
 		return
+	}
+
+	// Verify JWT token's UUID resolves to the same account for extra security
+	if client.AuthToken != "" && e.jwtManager != nil {
+		claims, err := e.jwtManager.ValidateToken(client.AuthToken)
+		if err != nil {
+			log.Printf("Token validation failed for %s: %v", client.Username, err)
+			return
+		}
+		resolvedID, err := e.store.GetAccountIDByUUID(ctx, claims.UUID)
+		if err != nil || resolvedID != client.AccountID {
+			log.Printf("Token UUID mismatch for %s (uuid=%s, expected account %d, got %d)",
+				client.Username, claims.UUID, client.AccountID, resolvedID)
+			return
+		}
 	}
 
 	charRow, err := e.store.GetCharacterByID(ctx, int(req.CharacterId), client.AccountID)
@@ -1748,8 +1805,8 @@ func (e *Engine) sendLoginError(client *network.Client, errMsg string) {
 	client.Send(data)
 }
 
-func (e *Engine) sendLoginSuccess(client *network.Client, chars []db.CharacterRow) {
-	resp := &pb.LoginResponse{Success: true}
+func (e *Engine) sendLoginSuccess(client *network.Client, chars []db.CharacterRow, token string) {
+	resp := &pb.LoginResponse{Success: true, Token: token}
 	for _, c := range chars {
 		resp.Characters = append(resp.Characters, charRowToSummary(c))
 	}

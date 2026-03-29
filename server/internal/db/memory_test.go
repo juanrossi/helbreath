@@ -30,7 +30,7 @@ func TestMemoryStoreGetAccount(t *testing.T) {
 
 	store.CreateAccount(ctx, "user1", "hash1")
 
-	id, hash, err := store.GetAccountByUsername(ctx, "user1")
+	id, hash, uuid, err := store.GetAccountByUsername(ctx, "user1")
 	if err != nil {
 		t.Fatalf("GetAccount failed: %v", err)
 	}
@@ -40,9 +40,12 @@ func TestMemoryStoreGetAccount(t *testing.T) {
 	if hash != "hash1" {
 		t.Errorf("Expected hash=hash1, got %s", hash)
 	}
+	if uuid == "" {
+		t.Error("Expected non-empty UUID")
+	}
 
 	// Non-existent
-	_, _, err = store.GetAccountByUsername(ctx, "nobody")
+	_, _, _, err = store.GetAccountByUsername(ctx, "nobody")
 	if err == nil {
 		t.Error("Non-existent account should fail")
 	}

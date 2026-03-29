@@ -123,6 +123,9 @@ export namespace hbonline {
 
         /** LoginResponse characters */
         characters?: (hbonline.ICharacterSummary[]|null);
+
+        /** LoginResponse token */
+        token?: (string|null);
     }
 
     /** Represents a LoginResponse. */
@@ -142,6 +145,9 @@ export namespace hbonline {
 
         /** LoginResponse characters. */
         public characters: hbonline.ICharacterSummary[];
+
+        /** LoginResponse token. */
+        public token: string;
 
         /**
          * Creates a new LoginResponse instance using the specified properties.

@@ -13,7 +13,11 @@ export class LoginScene extends Phaser.Scene {
 
   create(): void {
     // Initialize network
-    const wsUrl = `ws://${window.location.hostname}:8080/ws`;
+    const host = window.location.hostname;
+    const isLocal = host === 'localhost' || host === '127.0.0.1';
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const port = isLocal ? ':8080' : '';
+    const wsUrl = `${protocol}//${host}${port}/ws`;
     this.ws = new WebSocketClient(wsUrl, (type, data) => {
       this.msgHandler.handleMessage(type, data);
     });
@@ -26,6 +30,10 @@ export class LoginScene extends Phaser.Scene {
     this.msgHandler.on(Proto.MSG_LOGIN_RESPONSE, (resp: LoginResponse) => {
       if (resp.success) {
         this.registry.set('characters', resp.characters);
+        if (resp.token) {
+          localStorage.setItem('hb_token', resp.token);
+          this.registry.set('authToken', resp.token);
+        }
         this.scene.start('CharSelectScene');
       } else {
         this.showError(resp.error);
@@ -43,7 +51,7 @@ export class LoginScene extends Phaser.Scene {
     const centerY = this.cameras.main.height / 2;
 
     // Title
-    this.add.text(centerX, centerY - 120, 'HB Online', {
+    this.add.text(centerX, centerY - 120, 'Helbreath.xyz', {
       fontSize: '32px',
       color: '#FFD700',
       fontStyle: 'bold',

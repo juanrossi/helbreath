@@ -448,7 +448,7 @@ func TestSendLoginSuccess(t *testing.T) {
 	rows := []db.CharacterRow{
 		{ID: 1, Name: "Test", Level: 5, Gender: 0, Side: 1, MapName: "aresden"},
 	}
-	e.sendLoginSuccess(c, rows)
+	e.sendLoginSuccess(c, rows, "test-token")
 }
 
 func TestSendCreateCharError(t *testing.T) {

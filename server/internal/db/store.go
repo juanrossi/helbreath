@@ -24,13 +24,28 @@ func (s *Store) CreateAccount(ctx context.Context, username, passwordHash string
 	return id, err
 }
 
-func (s *Store) GetAccountByUsername(ctx context.Context, username string) (int, string, error) {
+func (s *Store) GetAccountByUsername(ctx context.Context, username string) (int, string, string, error) {
 	var id int
 	var hash string
+	var uuid string
 	err := s.pool.QueryRow(ctx,
-		`SELECT id, password_hash FROM accounts WHERE username = $1 AND is_banned = FALSE`,
-		username).Scan(&id, &hash)
-	return id, hash, err
+		`SELECT id, password_hash, uuid FROM accounts WHERE username = $1 AND is_banned = FALSE`,
+		username).Scan(&id, &hash, &uuid)
+	return id, hash, uuid, err
+}
+
+func (s *Store) GetAccountUUID(ctx context.Context, accountID int) (string, error) {
+	var uuid string
+	err := s.pool.QueryRow(ctx,
+		`SELECT uuid FROM accounts WHERE id = $1`, accountID).Scan(&uuid)
+	return uuid, err
+}
+
+func (s *Store) GetAccountIDByUUID(ctx context.Context, uuid string) (int, error) {
+	var id int
+	err := s.pool.QueryRow(ctx,
+		`SELECT id FROM accounts WHERE uuid = $1 AND is_banned = FALSE`, uuid).Scan(&id)
+	return id, err
 }
 
 func (s *Store) UpdateLastLogin(ctx context.Context, accountID int) error {

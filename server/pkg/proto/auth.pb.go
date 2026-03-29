@@ -88,6 +88,7 @@ type LoginResponse struct {
 	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
 	Error         string                 `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
 	Characters    []*CharacterSummary    `protobuf:"bytes,3,rep,name=characters,proto3" json:"characters,omitempty"`
+	Token         string                 `protobuf:"bytes,4,opt,name=token,proto3" json:"token,omitempty"` // JWT token for session auth
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -141,6 +142,13 @@ func (x *LoginResponse) GetCharacters() []*CharacterSummary {
 		return x.Characters
 	}
 	return nil
+}
+
+func (x *LoginResponse) GetToken() string {
+	if x != nil {
+		return x.Token
+	}
+	return ""
 }
 
 // Summary of a character shown on character select screen
@@ -589,13 +597,14 @@ const file_auth_proto_rawDesc = "" +
 	"\fLoginRequest\x12\x1a\n" +
 	"\busername\x18\x01 \x01(\tR\busername\x12\x1a\n" +
 	"\bpassword\x18\x02 \x01(\tR\bpassword\x12\x1a\n" +
-	"\bregister\x18\x03 \x01(\bR\bregister\"{\n" +
+	"\bregister\x18\x03 \x01(\bR\bregister\"\x91\x01\n" +
 	"\rLoginResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
 	"\x05error\x18\x02 \x01(\tR\x05error\x12:\n" +
 	"\n" +
 	"characters\x18\x03 \x03(\v2\x1a.hbonline.CharacterSummaryR\n" +
-	"characters\"\xc9\x01\n" +
+	"characters\x12\x14\n" +
+	"\x05token\x18\x04 \x01(\tR\x05token\"\xc9\x01\n" +
 	"\x10CharacterSummary\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x14\n" +

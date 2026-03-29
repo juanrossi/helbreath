@@ -48,6 +48,10 @@ func getRequiredLevel(cmd string) int {
 	case "createitem", "setstat", "setgold", "setadmin":
 		return AdminLevelSuperGM
 
+	// Level 5 (Server Admin only)
+	case "shutdown":
+		return AdminLevelServerAdmin
+
 	default:
 		return AdminLevelServerAdmin + 1 // unreachable level = unknown command
 	}
@@ -122,6 +126,8 @@ func (e *Engine) handleAdminCommand(p *player.Player, message string) bool {
 		e.adminSetGold(p, args)
 	case "setadmin":
 		e.adminSetAdmin(p, args)
+	case "shutdown":
+		e.adminShutdown(p, args)
 	default:
 		e.sendNotification(p, "Unknown admin command: /"+cmd, 2)
 	}
@@ -766,4 +772,71 @@ func (e *Engine) adminSetAdmin(p *player.Player, args []string) {
 	target.AdminLevel = level
 	e.sendNotification(p, fmt.Sprintf("Set %s's admin level to %d", target.Name, level), 1)
 	e.sendNotification(target, fmt.Sprintf("Your admin level has been set to %d", level), 1)
+}
+
+// ============================================================
+// Level 5 commands (Server Admin)
+// ============================================================
+
+// adminShutdown initiates a graceful server shutdown with a countdown.
+func (e *Engine) adminShutdown(p *player.Player, args []string) {
+	seconds := 30 // default countdown
+	if len(args) > 0 {
+		if n, err := strconv.Atoi(args[0]); err == nil && n > 0 && n <= 300 {
+			seconds = n
+		}
+	}
+	e.sendNotification(p, fmt.Sprintf("Shutdown initiated with %d second countdown", seconds), 1)
+	go e.initiateShutdown(seconds)
+}
+
+// initiateShutdown broadcasts countdown warnings, saves all players, and signals main to exit.
+func (e *Engine) initiateShutdown(seconds int) {
+	for remaining := seconds; remaining > 0; remaining-- {
+		// Broadcast every second for last 10, every 10 seconds before that
+		if remaining <= 10 || remaining%10 == 0 {
+			msg := fmt.Sprintf("Server shutting down in %d seconds!", remaining)
+			e.broadcastNotification(msg, 3) // type 3 = system
+		}
+		time.Sleep(1 * time.Second)
+	}
+
+	e.broadcastNotification("Server is shutting down NOW. Goodbye!", 3)
+	time.Sleep(500 * time.Millisecond) // let the message send
+
+	log.Println("Shutdown: saving all players...")
+	e.SaveAllPlayers()
+
+	log.Println("Shutdown: disconnecting all clients...")
+	e.disconnectAllClients()
+
+	log.Println("Shutdown: signaling main goroutine to exit.")
+	if e.shutdownChan != nil {
+		close(e.shutdownChan)
+	}
+}
+
+// broadcastNotification sends a notification message to all connected players.
+func (e *Engine) broadcastNotification(msg string, notifType int32) {
+	notif := &pb.Notification{Message: msg, Type: notifType}
+	data, err := network.Encode(network.MsgNotification, notif)
+	if err != nil {
+		return
+	}
+	e.players.Range(func(_, value any) bool {
+		p := value.(*player.Player)
+		p.Send(data)
+		return true
+	})
+}
+
+// disconnectAllClients closes the connection for every online player.
+func (e *Engine) disconnectAllClients() {
+	e.players.Range(func(_, value any) bool {
+		p := value.(*player.Player)
+		if p.Client != nil {
+			p.Client.Close()
+		}
+		return true
+	})
 }

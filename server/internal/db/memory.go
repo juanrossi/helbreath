@@ -20,6 +20,7 @@ type memAccount struct {
 	ID           int
 	Username     string
 	PasswordHash string
+	UUID         string
 }
 
 func NewMemoryStore() *MemoryStore {
@@ -44,21 +45,45 @@ func (m *MemoryStore) CreateAccount(_ context.Context, username, passwordHash st
 
 	id := m.nextAccountID
 	m.nextAccountID++
-	m.accounts[id] = &memAccount{ID: id, Username: username, PasswordHash: passwordHash}
+	uuid := fmt.Sprintf("mem-%d", id)
+	m.accounts[id] = &memAccount{ID: id, Username: username, PasswordHash: passwordHash, UUID: uuid}
 	m.accountsByName[username] = id
 	return id, nil
 }
 
-func (m *MemoryStore) GetAccountByUsername(_ context.Context, username string) (int, string, error) {
+func (m *MemoryStore) GetAccountByUsername(_ context.Context, username string) (int, string, string, error) {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 
 	id, ok := m.accountsByName[username]
 	if !ok {
-		return 0, "", fmt.Errorf("account not found")
+		return 0, "", "", fmt.Errorf("account not found")
 	}
 	acc := m.accounts[id]
-	return acc.ID, acc.PasswordHash, nil
+	return acc.ID, acc.PasswordHash, acc.UUID, nil
+}
+
+func (m *MemoryStore) GetAccountUUID(_ context.Context, accountID int) (string, error) {
+	m.mu.RLock()
+	defer m.mu.RUnlock()
+
+	acc, ok := m.accounts[accountID]
+	if !ok {
+		return "", fmt.Errorf("account not found")
+	}
+	return acc.UUID, nil
+}
+
+func (m *MemoryStore) GetAccountIDByUUID(_ context.Context, uuid string) (int, error) {
+	m.mu.RLock()
+	defer m.mu.RUnlock()
+
+	for _, acc := range m.accounts {
+		if acc.UUID == uuid {
+			return acc.ID, nil
+		}
+	}
+	return 0, fmt.Errorf("account not found")
 }
 
 func (m *MemoryStore) UpdateLastLogin(_ context.Context, _ int) error {

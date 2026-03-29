@@ -37,7 +37,7 @@ func (m *mockHandler) OnMessage(client *Client, msgType byte, payload []byte) {
 
 func TestNewServer(t *testing.T) {
 	handler := &mockHandler{}
-	s := NewServer(handler)
+	s := NewServer(handler, nil, nil)
 	if s == nil {
 		t.Fatal("NewServer returned nil")
 	}
@@ -48,7 +48,7 @@ func TestNewServer(t *testing.T) {
 
 func TestNewClient(t *testing.T) {
 	handler := &mockHandler{}
-	s := NewServer(handler)
+	s := NewServer(handler, nil, nil)
 
 	// Can't create a real websocket.Conn without a connection, but
 	// we can test with nil since NewClient only stores the pointer
@@ -72,7 +72,7 @@ func TestNewClient(t *testing.T) {
 
 func TestClientSend(t *testing.T) {
 	handler := &mockHandler{}
-	s := NewServer(handler)
+	s := NewServer(handler, nil, nil)
 	c := NewClient(nil, s)
 
 	// Normal send
@@ -91,7 +91,7 @@ func TestClientSend(t *testing.T) {
 
 func TestClientSendBufferFull(t *testing.T) {
 	handler := &mockHandler{}
-	s := NewServer(handler)
+	s := NewServer(handler, nil, nil)
 	c := NewClient(nil, s)
 
 	// Fill the buffer
@@ -110,7 +110,7 @@ func TestClientSendBufferFull(t *testing.T) {
 
 func TestServerRemoveClient(t *testing.T) {
 	handler := &mockHandler{}
-	s := NewServer(handler)
+	s := NewServer(handler, nil, nil)
 	c := NewClient(nil, s)
 
 	s.clients.Store(c, true)
@@ -135,7 +135,7 @@ func TestServerRemoveClient(t *testing.T) {
 
 func TestClientIDs(t *testing.T) {
 	handler := &mockHandler{}
-	s := NewServer(handler)
+	s := NewServer(handler, nil, nil)
 	c := NewClient(nil, s)
 
 	c.AccountID = 42
@@ -150,7 +150,7 @@ func TestClientIDs(t *testing.T) {
 // Integration test: full WebSocket connection lifecycle
 func TestWebSocketIntegration(t *testing.T) {
 	handler := &mockHandler{}
-	s := NewServer(handler)
+	s := NewServer(handler, nil, nil)
 
 	server := httptest.NewServer(http.HandlerFunc(s.HandleWebSocket))
 	defer server.Close()
@@ -202,7 +202,7 @@ func TestWebSocketIntegration(t *testing.T) {
 // Test multiple client connections
 func TestMultipleClients(t *testing.T) {
 	handler := &mockHandler{}
-	s := NewServer(handler)
+	s := NewServer(handler, nil, nil)
 
 	server := httptest.NewServer(http.HandlerFunc(s.HandleWebSocket))
 	defer server.Close()
@@ -238,14 +238,14 @@ func TestMultipleClients(t *testing.T) {
 // Test sending data from server to client
 func TestServerToClientMessage(t *testing.T) {
 	handler := &mockHandler{}
-	s := NewServer(handler)
+	s := NewServer(handler, nil, nil)
 
 	// Track the client from OnConnect
 	var connectedClient *Client
 	originalConnect := handler.OnConnect
 	_ = originalConnect
 	handler2 := &clientCapturingHandler{}
-	s2 := NewServer(handler2)
+	s2 := NewServer(handler2, nil, nil)
 
 	server := httptest.NewServer(http.HandlerFunc(s2.HandleWebSocket))
 	defer server.Close()

@@ -408,6 +408,7 @@ export interface LoginResponse {
   success: boolean;
   error: string;
   characters: CharacterSummary[];
+  token: string;
 }
 
 export interface CreateCharacterResponse {

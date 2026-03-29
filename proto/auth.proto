@@ -18,6 +18,7 @@ message LoginResponse {
   bool success = 1;
   string error = 2;
   repeated CharacterSummary characters = 3;
+  string token = 4;  // JWT token for session auth
 }
 
 // Summary of a character shown on character select screen

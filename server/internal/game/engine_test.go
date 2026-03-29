@@ -4,6 +4,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/juanrossi/hbonline/server/internal/auth"
 	"github.com/juanrossi/hbonline/server/internal/db"
 	"github.com/juanrossi/hbonline/server/internal/guild"
 	"github.com/juanrossi/hbonline/server/internal/items"
@@ -26,6 +27,7 @@ func makeTestEngine() *Engine {
 	now := time.Now()
 	e := &Engine{
 		store:            nil, // no DB
+		jwtManager:       auth.NewJWTManager("test-secret", 24*time.Hour),
 		maps:             make(map[string]*mapdata.GameMap),
 		lastRegenHP:      now,
 		lastRegenMP:      now,
@@ -115,6 +117,8 @@ func addPlayerToEngine(e *Engine, p *player.Player) {
 func makeClientWithObjectID(id int32) *network.Client {
 	c := &network.Client{}
 	c.ObjectID = id
+	c.AccountID = int(id)
+	c.Authenticated = true
 	return c
 }
 

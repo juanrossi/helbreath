@@ -6,6 +6,7 @@ import (
 	"sync"
 
 	"github.com/gorilla/websocket"
+	"github.com/juanrossi/hbonline/server/internal/auth"
 )
 
 var upgrader = websocket.Upgrader{
@@ -21,17 +22,34 @@ type MessageHandler interface {
 	OnMessage(client *Client, msgType byte, payload []byte)
 }
 
+// UUIDResolver resolves a UUID string to an internal account ID.
+type UUIDResolver func(uuid string) (int, error)
+
 // Server manages WebSocket connections.
 type Server struct {
-	handler MessageHandler
-	clients sync.Map // map[*Client]bool
+	handler      MessageHandler
+	clients      sync.Map // map[*Client]bool
+	jwtManager   *auth.JWTManager
+	uuidResolver UUIDResolver
 }
 
-func NewServer(handler MessageHandler) *Server {
-	return &Server{handler: handler}
+func NewServer(handler MessageHandler, jwtManager *auth.JWTManager, resolver UUIDResolver) *Server {
+	return &Server{handler: handler, jwtManager: jwtManager, uuidResolver: resolver}
 }
 
 func (s *Server) HandleWebSocket(w http.ResponseWriter, r *http.Request) {
+	// Check for JWT token in query parameter (pre-authenticated via HTTP)
+	token := r.URL.Query().Get("token")
+	var claims *auth.Claims
+	if token != "" && s.jwtManager != nil {
+		var err error
+		claims, err = s.jwtManager.ValidateToken(token)
+		if err != nil {
+			http.Error(w, "Invalid auth token", http.StatusUnauthorized)
+			return
+		}
+	}
+
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Printf("WebSocket upgrade error: %v", err)
@@ -39,6 +57,22 @@ func (s *Server) HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 	}
 
 	client := NewClient(conn, s)
+
+	// If pre-authenticated via HTTP, resolve UUID → account_id and set auth fields
+	if claims != nil && s.uuidResolver != nil {
+		accountID, err := s.uuidResolver(claims.UUID)
+		if err != nil {
+			log.Printf("WebSocket: failed to resolve UUID %s: %v", claims.UUID, err)
+			conn.Close()
+			return
+		}
+		client.AccountID = accountID
+		client.Username = claims.Username
+		client.AuthToken = token
+		client.Authenticated = true
+		log.Printf("WebSocket client pre-authenticated as %s (uuid=%s)", claims.Username, claims.UUID)
+	}
+
 	s.clients.Store(client, true)
 	s.handler.OnConnect(client)
 
@@ -59,9 +93,12 @@ type Client struct {
 	mu       sync.Mutex
 
 	// Set by game engine after auth
-	AccountID   int
-	CharacterID int
-	ObjectID    int32
+	AccountID     int
+	CharacterID   int
+	ObjectID      int32
+	Authenticated bool
+	AuthToken     string
+	Username      string
 }
 
 func NewClient(conn *websocket.Conn, server *Server) *Client {

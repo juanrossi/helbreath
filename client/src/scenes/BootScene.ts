@@ -4,7 +4,7 @@ import { getAssets, AssetType, type AssetData } from '../constants/Assets';
 
 /**
  * BootScene: Loads all game assets (SPR sprite files, AMD maps, music, sounds)
- * and displays a progress bar. Transitions to LoginScene when complete.
+ * and displays a progress bar. Transitions to CharSelectScene when complete.
  */
 export class BootScene extends Phaser.Scene {
   private progressBar!: Phaser.GameObjects.Graphics;
@@ -134,6 +134,6 @@ export class BootScene extends Phaser.Scene {
     // Short delay so user can see "Ready!" text
     await new Promise(resolve => setTimeout(resolve, 300));
 
-    this.scene.start('LoginScene');
+    this.scene.start('CharSelectScene');
   }
 }

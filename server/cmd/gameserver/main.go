@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"context"
 	"flag"
 	"fmt"
@@ -8,19 +9,38 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
+	"time"
 
+	"github.com/juanrossi/hbonline/server/internal/auth"
 	"github.com/juanrossi/hbonline/server/internal/db"
 	"github.com/juanrossi/hbonline/server/internal/game"
 	"github.com/juanrossi/hbonline/server/internal/network"
 )
 
 func main() {
-	addr := flag.String("addr", ":8080", "Server listen address")
-	dbURL := flag.String("db", "postgres://hbonline:hbonline@localhost:5432/hbonline?sslmode=disable", "PostgreSQL connection URL")
-	mapDir := flag.String("maps", "assets/MAPDATA", "Directory containing AMD map files")
-	memDB := flag.Bool("memdb", false, "Use in-memory store instead of PostgreSQL (for development)")
+	// Load .env file if it exists (before flag parsing so env vars are available)
+	loadEnvFile("../../.env") // from server/cmd/gameserver/ → project root
+	loadEnvFile(".env")       // also check current directory
+
+	addr := flag.String("addr", envOrDefault("ADDR", ":8080"), "Server listen address")
+	dbURL := flag.String("db", envOrDefault("DATABASE_URL", "postgres://hbonline:hbonline@localhost:5432/hbonline?sslmode=disable"), "PostgreSQL connection URL")
+	mapDir := flag.String("maps", envOrDefault("MAP_DIR", "assets/MAPDATA"), "Directory containing AMD map files")
+	memDB := flag.Bool("memdb", envOrDefault("MEMDB", "false") == "true", "Use in-memory store (development)")
+	jwtSecret := flag.String("jwt-secret", envOrDefault("JWT_SECRET", "helbreath-xyz-secret-change-me"), "Secret key for JWT signing")
+	jwtExpiryStr := flag.String("jwt-expiry", envOrDefault("JWT_EXPIRY", "24h"), "JWT token expiration duration")
 	flag.Parse()
+
+	jwtExpiry, err := time.ParseDuration(*jwtExpiryStr)
+	if err != nil {
+		log.Fatalf("Invalid jwt-expiry duration %q: %v", *jwtExpiryStr, err)
+	}
+
+	// Warn if using default secret
+	if *jwtSecret == "helbreath-xyz-secret-change-me" {
+		log.Println("WARNING: Using default JWT secret. Set JWT_SECRET in .env for production!")
+	}
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -40,8 +60,11 @@ func main() {
 		store = db.NewStore(pool)
 	}
 
+	// Create JWT manager
+	jwtManager := auth.NewJWTManager(*jwtSecret, jwtExpiry)
+
 	// Create game engine
-	engine := game.NewEngine(store)
+	engine := game.NewEngine(store, jwtManager)
 
 	// Load maps
 	if err := engine.LoadMaps(*mapDir); err != nil {
@@ -54,8 +77,11 @@ func main() {
 	// Start game loop
 	go engine.Run(ctx)
 
-	// Set up WebSocket server
-	wsServer := network.NewServer(engine)
+	// Set up WebSocket server with UUID resolver for token validation on upgrade
+	uuidResolver := func(uuid string) (int, error) {
+		return store.GetAccountIDByUUID(context.Background(), uuid)
+	}
+	wsServer := network.NewServer(engine, jwtManager, uuidResolver)
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/ws", wsServer.HandleWebSocket)
@@ -63,23 +89,84 @@ func main() {
 		fmt.Fprintln(w, "ok")
 	})
 
-	httpServer := &http.Server{Addr: *addr, Handler: mux}
+	// HTTP auth endpoints (pre-WebSocket authentication)
+	mux.HandleFunc("/api/login", engine.HandleHTTPLogin)
+	mux.HandleFunc("/api/characters", engine.HandleHTTPCharacters)
+	mux.HandleFunc("/api/characters/create", engine.HandleHTTPCreateCharacter)
+	mux.HandleFunc("/api/characters/delete", engine.HandleHTTPDeleteCharacter)
+
+	// Wrap with CORS middleware for development (client on :3000, server on :8080)
+	handler := corsMiddleware(mux)
+	httpServer := &http.Server{Addr: *addr, Handler: handler}
 
 	// Graceful shutdown
 	sigCh := make(chan os.Signal, 1)
 	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
 
 	go func() {
-		<-sigCh
-		log.Println("Shutting down...")
+		select {
+		case <-sigCh:
+			log.Println("OS signal received, shutting down...")
+		case <-engine.ShutdownChan():
+			log.Println("Admin shutdown signal received...")
+		}
 		cancel()
 		engine.SaveAllPlayers()
 		httpServer.Close()
 	}()
 
-	log.Printf("HB Online server starting on %s", *addr)
+	log.Printf("Helbreath.xyz server starting on %s", *addr)
 	if err := httpServer.ListenAndServe(); err != http.ErrServerClosed {
 		log.Fatalf("HTTP server error: %v", err)
 	}
 	log.Println("Server stopped")
+}
+
+// corsMiddleware adds CORS headers to all responses for cross-origin development.
+func corsMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
+		next.ServeHTTP(w, r)
+	})
+}
+
+// envOrDefault returns the environment variable value or a default.
+func envOrDefault(key, defaultVal string) string {
+	if v := os.Getenv(key); v != "" {
+		return v
+	}
+	return defaultVal
+}
+
+// loadEnvFile reads a .env file and sets environment variables (does not override existing).
+func loadEnvFile(path string) {
+	f, err := os.Open(path)
+	if err != nil {
+		return // file doesn't exist, skip silently
+	}
+	defer f.Close()
+
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
+		if line == "" || strings.HasPrefix(line, "#") {
+			continue
+		}
+		parts := strings.SplitN(line, "=", 2)
+		if len(parts) != 2 {
+			continue
+		}
+		key := strings.TrimSpace(parts[0])
+		val := strings.TrimSpace(parts[1])
+		// Don't override existing env vars
+		if os.Getenv(key) == "" {
+			os.Setenv(key, val)
+		}
+	}
 }
