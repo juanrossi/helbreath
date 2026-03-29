@@ -39,6 +39,7 @@ const (
 	MsgTradeConfirm           byte = 0x1C
 	MsgQuestAcceptRequest     byte = 0x1D
 	MsgQuestTurnInRequest     byte = 0x1E
+	MsgLogoutRequest          byte = 0x1F
 )
 
 // Message type IDs (server -> client)
@@ -86,6 +87,7 @@ const (
 	MsgQuestProgress      byte = 0xA9
 	MsgQuestReward        byte = 0xAA
 	MsgWorldState         byte = 0xAB
+	MsgLogoutResponse     byte = 0xAC
 )
 
 // Encode wraps a protobuf message with a type byte prefix.
@@ -171,6 +173,8 @@ func Decode(data []byte) (byte, proto.Message, error) {
 		msg = &pb.QuestAcceptRequest{}
 	case MsgQuestTurnInRequest:
 		msg = &pb.QuestTurnInRequest{}
+	case MsgLogoutRequest:
+		msg = &pb.LogoutRequest{}
 	default:
 		return msgType, nil, fmt.Errorf("unknown message type: 0x%02x", msgType)
 	}

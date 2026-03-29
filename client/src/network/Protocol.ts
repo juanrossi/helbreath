@@ -31,6 +31,7 @@ export const MSG_TRADE_SET_GOLD = 0x1b;
 export const MSG_TRADE_CONFIRM = 0x1c;
 export const MSG_QUEST_ACCEPT_REQUEST = 0x1d;
 export const MSG_QUEST_TURNIN_REQUEST = 0x1e;
+export const MSG_LOGOUT_REQUEST = 0x1f;
 
 // Server -> Client
 export const MSG_LOGIN_RESPONSE = 0x81;
@@ -75,3 +76,4 @@ export const MSG_PK_STATUS_UPDATE = 0xa7;
 export const MSG_QUEST_LIST_UPDATE = 0xa8;
 export const MSG_QUEST_PROGRESS = 0xa9;
 export const MSG_QUEST_REWARD = 0xaa;
+export const MSG_LOGOUT_RESPONSE = 0xac;

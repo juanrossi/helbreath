@@ -3601,6 +3601,212 @@ export namespace hbonline {
         public static getTypeUrl(typeUrlPrefix?: string): string;
     }
 
+    /** Properties of a LogoutRequest. */
+    interface ILogoutRequest {
+
+        /** LogoutRequest cancel */
+        cancel?: (boolean|null);
+    }
+
+    /** Represents a LogoutRequest. */
+    class LogoutRequest implements ILogoutRequest {
+
+        /**
+         * Constructs a new LogoutRequest.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: hbonline.ILogoutRequest);
+
+        /** LogoutRequest cancel. */
+        public cancel: boolean;
+
+        /**
+         * Creates a new LogoutRequest instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns LogoutRequest instance
+         */
+        public static create(properties?: hbonline.ILogoutRequest): hbonline.LogoutRequest;
+
+        /**
+         * Encodes the specified LogoutRequest message. Does not implicitly {@link hbonline.LogoutRequest.verify|verify} messages.
+         * @param message LogoutRequest message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: hbonline.ILogoutRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified LogoutRequest message, length delimited. Does not implicitly {@link hbonline.LogoutRequest.verify|verify} messages.
+         * @param message LogoutRequest message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: hbonline.ILogoutRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a LogoutRequest message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns LogoutRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.LogoutRequest;
+
+        /**
+         * Decodes a LogoutRequest message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns LogoutRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.LogoutRequest;
+
+        /**
+         * Verifies a LogoutRequest message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a LogoutRequest message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns LogoutRequest
+         */
+        public static fromObject(object: { [k: string]: any }): hbonline.LogoutRequest;
+
+        /**
+         * Creates a plain object from a LogoutRequest message. Also converts values to other types if specified.
+         * @param message LogoutRequest
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: hbonline.LogoutRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this LogoutRequest to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the default type url for LogoutRequest
+         * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns The default type url
+         */
+        public static getTypeUrl(typeUrlPrefix?: string): string;
+    }
+
+    /** Properties of a LogoutResponse. */
+    interface ILogoutResponse {
+
+        /** LogoutResponse secondsRemaining */
+        secondsRemaining?: (number|null);
+
+        /** LogoutResponse cancelled */
+        cancelled?: (boolean|null);
+
+        /** LogoutResponse reason */
+        reason?: (string|null);
+    }
+
+    /** Represents a LogoutResponse. */
+    class LogoutResponse implements ILogoutResponse {
+
+        /**
+         * Constructs a new LogoutResponse.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: hbonline.ILogoutResponse);
+
+        /** LogoutResponse secondsRemaining. */
+        public secondsRemaining: number;
+
+        /** LogoutResponse cancelled. */
+        public cancelled: boolean;
+
+        /** LogoutResponse reason. */
+        public reason: string;
+
+        /**
+         * Creates a new LogoutResponse instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns LogoutResponse instance
+         */
+        public static create(properties?: hbonline.ILogoutResponse): hbonline.LogoutResponse;
+
+        /**
+         * Encodes the specified LogoutResponse message. Does not implicitly {@link hbonline.LogoutResponse.verify|verify} messages.
+         * @param message LogoutResponse message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: hbonline.ILogoutResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified LogoutResponse message, length delimited. Does not implicitly {@link hbonline.LogoutResponse.verify|verify} messages.
+         * @param message LogoutResponse message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: hbonline.ILogoutResponse, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a LogoutResponse message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns LogoutResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.LogoutResponse;
+
+        /**
+         * Decodes a LogoutResponse message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns LogoutResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.LogoutResponse;
+
+        /**
+         * Verifies a LogoutResponse message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a LogoutResponse message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns LogoutResponse
+         */
+        public static fromObject(object: { [k: string]: any }): hbonline.LogoutResponse;
+
+        /**
+         * Creates a plain object from a LogoutResponse message. Also converts values to other types if specified.
+         * @param message LogoutResponse
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: hbonline.LogoutResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this LogoutResponse to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the default type url for LogoutResponse
+         * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns The default type url
+         */
+        public static getTypeUrl(typeUrlPrefix?: string): string;
+    }
+
     /** Properties of an EntityInfo. */
     interface IEntityInfo {
 

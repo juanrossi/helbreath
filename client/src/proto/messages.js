@@ -277,6 +277,7 @@ export const hbonline = $root.hbonline = (() => {
          * @property {boolean|null} [success] LoginResponse success
          * @property {string|null} [error] LoginResponse error
          * @property {Array.<hbonline.ICharacterSummary>|null} [characters] LoginResponse characters
+         * @property {string|null} [token] LoginResponse token
          */
 
         /**
@@ -320,6 +321,14 @@ export const hbonline = $root.hbonline = (() => {
         LoginResponse.prototype.characters = $util.emptyArray;
 
         /**
+         * LoginResponse token.
+         * @member {string} token
+         * @memberof hbonline.LoginResponse
+         * @instance
+         */
+        LoginResponse.prototype.token = "";
+
+        /**
          * Creates a new LoginResponse instance using the specified properties.
          * @function create
          * @memberof hbonline.LoginResponse
@@ -350,6 +359,8 @@ export const hbonline = $root.hbonline = (() => {
             if (message.characters != null && message.characters.length)
                 for (let i = 0; i < message.characters.length; ++i)
                     $root.hbonline.CharacterSummary.encode(message.characters[i], writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+            if (message.token != null && Object.hasOwnProperty.call(message, "token"))
+                writer.uint32(/* id 4, wireType 2 =*/34).string(message.token);
             return writer;
         };
 
@@ -398,6 +409,10 @@ export const hbonline = $root.hbonline = (() => {
                         if (!(message.characters && message.characters.length))
                             message.characters = [];
                         message.characters.push($root.hbonline.CharacterSummary.decode(reader, reader.uint32()));
+                        break;
+                    }
+                case 4: {
+                        message.token = reader.string();
                         break;
                     }
                 default:
@@ -450,6 +465,9 @@ export const hbonline = $root.hbonline = (() => {
                         return "characters." + error;
                 }
             }
+            if (message.token != null && message.hasOwnProperty("token"))
+                if (!$util.isString(message.token))
+                    return "token: string expected";
             return null;
         };
 
@@ -479,6 +497,8 @@ export const hbonline = $root.hbonline = (() => {
                     message.characters[i] = $root.hbonline.CharacterSummary.fromObject(object.characters[i]);
                 }
             }
+            if (object.token != null)
+                message.token = String(object.token);
             return message;
         };
 
@@ -500,6 +520,7 @@ export const hbonline = $root.hbonline = (() => {
             if (options.defaults) {
                 object.success = false;
                 object.error = "";
+                object.token = "";
             }
             if (message.success != null && message.hasOwnProperty("success"))
                 object.success = message.success;
@@ -510,6 +531,8 @@ export const hbonline = $root.hbonline = (() => {
                 for (let j = 0; j < message.characters.length; ++j)
                     object.characters[j] = $root.hbonline.CharacterSummary.toObject(message.characters[j], options);
             }
+            if (message.token != null && message.hasOwnProperty("token"))
+                object.token = message.token;
             return object;
         };
 
@@ -9401,6 +9424,463 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         return RespawnEvent;
+    })();
+
+    hbonline.LogoutRequest = (function() {
+
+        /**
+         * Properties of a LogoutRequest.
+         * @memberof hbonline
+         * @interface ILogoutRequest
+         * @property {boolean|null} [cancel] LogoutRequest cancel
+         */
+
+        /**
+         * Constructs a new LogoutRequest.
+         * @memberof hbonline
+         * @classdesc Represents a LogoutRequest.
+         * @implements ILogoutRequest
+         * @constructor
+         * @param {hbonline.ILogoutRequest=} [properties] Properties to set
+         */
+        function LogoutRequest(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * LogoutRequest cancel.
+         * @member {boolean} cancel
+         * @memberof hbonline.LogoutRequest
+         * @instance
+         */
+        LogoutRequest.prototype.cancel = false;
+
+        /**
+         * Creates a new LogoutRequest instance using the specified properties.
+         * @function create
+         * @memberof hbonline.LogoutRequest
+         * @static
+         * @param {hbonline.ILogoutRequest=} [properties] Properties to set
+         * @returns {hbonline.LogoutRequest} LogoutRequest instance
+         */
+        LogoutRequest.create = function create(properties) {
+            return new LogoutRequest(properties);
+        };
+
+        /**
+         * Encodes the specified LogoutRequest message. Does not implicitly {@link hbonline.LogoutRequest.verify|verify} messages.
+         * @function encode
+         * @memberof hbonline.LogoutRequest
+         * @static
+         * @param {hbonline.ILogoutRequest} message LogoutRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        LogoutRequest.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.cancel != null && Object.hasOwnProperty.call(message, "cancel"))
+                writer.uint32(/* id 1, wireType 0 =*/8).bool(message.cancel);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified LogoutRequest message, length delimited. Does not implicitly {@link hbonline.LogoutRequest.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof hbonline.LogoutRequest
+         * @static
+         * @param {hbonline.ILogoutRequest} message LogoutRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        LogoutRequest.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a LogoutRequest message from the specified reader or buffer.
+         * @function decode
+         * @memberof hbonline.LogoutRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {hbonline.LogoutRequest} LogoutRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        LogoutRequest.decode = function decode(reader, length, error) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.hbonline.LogoutRequest();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                if (tag === error)
+                    break;
+                switch (tag >>> 3) {
+                case 1: {
+                        message.cancel = reader.bool();
+                        break;
+                    }
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a LogoutRequest message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof hbonline.LogoutRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {hbonline.LogoutRequest} LogoutRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        LogoutRequest.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a LogoutRequest message.
+         * @function verify
+         * @memberof hbonline.LogoutRequest
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        LogoutRequest.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.cancel != null && message.hasOwnProperty("cancel"))
+                if (typeof message.cancel !== "boolean")
+                    return "cancel: boolean expected";
+            return null;
+        };
+
+        /**
+         * Creates a LogoutRequest message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof hbonline.LogoutRequest
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {hbonline.LogoutRequest} LogoutRequest
+         */
+        LogoutRequest.fromObject = function fromObject(object) {
+            if (object instanceof $root.hbonline.LogoutRequest)
+                return object;
+            let message = new $root.hbonline.LogoutRequest();
+            if (object.cancel != null)
+                message.cancel = Boolean(object.cancel);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a LogoutRequest message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof hbonline.LogoutRequest
+         * @static
+         * @param {hbonline.LogoutRequest} message LogoutRequest
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        LogoutRequest.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults)
+                object.cancel = false;
+            if (message.cancel != null && message.hasOwnProperty("cancel"))
+                object.cancel = message.cancel;
+            return object;
+        };
+
+        /**
+         * Converts this LogoutRequest to JSON.
+         * @function toJSON
+         * @memberof hbonline.LogoutRequest
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        LogoutRequest.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the default type url for LogoutRequest
+         * @function getTypeUrl
+         * @memberof hbonline.LogoutRequest
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        LogoutRequest.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/hbonline.LogoutRequest";
+        };
+
+        return LogoutRequest;
+    })();
+
+    hbonline.LogoutResponse = (function() {
+
+        /**
+         * Properties of a LogoutResponse.
+         * @memberof hbonline
+         * @interface ILogoutResponse
+         * @property {number|null} [secondsRemaining] LogoutResponse secondsRemaining
+         * @property {boolean|null} [cancelled] LogoutResponse cancelled
+         * @property {string|null} [reason] LogoutResponse reason
+         */
+
+        /**
+         * Constructs a new LogoutResponse.
+         * @memberof hbonline
+         * @classdesc Represents a LogoutResponse.
+         * @implements ILogoutResponse
+         * @constructor
+         * @param {hbonline.ILogoutResponse=} [properties] Properties to set
+         */
+        function LogoutResponse(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * LogoutResponse secondsRemaining.
+         * @member {number} secondsRemaining
+         * @memberof hbonline.LogoutResponse
+         * @instance
+         */
+        LogoutResponse.prototype.secondsRemaining = 0;
+
+        /**
+         * LogoutResponse cancelled.
+         * @member {boolean} cancelled
+         * @memberof hbonline.LogoutResponse
+         * @instance
+         */
+        LogoutResponse.prototype.cancelled = false;
+
+        /**
+         * LogoutResponse reason.
+         * @member {string} reason
+         * @memberof hbonline.LogoutResponse
+         * @instance
+         */
+        LogoutResponse.prototype.reason = "";
+
+        /**
+         * Creates a new LogoutResponse instance using the specified properties.
+         * @function create
+         * @memberof hbonline.LogoutResponse
+         * @static
+         * @param {hbonline.ILogoutResponse=} [properties] Properties to set
+         * @returns {hbonline.LogoutResponse} LogoutResponse instance
+         */
+        LogoutResponse.create = function create(properties) {
+            return new LogoutResponse(properties);
+        };
+
+        /**
+         * Encodes the specified LogoutResponse message. Does not implicitly {@link hbonline.LogoutResponse.verify|verify} messages.
+         * @function encode
+         * @memberof hbonline.LogoutResponse
+         * @static
+         * @param {hbonline.ILogoutResponse} message LogoutResponse message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        LogoutResponse.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.secondsRemaining != null && Object.hasOwnProperty.call(message, "secondsRemaining"))
+                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.secondsRemaining);
+            if (message.cancelled != null && Object.hasOwnProperty.call(message, "cancelled"))
+                writer.uint32(/* id 2, wireType 0 =*/16).bool(message.cancelled);
+            if (message.reason != null && Object.hasOwnProperty.call(message, "reason"))
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.reason);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified LogoutResponse message, length delimited. Does not implicitly {@link hbonline.LogoutResponse.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof hbonline.LogoutResponse
+         * @static
+         * @param {hbonline.ILogoutResponse} message LogoutResponse message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        LogoutResponse.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a LogoutResponse message from the specified reader or buffer.
+         * @function decode
+         * @memberof hbonline.LogoutResponse
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {hbonline.LogoutResponse} LogoutResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        LogoutResponse.decode = function decode(reader, length, error) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.hbonline.LogoutResponse();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                if (tag === error)
+                    break;
+                switch (tag >>> 3) {
+                case 1: {
+                        message.secondsRemaining = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.cancelled = reader.bool();
+                        break;
+                    }
+                case 3: {
+                        message.reason = reader.string();
+                        break;
+                    }
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a LogoutResponse message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof hbonline.LogoutResponse
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {hbonline.LogoutResponse} LogoutResponse
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        LogoutResponse.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a LogoutResponse message.
+         * @function verify
+         * @memberof hbonline.LogoutResponse
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        LogoutResponse.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.secondsRemaining != null && message.hasOwnProperty("secondsRemaining"))
+                if (!$util.isInteger(message.secondsRemaining))
+                    return "secondsRemaining: integer expected";
+            if (message.cancelled != null && message.hasOwnProperty("cancelled"))
+                if (typeof message.cancelled !== "boolean")
+                    return "cancelled: boolean expected";
+            if (message.reason != null && message.hasOwnProperty("reason"))
+                if (!$util.isString(message.reason))
+                    return "reason: string expected";
+            return null;
+        };
+
+        /**
+         * Creates a LogoutResponse message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof hbonline.LogoutResponse
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {hbonline.LogoutResponse} LogoutResponse
+         */
+        LogoutResponse.fromObject = function fromObject(object) {
+            if (object instanceof $root.hbonline.LogoutResponse)
+                return object;
+            let message = new $root.hbonline.LogoutResponse();
+            if (object.secondsRemaining != null)
+                message.secondsRemaining = object.secondsRemaining | 0;
+            if (object.cancelled != null)
+                message.cancelled = Boolean(object.cancelled);
+            if (object.reason != null)
+                message.reason = String(object.reason);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a LogoutResponse message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof hbonline.LogoutResponse
+         * @static
+         * @param {hbonline.LogoutResponse} message LogoutResponse
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        LogoutResponse.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.secondsRemaining = 0;
+                object.cancelled = false;
+                object.reason = "";
+            }
+            if (message.secondsRemaining != null && message.hasOwnProperty("secondsRemaining"))
+                object.secondsRemaining = message.secondsRemaining;
+            if (message.cancelled != null && message.hasOwnProperty("cancelled"))
+                object.cancelled = message.cancelled;
+            if (message.reason != null && message.hasOwnProperty("reason"))
+                object.reason = message.reason;
+            return object;
+        };
+
+        /**
+         * Converts this LogoutResponse to JSON.
+         * @function toJSON
+         * @memberof hbonline.LogoutResponse
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        LogoutResponse.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the default type url for LogoutResponse
+         * @function getTypeUrl
+         * @memberof hbonline.LogoutResponse
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        LogoutResponse.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/hbonline.LogoutResponse";
+        };
+
+        return LogoutResponse;
     })();
 
     hbonline.EntityInfo = (function() {

@@ -68,15 +68,15 @@ func BuildTeleportConfig() TeleportConfig {
 	addRange("aresden", 279, 279, 203, 211, TeleportDest{DestMap: "aresdend1", DestX: 40, DestY: 36})
 	// West exit -> Areuni
 	addRange("aresden", 78, 80, 209, 211, TeleportDest{DestMap: "areuni", DestX: 85, DestY: 23})
-	// Building entrances
+	// Building entrances (coordinates from C++ aresden.txt teleport-loc entries)
 	addRange("aresden", 135, 137, 128, 129, TeleportDest{DestMap: "cityhall_1", DestX: 55, DestY: 38})
 	addRange("aresden", 145, 146, 122, 123, TeleportDest{DestMap: "cityhall_1", DestX: 55, DestY: 38})
-	addRange("aresden", 167, 169, 194, 195, TeleportDest{DestMap: "bsmith_1", DestX: 34, DestY: 31})
-	addRange("aresden", 157, 158, 200, 201, TeleportDest{DestMap: "bsmith_1", DestX: 43, DestY: 26})
-	addRange("aresden", 101, 107, 183, 185, TeleportDest{DestMap: "arewrhus", DestX: 54, DestY: 30})
-	addRange("aresden", 217, 223, 132, 134, TeleportDest{DestMap: "arewrhus", DestX: 54, DestY: 30})
+	addRange("aresden", 167, 169, 194, 195, TeleportDest{DestMap: "bsmith_1", DestX: 34, DestY: 37})
+	addRange("aresden", 157, 158, 200, 201, TeleportDest{DestMap: "bsmith_1", DestX: 43, DestY: 32})
+	addRange("aresden", 101, 107, 183, 185, TeleportDest{DestMap: "wrhus_1", DestX: 56, DestY: 36})
+	addRange("aresden", 217, 223, 132, 134, TeleportDest{DestMap: "wrhus_1", DestX: 56, DestY: 36})
 	addRange("aresden", 55, 57, 117, 118, TeleportDest{DestMap: "wzdtwr_1", DestX: 40, DestY: 29})
-	addRange("aresden", 126, 131, 166, 167, TeleportDest{DestMap: "gshop_1", DestX: 50, DestY: 33})
+	addRange("aresden", 126, 131, 166, 167, TeleportDest{DestMap: "gshop_1", DestX: 50, DestY: 39})
 
 	// === ELVINE ===
 	// South exits -> Middleland
@@ -91,17 +91,17 @@ func BuildTeleportConfig() TeleportConfig {
 	// Building entrances
 	addRange("elvine", 135, 137, 132, 133, TeleportDest{DestMap: "cityhall_2", DestX: 55, DestY: 38})
 	addRange("elvine", 144, 146, 126, 127, TeleportDest{DestMap: "cityhall_2", DestX: 55, DestY: 38})
-	addRange("elvine", 239, 241, 106, 107, TeleportDest{DestMap: "bsmith_2", DestX: 34, DestY: 31})
-	addRange("elvine", 229, 230, 112, 113, TeleportDest{DestMap: "bsmith_2", DestX: 43, DestY: 26})
-	addRange("elvine", 197, 203, 127, 129, TeleportDest{DestMap: "elvwrhus", DestX: 54, DestY: 30})
-	addRange("elvine", 87, 93, 174, 176, TeleportDest{DestMap: "elvwrhus", DestX: 54, DestY: 30})
+	addRange("elvine", 239, 241, 106, 107, TeleportDest{DestMap: "bsmith_2", DestX: 34, DestY: 37})
+	addRange("elvine", 229, 230, 112, 113, TeleportDest{DestMap: "bsmith_2", DestX: 43, DestY: 32})
+	addRange("elvine", 197, 203, 127, 129, TeleportDest{DestMap: "wrhus_2", DestX: 56, DestY: 36})
+	addRange("elvine", 87, 93, 174, 176, TeleportDest{DestMap: "wrhus_2", DestX: 56, DestY: 36})
 	addRange("elvine", 180, 181, 76, 77, TeleportDest{DestMap: "wzdtwr_2", DestX: 40, DestY: 29})
-	addRange("elvine", 225, 230, 151, 152, TeleportDest{DestMap: "gshop_2", DestX: 50, DestY: 33})
+	addRange("elvine", 225, 230, 151, 152, TeleportDest{DestMap: "gshop_2", DestX: 50, DestY: 39})
 
 	// === MIDDLELAND ===
 	// South exits -> Aresden
 	addRange("middleland", 147, 158, 503, 503, TeleportDest{DestMap: "aresden", DestX: 31, DestY: 28})
-	addRange("middleland", 344, 356, 503, 503, TeleportDest{DestMap: "aresden", DestX: 259, DestY: 23})
+	addRange("middleland", 344, 356, 503, 503, TeleportDest{DestMap: "aresden", DestX: 256, DestY: 26})
 	// North exits -> Elvine
 	addRange("middleland", 99, 107, 20, 20, TeleportDest{DestMap: "elvine", DestX: 27, DestY: 271})
 	addRange("middleland", 309, 320, 20, 20, TeleportDest{DestMap: "elvine", DestX: 254, DestY: 267})
@@ -210,26 +210,26 @@ func BuildTeleportConfig() TeleportConfig {
 	// General Shop 2 -> Elvine
 	addRange("gshop_2", 49, 51, 36, 37, TeleportDest{DestMap: "elvine", DestX: 228, DestY: 154})
 	addRange("gshop_2", 58, 59, 34, 34, TeleportDest{DestMap: "elvine", DestX: 228, DestY: 154})
-	// Warehouse Aresden -> Aresden
-	addRange("arewrhus", 53, 55, 33, 34, TeleportDest{DestMap: "aresden", DestX: 104, DestY: 186})
-	addRange("arewrhus", 61, 61, 34, 35, TeleportDest{DestMap: "aresden", DestX: 104, DestY: 186})
-	// Warehouse Elvine -> Elvine
-	addRange("elvwrhus", 53, 55, 33, 34, TeleportDest{DestMap: "elvine", DestX: 200, DestY: 130})
-	addRange("elvwrhus", 61, 61, 34, 35, TeleportDest{DestMap: "elvine", DestX: 200, DestY: 130})
-	// Wrhus_1 -> Aresden (same layout as arewrhus)
-	addRange("wrhus_1", 53, 55, 33, 34, TeleportDest{DestMap: "aresden", DestX: 104, DestY: 186})
-	addRange("wrhus_1", 61, 61, 34, 35, TeleportDest{DestMap: "aresden", DestX: 104, DestY: 186})
-	// Wrhus_2 -> Elvine
-	addRange("wrhus_2", 53, 55, 33, 34, TeleportDest{DestMap: "elvine", DestX: 200, DestY: 130})
-	addRange("wrhus_2", 61, 61, 34, 35, TeleportDest{DestMap: "elvine", DestX: 200, DestY: 130})
+	// Warehouse Aresden -> Aresden (from C++ wrhus_1.txt)
+	addRange("arewrhus", 53, 55, 33, 34, TeleportDest{DestMap: "aresden", DestX: 106, DestY: 186})
+	addRange("arewrhus", 61, 61, 34, 35, TeleportDest{DestMap: "aresden", DestX: 96, DestY: 180})
+	// Warehouse Elvine -> Elvine (from C++ wrhus_2.txt)
+	addRange("elvwrhus", 53, 55, 33, 34, TeleportDest{DestMap: "elvine", DestX: 202, DestY: 132})
+	addRange("elvwrhus", 61, 61, 34, 35, TeleportDest{DestMap: "elvine", DestX: 195, DestY: 126})
+	// Wrhus_1 -> Aresden (same layout, from C++ wrhus_1.txt)
+	addRange("wrhus_1", 53, 55, 33, 34, TeleportDest{DestMap: "aresden", DestX: 106, DestY: 186})
+	addRange("wrhus_1", 61, 61, 34, 35, TeleportDest{DestMap: "aresden", DestX: 96, DestY: 180})
+	// Wrhus_2 -> Elvine (from C++ wrhus_2.txt)
+	addRange("wrhus_2", 53, 55, 33, 34, TeleportDest{DestMap: "elvine", DestX: 202, DestY: 132})
+	addRange("wrhus_2", 61, 61, 34, 35, TeleportDest{DestMap: "elvine", DestX: 195, DestY: 126})
 	// Wizard Tower 1 -> Aresden
 	addRange("wzdtwr_1", 40, 41, 32, 33, TeleportDest{DestMap: "aresden", DestX: 56, DestY: 120})
 	// Wizard Tower 2 -> Elvine
 	addRange("wzdtwr_2", 40, 41, 32, 33, TeleportDest{DestMap: "elvine", DestX: 181, DestY: 79})
-	// Cathedral 1 -> Aresden
-	addRange("cath_1", 36, 38, 38, 40, TeleportDest{DestMap: "aresden", DestX: 140, DestY: 140})
-	// Cathedral 2 -> Elvine
-	addRange("cath_2", 36, 38, 38, 40, TeleportDest{DestMap: "elvine", DestX: 140, DestY: 140})
+	// Cathedral 1 -> Aresden (initial-point 11 from aresden.txt: 170, 146)
+	addRange("cath_1", 36, 38, 38, 40, TeleportDest{DestMap: "aresden", DestX: 170, DestY: 146})
+	// Cathedral 2 -> Elvine (initial-point 11 from elvine.txt: 170, 146)
+	addRange("cath_2", 36, 38, 38, 40, TeleportDest{DestMap: "elvine", DestX: 170, DestY: 146})
 	// Command Hall 1 -> Aresden
 	addRange("Cmdhall_1", 49, 51, 47, 48, TeleportDest{DestMap: "aresden", DestX: 140, DestY: 140})
 	addRange("Cmdhall_1", 38, 40, 49, 50, TeleportDest{DestMap: "aresden", DestX: 140, DestY: 140})
@@ -301,9 +301,11 @@ func BuildTeleportConfig() TeleportConfig {
 	addRange("NewEvent", 139, 142, 211, 215, TeleportDest{DestMap: "middleland", DestX: 250, DestY: 250})
 	addRange("NewEvent", 193, 196, 211, 215, TeleportDest{DestMap: "middleland", DestX: 250, DestY: 250})
 
-	// === DEFAULT MAP -> CITIES (starter zone exits) ===
-	addRange("default", 80, 82, 75, 76, TeleportDest{DestMap: "aresden", DestX: 140, DestY: 140})
-	addRange("default", 127, 129, 78, 79, TeleportDest{DestMap: "elvine", DestX: 140, DestY: 140})
+	// === DEFAULT MAP -> CITIES ===
+	// C++ default.txt routes through cathedrals → "lost" map, but we don't have the "lost" map.
+	// Go directly to cities using initial-point coordinates from aresden.txt / elvine.txt.
+	addRange("default", 80, 82, 75, 76, TeleportDest{DestMap: "aresden", DestX: 170, DestY: 146})
+	addRange("default", 127, 129, 78, 79, TeleportDest{DestMap: "elvine", DestX: 170, DestY: 146})
 
 	return tc
 }

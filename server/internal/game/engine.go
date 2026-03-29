@@ -207,6 +207,9 @@ func (e *Engine) processTick() {
 		e.processPKDecay(now)
 	}
 
+	// Process pending logouts
+	e.processLogouts(now)
+
 	// NPC AI tick
 	e.npcs.Range(func(key, value any) bool {
 		n := value.(*npc.NPC)
@@ -585,6 +588,11 @@ func (e *Engine) processNPCTick(n *npc.NPC, now time.Time) {
 		// Update player stats
 		e.sendStatUpdate(target)
 
+		// Cancel logout if the player was hit
+		if !result.Miss {
+			e.cancelLogoutOnDamage(target)
+		}
+
 		// Handle player death
 		if result.Killed {
 			e.handlePlayerDeath(target, n.ObjectID, n.Type.Name)
@@ -878,6 +886,67 @@ func (e *Engine) OnDisconnect(client *network.Client) {
 	}
 }
 
+// LogoutCountdownSeconds is how long a player must wait before logging out.
+const LogoutCountdownSeconds = 10
+
+func (e *Engine) handleLogout(client *network.Client, req *pb.LogoutRequest) {
+	val, ok := e.players.Load(client.ObjectID)
+	if !ok {
+		return
+	}
+	p := val.(*player.Player)
+
+	if req.Cancel {
+		if p.CancelLogout() {
+			resp := &pb.LogoutResponse{SecondsRemaining: 0, Cancelled: true, Reason: "Cancelled"}
+			data, _ := network.Encode(network.MsgLogoutResponse, resp)
+			p.Send(data)
+		}
+		return
+	}
+
+	// Start logout countdown
+	p.LogoutPending = true
+	p.LogoutTime = time.Now().Add(time.Duration(LogoutCountdownSeconds) * time.Second)
+
+	resp := &pb.LogoutResponse{SecondsRemaining: int32(LogoutCountdownSeconds)}
+	data, _ := network.Encode(network.MsgLogoutResponse, resp)
+	p.Send(data)
+}
+
+// processLogouts checks all players for completed logout countdowns and disconnects them.
+func (e *Engine) processLogouts(now time.Time) {
+	e.players.Range(func(key, value any) bool {
+		p := value.(*player.Player)
+		if !p.LogoutPending {
+			return true
+		}
+		if now.Before(p.LogoutTime) {
+			return true
+		}
+		// Countdown finished — disconnect the player
+		p.LogoutPending = false
+		log.Printf("Player %s logged out via countdown", p.Name)
+		resp := &pb.LogoutResponse{SecondsRemaining: 0}
+		data, _ := network.Encode(network.MsgLogoutResponse, resp)
+		p.Send(data)
+		// Close the connection, which triggers OnDisconnect for cleanup
+		if p.Client != nil {
+			p.Client.Close()
+		}
+		return true
+	})
+}
+
+// cancelLogoutOnDamage cancels a player's pending logout when they take damage.
+func (e *Engine) cancelLogoutOnDamage(p *player.Player) {
+	if p.CancelLogout() {
+		resp := &pb.LogoutResponse{SecondsRemaining: 0, Cancelled: true, Reason: "You were attacked!"}
+		data, _ := network.Encode(network.MsgLogoutResponse, resp)
+		p.Send(data)
+	}
+}
+
 // OnMessage implements network.MessageHandler.
 func (e *Engine) OnMessage(client *network.Client, msgType byte, rawData []byte) {
 	_, msg, err := network.Decode(rawData)
@@ -953,6 +1022,8 @@ func (e *Engine) OnMessage(client *network.Client, msgType byte, rawData []byte)
 		e.handleQuestAccept(client, msg.(*pb.QuestAcceptRequest))
 	case network.MsgQuestTurnInRequest:
 		e.handleQuestTurnIn(client, msg.(*pb.QuestTurnInRequest))
+	case network.MsgLogoutRequest:
+		e.handleLogout(client, msg.(*pb.LogoutRequest))
 	}
 }
 

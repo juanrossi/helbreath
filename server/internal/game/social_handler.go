@@ -814,6 +814,11 @@ func (e *Engine) handlePvPAttack(attacker, target *player.Player) {
 
 	e.sendStatUpdate(target)
 
+	// Cancel logout if the target was hit
+	if !result.Miss {
+		e.cancelLogoutOnDamage(target)
+	}
+
 	if result.Killed {
 		// PK tracking
 		sameFaction := target.Side != 0 && attacker.Side != 0 && target.Side == attacker.Side

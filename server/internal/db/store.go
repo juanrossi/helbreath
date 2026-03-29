@@ -147,8 +147,9 @@ func (s *Store) CreateCharacter(ctx context.Context, accountID int, name string,
 	var id int
 	err := s.pool.QueryRow(ctx,
 		`INSERT INTO characters (account_id, name, gender, skin_color, hair_style, hair_color,
-		                         underwear_color, str, vit, dex, int_stat, mag, charisma)
-		 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) RETURNING id`,
+		                         underwear_color, str, vit, dex, int_stat, mag, charisma,
+		                         map_name, pos_x, pos_y, direction)
+		 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,'default',134,37,5) RETURNING id`,
 		accountID, name, gender, skinColor, hairStyle, hairColor, underwearColor,
 		str, vit, dex, intStat, mag, chr).Scan(&id)
 	return id, err

@@ -390,6 +390,12 @@ export interface QuestRewardData {
   itemCount: number;
 }
 
+export interface LogoutResponseData {
+  secondsRemaining: number;
+  cancelled: boolean;
+  reason: string;
+}
+
 export interface MapInfo {
   name: string;
   width: number;
@@ -462,6 +468,7 @@ const decoderMap: Record<number, { decode: (reader: Uint8Array) => any }> = {
   [Proto.MSG_QUEST_LIST_UPDATE]: hbonline.QuestListUpdate,
   [Proto.MSG_QUEST_PROGRESS]: hbonline.QuestProgressUpdate,
   [Proto.MSG_QUEST_REWARD]: hbonline.QuestRewardNotification,
+  [Proto.MSG_LOGOUT_RESPONSE]: hbonline.LogoutResponse,
 };
 
 // Map from client message type to pre-compiled protobuf encoder
@@ -496,6 +503,7 @@ const encoderMap: Record<number, { create: (data: any) => any; encode: (msg: any
   [Proto.MSG_TRADE_CONFIRM]: hbonline.TradeConfirm,
   [Proto.MSG_QUEST_ACCEPT_REQUEST]: hbonline.QuestAcceptRequest,
   [Proto.MSG_QUEST_TURNIN_REQUEST]: hbonline.QuestTurnInRequest,
+  [Proto.MSG_LOGOUT_REQUEST]: hbonline.LogoutRequest,
 };
 
 export class MessageHandler {

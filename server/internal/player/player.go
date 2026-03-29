@@ -101,6 +101,10 @@ type Player struct {
 	// Quests
 	Quests *quest.QuestTracker
 
+	// Logout countdown
+	LogoutPending bool      // true while countdown is active
+	LogoutTime    time.Time // when the logout will execute
+
 	// Anti-hack
 	LastMoveTime time.Time
 
@@ -487,6 +491,16 @@ func (p *Player) ToSkillList() *pb.SkillListUpdate {
 		})
 	}
 	return update
+}
+
+// CancelLogout cancels any pending logout countdown.
+func (p *Player) CancelLogout() bool {
+	if !p.LogoutPending {
+		return false
+	}
+	p.LogoutPending = false
+	p.LogoutTime = time.Time{}
+	return true
 }
 
 // MeetsRequirements checks if the player meets an item's stat requirements.

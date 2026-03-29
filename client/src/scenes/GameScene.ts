@@ -11,6 +11,7 @@ import {
   PartyUpdateData, PartyMemberData, PartyInviteData, PartyActionResponseData,
   TradeIncomingData, TradeUpdateData, TradeSlotData, TradeCompleteData, PKStatusData,
   QuestListData, QuestEntryData, QuestProgressData, QuestRewardData,
+  LogoutResponseData,
 } from '../network/MessageHandler';
 import * as Proto from '../network/Protocol';
 import { HBMap, TILE_SIZE } from '../game/assets/HBMap';
@@ -440,6 +441,17 @@ export class GameScene extends Phaser.Scene {
   private playerMAG = 10;
   private playerCHR = 10;
 
+  /** XP required to reach a given level. Ported from server combat.go / C++ iGetLevelExp. */
+  private xpForLevel(level: number): number {
+    if (level <= 1) return 0;
+    let total = 0;
+    for (let i = 2; i <= level; i++) {
+      const q = Math.floor(i / 17);
+      total += i * (50 + q * q);
+    }
+    return total;
+  }
+
   constructor() {
     super({ key: 'GameScene' });
   }
@@ -461,7 +473,7 @@ export class GameScene extends Phaser.Scene {
       Proto.MSG_PARTY_UPDATE, Proto.MSG_PARTY_INVITE, Proto.MSG_PARTY_ACTION_RESPONSE,
       Proto.MSG_TRADE_INCOMING, Proto.MSG_TRADE_UPDATE, Proto.MSG_TRADE_COMPLETE,
       Proto.MSG_PK_STATUS_UPDATE, Proto.MSG_QUEST_LIST_UPDATE, Proto.MSG_QUEST_PROGRESS,
-      Proto.MSG_MAP_CHANGE_RESPONSE,
+      Proto.MSG_MAP_CHANGE_RESPONSE, Proto.MSG_LOGOUT_RESPONSE,
     ];
     for (const t of gameSceneMsgTypes) this.msgHandler.off(t);
 
@@ -825,6 +837,13 @@ export class GameScene extends Phaser.Scene {
     const dir = data.direction as number;
 
     console.log(`Map change: teleporting to ${mapName} (${pos?.x}, ${pos?.y})`);
+
+    // Clear weather indoors, restore outdoors
+    if (GameScene.INDOOR_MAPS.has(mapName)) {
+      this.weatherManager.setWeather('clear');
+    } else if (this.weather && this.weather !== 'clear') {
+      this.weatherManager.setWeather(this.weather as any);
+    }
 
     // Show loading overlay
     const overlay = this.add.rectangle(
@@ -1317,6 +1336,7 @@ export class GameScene extends Phaser.Scene {
     this.msgHandler.on(Proto.MSG_QUEST_PROGRESS, (data: QuestProgressData) => this.onQuestProgress(data));
     this.msgHandler.on(Proto.MSG_QUEST_REWARD, (data: QuestRewardData) => this.onQuestReward(data));
     this.msgHandler.on(Proto.MSG_MAP_CHANGE_RESPONSE, (data: any) => this.onMapChange(data));
+    this.msgHandler.on(Proto.MSG_LOGOUT_RESPONSE, (data: LogoutResponseData) => this.onLogoutResponse(data));
   }
 
   private destroyPlayerAssets(assets: PlayerAssets | null): void {
@@ -2065,7 +2085,23 @@ export class GameScene extends Phaser.Scene {
   // Cache of minimap canvases by map name (persists across teleports)
   private static minimapCache = new Map<string, HTMLCanvasElement>();
 
+  // Indoor/building maps too small for a minimap
+  private static readonly INDOOR_MAPS = new Set([
+    'cityhall_1', 'cityhall_2',
+    'bsmith_1', 'bsmith_2',
+    'gshop_1', 'gshop_2',
+    'wrhus_1', 'wrhus_2', 'arewrhus', 'elvwrhus', 'whouse', 'whouse2',
+    'wzdtwr_1', 'wzdtwr_2',
+    'cath_1', 'cath_2',
+    'cmdhall_1', 'cmdhall_2', 'Cmdhall_1', 'Cmdhall_2',
+    'ABarracks', 'EBarracks', 'MBarracks',
+    'resurr1', 'resurr2',
+    'market',
+  ]);
+
   private createMinimap(): void {
+    if (GameScene.INDOOR_MAPS.has(this.currentMapName)) return;
+
     const MINIMAP_SIZE = 140;
     const padding = 10;
     const mmX = padding;
@@ -2777,7 +2813,12 @@ export class GameScene extends Phaser.Scene {
       } else if (key === 'weather' && value) {
         this.weather = value;
         if (['clear', 'rain', 'snow', 'fog'].includes(value)) {
-          this.weatherManager.setWeather(value as any);
+          // No weather effects indoors
+          if (GameScene.INDOOR_MAPS.has(this.currentMapName)) {
+            this.weatherManager.setWeather('clear');
+          } else {
+            this.weatherManager.setWeather(value as any);
+          }
         }
       }
     }
@@ -2815,6 +2856,21 @@ export class GameScene extends Phaser.Scene {
     if (hpBar) hpBar.style.width = `${this.playerMaxHP > 0 ? Math.round((this.playerHP / this.playerMaxHP) * 100) : 0}%`;
     if (mpBar) mpBar.style.width = `${this.playerMaxMP > 0 ? Math.round((this.playerMP / this.playerMaxMP) * 100) : 0}%`;
     if (spBar) spBar.style.width = `${this.playerMaxSP > 0 ? Math.round((this.playerSP / this.playerMaxSP) * 100) : 0}%`;
+
+    // XP bar
+    const xpBar = document.getElementById('hud-xp-bar');
+    const xpEl = document.getElementById('hud-xp');
+    const xpDetailEl = document.getElementById('hud-xp-detail');
+    if (xpBar || xpEl) {
+      const currentLevelXP = this.xpForLevel(this.playerLevel);
+      const nextLevelXP = this.xpForLevel(this.playerLevel + 1);
+      const xpIntoLevel = Number(this.playerExp) - currentLevelXP;
+      const xpNeeded = nextLevelXP - currentLevelXP;
+      const pct = xpNeeded > 0 ? Math.min(Math.round((xpIntoLevel / xpNeeded) * 100), 100) : 100;
+      if (xpBar) xpBar.style.width = `${pct}%`;
+      if (xpEl) xpEl.textContent = `${pct}%`;
+      if (xpDetailEl) xpDetailEl.textContent = `${xpIntoLevel} / ${xpNeeded}`;
+    }
   }
 
   // ---------------------------------------------------------------------------
@@ -2935,10 +2991,22 @@ export class GameScene extends Phaser.Scene {
           </div>
         </div>
 
+        <!-- XP Bar -->
+        <div style="display:flex; flex-direction:column; gap:2px; min-width:120px; max-width:180px;">
+          <div style="display:flex; align-items:center; gap:4px;">
+            <span style="color:#f39c12; font-size:10px; font-weight:bold; width:18px;">XP</span>
+            <div style="flex:1; height:12px; background:#333; border:1px solid #555; border-radius:2px; position:relative; overflow:hidden;">
+              <div id="hud-xp-bar" style="height:100%; background:linear-gradient(to bottom,#f39c12,#e67e22); width:0%; transition:width 0.3s;"></div>
+            </div>
+            <span id="hud-xp" style="color:#f39c12; font-size:9px; min-width:40px; text-align:right;">0%</span>
+          </div>
+          <div id="hud-xp-detail" style="color:#888; font-size:8px; text-align:center;"></div>
+        </div>
+
         <!-- Gold & Stat Points -->
         <div style="display:flex; flex-direction:column; gap:2px; min-width:70px; margin:0 4px;">
           <div id="hud-gold" style="color:#FFD700; font-size:11px;">${playerData.gold ?? 0} G</div>
-          <div id="hud-lupool" style="color:#9b59b6; font-size:10px; display:none;">+0 pts</div>
+          <div id="hud-lupool" style="color:#9b59b6; font-size:10px; display:none; cursor:pointer;" title="Click to open Stats">+0 pts</div>
           <div style="color:#555; font-size:8px;">Coords: <span id="hud-coords">${playerData.posX ?? 0},${playerData.posY ?? 0}</span></div>
         </div>
 
@@ -2961,6 +3029,10 @@ export class GameScene extends Phaser.Scene {
           </button>
           <button id="btn-party" class="hud-btn" title="Party (P)">
             <div style="font-size:16px;">&#x1F465;</div><div style="font-size:8px;">Party</div>
+          </button>
+          <div style="width:1px; background:#444; margin:4px 2px;"></div>
+          <button id="btn-logout" class="hud-btn" title="Logout" style="background:linear-gradient(to bottom,#5a2a2a,#3a1a1a); border-color:#733;">
+            <div style="font-size:14px;">&#x23FB;</div><div style="font-size:8px;">Logout</div>
           </button>
         </div>
       </div>
@@ -2986,8 +3058,101 @@ export class GameScene extends Phaser.Scene {
     document.getElementById('btn-skills')?.addEventListener('click', () => this.toggleSkills());
     document.getElementById('btn-guild')?.addEventListener('click', () => this.toggleGuild());
     document.getElementById('btn-party')?.addEventListener('click', () => this.toggleParty());
+    document.getElementById('hud-lupool')?.addEventListener('click', () => this.toggleStats());
+    document.getElementById('btn-logout')?.addEventListener('click', () => this.requestLogout());
 
     this.events.on('shutdown', () => { div.remove(); });
+  }
+
+  // ---------------------------------------------------------------------------
+  // Logout UI
+  // ---------------------------------------------------------------------------
+
+  private logoutCountdown = 0;
+  private logoutInterval: ReturnType<typeof setInterval> | null = null;
+  private logoutDiv: HTMLDivElement | null = null;
+
+  private requestLogout(): void {
+    if (this.logoutCountdown > 0) {
+      // Already logging out — cancel
+      this.msgHandler.sendMessage(Proto.MSG_LOGOUT_REQUEST, { cancel: true });
+      return;
+    }
+    this.msgHandler.sendMessage(Proto.MSG_LOGOUT_REQUEST, { cancel: false });
+  }
+
+  private onLogoutResponse(data: LogoutResponseData): void {
+    if (data.cancelled) {
+      this.cancelLogoutUI(data.reason || 'Cancelled');
+      return;
+    }
+    if (data.secondsRemaining === 0) {
+      // Server confirmed logout — redirect to login
+      this.cancelLogoutUI();
+      window.location.reload();
+      return;
+    }
+    this.startLogoutCountdown(data.secondsRemaining);
+  }
+
+  private startLogoutCountdown(seconds: number): void {
+    this.logoutCountdown = seconds;
+    this.renderLogoutOverlay();
+
+    if (this.logoutInterval) clearInterval(this.logoutInterval);
+    this.logoutInterval = setInterval(() => {
+      this.logoutCountdown--;
+      if (this.logoutCountdown <= 0) {
+        this.cancelLogoutUI();
+        return;
+      }
+      this.updateLogoutOverlay();
+    }, 1000);
+  }
+
+  private renderLogoutOverlay(): void {
+    this.closeLogoutOverlay();
+    const div = document.createElement('div');
+    div.id = 'logout-overlay';
+    div.style.cssText = 'position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); z-index:300; background:rgba(0,0,0,0.85); color:#fff; padding:20px 30px; border:2px solid #c0392b; border-radius:8px; text-align:center; font-family:"Segoe UI",Arial,sans-serif;';
+    div.innerHTML = `
+      <div style="font-size:14px; margin-bottom:10px; color:#e74c3c;">Logging out...</div>
+      <div id="logout-timer" style="font-size:36px; font-weight:bold; color:#fff; margin-bottom:12px;">${this.logoutCountdown}</div>
+      <div style="font-size:11px; color:#888; margin-bottom:12px;">Taking damage will cancel logout</div>
+      <button id="logout-cancel-btn" style="padding:6px 20px; cursor:pointer; background:#c0392b; color:#fff; border:none; border-radius:4px; font-size:12px;">Cancel</button>
+    `;
+    document.body.appendChild(div);
+    this.logoutDiv = div;
+
+    div.querySelector('#logout-cancel-btn')?.addEventListener('click', () => {
+      this.msgHandler.sendMessage(Proto.MSG_LOGOUT_REQUEST, { cancel: true });
+    });
+  }
+
+  private updateLogoutOverlay(): void {
+    const timerEl = document.getElementById('logout-timer');
+    if (timerEl) timerEl.textContent = `${this.logoutCountdown}`;
+  }
+
+  private cancelLogoutUI(reason?: string): void {
+    this.logoutCountdown = 0;
+    if (this.logoutInterval) {
+      clearInterval(this.logoutInterval);
+      this.logoutInterval = null;
+    }
+    this.closeLogoutOverlay();
+    if (reason) {
+      this.showSystemMessage(`Logout cancelled: ${reason}`);
+    }
+  }
+
+  private closeLogoutOverlay(): void {
+    if (this.logoutDiv) {
+      this.logoutDiv.remove();
+      this.logoutDiv = null;
+    }
+    const existing = document.getElementById('logout-overlay');
+    if (existing) existing.remove();
   }
 
   // ---------------------------------------------------------------------------
@@ -3299,36 +3464,66 @@ export class GameScene extends Phaser.Scene {
 
     const div = document.createElement('div');
     div.id = 'stats-panel';
-    div.style.cssText = 'position:fixed; top:50%; right:180px; transform:translateY(-50%); z-index:200; background:rgba(20,20,30,0.95); color:#fff; padding:15px; font-size:12px; min-width:200px; border:1px solid #555; border-radius:4px;';
+    div.style.cssText = 'position:fixed; top:50%; right:180px; transform:translateY(-50%); z-index:200; background:rgba(20,20,30,0.95); color:#fff; padding:15px; font-size:12px; min-width:260px; border:1px solid #555; border-radius:4px;';
 
-    const stats = [
-      { key: 1, name: 'STR', val: this.playerSTR },
-      { key: 2, name: 'VIT', val: this.playerVIT },
-      { key: 3, name: 'DEX', val: this.playerDEX },
-      { key: 4, name: 'INT', val: this.playerINT },
-      { key: 5, name: 'MAG', val: this.playerMAG },
-      { key: 6, name: 'CHR', val: this.playerCHR },
+    const stats: { key: number; name: string; val: number; hint: string }[] = [
+      { key: 1, name: 'STR', val: this.playerSTR, hint: 'Melee damage' },
+      { key: 2, name: 'VIT', val: this.playerVIT, hint: '+2 Max HP per pt' },
+      { key: 3, name: 'DEX', val: this.playerDEX, hint: 'Hit & defense ratio' },
+      { key: 4, name: 'INT', val: this.playerINT, hint: 'Spell power' },
+      { key: 5, name: 'MAG', val: this.playerMAG, hint: '+2 Max MP per pt' },
+      { key: 6, name: 'CHR', val: this.playerCHR, hint: 'NPC prices, party bonus' },
     ];
 
-    let html = '<div style="display:flex; justify-content:space-between; margin-bottom:10px;"><strong>Character Stats</strong><button id="stats-close" style="cursor:pointer;">X</button></div>';
-    html += `<div style="margin-bottom:8px;">Level: ${this.playerLevel} | XP: ${this.playerExp}</div>`;
-    html += `<div style="margin-bottom:8px; color:#9b59b6;">Stat Points: ${this.playerLUPool}</div>`;
+    // Header
+    let html = '<div style="display:flex; justify-content:space-between; margin-bottom:10px;"><strong style="font-size:13px;">Character Stats</strong><button id="stats-close" style="cursor:pointer; background:none; border:none; color:#aaa; font-size:14px;">X</button></div>';
 
+    // XP progress section
+    const currentLevelXP = this.xpForLevel(this.playerLevel);
+    const nextLevelXP = this.xpForLevel(this.playerLevel + 1);
+    const xpIntoLevel = Number(this.playerExp) - currentLevelXP;
+    const xpNeeded = nextLevelXP - currentLevelXP;
+    const xpPct = xpNeeded > 0 ? Math.min(Math.round((xpIntoLevel / xpNeeded) * 100), 100) : 100;
+
+    html += `<div style="margin-bottom:10px; padding:8px; background:rgba(0,0,0,0.3); border-radius:3px;">`;
+    html += `<div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>Level <strong style="color:#FFD700;">${this.playerLevel}</strong></span><span style="color:#888; font-size:10px;">Total XP: ${this.playerExp}</span></div>`;
+    html += `<div style="height:14px; background:#333; border:1px solid #555; border-radius:2px; position:relative; overflow:hidden; margin-bottom:3px;">`;
+    html += `<div style="height:100%; background:linear-gradient(to right,#e67e22,#f39c12); width:${xpPct}%; transition:width 0.3s;"></div>`;
+    html += `<div style="position:absolute; top:0; left:0; right:0; text-align:center; font-size:9px; line-height:14px; color:#fff; text-shadow:0 0 2px #000;">${xpPct}% &mdash; ${xpIntoLevel} / ${xpNeeded}</div>`;
+    html += `</div></div>`;
+
+    // Stat points banner
+    if (this.playerLUPool > 0) {
+      html += `<div style="margin-bottom:8px; padding:6px 8px; background:rgba(155,89,182,0.15); border:1px solid #9b59b6; border-radius:3px; color:#d4a0ff; text-align:center; font-weight:bold;">`;
+      html += `${this.playerLUPool} Stat Point${this.playerLUPool > 1 ? 's' : ''} Available`;
+      html += `</div>`;
+    }
+
+    // Stat rows
+    const btnStyle = 'font-size:10px; cursor:pointer; padding:1px 6px; border:1px solid #555; border-radius:2px; background:#333; color:#ccc; margin-left:2px;';
     for (const stat of stats) {
-      html += `<div style="display:flex; justify-content:space-between; align-items:center; padding:3px 0;">`;
-      html += `<span>${stat.name}: <strong>${stat.val}</strong></span>`;
+      html += `<div style="display:flex; justify-content:space-between; align-items:center; padding:4px 0; border-bottom:1px solid #222;">`;
+      html += `<div><span style="color:#aaa; width:32px; display:inline-block;">${stat.name}</span> <strong style="font-size:13px;">${stat.val}</strong> <span style="color:#555; font-size:9px;">${stat.hint}</span></div>`;
       if (this.playerLUPool > 0) {
-        html += `<button class="stat-alloc-btn" data-stat="${stat.key}" style="font-size:10px; cursor:pointer;">+1</button>`;
+        html += `<div style="display:flex;">`;
+        html += `<button class="stat-alloc-btn" data-stat="${stat.key}" data-pts="1" style="${btnStyle}">+1</button>`;
+        if (this.playerLUPool >= 5) {
+          html += `<button class="stat-alloc-btn" data-stat="${stat.key}" data-pts="5" style="${btnStyle}">+5</button>`;
+        }
+        html += `</div>`;
       }
       html += `</div>`;
     }
 
-    html += `<div style="margin-top:10px; border-top:1px solid #333; padding-top:8px; font-size:11px;">`;
-    html += `<div>HP: ${this.playerHP}/${this.playerMaxHP}</div>`;
-    html += `<div>MP: ${this.playerMP}/${this.playerMaxMP}</div>`;
-    html += `<div>SP: ${this.playerSP}/${this.playerMaxSP}</div>`;
+    // Derived stats
+    html += `<div style="margin-top:10px; padding:8px; background:rgba(0,0,0,0.3); border-radius:3px; font-size:11px;">`;
+    html += `<div style="color:#aaa; margin-bottom:4px; font-size:10px;">Derived Stats</div>`;
+    html += `<div style="display:flex; justify-content:space-between;"><span style="color:#e74c3c;">HP</span> <span>${this.playerHP}/${this.playerMaxHP}</span></div>`;
+    html += `<div style="display:flex; justify-content:space-between;"><span style="color:#3498db;">MP</span> <span>${this.playerMP}/${this.playerMaxMP}</span></div>`;
+    html += `<div style="display:flex; justify-content:space-between;"><span style="color:#2ecc71;">SP</span> <span>${this.playerSP}/${this.playerMaxSP}</span></div>`;
     html += `</div>`;
 
+    html += `<style>.stat-alloc-btn:hover{background:#555!important;color:#fff!important;}</style>`;
     div.innerHTML = html;
     document.body.appendChild(div);
 
@@ -3336,8 +3531,8 @@ export class GameScene extends Phaser.Scene {
     div.querySelectorAll('.stat-alloc-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const statType = parseInt((btn as HTMLElement).dataset.stat || '0');
-        this.msgHandler.sendMessage(Proto.MSG_STAT_ALLOC_REQUEST, { statType, points: 1 });
-        // Re-render after a short delay for server response
+        const points = parseInt((btn as HTMLElement).dataset.pts || '1');
+        this.msgHandler.sendMessage(Proto.MSG_STAT_ALLOC_REQUEST, { statType, points });
         setTimeout(() => this.renderStatsUI(), 200);
       });
     });

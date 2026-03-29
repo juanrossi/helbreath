@@ -148,8 +148,8 @@ func (m *MemoryStore) CreateCharacter(_ context.Context, accountID int, name str
 		MP:             10,
 		SP:             30,
 		MapName:        "default",
-		PosX:           50,
-		PosY:           50,
+		PosX:           134,
+		PosY:           37,
 		Direction:      5,
 		Hunger:         100,
 		AdminLevel:     4, // Dev mode: all characters start as Super GM

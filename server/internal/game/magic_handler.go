@@ -382,6 +382,9 @@ func (e *Engine) handleDebuffSpell(p *player.Player, spell *magic.SpellDef, targ
 			targetPlayer.Buffs.AddBuff(spell.ID, spell.Name, spell.BuffStat, spell.BuffAmount, spell.Duration)
 		}
 
+		// Cancel logout if the target was hit by a hostile spell
+		e.cancelLogoutOnDamage(targetPlayer)
+
 		e.broadcastSpellEffect(p, spell, targetID, p.X, p.Y, targetPlayer.X, targetPlayer.Y, 0, 0, false, gm)
 		log.Printf("Player %s cast %s on player %s", p.Name, spell.Name, targetPlayer.Name)
 	}

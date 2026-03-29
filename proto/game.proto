@@ -192,6 +192,18 @@ message RespawnEvent {
   int32 sp = 6;
 }
 
+// Client -> Server: Request to start or cancel logout
+message LogoutRequest {
+  bool cancel = 1;  // true = cancel pending logout
+}
+
+// Server -> Client: Logout status update
+message LogoutResponse {
+  int32 seconds_remaining = 1;  // 0 = cancelled/completed
+  bool cancelled = 2;           // true = countdown was interrupted
+  string reason = 3;            // why it was cancelled (e.g. "You were attacked!")
+}
+
 // Entity info for initial world state
 message EntityInfo {
   int32 object_id = 1;

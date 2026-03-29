@@ -21,8 +21,9 @@ type CombatResult struct {
 // PlayerAttackNPC calculates damage from a player attacking an NPC.
 // Ported from C++ iCalculateAttackEffect (Game.cpp:60905).
 func PlayerAttackNPC(p *player.Player, n *npc.NPC) CombatResult {
-	// Hit check: player hit ratio vs NPC defense ratio
-	hitChance := clamp(50+p.HitRatio-n.Type.Defense, 5, 95)
+	// Hit check: ratio-based formula from C++ (Game.cpp:61837)
+	// iDestHitRatio = (iAttackerHitRatio / iTargetDefenseRatio) * 50.0
+	hitChance := calcHitChance(p.HitRatio, n.Type.Defense)
 	if rand.Intn(100)+1 > hitChance {
 		return CombatResult{Miss: true}
 	}
@@ -107,8 +108,8 @@ func NPCAttackPlayer(n *npc.NPC, p *player.Player) CombatResult {
 		return CombatResult{Damage: 0, Miss: true}
 	}
 
-	// Hit check: NPC DEX vs player defense ratio
-	hitChance := clamp(50+n.Type.DEX-p.DefenseRatio, 5, 95)
+	// Hit check: ratio-based formula from C++ (Game.cpp:61837)
+	hitChance := calcHitChance(n.Type.DEX, p.DefenseRatio)
 	if rand.Intn(100)+1 > hitChance {
 		return CombatResult{Miss: true}
 	}
@@ -201,8 +202,8 @@ func PlayerAttackPlayer(attacker, target *player.Player) CombatResult {
 		return CombatResult{Damage: 0, Miss: true}
 	}
 
-	// Hit check: attacker hit ratio vs target defense ratio
-	hitChance := clamp(50+attacker.HitRatio-target.DefenseRatio, 5, 95)
+	// Hit check: ratio-based formula from C++ (Game.cpp:61837)
+	hitChance := calcHitChance(attacker.HitRatio, target.DefenseRatio)
 	if rand.Intn(100)+1 > hitChance {
 		return CombatResult{Miss: true}
 	}
@@ -429,6 +430,20 @@ func CalcDayNightBonus(p *player.Player, worldPhase int) int {
 		bonus += def.NightBonus
 	}
 	return bonus
+}
+
+// calcHitChance computes the hit probability using the C++ ratio formula:
+//
+//	hitChance = (attackerHitRatio / defenderDefenseRatio) * 50.0
+//	clamped to [15, 99] (DEF_MINIMUMHITRATIO / DEF_MAXIMUMHITRATIO)
+//
+// If defenderRatio is 0, returns 99 (guaranteed hit).
+func calcHitChance(attackerRatio, defenderRatio int) int {
+	if defenderRatio <= 0 {
+		return 99
+	}
+	hitChance := int(float64(attackerRatio) / float64(defenderRatio) * 50.0)
+	return clamp(hitChance, 15, 99)
 }
 
 func abs(x int) int {
