@@ -6083,6 +6083,242 @@ export namespace hbonline {
         public static getTypeUrl(typeUrlPrefix?: string): string;
     }
 
+    /** Properties of a SpellCatalog. */
+    interface ISpellCatalog {
+
+        /** SpellCatalog spells */
+        spells?: (hbonline.ISpellCatalogEntry[]|null);
+    }
+
+    /** Represents a SpellCatalog. */
+    class SpellCatalog implements ISpellCatalog {
+
+        /**
+         * Constructs a new SpellCatalog.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: hbonline.ISpellCatalog);
+
+        /** SpellCatalog spells. */
+        public spells: hbonline.ISpellCatalogEntry[];
+
+        /**
+         * Creates a new SpellCatalog instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns SpellCatalog instance
+         */
+        public static create(properties?: hbonline.ISpellCatalog): hbonline.SpellCatalog;
+
+        /**
+         * Encodes the specified SpellCatalog message. Does not implicitly {@link hbonline.SpellCatalog.verify|verify} messages.
+         * @param message SpellCatalog message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: hbonline.ISpellCatalog, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified SpellCatalog message, length delimited. Does not implicitly {@link hbonline.SpellCatalog.verify|verify} messages.
+         * @param message SpellCatalog message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: hbonline.ISpellCatalog, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a SpellCatalog message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns SpellCatalog
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.SpellCatalog;
+
+        /**
+         * Decodes a SpellCatalog message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns SpellCatalog
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.SpellCatalog;
+
+        /**
+         * Verifies a SpellCatalog message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a SpellCatalog message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns SpellCatalog
+         */
+        public static fromObject(object: { [k: string]: any }): hbonline.SpellCatalog;
+
+        /**
+         * Creates a plain object from a SpellCatalog message. Also converts values to other types if specified.
+         * @param message SpellCatalog
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: hbonline.SpellCatalog, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this SpellCatalog to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the default type url for SpellCatalog
+         * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns The default type url
+         */
+        public static getTypeUrl(typeUrlPrefix?: string): string;
+    }
+
+    /** Properties of a SpellCatalogEntry. */
+    interface ISpellCatalogEntry {
+
+        /** SpellCatalogEntry spellId */
+        spellId?: (number|null);
+
+        /** SpellCatalogEntry name */
+        name?: (string|null);
+
+        /** SpellCatalogEntry spellType */
+        spellType?: (number|null);
+
+        /** SpellCatalogEntry manaCost */
+        manaCost?: (number|null);
+
+        /** SpellCatalogEntry reqLevel */
+        reqLevel?: (number|null);
+
+        /** SpellCatalogEntry reqMag */
+        reqMag?: (number|null);
+
+        /** SpellCatalogEntry reqInt */
+        reqInt?: (number|null);
+
+        /** SpellCatalogEntry learned */
+        learned?: (boolean|null);
+    }
+
+    /** Represents a SpellCatalogEntry. */
+    class SpellCatalogEntry implements ISpellCatalogEntry {
+
+        /**
+         * Constructs a new SpellCatalogEntry.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: hbonline.ISpellCatalogEntry);
+
+        /** SpellCatalogEntry spellId. */
+        public spellId: number;
+
+        /** SpellCatalogEntry name. */
+        public name: string;
+
+        /** SpellCatalogEntry spellType. */
+        public spellType: number;
+
+        /** SpellCatalogEntry manaCost. */
+        public manaCost: number;
+
+        /** SpellCatalogEntry reqLevel. */
+        public reqLevel: number;
+
+        /** SpellCatalogEntry reqMag. */
+        public reqMag: number;
+
+        /** SpellCatalogEntry reqInt. */
+        public reqInt: number;
+
+        /** SpellCatalogEntry learned. */
+        public learned: boolean;
+
+        /**
+         * Creates a new SpellCatalogEntry instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns SpellCatalogEntry instance
+         */
+        public static create(properties?: hbonline.ISpellCatalogEntry): hbonline.SpellCatalogEntry;
+
+        /**
+         * Encodes the specified SpellCatalogEntry message. Does not implicitly {@link hbonline.SpellCatalogEntry.verify|verify} messages.
+         * @param message SpellCatalogEntry message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: hbonline.ISpellCatalogEntry, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified SpellCatalogEntry message, length delimited. Does not implicitly {@link hbonline.SpellCatalogEntry.verify|verify} messages.
+         * @param message SpellCatalogEntry message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: hbonline.ISpellCatalogEntry, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a SpellCatalogEntry message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns SpellCatalogEntry
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.SpellCatalogEntry;
+
+        /**
+         * Decodes a SpellCatalogEntry message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns SpellCatalogEntry
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.SpellCatalogEntry;
+
+        /**
+         * Verifies a SpellCatalogEntry message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a SpellCatalogEntry message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns SpellCatalogEntry
+         */
+        public static fromObject(object: { [k: string]: any }): hbonline.SpellCatalogEntry;
+
+        /**
+         * Creates a plain object from a SpellCatalogEntry message. Also converts values to other types if specified.
+         * @param message SpellCatalogEntry
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: hbonline.SpellCatalogEntry, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this SpellCatalogEntry to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+
+        /**
+         * Gets the default type url for SpellCatalogEntry
+         * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns The default type url
+         */
+        public static getTypeUrl(typeUrlPrefix?: string): string;
+    }
+
     /** Properties of a LearnSpellRequest. */
     interface ILearnSpellRequest {
 

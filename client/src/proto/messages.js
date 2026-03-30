@@ -15431,6 +15431,599 @@ export const hbonline = $root.hbonline = (() => {
         return LearnedSpell;
     })();
 
+    hbonline.SpellCatalog = (function() {
+
+        /**
+         * Properties of a SpellCatalog.
+         * @memberof hbonline
+         * @interface ISpellCatalog
+         * @property {Array.<hbonline.ISpellCatalogEntry>|null} [spells] SpellCatalog spells
+         */
+
+        /**
+         * Constructs a new SpellCatalog.
+         * @memberof hbonline
+         * @classdesc Represents a SpellCatalog.
+         * @implements ISpellCatalog
+         * @constructor
+         * @param {hbonline.ISpellCatalog=} [properties] Properties to set
+         */
+        function SpellCatalog(properties) {
+            this.spells = [];
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * SpellCatalog spells.
+         * @member {Array.<hbonline.ISpellCatalogEntry>} spells
+         * @memberof hbonline.SpellCatalog
+         * @instance
+         */
+        SpellCatalog.prototype.spells = $util.emptyArray;
+
+        /**
+         * Creates a new SpellCatalog instance using the specified properties.
+         * @function create
+         * @memberof hbonline.SpellCatalog
+         * @static
+         * @param {hbonline.ISpellCatalog=} [properties] Properties to set
+         * @returns {hbonline.SpellCatalog} SpellCatalog instance
+         */
+        SpellCatalog.create = function create(properties) {
+            return new SpellCatalog(properties);
+        };
+
+        /**
+         * Encodes the specified SpellCatalog message. Does not implicitly {@link hbonline.SpellCatalog.verify|verify} messages.
+         * @function encode
+         * @memberof hbonline.SpellCatalog
+         * @static
+         * @param {hbonline.ISpellCatalog} message SpellCatalog message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        SpellCatalog.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.spells != null && message.spells.length)
+                for (let i = 0; i < message.spells.length; ++i)
+                    $root.hbonline.SpellCatalogEntry.encode(message.spells[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            return writer;
+        };
+
+        /**
+         * Encodes the specified SpellCatalog message, length delimited. Does not implicitly {@link hbonline.SpellCatalog.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof hbonline.SpellCatalog
+         * @static
+         * @param {hbonline.ISpellCatalog} message SpellCatalog message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        SpellCatalog.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a SpellCatalog message from the specified reader or buffer.
+         * @function decode
+         * @memberof hbonline.SpellCatalog
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {hbonline.SpellCatalog} SpellCatalog
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        SpellCatalog.decode = function decode(reader, length, error) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.hbonline.SpellCatalog();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                if (tag === error)
+                    break;
+                switch (tag >>> 3) {
+                case 1: {
+                        if (!(message.spells && message.spells.length))
+                            message.spells = [];
+                        message.spells.push($root.hbonline.SpellCatalogEntry.decode(reader, reader.uint32()));
+                        break;
+                    }
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a SpellCatalog message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof hbonline.SpellCatalog
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {hbonline.SpellCatalog} SpellCatalog
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        SpellCatalog.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a SpellCatalog message.
+         * @function verify
+         * @memberof hbonline.SpellCatalog
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        SpellCatalog.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.spells != null && message.hasOwnProperty("spells")) {
+                if (!Array.isArray(message.spells))
+                    return "spells: array expected";
+                for (let i = 0; i < message.spells.length; ++i) {
+                    let error = $root.hbonline.SpellCatalogEntry.verify(message.spells[i]);
+                    if (error)
+                        return "spells." + error;
+                }
+            }
+            return null;
+        };
+
+        /**
+         * Creates a SpellCatalog message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof hbonline.SpellCatalog
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {hbonline.SpellCatalog} SpellCatalog
+         */
+        SpellCatalog.fromObject = function fromObject(object) {
+            if (object instanceof $root.hbonline.SpellCatalog)
+                return object;
+            let message = new $root.hbonline.SpellCatalog();
+            if (object.spells) {
+                if (!Array.isArray(object.spells))
+                    throw TypeError(".hbonline.SpellCatalog.spells: array expected");
+                message.spells = [];
+                for (let i = 0; i < object.spells.length; ++i) {
+                    if (typeof object.spells[i] !== "object")
+                        throw TypeError(".hbonline.SpellCatalog.spells: object expected");
+                    message.spells[i] = $root.hbonline.SpellCatalogEntry.fromObject(object.spells[i]);
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a SpellCatalog message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof hbonline.SpellCatalog
+         * @static
+         * @param {hbonline.SpellCatalog} message SpellCatalog
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        SpellCatalog.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.arrays || options.defaults)
+                object.spells = [];
+            if (message.spells && message.spells.length) {
+                object.spells = [];
+                for (let j = 0; j < message.spells.length; ++j)
+                    object.spells[j] = $root.hbonline.SpellCatalogEntry.toObject(message.spells[j], options);
+            }
+            return object;
+        };
+
+        /**
+         * Converts this SpellCatalog to JSON.
+         * @function toJSON
+         * @memberof hbonline.SpellCatalog
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        SpellCatalog.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the default type url for SpellCatalog
+         * @function getTypeUrl
+         * @memberof hbonline.SpellCatalog
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        SpellCatalog.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/hbonline.SpellCatalog";
+        };
+
+        return SpellCatalog;
+    })();
+
+    hbonline.SpellCatalogEntry = (function() {
+
+        /**
+         * Properties of a SpellCatalogEntry.
+         * @memberof hbonline
+         * @interface ISpellCatalogEntry
+         * @property {number|null} [spellId] SpellCatalogEntry spellId
+         * @property {string|null} [name] SpellCatalogEntry name
+         * @property {number|null} [spellType] SpellCatalogEntry spellType
+         * @property {number|null} [manaCost] SpellCatalogEntry manaCost
+         * @property {number|null} [reqLevel] SpellCatalogEntry reqLevel
+         * @property {number|null} [reqMag] SpellCatalogEntry reqMag
+         * @property {number|null} [reqInt] SpellCatalogEntry reqInt
+         * @property {boolean|null} [learned] SpellCatalogEntry learned
+         */
+
+        /**
+         * Constructs a new SpellCatalogEntry.
+         * @memberof hbonline
+         * @classdesc Represents a SpellCatalogEntry.
+         * @implements ISpellCatalogEntry
+         * @constructor
+         * @param {hbonline.ISpellCatalogEntry=} [properties] Properties to set
+         */
+        function SpellCatalogEntry(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * SpellCatalogEntry spellId.
+         * @member {number} spellId
+         * @memberof hbonline.SpellCatalogEntry
+         * @instance
+         */
+        SpellCatalogEntry.prototype.spellId = 0;
+
+        /**
+         * SpellCatalogEntry name.
+         * @member {string} name
+         * @memberof hbonline.SpellCatalogEntry
+         * @instance
+         */
+        SpellCatalogEntry.prototype.name = "";
+
+        /**
+         * SpellCatalogEntry spellType.
+         * @member {number} spellType
+         * @memberof hbonline.SpellCatalogEntry
+         * @instance
+         */
+        SpellCatalogEntry.prototype.spellType = 0;
+
+        /**
+         * SpellCatalogEntry manaCost.
+         * @member {number} manaCost
+         * @memberof hbonline.SpellCatalogEntry
+         * @instance
+         */
+        SpellCatalogEntry.prototype.manaCost = 0;
+
+        /**
+         * SpellCatalogEntry reqLevel.
+         * @member {number} reqLevel
+         * @memberof hbonline.SpellCatalogEntry
+         * @instance
+         */
+        SpellCatalogEntry.prototype.reqLevel = 0;
+
+        /**
+         * SpellCatalogEntry reqMag.
+         * @member {number} reqMag
+         * @memberof hbonline.SpellCatalogEntry
+         * @instance
+         */
+        SpellCatalogEntry.prototype.reqMag = 0;
+
+        /**
+         * SpellCatalogEntry reqInt.
+         * @member {number} reqInt
+         * @memberof hbonline.SpellCatalogEntry
+         * @instance
+         */
+        SpellCatalogEntry.prototype.reqInt = 0;
+
+        /**
+         * SpellCatalogEntry learned.
+         * @member {boolean} learned
+         * @memberof hbonline.SpellCatalogEntry
+         * @instance
+         */
+        SpellCatalogEntry.prototype.learned = false;
+
+        /**
+         * Creates a new SpellCatalogEntry instance using the specified properties.
+         * @function create
+         * @memberof hbonline.SpellCatalogEntry
+         * @static
+         * @param {hbonline.ISpellCatalogEntry=} [properties] Properties to set
+         * @returns {hbonline.SpellCatalogEntry} SpellCatalogEntry instance
+         */
+        SpellCatalogEntry.create = function create(properties) {
+            return new SpellCatalogEntry(properties);
+        };
+
+        /**
+         * Encodes the specified SpellCatalogEntry message. Does not implicitly {@link hbonline.SpellCatalogEntry.verify|verify} messages.
+         * @function encode
+         * @memberof hbonline.SpellCatalogEntry
+         * @static
+         * @param {hbonline.ISpellCatalogEntry} message SpellCatalogEntry message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        SpellCatalogEntry.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.spellId != null && Object.hasOwnProperty.call(message, "spellId"))
+                writer.uint32(/* id 1, wireType 0 =*/8).int32(message.spellId);
+            if (message.name != null && Object.hasOwnProperty.call(message, "name"))
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
+            if (message.spellType != null && Object.hasOwnProperty.call(message, "spellType"))
+                writer.uint32(/* id 3, wireType 0 =*/24).int32(message.spellType);
+            if (message.manaCost != null && Object.hasOwnProperty.call(message, "manaCost"))
+                writer.uint32(/* id 4, wireType 0 =*/32).int32(message.manaCost);
+            if (message.reqLevel != null && Object.hasOwnProperty.call(message, "reqLevel"))
+                writer.uint32(/* id 5, wireType 0 =*/40).int32(message.reqLevel);
+            if (message.reqMag != null && Object.hasOwnProperty.call(message, "reqMag"))
+                writer.uint32(/* id 6, wireType 0 =*/48).int32(message.reqMag);
+            if (message.reqInt != null && Object.hasOwnProperty.call(message, "reqInt"))
+                writer.uint32(/* id 7, wireType 0 =*/56).int32(message.reqInt);
+            if (message.learned != null && Object.hasOwnProperty.call(message, "learned"))
+                writer.uint32(/* id 8, wireType 0 =*/64).bool(message.learned);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified SpellCatalogEntry message, length delimited. Does not implicitly {@link hbonline.SpellCatalogEntry.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof hbonline.SpellCatalogEntry
+         * @static
+         * @param {hbonline.ISpellCatalogEntry} message SpellCatalogEntry message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        SpellCatalogEntry.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a SpellCatalogEntry message from the specified reader or buffer.
+         * @function decode
+         * @memberof hbonline.SpellCatalogEntry
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {hbonline.SpellCatalogEntry} SpellCatalogEntry
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        SpellCatalogEntry.decode = function decode(reader, length, error) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.hbonline.SpellCatalogEntry();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                if (tag === error)
+                    break;
+                switch (tag >>> 3) {
+                case 1: {
+                        message.spellId = reader.int32();
+                        break;
+                    }
+                case 2: {
+                        message.name = reader.string();
+                        break;
+                    }
+                case 3: {
+                        message.spellType = reader.int32();
+                        break;
+                    }
+                case 4: {
+                        message.manaCost = reader.int32();
+                        break;
+                    }
+                case 5: {
+                        message.reqLevel = reader.int32();
+                        break;
+                    }
+                case 6: {
+                        message.reqMag = reader.int32();
+                        break;
+                    }
+                case 7: {
+                        message.reqInt = reader.int32();
+                        break;
+                    }
+                case 8: {
+                        message.learned = reader.bool();
+                        break;
+                    }
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a SpellCatalogEntry message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof hbonline.SpellCatalogEntry
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {hbonline.SpellCatalogEntry} SpellCatalogEntry
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        SpellCatalogEntry.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a SpellCatalogEntry message.
+         * @function verify
+         * @memberof hbonline.SpellCatalogEntry
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        SpellCatalogEntry.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.spellId != null && message.hasOwnProperty("spellId"))
+                if (!$util.isInteger(message.spellId))
+                    return "spellId: integer expected";
+            if (message.name != null && message.hasOwnProperty("name"))
+                if (!$util.isString(message.name))
+                    return "name: string expected";
+            if (message.spellType != null && message.hasOwnProperty("spellType"))
+                if (!$util.isInteger(message.spellType))
+                    return "spellType: integer expected";
+            if (message.manaCost != null && message.hasOwnProperty("manaCost"))
+                if (!$util.isInteger(message.manaCost))
+                    return "manaCost: integer expected";
+            if (message.reqLevel != null && message.hasOwnProperty("reqLevel"))
+                if (!$util.isInteger(message.reqLevel))
+                    return "reqLevel: integer expected";
+            if (message.reqMag != null && message.hasOwnProperty("reqMag"))
+                if (!$util.isInteger(message.reqMag))
+                    return "reqMag: integer expected";
+            if (message.reqInt != null && message.hasOwnProperty("reqInt"))
+                if (!$util.isInteger(message.reqInt))
+                    return "reqInt: integer expected";
+            if (message.learned != null && message.hasOwnProperty("learned"))
+                if (typeof message.learned !== "boolean")
+                    return "learned: boolean expected";
+            return null;
+        };
+
+        /**
+         * Creates a SpellCatalogEntry message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof hbonline.SpellCatalogEntry
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {hbonline.SpellCatalogEntry} SpellCatalogEntry
+         */
+        SpellCatalogEntry.fromObject = function fromObject(object) {
+            if (object instanceof $root.hbonline.SpellCatalogEntry)
+                return object;
+            let message = new $root.hbonline.SpellCatalogEntry();
+            if (object.spellId != null)
+                message.spellId = object.spellId | 0;
+            if (object.name != null)
+                message.name = String(object.name);
+            if (object.spellType != null)
+                message.spellType = object.spellType | 0;
+            if (object.manaCost != null)
+                message.manaCost = object.manaCost | 0;
+            if (object.reqLevel != null)
+                message.reqLevel = object.reqLevel | 0;
+            if (object.reqMag != null)
+                message.reqMag = object.reqMag | 0;
+            if (object.reqInt != null)
+                message.reqInt = object.reqInt | 0;
+            if (object.learned != null)
+                message.learned = Boolean(object.learned);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a SpellCatalogEntry message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof hbonline.SpellCatalogEntry
+         * @static
+         * @param {hbonline.SpellCatalogEntry} message SpellCatalogEntry
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        SpellCatalogEntry.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.spellId = 0;
+                object.name = "";
+                object.spellType = 0;
+                object.manaCost = 0;
+                object.reqLevel = 0;
+                object.reqMag = 0;
+                object.reqInt = 0;
+                object.learned = false;
+            }
+            if (message.spellId != null && message.hasOwnProperty("spellId"))
+                object.spellId = message.spellId;
+            if (message.name != null && message.hasOwnProperty("name"))
+                object.name = message.name;
+            if (message.spellType != null && message.hasOwnProperty("spellType"))
+                object.spellType = message.spellType;
+            if (message.manaCost != null && message.hasOwnProperty("manaCost"))
+                object.manaCost = message.manaCost;
+            if (message.reqLevel != null && message.hasOwnProperty("reqLevel"))
+                object.reqLevel = message.reqLevel;
+            if (message.reqMag != null && message.hasOwnProperty("reqMag"))
+                object.reqMag = message.reqMag;
+            if (message.reqInt != null && message.hasOwnProperty("reqInt"))
+                object.reqInt = message.reqInt;
+            if (message.learned != null && message.hasOwnProperty("learned"))
+                object.learned = message.learned;
+            return object;
+        };
+
+        /**
+         * Converts this SpellCatalogEntry to JSON.
+         * @function toJSON
+         * @memberof hbonline.SpellCatalogEntry
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        SpellCatalogEntry.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        /**
+         * Gets the default type url for SpellCatalogEntry
+         * @function getTypeUrl
+         * @memberof hbonline.SpellCatalogEntry
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        SpellCatalogEntry.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/hbonline.SpellCatalogEntry";
+        };
+
+        return SpellCatalogEntry;
+    })();
+
     hbonline.LearnSpellRequest = (function() {
 
         /**

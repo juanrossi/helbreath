@@ -23,7 +23,10 @@ type CombatResult struct {
 func PlayerAttackNPC(p *player.Player, n *npc.NPC) CombatResult {
 	// Hit check: ratio-based formula from C++ (Game.cpp:61837)
 	// iDestHitRatio = (iAttackerHitRatio / iTargetDefenseRatio) * 50.0
-	hitChance := calcHitChance(p.HitRatio, n.Type.Defense)
+	hitChance := calcHitChance(p.HitRatio, n.Type.Defense) + HitBonus
+	if hitChance > 99 {
+		hitChance = 99
+	}
 	if rand.Intn(100)+1 > hitChance {
 		return CombatResult{Miss: true}
 	}
@@ -38,12 +41,14 @@ func PlayerAttackNPC(p *player.Player, n *npc.NPC) CombatResult {
 	damage += p.AttBonus
 
 	// Multiplicative STR scaling: damage * (1 + STR/500)
-	// Ported from C++: iDamage += (iDamage * iStr / 500)
 	str := p.EffectiveSTR()
 	damage += damage * str / 500
 
 	// Level bonus
 	damage += p.Level
+
+	// Difficulty multiplier — makes the game easier
+	damage *= DamageMultiplier
 
 	// Critical hit via attack mode (C++ triggers when iAttackMode >= 20)
 	critical := false
@@ -160,6 +165,10 @@ func NPCAttackPlayer(n *npc.NPC, p *player.Player) CombatResult {
 		}
 	}
 
+	// Difficulty: reduce NPC damage to players
+	if NPCDamageReduction > 1 {
+		damage = damage / NPCDamageReduction
+	}
 	if damage < 1 {
 		damage = 1
 	}

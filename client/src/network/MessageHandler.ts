@@ -396,6 +396,21 @@ export interface LogoutResponseData {
   reason: string;
 }
 
+export interface SpellCatalogEntry {
+  spellId: number;
+  name: string;
+  spellType: number;
+  manaCost: number;
+  reqLevel: number;
+  reqMag: number;
+  reqInt: number;
+  learned: boolean;
+}
+
+export interface SpellCatalogData {
+  spells: SpellCatalogEntry[];
+}
+
 export interface MapInfo {
   name: string;
   width: number;
@@ -469,6 +484,7 @@ const decoderMap: Record<number, { decode: (reader: Uint8Array) => any }> = {
   [Proto.MSG_QUEST_PROGRESS]: hbonline.QuestProgressUpdate,
   [Proto.MSG_QUEST_REWARD]: hbonline.QuestRewardNotification,
   [Proto.MSG_LOGOUT_RESPONSE]: hbonline.LogoutResponse,
+  [Proto.MSG_SPELL_CATALOG]: hbonline.SpellCatalog,
 };
 
 // Map from client message type to pre-compiled protobuf encoder

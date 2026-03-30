@@ -11,7 +11,7 @@ import {
   PartyUpdateData, PartyMemberData, PartyInviteData, PartyActionResponseData,
   TradeIncomingData, TradeUpdateData, TradeSlotData, TradeCompleteData, PKStatusData,
   QuestListData, QuestEntryData, QuestProgressData, QuestRewardData,
-  LogoutResponseData,
+  LogoutResponseData, SpellCatalogData, SpellCatalogEntry,
 } from '../network/MessageHandler';
 import * as Proto from '../network/Protocol';
 import { HBMap, TILE_SIZE } from '../game/assets/HBMap';
@@ -410,6 +410,8 @@ export class GameScene extends Phaser.Scene {
   private skillsOpen = false;
   private skillsDiv: HTMLDivElement | null = null;
   private selectedSpellId = 0;
+  private spellCatalog: SpellCatalogEntry[] = [];
+  private spellBookTab: 'known' | 'learn' = 'known';
 
   // Social
   private guildInfo: GuildInfoData | null = null;
@@ -477,6 +479,7 @@ export class GameScene extends Phaser.Scene {
       Proto.MSG_TRADE_INCOMING, Proto.MSG_TRADE_UPDATE, Proto.MSG_TRADE_COMPLETE,
       Proto.MSG_PK_STATUS_UPDATE, Proto.MSG_QUEST_LIST_UPDATE, Proto.MSG_QUEST_PROGRESS,
       Proto.MSG_MAP_CHANGE_RESPONSE, Proto.MSG_LOGOUT_RESPONSE,
+      Proto.MSG_SPELL_CATALOG,
     ];
     for (const t of gameSceneMsgTypes) this.msgHandler.off(t);
 
@@ -1341,6 +1344,7 @@ export class GameScene extends Phaser.Scene {
     this.msgHandler.on(Proto.MSG_QUEST_REWARD, (data: QuestRewardData) => this.onQuestReward(data));
     this.msgHandler.on(Proto.MSG_MAP_CHANGE_RESPONSE, (data: any) => this.onMapChange(data));
     this.msgHandler.on(Proto.MSG_LOGOUT_RESPONSE, (data: LogoutResponseData) => this.onLogoutResponse(data));
+    this.msgHandler.on(Proto.MSG_SPELL_CATALOG, (data: SpellCatalogData) => this.onSpellCatalog(data));
   }
 
   // Track which deferred sprites are already loaded or loading
@@ -3840,6 +3844,13 @@ export class GameScene extends Phaser.Scene {
     }
   }
 
+  private onSpellCatalog(data: SpellCatalogData): void {
+    this.spellCatalog = data.spells || [];
+    if (this.spellBarOpen && this.spellBookTab === 'learn') {
+      this.renderSpellBarUI();
+    }
+  }
+
   private onSkillList(data: SkillListData): void {
     this.playerSkills = data.skills || [];
     if (this.skillsOpen) {
@@ -3955,43 +3966,98 @@ export class GameScene extends Phaser.Scene {
 
     const div = document.createElement('div');
     div.id = 'spell-bar';
-    div.style.cssText = 'position:fixed; bottom:60px; left:50%; transform:translateX(-50%); background:#1a1a2e; border:1px solid #555; border-radius:6px; padding:10px; z-index:1000; color:#fff; font-size:12px; min-width:300px; max-width:500px;';
+    div.style.cssText = 'position:fixed; bottom:60px; left:50%; transform:translateX(-50%); background:#1a1a2e; border:1px solid #555; border-radius:6px; padding:10px; z-index:1000; color:#fff; font-size:12px; min-width:340px; max-width:520px; max-height:320px; display:flex; flex-direction:column;';
     this.spellBarDiv = div;
 
-    let html = '<div style="display:flex; justify-content:space-between; margin-bottom:8px;"><strong>Spell Book (M)</strong><button id="spell-close" style="cursor:pointer;">X</button></div>';
+    const typeNames: Record<number, string> = { 1: 'DMG', 2: 'AOE', 3: 'HEAL', 4: 'BUFF', 5: 'DEBUFF' };
+    const typeColors: Record<number, string> = { 1: '#ff6644', 2: '#ff8800', 3: '#44ff44', 4: '#4488ff', 5: '#aa44ff' };
 
-    if (this.learnedSpells.length === 0) {
-      html += '<div style="color:#888;">No spells learned yet.</div>';
-    } else {
-      html += '<div style="display:flex; flex-wrap:wrap; gap:6px;">';
-      const typeNames: Record<number, string> = { 1: 'DMG', 2: 'AOE', 3: 'HEAL', 4: 'BUFF', 5: 'DEBUFF' };
-      const typeColors: Record<number, string> = { 1: '#ff6644', 2: '#ff8800', 3: '#44ff44', 4: '#4488ff', 5: '#aa44ff' };
-      for (const spell of this.learnedSpells) {
-        const color = typeColors[spell.spellType] || '#fff';
-        const typeName = typeNames[spell.spellType] || '???';
-        const selected = this.selectedSpellId === spell.spellId;
-        const border = selected ? '2px solid #fff' : '1px solid #444';
-        html += `<div class="spell-btn" data-spell="${spell.spellId}" style="cursor:pointer; padding:6px 10px; border:${border}; border-radius:4px; background:#2a2a3e; text-align:center; min-width:70px;">`;
-        html += `<div style="color:${color}; font-weight:bold; font-size:11px;">${spell.name}</div>`;
-        html += `<div style="font-size:9px; color:#aaa;">${typeName} | ${spell.manaCost} MP</div>`;
-        html += `</div>`;
+    // Header + tabs
+    const knownStyle = this.spellBookTab === 'known' ? 'border-bottom:2px solid #FFD700; color:#FFD700;' : 'color:#888;';
+    const learnStyle = this.spellBookTab === 'learn' ? 'border-bottom:2px solid #4488ff; color:#4488ff;' : 'color:#888;';
+
+    let html = '<div style="display:flex; justify-content:space-between; margin-bottom:8px;">';
+    html += '<div style="display:flex; gap:12px;">';
+    html += `<span id="tab-known" style="cursor:pointer; padding-bottom:2px; font-weight:bold; font-size:13px; ${knownStyle}">Spell Book</span>`;
+    html += `<span id="tab-learn" style="cursor:pointer; padding-bottom:2px; font-weight:bold; font-size:13px; ${learnStyle}">Learn Spells</span>`;
+    html += '</div>';
+    html += '<button id="spell-close" style="cursor:pointer; background:none; border:none; color:#aaa; font-size:14px;">X</button></div>';
+
+    if (this.spellBookTab === 'known') {
+      // Known spells tab
+      if (this.learnedSpells.length === 0) {
+        html += '<div style="color:#888; padding:10px; text-align:center;">No spells learned yet. Open the "Learn Spells" tab to get started.</div>';
+      } else {
+        html += '<div style="display:flex; flex-wrap:wrap; gap:6px; overflow-y:auto;">';
+        for (const spell of this.learnedSpells) {
+          const color = typeColors[spell.spellType] || '#fff';
+          const typeName = typeNames[spell.spellType] || '???';
+          const selected = this.selectedSpellId === spell.spellId;
+          const border = selected ? '2px solid #fff' : '1px solid #444';
+          html += `<div class="spell-btn" data-spell="${spell.spellId}" style="cursor:pointer; padding:6px 10px; border:${border}; border-radius:4px; background:#2a2a3e; text-align:center; min-width:70px;">`;
+          html += `<div style="color:${color}; font-weight:bold; font-size:11px;">${spell.name}</div>`;
+          html += `<div style="font-size:9px; color:#aaa;">${typeName} | ${spell.manaCost} MP</div>`;
+          html += `</div>`;
+        }
+        html += '</div>';
       }
-      html += '</div>';
-    }
+      if (this.selectedSpellId > 0) {
+        html += `<div style="margin-top:8px; font-size:11px; color:#aaa;">Selected spell active. Click a target to cast.</div>`;
+      }
+    } else {
+      // Learn spells tab
+      const available = this.spellCatalog
+        .filter(s => !s.learned)
+        .sort((a, b) => a.reqLevel - b.reqLevel || a.reqMag - b.reqMag);
 
-    if (this.selectedSpellId > 0) {
-      html += `<div style="margin-top:8px; font-size:11px; color:#aaa;">Selected spell active. Click a target to cast.</div>`;
+      if (available.length === 0) {
+        html += '<div style="color:#888; padding:10px; text-align:center;">You have learned all available spells!</div>';
+      } else {
+        html += '<div style="overflow-y:auto; max-height:220px;">';
+        for (const spell of available) {
+          const color = typeColors[spell.spellType] || '#fff';
+          const typeName = typeNames[spell.spellType] || '???';
+          const meetsLevel = this.playerLevel >= spell.reqLevel;
+          const meetsMag = this.playerMAG >= spell.reqMag;
+          const meetsInt = this.playerINT >= spell.reqInt;
+          const canLearn = meetsLevel && meetsMag && meetsInt;
+
+          html += `<div style="display:flex; justify-content:space-between; align-items:center; padding:5px 4px; border-bottom:1px solid #222;">`;
+          html += `<div>`;
+          html += `<span style="color:${color}; font-weight:bold;">${spell.name}</span>`;
+          html += ` <span style="color:#666; font-size:10px;">${typeName} | ${spell.manaCost} MP</span>`;
+          html += `<div style="font-size:10px; margin-top:2px;">`;
+          html += `<span style="color:${meetsLevel ? '#2ecc71' : '#e74c3c'};">Lv.${spell.reqLevel}</span>`;
+          if (spell.reqMag > 0) html += ` <span style="color:${meetsMag ? '#2ecc71' : '#e74c3c'};">MAG ${spell.reqMag}</span>`;
+          if (spell.reqInt > 0) html += ` <span style="color:${meetsInt ? '#2ecc71' : '#e74c3c'};">INT ${spell.reqInt}</span>`;
+          html += `</div></div>`;
+          if (canLearn) {
+            html += `<button class="learn-spell-btn" data-spell="${spell.spellId}" style="padding:3px 10px; cursor:pointer; background:#2d3c5f; color:#fff; border:1px solid #4488ff; border-radius:3px; font-size:11px;">Learn</button>`;
+          } else {
+            html += `<span style="color:#555; font-size:10px;">Locked</span>`;
+          }
+          html += `</div>`;
+        }
+        html += '</div>';
+      }
     }
 
     div.innerHTML = html;
     document.body.appendChild(div);
 
     div.querySelector('#spell-close')?.addEventListener('click', () => this.toggleSpellBar());
+    div.querySelector('#tab-known')?.addEventListener('click', () => { this.spellBookTab = 'known'; this.renderSpellBarUI(); });
+    div.querySelector('#tab-learn')?.addEventListener('click', () => { this.spellBookTab = 'learn'; this.renderSpellBarUI(); });
     div.querySelectorAll('.spell-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        const spellId = parseInt((btn as HTMLElement).dataset.spell || '0');
-        this.selectedSpellId = spellId;
+        this.selectedSpellId = parseInt((btn as HTMLElement).dataset.spell || '0');
         this.renderSpellBarUI();
+      });
+    });
+    div.querySelectorAll('.learn-spell-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const spellId = parseInt((btn as HTMLElement).dataset.spell || '0');
+        this.msgHandler.sendMessage(Proto.MSG_LEARN_SPELL_REQUEST, { spellId });
       });
     });
 

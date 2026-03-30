@@ -77,3 +77,4 @@ export const MSG_QUEST_LIST_UPDATE = 0xa8;
 export const MSG_QUEST_PROGRESS = 0xa9;
 export const MSG_QUEST_REWARD = 0xaa;
 export const MSG_LOGOUT_RESPONSE = 0xac;
+export const MSG_SPELL_CATALOG = 0xad;

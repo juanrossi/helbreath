@@ -1344,6 +1344,7 @@ func (e *Engine) handleEnterGame(client *network.Client, req *pb.EnterGameReques
 
 	// Send spell and skill lists
 	e.sendSpellList(p)
+	e.sendSpellCatalog(p)
 	e.sendSkillList(p)
 
 	// Send guild info if in a guild
@@ -1847,8 +1848,9 @@ func (e *Engine) handleNPCDeath(n *npc.NPC, killer *player.Player, gm *mapdata.G
 	// Update quest progress
 	e.onNPCKillQuestUpdate(killer, n.Type.ID)
 
-	// Award XP to killer
-	killer.Experience += int64(n.Type.XP)
+	// Award XP to killer (with difficulty multiplier)
+	xpGain := int64(float64(n.Type.XP) * XPMultiplier)
+	killer.Experience += xpGain
 	leveledUp := CheckLevelUp(killer)
 
 	// Award gold (multi-tier: always drops, amount based on NPC XP)

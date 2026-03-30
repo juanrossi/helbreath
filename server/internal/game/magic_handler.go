@@ -390,6 +390,25 @@ func (e *Engine) handleDebuffSpell(p *player.Player, spell *magic.SpellDef, targ
 	}
 }
 
+// sendSpellCatalog sends the full spell catalog with learning requirements to the player.
+func (e *Engine) sendSpellCatalog(p *player.Player) {
+	catalog := &pb.SpellCatalog{}
+	for _, def := range magic.SpellDB {
+		catalog.Spells = append(catalog.Spells, &pb.SpellCatalogEntry{
+			SpellId:   int32(def.ID),
+			Name:      def.Name,
+			SpellType: int32(def.Type),
+			ManaCost:  int32(def.ManaCost),
+			ReqLevel:  int32(def.ReqLevel),
+			ReqMag:    int32(def.ReqMAG),
+			ReqInt:    int32(def.ReqINT),
+			Learned:   p.LearnedSpells[def.ID],
+		})
+	}
+	data, _ := network.Encode(network.MsgSpellCatalog, catalog)
+	p.Send(data)
+}
+
 // handleLearnSpell handles learning a new spell.
 func (e *Engine) handleLearnSpell(client *network.Client, req *pb.LearnSpellRequest) {
 	p := e.getPlayerByClient(client)
@@ -424,6 +443,7 @@ func (e *Engine) handleLearnSpell(client *network.Client, req *pb.LearnSpellRequ
 
 	p.LearnSpell(spellDef.ID)
 	e.sendSpellList(p)
+	e.sendSpellCatalog(p)
 	e.sendNotification(p, fmt.Sprintf("Learned %s!", spellDef.Name), 3)
 	log.Printf("Player %s learned spell %s", p.Name, spellDef.Name)
 }

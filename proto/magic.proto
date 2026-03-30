@@ -52,6 +52,22 @@ message LearnedSpell {
   int32 sprite_id = 6;
 }
 
+// Server -> Client: All spells available to learn (sent on enter game)
+message SpellCatalog {
+  repeated SpellCatalogEntry spells = 1;
+}
+
+message SpellCatalogEntry {
+  int32 spell_id = 1;
+  string name = 2;
+  int32 spell_type = 3;    // 1=damage, 2=aoe, 3=heal, 4=buff, 5=debuff
+  int32 mana_cost = 4;
+  int32 req_level = 5;
+  int32 req_mag = 6;
+  int32 req_int = 7;
+  bool learned = 8;        // true if the player already knows this spell
+}
+
 // Client -> Server: Learn a spell (from scroll/NPC)
 message LearnSpellRequest {
   int32 spell_id = 1;

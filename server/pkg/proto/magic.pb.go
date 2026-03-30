@@ -421,6 +421,151 @@ func (x *LearnedSpell) GetSpriteId() int32 {
 	return 0
 }
 
+// Server -> Client: All spells available to learn (sent on enter game)
+type SpellCatalog struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Spells        []*SpellCatalogEntry   `protobuf:"bytes,1,rep,name=spells,proto3" json:"spells,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SpellCatalog) Reset() {
+	*x = SpellCatalog{}
+	mi := &file_magic_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SpellCatalog) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SpellCatalog) ProtoMessage() {}
+
+func (x *SpellCatalog) ProtoReflect() protoreflect.Message {
+	mi := &file_magic_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SpellCatalog.ProtoReflect.Descriptor instead.
+func (*SpellCatalog) Descriptor() ([]byte, []int) {
+	return file_magic_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *SpellCatalog) GetSpells() []*SpellCatalogEntry {
+	if x != nil {
+		return x.Spells
+	}
+	return nil
+}
+
+type SpellCatalogEntry struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SpellId       int32                  `protobuf:"varint,1,opt,name=spell_id,json=spellId,proto3" json:"spell_id,omitempty"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	SpellType     int32                  `protobuf:"varint,3,opt,name=spell_type,json=spellType,proto3" json:"spell_type,omitempty"` // 1=damage, 2=aoe, 3=heal, 4=buff, 5=debuff
+	ManaCost      int32                  `protobuf:"varint,4,opt,name=mana_cost,json=manaCost,proto3" json:"mana_cost,omitempty"`
+	ReqLevel      int32                  `protobuf:"varint,5,opt,name=req_level,json=reqLevel,proto3" json:"req_level,omitempty"`
+	ReqMag        int32                  `protobuf:"varint,6,opt,name=req_mag,json=reqMag,proto3" json:"req_mag,omitempty"`
+	ReqInt        int32                  `protobuf:"varint,7,opt,name=req_int,json=reqInt,proto3" json:"req_int,omitempty"`
+	Learned       bool                   `protobuf:"varint,8,opt,name=learned,proto3" json:"learned,omitempty"` // true if the player already knows this spell
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SpellCatalogEntry) Reset() {
+	*x = SpellCatalogEntry{}
+	mi := &file_magic_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SpellCatalogEntry) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SpellCatalogEntry) ProtoMessage() {}
+
+func (x *SpellCatalogEntry) ProtoReflect() protoreflect.Message {
+	mi := &file_magic_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SpellCatalogEntry.ProtoReflect.Descriptor instead.
+func (*SpellCatalogEntry) Descriptor() ([]byte, []int) {
+	return file_magic_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *SpellCatalogEntry) GetSpellId() int32 {
+	if x != nil {
+		return x.SpellId
+	}
+	return 0
+}
+
+func (x *SpellCatalogEntry) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *SpellCatalogEntry) GetSpellType() int32 {
+	if x != nil {
+		return x.SpellType
+	}
+	return 0
+}
+
+func (x *SpellCatalogEntry) GetManaCost() int32 {
+	if x != nil {
+		return x.ManaCost
+	}
+	return 0
+}
+
+func (x *SpellCatalogEntry) GetReqLevel() int32 {
+	if x != nil {
+		return x.ReqLevel
+	}
+	return 0
+}
+
+func (x *SpellCatalogEntry) GetReqMag() int32 {
+	if x != nil {
+		return x.ReqMag
+	}
+	return 0
+}
+
+func (x *SpellCatalogEntry) GetReqInt() int32 {
+	if x != nil {
+		return x.ReqInt
+	}
+	return 0
+}
+
+func (x *SpellCatalogEntry) GetLearned() bool {
+	if x != nil {
+		return x.Learned
+	}
+	return false
+}
+
 // Client -> Server: Learn a spell (from scroll/NPC)
 type LearnSpellRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -431,7 +576,7 @@ type LearnSpellRequest struct {
 
 func (x *LearnSpellRequest) Reset() {
 	*x = LearnSpellRequest{}
-	mi := &file_magic_proto_msgTypes[5]
+	mi := &file_magic_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -443,7 +588,7 @@ func (x *LearnSpellRequest) String() string {
 func (*LearnSpellRequest) ProtoMessage() {}
 
 func (x *LearnSpellRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_magic_proto_msgTypes[5]
+	mi := &file_magic_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -456,7 +601,7 @@ func (x *LearnSpellRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LearnSpellRequest.ProtoReflect.Descriptor instead.
 func (*LearnSpellRequest) Descriptor() ([]byte, []int) {
-	return file_magic_proto_rawDescGZIP(), []int{5}
+	return file_magic_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *LearnSpellRequest) GetSpellId() int32 {
@@ -478,7 +623,7 @@ type SkillListUpdate struct {
 
 func (x *SkillListUpdate) Reset() {
 	*x = SkillListUpdate{}
-	mi := &file_magic_proto_msgTypes[6]
+	mi := &file_magic_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -490,7 +635,7 @@ func (x *SkillListUpdate) String() string {
 func (*SkillListUpdate) ProtoMessage() {}
 
 func (x *SkillListUpdate) ProtoReflect() protoreflect.Message {
-	mi := &file_magic_proto_msgTypes[6]
+	mi := &file_magic_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -503,7 +648,7 @@ func (x *SkillListUpdate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SkillListUpdate.ProtoReflect.Descriptor instead.
 func (*SkillListUpdate) Descriptor() ([]byte, []int) {
-	return file_magic_proto_rawDescGZIP(), []int{6}
+	return file_magic_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *SkillListUpdate) GetSkills() []*SkillEntry {
@@ -538,7 +683,7 @@ type SkillEntry struct {
 
 func (x *SkillEntry) Reset() {
 	*x = SkillEntry{}
-	mi := &file_magic_proto_msgTypes[7]
+	mi := &file_magic_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -550,7 +695,7 @@ func (x *SkillEntry) String() string {
 func (*SkillEntry) ProtoMessage() {}
 
 func (x *SkillEntry) ProtoReflect() protoreflect.Message {
-	mi := &file_magic_proto_msgTypes[7]
+	mi := &file_magic_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -563,7 +708,7 @@ func (x *SkillEntry) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SkillEntry.ProtoReflect.Descriptor instead.
 func (*SkillEntry) Descriptor() ([]byte, []int) {
-	return file_magic_proto_rawDescGZIP(), []int{7}
+	return file_magic_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *SkillEntry) GetSkillId() int32 {
@@ -599,7 +744,7 @@ type SkillUseRequest struct {
 
 func (x *SkillUseRequest) Reset() {
 	*x = SkillUseRequest{}
-	mi := &file_magic_proto_msgTypes[8]
+	mi := &file_magic_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -611,7 +756,7 @@ func (x *SkillUseRequest) String() string {
 func (*SkillUseRequest) ProtoMessage() {}
 
 func (x *SkillUseRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_magic_proto_msgTypes[8]
+	mi := &file_magic_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -624,7 +769,7 @@ func (x *SkillUseRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SkillUseRequest.ProtoReflect.Descriptor instead.
 func (*SkillUseRequest) Descriptor() ([]byte, []int) {
-	return file_magic_proto_rawDescGZIP(), []int{8}
+	return file_magic_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *SkillUseRequest) GetSkillId() int32 {
@@ -662,7 +807,7 @@ type SkillResultEvent struct {
 
 func (x *SkillResultEvent) Reset() {
 	*x = SkillResultEvent{}
-	mi := &file_magic_proto_msgTypes[9]
+	mi := &file_magic_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -674,7 +819,7 @@ func (x *SkillResultEvent) String() string {
 func (*SkillResultEvent) ProtoMessage() {}
 
 func (x *SkillResultEvent) ProtoReflect() protoreflect.Message {
-	mi := &file_magic_proto_msgTypes[9]
+	mi := &file_magic_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -687,7 +832,7 @@ func (x *SkillResultEvent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SkillResultEvent.ProtoReflect.Descriptor instead.
 func (*SkillResultEvent) Descriptor() ([]byte, []int) {
-	return file_magic_proto_rawDescGZIP(), []int{9}
+	return file_magic_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *SkillResultEvent) GetSkillId() int32 {
@@ -735,7 +880,7 @@ type CraftRequest struct {
 
 func (x *CraftRequest) Reset() {
 	*x = CraftRequest{}
-	mi := &file_magic_proto_msgTypes[10]
+	mi := &file_magic_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -747,7 +892,7 @@ func (x *CraftRequest) String() string {
 func (*CraftRequest) ProtoMessage() {}
 
 func (x *CraftRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_magic_proto_msgTypes[10]
+	mi := &file_magic_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -760,7 +905,7 @@ func (x *CraftRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CraftRequest.ProtoReflect.Descriptor instead.
 func (*CraftRequest) Descriptor() ([]byte, []int) {
-	return file_magic_proto_rawDescGZIP(), []int{10}
+	return file_magic_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *CraftRequest) GetRecipeId() int32 {
@@ -783,7 +928,7 @@ type CraftResult struct {
 
 func (x *CraftResult) Reset() {
 	*x = CraftResult{}
-	mi := &file_magic_proto_msgTypes[11]
+	mi := &file_magic_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -795,7 +940,7 @@ func (x *CraftResult) String() string {
 func (*CraftResult) ProtoMessage() {}
 
 func (x *CraftResult) ProtoReflect() protoreflect.Message {
-	mi := &file_magic_proto_msgTypes[11]
+	mi := &file_magic_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -808,7 +953,7 @@ func (x *CraftResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CraftResult.ProtoReflect.Descriptor instead.
 func (*CraftResult) Descriptor() ([]byte, []int) {
-	return file_magic_proto_rawDescGZIP(), []int{11}
+	return file_magic_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *CraftResult) GetSuccess() bool {
@@ -880,7 +1025,19 @@ const file_magic_proto_rawDesc = "" +
 	"cooldownMs\x12\x1d\n" +
 	"\n" +
 	"spell_type\x18\x05 \x01(\x05R\tspellType\x12\x1b\n" +
-	"\tsprite_id\x18\x06 \x01(\x05R\bspriteId\".\n" +
+	"\tsprite_id\x18\x06 \x01(\x05R\bspriteId\"C\n" +
+	"\fSpellCatalog\x123\n" +
+	"\x06spells\x18\x01 \x03(\v2\x1b.hbonline.SpellCatalogEntryR\x06spells\"\xe7\x01\n" +
+	"\x11SpellCatalogEntry\x12\x19\n" +
+	"\bspell_id\x18\x01 \x01(\x05R\aspellId\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1d\n" +
+	"\n" +
+	"spell_type\x18\x03 \x01(\x05R\tspellType\x12\x1b\n" +
+	"\tmana_cost\x18\x04 \x01(\x05R\bmanaCost\x12\x1b\n" +
+	"\treq_level\x18\x05 \x01(\x05R\breqLevel\x12\x17\n" +
+	"\areq_mag\x18\x06 \x01(\x05R\x06reqMag\x12\x17\n" +
+	"\areq_int\x18\a \x01(\x05R\x06reqInt\x12\x18\n" +
+	"\alearned\x18\b \x01(\bR\alearned\".\n" +
 	"\x11LearnSpellRequest\x12\x19\n" +
 	"\bspell_id\x18\x01 \x01(\x05R\aspellId\"\x85\x01\n" +
 	"\x0fSkillListUpdate\x12,\n" +
@@ -924,34 +1081,37 @@ func file_magic_proto_rawDescGZIP() []byte {
 	return file_magic_proto_rawDescData
 }
 
-var file_magic_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_magic_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_magic_proto_goTypes = []any{
 	(*SpellCastRequest)(nil),  // 0: hbonline.SpellCastRequest
 	(*SpellEffectEvent)(nil),  // 1: hbonline.SpellEffectEvent
 	(*BuffUpdate)(nil),        // 2: hbonline.BuffUpdate
 	(*SpellListUpdate)(nil),   // 3: hbonline.SpellListUpdate
 	(*LearnedSpell)(nil),      // 4: hbonline.LearnedSpell
-	(*LearnSpellRequest)(nil), // 5: hbonline.LearnSpellRequest
-	(*SkillListUpdate)(nil),   // 6: hbonline.SkillListUpdate
-	(*SkillEntry)(nil),        // 7: hbonline.SkillEntry
-	(*SkillUseRequest)(nil),   // 8: hbonline.SkillUseRequest
-	(*SkillResultEvent)(nil),  // 9: hbonline.SkillResultEvent
-	(*CraftRequest)(nil),      // 10: hbonline.CraftRequest
-	(*CraftResult)(nil),       // 11: hbonline.CraftResult
-	(*Vec2)(nil),              // 12: hbonline.Vec2
+	(*SpellCatalog)(nil),      // 5: hbonline.SpellCatalog
+	(*SpellCatalogEntry)(nil), // 6: hbonline.SpellCatalogEntry
+	(*LearnSpellRequest)(nil), // 7: hbonline.LearnSpellRequest
+	(*SkillListUpdate)(nil),   // 8: hbonline.SkillListUpdate
+	(*SkillEntry)(nil),        // 9: hbonline.SkillEntry
+	(*SkillUseRequest)(nil),   // 10: hbonline.SkillUseRequest
+	(*SkillResultEvent)(nil),  // 11: hbonline.SkillResultEvent
+	(*CraftRequest)(nil),      // 12: hbonline.CraftRequest
+	(*CraftResult)(nil),       // 13: hbonline.CraftResult
+	(*Vec2)(nil),              // 14: hbonline.Vec2
 }
 var file_magic_proto_depIdxs = []int32{
-	12, // 0: hbonline.SpellCastRequest.target_position:type_name -> hbonline.Vec2
-	12, // 1: hbonline.SpellEffectEvent.caster_position:type_name -> hbonline.Vec2
-	12, // 2: hbonline.SpellEffectEvent.target_position:type_name -> hbonline.Vec2
+	14, // 0: hbonline.SpellCastRequest.target_position:type_name -> hbonline.Vec2
+	14, // 1: hbonline.SpellEffectEvent.caster_position:type_name -> hbonline.Vec2
+	14, // 2: hbonline.SpellEffectEvent.target_position:type_name -> hbonline.Vec2
 	4,  // 3: hbonline.SpellListUpdate.spells:type_name -> hbonline.LearnedSpell
-	7,  // 4: hbonline.SkillListUpdate.skills:type_name -> hbonline.SkillEntry
-	12, // 5: hbonline.SkillUseRequest.target_position:type_name -> hbonline.Vec2
-	6,  // [6:6] is the sub-list for method output_type
-	6,  // [6:6] is the sub-list for method input_type
-	6,  // [6:6] is the sub-list for extension type_name
-	6,  // [6:6] is the sub-list for extension extendee
-	0,  // [0:6] is the sub-list for field type_name
+	6,  // 4: hbonline.SpellCatalog.spells:type_name -> hbonline.SpellCatalogEntry
+	9,  // 5: hbonline.SkillListUpdate.skills:type_name -> hbonline.SkillEntry
+	14, // 6: hbonline.SkillUseRequest.target_position:type_name -> hbonline.Vec2
+	7,  // [7:7] is the sub-list for method output_type
+	7,  // [7:7] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_magic_proto_init() }
@@ -966,7 +1126,7 @@ func file_magic_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_magic_proto_rawDesc), len(file_magic_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   12,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

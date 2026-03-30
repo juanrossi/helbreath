@@ -2,6 +2,10 @@ package items
 
 import "math/rand"
 
+// LootDropMultiplier scales all item drop chances. Set by the game engine's difficulty config.
+// Default 3.0 = 3x more likely to drop items.
+var LootDropMultiplier = 3.0
+
 // LootEntry defines a possible drop from an NPC.
 type LootEntry struct {
 	ItemID     int
@@ -53,7 +57,11 @@ func RollLoot(npcTypeID int) []*Item {
 
 	var drops []*Item
 	for _, entry := range entries {
-		if rand.Float64() < entry.DropChance {
+		chance := entry.DropChance * LootDropMultiplier
+		if chance > 1.0 {
+			chance = 1.0
+		}
+		if rand.Float64() < chance {
 			def := GetItemDef(entry.ItemID)
 			if def == nil {
 				continue
@@ -111,8 +119,10 @@ func PotionTierByDifficulty(npcXP int) int {
 func RollMultiTierLoot(npcTypeID int, npcXP int) []*Item {
 	var drops []*Item
 
-	// Tier 2: Potion roll (35% chance)
-	if rand.Float64() < 0.35 {
+	// Tier 2: Potion roll (35% base, scaled by drop multiplier)
+	potionChance := 0.35 * LootDropMultiplier
+	if potionChance > 1.0 { potionChance = 1.0 }
+	if rand.Float64() < potionChance {
 		potionID := PotionTierByDifficulty(npcXP)
 		def := GetItemDef(potionID)
 		if def != nil {
@@ -124,8 +134,9 @@ func RollMultiTierLoot(npcTypeID int, npcXP int) []*Item {
 	tableLoot := RollLoot(npcTypeID)
 	drops = append(drops, tableLoot...)
 
-	// Tier 4: Rare roll (0.1% chance) — placeholder for future rare items
-	if rand.Float64() < 0.001 {
+	// Tier 4: Rare roll (0.1% base, scaled by drop multiplier)
+	rareChance := 0.001 * LootDropMultiplier
+	if rand.Float64() < rareChance {
 		// Roll a random high-tier equipment piece as rare drop
 		rareItems := []int{50, 4, 81, 456, 600, 461} // GreatSword, Dagger+1, TargeShield, ChainMail(M), Helm, ChainHose(M)
 		rareID := rareItems[rand.Intn(len(rareItems))]

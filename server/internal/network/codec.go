@@ -88,6 +88,7 @@ const (
 	MsgQuestReward        byte = 0xAA
 	MsgWorldState         byte = 0xAB
 	MsgLogoutResponse     byte = 0xAC
+	MsgSpellCatalog       byte = 0xAD
 )
 
 // Encode wraps a protobuf message with a type byte prefix.
