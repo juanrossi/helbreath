@@ -1,62 +1,58 @@
-# HB Online
+# Helbreath.xyz
 
-A web-based rewrite of the classic Helbreath MMORPG. Go server, Phaser 3 + TypeScript client, PostgreSQL, WebSocket + Protobuf.
+A web-based rewrite of the classic Helbreath MMORPG (2001). Play in your browser — no download required.
+
+**Tech Stack**: Go server, Phaser 3 + TypeScript client, PostgreSQL, WebSocket + Protobuf.
+
+**Live**: [https://www.helbreath.xyz](https://www.helbreath.xyz)
 
 ## Prerequisites
 
-- **Go** 1.25+
+- **Go** 1.21+
 - **Node.js** 18+ and npm
-- **Docker** (for PostgreSQL) or a local PostgreSQL 16 instance
+- **PostgreSQL 16** (via Docker or local install)
 - Original game assets in `assets/` (SPRITES, MAPDATA, SOUNDS, MUSIC)
 
 ## Quick Start
 
-### 1. Start the Database
+### 1. Database
 
 ```bash
 docker compose up -d
+
+# Apply migrations
+psql -d hbonline -f migrations/001_initial.sql
+psql -d hbonline -f migrations/002_inventory_skills_and_missing_fields.sql
+psql -d hbonline -f migrations/003_auth_and_uuid.sql
 ```
 
-This starts PostgreSQL 16 on port 5432 and auto-applies migrations from `migrations/`.
+### 2. Server Configuration
 
-Connection string: `postgres://hbonline:hbonline@localhost:5432/hbonline?sslmode=disable`
-
-To verify it's healthy:
+Copy `.env.example` to `.env` and configure:
 
 ```bash
-docker compose ps
+cp .env.example .env
 ```
 
-### 2. Start the Server
+Key settings in `.env`:
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `JWT_SECRET` | (change me) | Secret key for JWT token signing |
+| `JWT_EXPIRY` | `24h` | Token expiration duration |
+| `DATABASE_URL` | `postgres://hbonline:hbonline@localhost:5432/hbonline` | PostgreSQL URL |
+| `ADDR` | `:8080` | Server listen address |
+| `MEMDB` | `false` | Use in-memory store (dev only) |
+| `ALLOWED_ORIGINS` | `http://localhost:3000,...` | CORS allowed origins |
+
+### 3. Start the Server
 
 ```bash
 cd server
 go run ./cmd/gameserver
 ```
 
-The server starts on **port 8080** by default. It will:
-- Connect to PostgreSQL
-- Load all `.amd` map files from `assets/MAPDATA`
-- Spawn NPCs across maps (monsters + shop vendors)
-- Start the game loop (10 ticks/second)
-- Listen for WebSocket connections at `ws://localhost:8080/ws`
-
-#### Server Flags
-
-| Flag | Default | Description |
-|------|---------|-------------|
-| `-addr` | `:8080` | Server listen address |
-| `-db` | `postgres://hbonline:hbonline@localhost:5432/hbonline?sslmode=disable` | PostgreSQL connection URL |
-| `-maps` | `assets/MAPDATA` | Directory containing `.amd` map files |
-| `-memdb` | `false` | Use in-memory store (no PostgreSQL needed, data lost on restart) |
-
-**Example with custom port and in-memory DB (no Docker needed):**
-
-```bash
-go run ./cmd/gameserver -addr :9090 -memdb
-```
-
-### 3. Start the Client
+### 4. Start the Client
 
 ```bash
 cd client
@@ -64,299 +60,280 @@ npm install
 npm run dev
 ```
 
-The Vite dev server starts on **http://localhost:3000** with automatic WebSocket proxying to the Go server.
+Open **http://localhost:3000** to play.
 
-Open your browser to **http://localhost:3000** to play.
+### 5. Play
 
-### 4. Play
+1. **Register** an account (username, password, email)
+2. **Create a character** (name, gender, appearance, stats)
+3. **Enter the game** — spawn on the default map with starter gear
+4. **Move** by clicking / holding mouse. Hold **Shift** to run
+5. **Attack** by left-clicking on monsters (right-click also attacks)
+6. **Chat** by pressing Enter. Prefix `!` for shout, `@name` for whisper
+7. **Hotkeys**: `I` inventory, `C` stats, `M` spells, `K` skills, `G` guild, `P` party, `J` quests
 
-1. **Register** an account (username + password)
-2. **Create a character** (name, gender, appearance, stat allocation — total 70 points, each stat min 10)
-3. **Enter the game** — you spawn on the default map with starter equipment
-4. **Move** with arrow keys, hold **Shift** to run
-5. **Chat** by pressing Enter (prefix `!` for shout, `@name` for whisper)
-6. **Attack** by right-clicking on monsters
-7. **Open inventory** with `I`, stats with `C`, spells with `M`, skills with `K`
+## Authentication
+
+Authentication uses **HTTP REST + JWT tokens** — login happens before Phaser loads any assets.
+
+**Flow:**
+```
+Browser → HTML login form (no Phaser)
+       → POST /api/login (username, password)
+       ← JWT token + character list
+       → Initialize Phaser + load assets
+       → WebSocket connects with ?token=JWT
+       ← Server validates JWT on upgrade
+```
+
+- Token stored in `localStorage` (survives refresh)
+- Character ownership validated: JWT UUID → account_id → SQL `WHERE account_id = $2`
+- All WebSocket messages require `client.Authenticated = true`
+- `beforeunload` warns before closing while in-game
+
+**HTTP Auth Endpoints:**
+- `POST /api/login` — Login or register
+- `GET /api/characters` — List characters (Bearer token)
+- `POST /api/characters/create` — Create character (Bearer token)
+- `POST /api/characters/delete` — Delete character (Bearer token)
+
+## Production Deployment
+
+### Build
+
+```bash
+# Server
+cd server && go build -o hbonline-server ./cmd/gameserver
+
+# Client (uses .env.production for API/WS/CDN URLs)
+cd client && npm run build   # Output: client/dist/
+```
+
+### Client Environment (`client/.env.production`)
+
+```
+VITE_API_BASE=https://api.helbreath.xyz
+VITE_WS_BASE=wss://api.helbreath.xyz
+VITE_ASSET_BASE=https://cdn.helbreath.xyz
+```
+
+### Run Production Server
+
+```bash
+JWT_SECRET=your-64-char-secret-here \
+DATABASE_URL=postgres://user:pass@host:5432/hbonline \
+ALLOWED_ORIGINS=https://helbreath.xyz,https://www.helbreath.xyz \
+./hbonline-server -addr :8080
+```
+
+## Admin System
+
+Type commands in chat starting with `/`. Not broadcast to other players.
+
+### Activating Admin
+
+```sql
+UPDATE characters SET admin_level = 4 WHERE name = 'YourName';
+```
+
+In `-memdb` mode, all new characters start as admin level 4.
+
+### Admin Levels
+
+| Level | Title | Description |
+|-------|-------|-------------|
+| 0 | Player | No commands |
+| 1 | Basic GM | Teleport, /who |
+| 2 | Standard GM | Kill, revive, god mode, effects, kick |
+| 3 | Senior GM | Summon NPCs, weather, clear mobs |
+| 4 | Super GM | Create items, modify stats, set gold |
+| 5 | Server Admin | Full control, /shutdown |
+
+### Commands
+
+| Command | Level | Description |
+|---------|-------|-------------|
+| `/who` | 1 | List online players |
+| `/tp <map> [x] [y]` | 1 | Teleport to map |
+| `/goto <player>` | 1 | Teleport to player |
+| `/god` | 2 | Toggle invulnerability + 10x damage |
+| `/heal` | 2 | Full HP/MP/SP restore |
+| `/kill <player>` | 2 | Kill player |
+| `/revive <player>` | 2 | Revive player |
+| `/setinvi [player]` | 2 | Toggle invisibility |
+| `/setzerk [player]` | 2 | Toggle berserk |
+| `/setfreeze [player]` | 2 | Toggle freeze |
+| `/summonplayer <player>` | 2 | Teleport player to you |
+| `/kick <player>` | 2 | Disconnect player |
+| `/shutup <player> <min>` | 2 | Mute chat |
+| `/givexp <amount>` | 2 | Give self XP |
+| `/summon <npc_id> [count]` | 3 | Spawn NPCs (max 20) |
+| `/weather <type>` | 3 | Set weather: clear/rain/snow/fog |
+| `/clearnpc` | 3 | Kill all monsters on map |
+| `/createitem <id> [count]` | 4 | Create items |
+| `/setstat <player> <stat> <val>` | 4 | Set stat |
+| `/setgold <player> <amount>` | 4 | Set gold |
+| `/setadmin <player> <level>` | 4 | Set admin level |
+| `/shutdown [seconds]` | 5 | Graceful shutdown with countdown |
+
+## Game Systems
+
+### Combat
+- **Dice-based damage** ported from C++ `iCalculateAttackEffect`
+- Multiplicative STR scaling: `damage * (1 + STR/500)`
+- Layered defense: body, shield, cape, helm, leggings, boots
+- Hit ratio: `attackerHitRatio / defenderRatio * 50`
+- Critical via AttackMode system with SuperAttackLeft counter
+- Weapon skill mastery trains on attack (20% chance)
+- **Difficulty multiplier**: 3x easier (configurable in `difficulty.go`)
+
+### Items (656 items from Item.cfg)
+- Imported from original Helbreath Item.cfg/Item2.cfg/Item3.cfg
+- Sharp (+1 dice) and Ancient (+2 dice) attributes on drops
+- Ground items render from `item-ground` spritesheet atlas
+- Equipment sprites lazy-loaded on demand to save GPU memory
+- Full persistence: inventory + equipment saved as JSON in DB
+
+### NPCs & Monsters (166 types from NPC.cfg)
+- 6 AI states: Idle, Wander, Chase, Attack, Dead, Flee
+- Faction-aware targeting (monsters vs players, criminal detection)
+- Admin immunity, flee behavior, configurable spawns via JSON
+- Variable respawn timers per NPC type
+- Shop NPCs: left-click to interact (open shop), no attack animation
+
+### Spells (91 from Magic.cfg)
+- 13 status effects: poison, ice, berserk, invisibility, silence, defense shield, magic protection
+- Spell resistance: `50 + (targetINT - attackerMAG) * 2`
+- Poison DoT, ice movement slow, berserk damage/defense trade-off
+
+### Death & Economy
+- PK-tiered death penalties: 2% (innocent) to 20% (slaughterer)
+- Map types: SafeZone (no penalty), Arena, Normal
+- Reputation system (±10000)
+- Multi-tier loot: gold + potions + equipment + rare (0.3% at 3x)
+- Criminal tiers with PK decay (-1 per 10 min online)
+
+### World
+- Day/night cycle (30 min): ambient lighting (dusk/night/dawn)
+- Weather: rain (particles + sound), snow (dual layers), fog (overlay + wisps)
+- Weather synced from server, disabled indoors
+- Minimap from JPEG images (`assets/minimaps/`), hidden indoors
+- Minimap toggle in Controls panel
+
+### Teleportation
+- 83 maps with interconnections from original C++ configs
+- Cities: Aresden, Elvine with buildings (blacksmith, shop, warehouse, cityhall)
+- Dungeons: aresdend1 → dglv2 → dglv3 → dglv4
+- Hunt zones, Tower of Helbreath, Icebound, event maps
+- No-attack areas at city gates and building interiors
+
+### Equipment Rendering
+- Gender-specific sprites (male/female variants)
+- Weapon: FullFrame animation with `startSpriteSheetIndex + armState * 8 + direction`
+- Shield: DirectionalSubFrame with armament state index
+- Armor/helm/leggings/boots/cape: DirectionalSubFrame with `ARMOUR_SPRITESHEET_BASE[state]`
+- Lazy loading: equipment sprites loaded on-demand, player/NPC visuals refresh when ready
+- Custom cursor from `interface.spr`: pointer, grab, attack (sword)
+
+### Controls Panel
+- Music volume slider + mute
+- Sound effects volume slider + mute
+- Minimap show/hide toggle
+
+### Keyboard Shortcuts
+Disabled while typing in input fields (chat, party invite, etc.)
+
+| Key | Action |
+|-----|--------|
+| I | Inventory |
+| C | Stats |
+| M | Spells |
+| K | Skills |
+| G | Guild |
+| P | Party |
+| J | Quests |
+| Shift | Run (hold) |
+| Enter | Chat |
 
 ## Project Structure
 
 ```
 hbonline/
 ├── server/                    # Go game server
-│   ├── cmd/gameserver/        # Server entry point
+│   ├── cmd/gameserver/        # Entry point + .env loader
 │   ├── internal/
-│   │   ├── game/              # Game engine, tick loop, all handlers
-│   │   ├── player/            # Player entity, stats, appearance
-│   │   ├── npc/               # NPC types, AI state machine
-│   │   ├── mapdata/           # AMD map parser, collision, teleports
-│   │   ├── items/             # Item definitions, inventory system
-│   │   ├── combat/            # Damage formulas
-│   │   ├── magic/             # Spell system (98 spells)
-│   │   ├── skills/            # Skill system (24 skills)
-│   │   ├── guild/             # Guild management
-│   │   ├── party/             # Party system
-│   │   ├── quest/             # Quest system
-│   │   ├── trade/             # Player trading
-│   │   ├── world/             # World state, weather, events
-│   │   ├── network/           # WebSocket server, protobuf codec
-│   │   └── db/                # PostgreSQL data store
+│   │   ├── auth/              # JWT token generation/validation
+│   │   ├── game/              # Engine, combat, admin, spawns, persistence, difficulty
+│   │   ├── player/            # Player struct, stats, equipment
+│   │   ├── npc/               # 166 NPC types, AI states
+│   │   ├── items/             # 656 items, inventory, loot tables
+│   │   ├── magic/             # 91 spells, effects, resistance
+│   │   ├── skills/            # 24 skills, mastery
+│   │   ├── mapdata/           # Map loading, teleports, no-attack areas
+│   │   ├── db/                # PostgreSQL + in-memory store
+│   │   ├── network/           # WebSocket, JWT-on-upgrade, protobuf
+│   │   └── world/             # Day/night, weather
+│   ├── tools/                 # Import tools (itemimport, npcimport, magicimport)
 │   └── pkg/proto/             # Generated protobuf Go code
 ├── client/                    # Phaser 3 + TypeScript client
 │   ├── src/
-│   │   ├── scenes/            # Phaser scenes (Boot, Login, CharSelect, Game)
-│   │   ├── game/assets/       # HBMap and HBSprite parsers
-│   │   ├── network/           # WebSocket client, message handler
-│   │   └── proto/             # Generated protobuf JS code
-│   └── public/assets/         # Converted game assets
-│       ├── maps/              # .amd map files + .json metadata
-│       ├── sprites/           # .spr sprite files
-│       ├── spritesheets/      # Extracted sprite sheets
-│       ├── sounds/            # WAV sound effects
-│       └── music/             # WAV/MP3 music
-├── proto/                     # Protobuf definitions (.proto files)
-├── migrations/                # SQL migrations (auto-applied by Docker)
-├── assets/                    # Original game assets (source)
-│   ├── SPRITES/               # 446 .pak/.apk files
-│   ├── MAPDATA/               # 83 .amd map files
-│   ├── SOUNDS/                # 231 .WAV files
-│   └── MUSIC/                 # 11 .wav files
-├── tools/                     # Asset pipeline binaries
-│   ├── pakextract             # PAK -> PNG/spritesheet converter
-│   └── amdconvert             # AMD -> JSON map converter
-├── docker-compose.yml         # PostgreSQL container
-└── docs/                      # Phase specification documents
+│   │   ├── scenes/            # Boot, CharSelect, CharCreate, Game
+│   │   ├── game/              # GameAsset, HBSprite, HBMap, PlayerAppearanceManager
+│   │   ├── constants/         # Assets, ItemDefs, ItemGroundSprites
+│   │   ├── network/           # WebSocket, MessageHandler (with buffering)
+│   │   ├── audio/             # SoundManager, MusicManager
+│   │   └── login.ts           # Pre-Phaser HTTP auth
+│   └── public/assets/
+│       ├── sprites/           # 361 .spr files
+│       ├── spritesheets/      # item-ground atlas, interface
+│       ├── minimaps/          # 35 JPEG minimaps
+│       ├── sounds/            # 129 MP3 sound effects
+│       └── music/             # 11 MP3 music tracks
+├── proto/                     # Protobuf definitions
+├── migrations/                # 3 SQL migration files
+├── .env.example               # Server config template
+├── CLAUDE.md                  # AI assistant instructions
+└── docs/server/               # Phase implementation docs
 ```
 
-## Architecture
+## Database Migrations
 
-```
-┌──────────────┐  WebSocket/Protobuf  ┌──────────────┐
-│  Go Server   │◄────────────────────►│ Phaser Client │
-│  (port 8080) │                      │ (port 3000)   │
-└──────┬───────┘                      └───────────────┘
-       │
-       ▼
-┌──────────────┐
-│  PostgreSQL  │
-│  (port 5432) │
-└──────────────┘
-```
-
-- **Server**: Authoritative game state. Validates all movement, combat, and item actions. Runs at 10 ticks/second.
-- **Client**: Renders the game using Phaser 3. Loads `.amd` map files and `.spr` sprite files directly. Communicates via binary WebSocket (1-byte type prefix + protobuf payload).
-- **Database**: Stores accounts, characters, inventories, and skills. Schema in `migrations/001_initial.sql` + `002_inventory_skills_and_missing_fields.sql`.
-
-## Network Protocol
-
-All messages are binary WebSocket frames: `[1-byte type ID][protobuf payload]`.
-
-**Client -> Server** (`0x01`-`0x1E`): Login, character CRUD, movement, chat, combat, items, spells, skills, trading, guilds, parties, quests.
-
-**Server -> Client** (`0x81`-`0xAB`): Responses, entity appear/disappear/motion, damage, stats, inventory, map changes, notifications.
-
-See `proto/*.proto` for full message definitions.
-
-## Admin System
-
-Admin commands are typed in the in-game chat starting with `/`. They are intercepted by the server and not broadcast to other players.
-
-### Activating Admin Mode
-
-**Via PostgreSQL:**
-```sql
--- Set a character to Super GM (level 4)
-UPDATE characters SET admin_level = 4 WHERE name = 'YourCharName';
-```
-
-**Via Docker:**
 ```bash
-docker compose exec postgres psql -U hbonline -d hbonline \
-  -c "UPDATE characters SET admin_level = 4 WHERE name = 'YourCharName';"
+psql -d hbonline -f migrations/001_initial.sql              # accounts + characters
+psql -d hbonline -f migrations/002_inventory_skills_and_missing_fields.sql  # inventory, skills, guild, reputation
+psql -d hbonline -f migrations/003_auth_and_uuid.sql         # UUID for JWT
 ```
-
-**Via in-game command** (requires an existing admin level 5):
-```
-/setadmin PlayerName 4
-```
-
-**For development with `-memdb`:** Modify `db/memory.go` `CreateCharacter` to set `AdminLevel: 4` in the CharacterRow.
-
-### Admin Levels
-
-| Level | Title        | Description                               |
-|-------|-------------|-------------------------------------------|
-| 0     | Player       | No admin commands                         |
-| 1     | Basic GM     | Teleport, player list                     |
-| 2     | Standard GM  | Kill, revive, god mode, effects, kick     |
-| 3     | Senior GM    | Summon NPCs, weather control, clear mobs  |
-| 4     | Super GM     | Create items, modify stats, set gold      |
-| 5     | Server Admin | Full control, can promote to level 4+     |
-
-These levels match the original C++ server (`admin-user-level` in character files like `Gem[GM].txt`).
-
-### Command Reference
-
-**Level 1+ (Basic GM):**
-
-| Command                      | Description                              |
-|------------------------------|------------------------------------------|
-| `/who`                       | List all online players with count       |
-| `/tp <map> [x] [y]`         | Teleport to a map (alias: `/teleport`)   |
-| `/goto <player>`             | Teleport to a player's location          |
-
-**Level 2+ (Standard GM):**
-
-| Command                      | Description                              |
-|------------------------------|------------------------------------------|
-| `/god`                       | Toggle god mode (0 damage taken, 10x dealt) |
-| `/heal`                      | Fully restore own HP/MP/SP               |
-| `/kill <player>`             | Kill a player (set HP to 0)              |
-| `/revive <player>`           | Revive a dead player (full HP)           |
-| `/setinvi [player]`          | Toggle invisibility effect               |
-| `/setzerk [player]`          | Toggle berserk effect                    |
-| `/setfreeze [player]`        | Toggle ice/frozen effect                 |
-| `/summonplayer <player>`     | Teleport player to your location         |
-| `/kick <player>`             | Disconnect a player                      |
-| `/shutup <player> <minutes>` | Mute a player's chat                     |
-| `/givexp <amount>`           | Give yourself XP                         |
-
-**Level 3+ (Senior GM):**
-
-| Command                      | Description                              |
-|------------------------------|------------------------------------------|
-| `/summon <npc_id> [count]`   | Spawn NPCs at your location (max 20)    |
-| `/weather <type>`            | Change weather: clear, rain, snow, fog   |
-| `/clearnpc`                  | Kill all monsters on current map         |
-
-**Level 4+ (Super GM):**
-
-| Command                            | Description                        |
-|------------------------------------|------------------------------------|
-| `/createitem <id> [count] [player]` | Create items in inventory         |
-| `/setstat <player> <stat> <value>` | Set player stat (str/vit/dex/int/mag/chr/level) |
-| `/setgold <player> <amount>`       | Set a player's gold               |
-| `/setadmin <player> <level>`       | Set admin level (lvl 5 needed for 4+) |
-
-### NPC Type IDs (for `/summon`)
-
-| ID | Name            | Level | Notes          |
-|----|-----------------|-------|----------------|
-| 1  | Slime           | Low   | Small, no flee |
-| 2  | Skeleton        | Med   | Medium size    |
-| 3  | Orc             | High  | Large, flees   |
-| 4  | Demon           | Boss  | Large, tough   |
-
-## Game Features
-
-### Implemented
-- Account registration/login with bcrypt
-- Character creation with appearance customization
-- Map rendering from original .amd files with collision
-- Real-time multiplayer movement with server validation
-- Chat (normal, shout, whisper, guild, party)
-- NPC monsters with AI (idle, wander, chase, attack, flee, respawn)
-- Dice-based combat with STR scaling, layered defense, weapon skill mastery
-- Item system with persistence (equipment, potions, materials, ground drops)
-- Item attributes (Sharp, Ancient) that modify weapon dice
-- Shop NPCs (buy/sell)
-- Spell system (damage, heal, buff, debuff, area effects)
-- 13 status effects (poison, ice, berserk, invisibility, silence, etc.)
-- Skill system (mining, fishing, alchemy, crafting, weapon mastery)
-- Faction selection (Aresden/Elvine)
-- Guild system (create, invite, kick, ranks, chat)
-- Party system (up to 8 members)
-- Player trading
-- PK/criminal tracking with reputation system
-- Quest system (hunt, collect, turn-in)
-- Map teleportation between zones
-- Day/night cycle and weather system (fog affects aggro)
-- Multi-tier loot tables with boss drops
-- Criminal status tiers with PK decay
-- Admin command system (22 commands across 5 levels)
-- Starting equipment for new characters
-- Minimap with terrain colors
-- HUD with HP/MP/SP bars
-
-### Maps
-Cities (Aresden, Elvine), hunt zones, dungeons, middleland (PvP), buildings (blacksmiths, shops, cityhalls, warehouses, wizard towers), and more — 82 maps total.
 
 ## Development
 
-### Run Tests
+### Tests
 
 ```bash
-# Server tests (730+ tests)
 cd server
-go test ./... -count=1
-
-# With coverage
-go test ./... -count=1 -coverprofile=cover.out
-go tool cover -func=cover.out
+go test ./... -count=1    # 736+ tests across 22 packages
 ```
 
-### Build for Production
+### In-Memory Mode
 
 ```bash
-# Server binary
 cd server
-go build -o hbonline-server ./cmd/gameserver
-
-# Client static files
-cd client
-npm run build
-# Output in client/dist/
+go run ./cmd/gameserver -memdb    # No PostgreSQL, all characters start as admin 4
 ```
 
-### In-Memory Mode (No Database)
+### Import Tools
 
-For quick testing without Docker/PostgreSQL:
+Regenerate item/NPC/spell definitions from original C++ configs:
 
 ```bash
-go run ./cmd/gameserver -memdb
+cd server
+go run ./tools/itemimport/ > internal/items/itemdefs_gen.go      # 656 items
+go run ./tools/npcimport/ > internal/npc/npcdefs_gen.go          # 108 NPCs
+go run ./tools/magicimport/ > internal/magic/spelldefs_gen.go    # 63 spells
 ```
 
-Data is stored in memory and lost on server restart.
+### Audio
 
-### Asset Pipeline
-
-The `tools/` directory contains pre-built binaries for converting original game assets:
-
-- **`pakextract`** — Extracts sprites from `.pak`/`.apk` files to PNG spritesheets
-- **`amdconvert`** — Converts `.amd` map files to JSON format
-
-The client loads `.amd` and `.spr` files directly, so conversion is optional for development.
-
-### Protobuf
-
-Message definitions are in `proto/`. If you modify them:
-
-```bash
-# Regenerate Go code
-protoc --go_out=server/pkg/proto --go_opt=paths=source_relative proto/*.proto
-
-# Regenerate JS code
-cd client
-npx pbjs -t static-module -w es6 -o src/proto/messages.js ../proto/*.proto
-npx pbts -o src/proto/messages.d.ts src/proto/messages.js
-```
-
-## Environment Variables
-
-| Variable | Used By | Default | Description |
-|----------|---------|---------|-------------|
-| `POSTGRES_USER` | Docker | `hbonline` | Database user |
-| `POSTGRES_PASSWORD` | Docker | `hbonline` | Database password |
-| `POSTGRES_DB` | Docker | `hbonline` | Database name |
-
-Server configuration is done via CLI flags (see [Server Flags](#server-flags)).
-
-## Ports
-
-| Service | Port | Protocol |
-|---------|------|----------|
-| Go game server | 8080 | HTTP + WebSocket |
-| Vite dev server | 3000 | HTTP (proxies WS to 8080) |
-| PostgreSQL | 5432 | TCP |
+All sounds converted from WAV to MP3 (41 MB → 14.6 MB, 64% reduction).
 
 ## License
 

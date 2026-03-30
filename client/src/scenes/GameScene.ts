@@ -305,6 +305,13 @@ export class GameScene extends Phaser.Scene {
   private isMouseDown = false;
   private lastMoveTime = 0;
   private isRunning = false;
+  private alwaysRun = false;
+  private combatMode = false; // false=rest/peace, true=attack/combat
+
+  /** Returns the correct idle state based on current combat mode. */
+  private get idleState(): PlayerState {
+    return this.combatMode ? PlayerState.IdleCombat : PlayerState.IdlePeace;
+  }
 
   // Tile occupancy tracking (dynamic: objectId -> {x,y})
   private tileOccupancy: Map<string, number> = new Map();
@@ -596,8 +603,8 @@ export class GameScene extends Phaser.Scene {
     this.game.canvas.addEventListener('contextmenu', (e) => e.preventDefault());
 
     // Shift key for run toggle
-    this.input.keyboard!.on('keydown-SHIFT', () => { this.isRunning = true; });
-    this.input.keyboard!.on('keyup-SHIFT', () => { this.isRunning = false; });
+    this.input.keyboard!.on('keydown-SHIFT', () => { this.isRunning = !this.alwaysRun; });
+    this.input.keyboard!.on('keyup-SHIFT', () => { this.isRunning = this.alwaysRun; });
 
     // Initialize sound system
     this.soundManager = new SoundManager(this);
@@ -619,6 +626,8 @@ export class GameScene extends Phaser.Scene {
       if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || (el as HTMLElement).isContentEditable)) return;
       fn();
     };
+    this.input.keyboard!.on('keydown-A', ifNotTyping(() => this.toggleCombatMode()));
+    this.input.keyboard!.on('keydown-R', ifNotTyping(() => this.toggleAlwaysRun()));
     this.input.keyboard!.on('keydown-I', ifNotTyping(() => this.toggleInventory()));
     this.input.keyboard!.on('keydown-C', ifNotTyping(() => this.toggleStats()));
     this.input.keyboard!.on('keydown-M', ifNotTyping(() => this.toggleSpellBar()));
@@ -626,6 +635,21 @@ export class GameScene extends Phaser.Scene {
     this.input.keyboard!.on('keydown-G', ifNotTyping(() => this.toggleGuild()));
     this.input.keyboard!.on('keydown-P', ifNotTyping(() => this.toggleParty()));
     this.input.keyboard!.on('keydown-J', ifNotTyping(() => this.toggleQuests()));
+
+    // Potion hotkeys
+    this.input.keyboard!.on('keydown-ONE', ifNotTyping(() => this.usePotion('hp')));
+    this.input.keyboard!.on('keydown-TWO', ifNotTyping(() => this.usePotion('mp')));
+    this.input.keyboard!.on('keydown-THREE', ifNotTyping(() => this.usePotion('sp')));
+    this.input.keyboard!.on('keydown-INSERT', ifNotTyping(() => this.usePotion('hp')));
+    this.input.keyboard!.on('keydown-DELETE', ifNotTyping(() => this.usePotion('mp')));
+
+    // Help modal (Ctrl+? or Cmd+?)
+    this.input.keyboard!.on('keydown', (evt: KeyboardEvent) => {
+      if ((evt.ctrlKey || evt.metaKey) && (evt.key === '/' || evt.key === '?')) {
+        evt.preventDefault();
+        this.toggleHelpModal();
+      }
+    });
 
     // Debug shortcuts
     this.input.keyboard!.on('keydown-F12', () => this.toggleDebugMode());
@@ -971,9 +995,8 @@ export class GameScene extends Phaser.Scene {
       leggings: this.playerLeggings, boots: this.playerBoots, cape: this.playerCape,
     });
     const dir = Math.max(0, this.playerDirection - 1);
-    const state = PlayerState.IdlePeace;
 
-    const layers = this.createPlayerLayers(gear, dir, state);
+    const layers = this.createPlayerLayers(gear, dir, this.idleState);
     this.playerAssets = { layers, gear, equipLayerMap: this._lastEquipLayerMap };
 
     this.setPlayerAssetsPosition(this.playerAssets, this.visualX, this.visualY, this.tileY);
@@ -983,7 +1006,7 @@ export class GameScene extends Phaser.Scene {
       stroke: '#000000', strokeThickness: 2,
     }).setOrigin(0.5, 1).setDepth(this.tileY * DEPTH_MULTIPLIER + 50).setVisible(false);
 
-    this.playerState = state;
+    this.playerState = this.idleState;
   }
 
   private createPlayerLayers(gear: GearConfig, direction: number, state: PlayerState): GameAsset[] {
@@ -1603,9 +1626,9 @@ export class GameScene extends Phaser.Scene {
       }
       // Safety: force reset to idle if animation blocked too long
       console.warn(`[MOVE] Force-resetting stuck state ${this.playerState} after ${elapsed}ms`);
-      this.playerState = PlayerState.IdlePeace;
+      this.playerState = this.idleState;
       if (this.playerAssets) {
-        this.updatePlayerAnimation(this.playerAssets, PlayerState.IdlePeace, Math.max(0, this.playerDirection - 1));
+        this.updatePlayerAnimation(this.playerAssets, this.idleState, Math.max(0, this.playerDirection - 1));
       }
     }
     // Not in a blocking state — reset the timer
@@ -1655,8 +1678,8 @@ export class GameScene extends Phaser.Scene {
         this.updatePlayerAnimation(this.playerAssets, PlayerState.PickUp, Math.max(0, this.playerDirection - 1));
         this.time.delayedCall(400, () => {
           if (this.playerState === PlayerState.PickUp && this.playerAssets) {
-            this.playerState = PlayerState.IdlePeace;
-            this.updatePlayerAnimation(this.playerAssets, PlayerState.IdlePeace, Math.max(0, this.playerDirection - 1));
+            this.playerState = this.idleState;
+            this.updatePlayerAnimation(this.playerAssets, this.idleState, Math.max(0, this.playerDirection - 1));
           }
         });
       }
@@ -1701,7 +1724,7 @@ export class GameScene extends Phaser.Scene {
     // Calculate speed from slider value
     let speed = movementDurationFromSpeed(this.movementSpeed);
     const action = this.isRunning ? 2 : 1;
-    const animState = this.isRunning ? PlayerState.Run : PlayerState.WalkPeace;
+    const animState = this.isRunning ? PlayerState.Run : (this.combatMode ? PlayerState.WalkCombat : PlayerState.WalkPeace);
 
     // Walk mode doubles duration
     if (!this.isRunning) {
@@ -1748,8 +1771,8 @@ export class GameScene extends Phaser.Scene {
     if (this.idleTimer) clearTimeout(this.idleTimer);
     this.idleTimer = setTimeout(() => {
       if (isMovementState(this.playerState) && this.playerAssets) {
-        this.playerState = PlayerState.IdlePeace;
-        this.updatePlayerAnimation(this.playerAssets, PlayerState.IdlePeace, this.playerDirection - 1);
+        this.playerState = this.idleState;
+        this.updatePlayerAnimation(this.playerAssets, this.idleState, this.playerDirection - 1);
         this.soundTracker.stopAll();
       }
     }, speed + 200);
@@ -1811,8 +1834,8 @@ export class GameScene extends Phaser.Scene {
       this.updatePlayerAnimation(this.playerAssets, PlayerState.TakeDamage, this.playerDirection - 1);
       setTimeout(() => {
         if (this.playerState === PlayerState.TakeDamage && this.playerAssets) {
-          this.playerState = PlayerState.IdlePeace;
-          this.updatePlayerAnimation(this.playerAssets, PlayerState.IdlePeace, this.playerDirection - 1);
+          this.playerState = this.idleState;
+          this.updatePlayerAnimation(this.playerAssets, this.idleState, this.playerDirection - 1);
         }
       }, 300);
     }
@@ -1840,8 +1863,8 @@ export class GameScene extends Phaser.Scene {
 
       // Return to idle after knockback
       if (this.playerAssets && !this.isDead) {
-        this.playerState = PlayerState.IdlePeace;
-        this.updatePlayerAnimation(this.playerAssets, PlayerState.IdlePeace, this.playerDirection - 1);
+        this.playerState = this.idleState;
+        this.updatePlayerAnimation(this.playerAssets, this.idleState, this.playerDirection - 1);
       }
     }
   }
@@ -2174,8 +2197,8 @@ export class GameScene extends Phaser.Scene {
         this.isMoving = false;
         this.playerDirection = evt.direction;
         if (this.playerAssets) {
-          this.playerState = PlayerState.IdlePeace;
-          this.updatePlayerAnimation(this.playerAssets, PlayerState.IdlePeace, evt.direction - 1);
+          this.playerState = this.idleState;
+          this.updatePlayerAnimation(this.playerAssets, this.idleState, evt.direction - 1);
         }
       }
       return;
@@ -2781,8 +2804,8 @@ export class GameScene extends Phaser.Scene {
       // Return to idle after attack animation
       setTimeout(() => {
         if (this.playerState === PlayerState.MeleeAttack && this.playerAssets) {
-          this.playerState = PlayerState.IdlePeace;
-          this.updatePlayerAnimation(this.playerAssets, PlayerState.IdlePeace, this.playerDirection - 1);
+          this.playerState = this.idleState;
+          this.updatePlayerAnimation(this.playerAssets, this.idleState, this.playerDirection - 1);
         }
       }, 600);
     }
@@ -2855,8 +2878,8 @@ export class GameScene extends Phaser.Scene {
             this.updatePlayerAnimation(this.playerAssets, PlayerState.TakeDamage, this.playerDirection - 1);
             setTimeout(() => {
               if (this.playerState === PlayerState.TakeDamage && this.playerAssets) {
-                this.playerState = PlayerState.IdlePeace;
-                this.updatePlayerAnimation(this.playerAssets, PlayerState.IdlePeace, this.playerDirection - 1);
+                this.playerState = this.idleState;
+                this.updatePlayerAnimation(this.playerAssets, this.idleState, this.playerDirection - 1);
               }
             }, 300);
           }
@@ -2940,8 +2963,8 @@ export class GameScene extends Phaser.Scene {
     this.playerSP = data.sp;
 
     if (this.playerAssets) {
-      this.playerState = PlayerState.IdlePeace;
-      this.updatePlayerAnimation(this.playerAssets, PlayerState.IdlePeace, this.playerDirection - 1);
+      this.playerState = this.idleState;
+      this.updatePlayerAnimation(this.playerAssets, this.idleState, this.playerDirection - 1);
     }
 
     this.updateHUD();
@@ -3010,6 +3033,176 @@ export class GameScene extends Phaser.Scene {
         }
       }
     }
+  }
+
+  private toggleCombatMode(): void {
+    this.combatMode = !this.combatMode;
+
+    // Switch idle animation
+    if (!this.isMoving && this.playerAssets) {
+      const idleState = this.combatMode ? PlayerState.IdleCombat : PlayerState.IdlePeace;
+      this.playerState = idleState;
+      this.updatePlayerAnimation(this.playerAssets, idleState, Math.max(0, this.playerDirection - 1));
+    }
+
+    // Update HUD indicator
+    this.updateCombatModeHUD();
+  }
+
+  private updateCombatModeHUD(): void {
+    const indicator = document.getElementById('hud-mode');
+    const hudBar = document.getElementById('hud-bar');
+    if (indicator) {
+      if (this.combatMode) {
+        indicator.textContent = 'ATTACK';
+        indicator.style.color = '#ff4444';
+        indicator.style.borderColor = '#c0392b';
+        indicator.style.background = 'rgba(192,57,43,0.15)';
+      } else {
+        indicator.textContent = 'REST';
+        indicator.style.color = '#888';
+        indicator.style.borderColor = '#555';
+        indicator.style.background = 'rgba(80,80,80,0.15)';
+      }
+    }
+    if (hudBar) {
+      hudBar.style.borderTopColor = this.combatMode ? '#c0392b' : '#444';
+    }
+  }
+
+  private toggleAlwaysRun(): void {
+    this.alwaysRun = !this.alwaysRun;
+    this.isRunning = this.alwaysRun;
+    this.showSystemMessage(this.alwaysRun ? 'Always Run: ON' : 'Always Run: OFF');
+  }
+
+  /**
+   * Find the first potion of the given type in inventory and use it.
+   * type: 'hp' = health potions, 'mp' = mana potions, 'sp' = stamina potions
+   */
+  private usePotion(type: 'hp' | 'mp' | 'sp'): void {
+    const patterns: Record<string, RegExp> = {
+      hp: /health|red.*potion|potion.*red|^redpotion|^bighealthpotion/i,
+      mp: /mana|blue.*potion|potion.*blue|^bluepotion|^bigmanapotion/i,
+      sp: /stamina|green.*potion|potion.*green|^greenpotion|^bigstaminapotion/i,
+    };
+    // Also match by known item IDs: 91=RedPotion, 92=BigHP, 93=BluePotion, 94=BigMP, 95=GreenPotion, 96=BigSP
+    const idSets: Record<string, Set<number>> = {
+      hp: new Set([91, 92, 291, 292]),
+      mp: new Set([93, 94, 293, 294]),
+      sp: new Set([95, 96, 295, 296]),
+    };
+
+    const pattern = patterns[type];
+    const ids = idSets[type];
+    const item = this.inventoryItems.find(i =>
+      ids.has(i.itemId) || pattern.test(i.name.replace(/[\s-]/g, ''))
+    );
+    if (item) {
+      this.msgHandler.sendMessage(Proto.MSG_ITEM_USE_REQUEST, { slotIndex: item.slotIndex });
+    } else {
+      const names: Record<string, string> = { hp: 'Health', mp: 'Mana', sp: 'Stamina' };
+      this.showSystemMessage(`No ${names[type]} Potion in inventory`);
+    }
+  }
+
+  private helpModalOpen = false;
+
+  private toggleHelpModal(): void {
+    const existing = document.getElementById('help-modal');
+    if (existing) {
+      existing.remove();
+      this.helpModalOpen = false;
+      return;
+    }
+    this.helpModalOpen = true;
+
+    const div = document.createElement('div');
+    div.id = 'help-modal';
+    div.style.cssText = 'position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); z-index:400; background:rgba(15,15,25,0.97); color:#ccc; padding:20px 28px; border:1px solid #555; border-radius:6px; font-family:"Segoe UI",Arial,sans-serif; font-size:12px; max-width:640px; max-height:80vh; overflow-y:auto;';
+
+    div.innerHTML = `
+      <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+        <strong style="color:#FFD700; font-size:15px;">Hotkeys & Commands</strong>
+        <button id="help-close" style="cursor:pointer; background:none; border:none; color:#aaa; font-size:16px;">X</button>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+        <div>
+          <div style="color:#f39c12; font-weight:bold; margin-bottom:6px;">Movement & Combat</div>
+          <div style="line-height:1.8;">
+            <div><kbd>Left Click</kbd> Move / Melee attack</div>
+            <div><kbd>Right Click</kbd> Cast spell / Melee attack</div>
+            <div><kbd>A</kbd> Toggle Attack / Rest mode</div>
+            <div><kbd>R</kbd> Toggle Always Run</div>
+            <div><kbd>Shift</kbd> Hold to run (or walk if Always Run)</div>
+          </div>
+
+          <div style="color:#f39c12; font-weight:bold; margin:10px 0 6px;">Potions</div>
+          <div style="line-height:1.8;">
+            <div><kbd>1</kbd> / <kbd>Insert</kbd> Drink Health Potion</div>
+            <div><kbd>2</kbd> / <kbd>Delete</kbd> Drink Mana Potion</div>
+            <div><kbd>3</kbd> Drink Stamina Potion</div>
+          </div>
+
+          <div style="color:#f39c12; font-weight:bold; margin:10px 0 6px;">Panels</div>
+          <div style="line-height:1.8;">
+            <div><kbd>I</kbd> Inventory</div>
+            <div><kbd>C</kbd> Character Stats</div>
+            <div><kbd>M</kbd> Spell Book</div>
+            <div><kbd>K</kbd> Skills</div>
+            <div><kbd>G</kbd> Guild</div>
+            <div><kbd>P</kbd> Party</div>
+            <div><kbd>J</kbd> Quests</div>
+            <div><kbd>Ctrl+/</kbd> This help</div>
+          </div>
+        </div>
+
+        <div>
+          <div style="color:#3498db; font-weight:bold; margin-bottom:6px;">Chat Commands</div>
+          <div style="line-height:1.8; font-size:11px;">
+            <div><code>!text</code> Global chat</div>
+            <div><code>~text</code> Town chat</div>
+            <div><code>^text</code> or <code>@text</code> Guild chat</div>
+            <div><code>$text</code> Party chat</div>
+            <div><code>#text</code> Local chat</div>
+            <div><code>/to name msg</code> Whisper to player</div>
+            <div><code>/mute name</code> Mute a player</div>
+            <div><code>/unmute name</code> Unmute a player</div>
+          </div>
+
+          <div style="color:#3498db; font-weight:bold; margin:10px 0 6px;">Party & Summon</div>
+          <div style="line-height:1.8; font-size:11px;">
+            <div><code>/joinparty name</code> Join player's party</div>
+            <div><code>/leaveparty</code> Leave current party</div>
+            <div><code>/tgt name</code> Summons attack player</div>
+            <div><code>/hold</code> Hold your summons</div>
+            <div><code>/free</code> Free your summons</div>
+          </div>
+
+          <div style="color:#3498db; font-weight:bold; margin:10px 0 6px;">Display</div>
+          <div style="line-height:1.8; font-size:11px;">
+            <div><code>/bigitems</code> Large ground item icons</div>
+            <div><code>/ekscreenshot</code> Auto screenshot on EK</div>
+            <div><code>/grid</code> Tile grid overlay</div>
+          </div>
+        </div>
+      </div>
+
+      <style>
+        #help-modal kbd {
+          background:#333; border:1px solid #555; border-radius:3px;
+          padding:1px 5px; font-size:11px; color:#fff; font-family:monospace;
+        }
+        #help-modal code {
+          background:#1a2a3a; padding:1px 4px; border-radius:2px; color:#7dc4e4;
+        }
+      </style>
+    `;
+
+    document.body.appendChild(div);
+    div.querySelector('#help-close')?.addEventListener('click', () => this.toggleHelpModal());
+    this.events.on('shutdown', () => div.remove());
   }
 
   private updateHUD(): void {
@@ -3151,6 +3344,14 @@ export class GameScene extends Phaser.Scene {
           <div id="hud-map" style="color:#777; font-size:9px;">Map: ${playerData.mapName}</div>
         </div>
 
+        <!-- Combat Mode Indicator -->
+        <div id="hud-mode" style="
+          padding:4px 8px; border:1px solid #555; border-radius:3px;
+          font-size:10px; font-weight:bold; color:#888; text-align:center;
+          cursor:pointer; background:rgba(80,80,80,0.15); min-width:48px;
+          letter-spacing:1px;
+        " title="Toggle Attack/Rest mode (A)">REST</div>
+
         <!-- HP/MP/SP Bars -->
         <div style="display:flex; flex-direction:column; gap:3px; min-width:180px; flex:1; max-width:280px;">
           <!-- HP Bar -->
@@ -3250,6 +3451,7 @@ export class GameScene extends Phaser.Scene {
     document.getElementById('btn-guild')?.addEventListener('click', () => this.toggleGuild());
     document.getElementById('btn-party')?.addEventListener('click', () => this.toggleParty());
     document.getElementById('hud-lupool')?.addEventListener('click', () => this.toggleStats());
+    document.getElementById('hud-mode')?.addEventListener('click', () => this.toggleCombatMode());
     document.getElementById('btn-controls')?.addEventListener('click', () => this.toggleControlsPanel());
     document.getElementById('btn-logout')?.addEventListener('click', () => this.requestLogout());
 
@@ -3642,8 +3844,8 @@ export class GameScene extends Phaser.Scene {
         // Return to idle after pickup animation completes
         this.time.delayedCall(400, () => {
           if (this.playerState === PlayerState.PickUp && this.playerAssets) {
-            this.playerState = PlayerState.IdlePeace;
-            this.updatePlayerAnimation(this.playerAssets, PlayerState.IdlePeace, Math.max(0, this.playerDirection - 1));
+            this.playerState = this.idleState;
+            this.updatePlayerAnimation(this.playerAssets, this.idleState, Math.max(0, this.playerDirection - 1));
           }
         });
       }
@@ -4207,8 +4409,8 @@ export class GameScene extends Phaser.Scene {
       this.soundManager.playOnce(PLAYER_CAST);
       setTimeout(() => {
         if (this.playerState === PlayerState.Cast && this.playerAssets) {
-          this.playerState = PlayerState.IdlePeace;
-          this.updatePlayerAnimation(this.playerAssets, PlayerState.IdlePeace, this.playerDirection - 1);
+          this.playerState = this.idleState;
+          this.updatePlayerAnimation(this.playerAssets, this.idleState, this.playerDirection - 1);
         }
       }, 600);
     }
