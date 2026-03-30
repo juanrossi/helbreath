@@ -331,10 +331,6 @@ go run ./tools/npcimport/ > internal/npc/npcdefs_gen.go          # 108 NPCs
 go run ./tools/magicimport/ > internal/magic/spelldefs_gen.go    # 63 spells
 ```
 
-### Audio
-
-All sounds converted from WAV to MP3 (41 MB → 14.6 MB, 64% reduction).
-
 ## License
 
-Private project. Original Helbreath assets are property of their respective owners.
+The source code of this project is released under the MIT License. Original Helbreath assets are property of Siementech Co. Ltd.
