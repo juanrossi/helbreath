@@ -76,9 +76,9 @@ func PlayerAttackNPC(p *player.Player, n *npc.NPC) CombatResult {
 		damage = 1
 	}
 
-	// God mode: multiply damage by 10
+	// God mode: multiply damage by 1000
 	if p.GodMode {
-		damage *= 10
+		damage *= 1000
 	}
 
 	killed := n.TakeDamage(damage)
@@ -282,9 +282,9 @@ func PlayerAttackPlayer(attacker, target *player.Player) CombatResult {
 		damage = 1
 	}
 
-	// God mode: attacker deals 10x damage
+	// God mode: attacker deals 1000x damage
 	if attacker.GodMode {
-		damage *= 10
+		damage *= 1000
 	}
 
 	target.HP -= damage

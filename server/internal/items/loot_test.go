@@ -6,7 +6,7 @@ func TestRollLoot(t *testing.T) {
 	// Run multiple rolls to verify we get results
 	gotSomething := false
 	for i := 0; i < 100; i++ {
-		drops := RollLoot(1) // Slime
+		drops := RollLoot(10) // Slime (type 10)
 		if len(drops) > 0 {
 			gotSomething = true
 			for _, drop := range drops {
@@ -97,20 +97,20 @@ func TestPotionTierByDifficulty(t *testing.T) {
 		}
 	}
 
-	// Medium difficulty
-	medPotions := map[int]bool{92: true, 94: true}
+	// Medium difficulty — basic potions
+	basicPotions := map[int]bool{91: true, 93: true}
 	for i := 0; i < 50; i++ {
 		id := PotionTierByDifficulty(50)
-		if !medPotions[id] {
-			t.Errorf("Medium difficulty potion should be big (92 or 94), got %d", id)
+		if !basicPotions[id] {
+			t.Errorf("Medium difficulty potion should be basic (91 or 93), got %d", id)
 		}
 	}
 
-	// High difficulty
-	highPotions := map[int]bool{92: true, 94: true}
+	// High difficulty (XP >= 500) — big potions
+	bigPotions := map[int]bool{92: true, 94: true}
 	for i := 0; i < 50; i++ {
-		id := PotionTierByDifficulty(100)
-		if !highPotions[id] {
+		id := PotionTierByDifficulty(1000)
+		if !bigPotions[id] {
 			t.Errorf("High difficulty potion should be big (92 or 94), got %d", id)
 		}
 	}
@@ -121,7 +121,7 @@ func TestRollMultiTierLoot(t *testing.T) {
 	gotPotion := false
 	gotEquipment := false
 	for i := 0; i < 500; i++ {
-		drops := RollMultiTierLoot(2, 35) // Skeleton
+		drops := RollMultiTierLoot(11, 262) // Skeleton (type 11, XP 262)
 		for _, drop := range drops {
 			def := drop.Def()
 			if def == nil {
@@ -161,12 +161,12 @@ func TestRollMultiTierLootNonExistentNPC(t *testing.T) {
 	}
 }
 
-func TestRollBossLoot(t *testing.T) {
-	// Boss loot should always include guaranteed potions
+func TestHellclawLoot(t *testing.T) {
+	// Hellclaw (49) has guaranteed potion drops — should always get potions
 	gotPotions := false
 	gotEquip := false
 	for i := 0; i < 50; i++ {
-		drops := RollBossLoot()
+		drops := RollLoot(49)
 		for _, drop := range drops {
 			def := drop.Def()
 			if def == nil {
@@ -181,27 +181,29 @@ func TestRollBossLoot(t *testing.T) {
 		}
 	}
 	if !gotPotions {
-		t.Error("Boss loot should always drop potions (100% chance)")
+		t.Error("Hellclaw loot should always drop potions (100% chance)")
 	}
 	if !gotEquip {
-		t.Error("Expected at least some equipment from 50 boss rolls")
+		t.Error("Expected at least some equipment from 50 Hellclaw rolls")
 	}
 }
 
-func TestBossLootTableValid(t *testing.T) {
-	for _, entry := range BossLootTable {
-		def := GetItemDef(entry.ItemID)
-		if def == nil {
-			t.Errorf("Boss loot table references non-existent item %d", entry.ItemID)
-		}
-		if entry.DropChance <= 0 || entry.DropChance > 1.0 {
-			t.Errorf("Boss loot item %d: invalid drop chance %f", entry.ItemID, entry.DropChance)
-		}
-		if entry.MinCount < 1 {
-			t.Errorf("Boss loot item %d: min count must be >= 1", entry.ItemID)
-		}
-		if entry.MaxCount < entry.MinCount {
-			t.Errorf("Boss loot item %d: max count < min count", entry.ItemID)
+func TestAllLootTablesValid(t *testing.T) {
+	for npcID, entries := range NpcLootTables {
+		for _, entry := range entries {
+			def := GetItemDef(entry.ItemID)
+			if def == nil {
+				t.Errorf("NPC %d loot table references non-existent item %d", npcID, entry.ItemID)
+			}
+			if entry.DropChance <= 0 || entry.DropChance > 1.0 {
+				t.Errorf("NPC %d item %d: invalid drop chance %f", npcID, entry.ItemID, entry.DropChance)
+			}
+			if entry.MinCount < 1 {
+				t.Errorf("NPC %d item %d: min count must be >= 1", npcID, entry.ItemID)
+			}
+			if entry.MaxCount < entry.MinCount {
+				t.Errorf("NPC %d item %d: max count < min count", npcID, entry.ItemID)
+			}
 		}
 	}
 }

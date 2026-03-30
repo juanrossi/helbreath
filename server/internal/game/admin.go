@@ -72,6 +72,16 @@ func (e *Engine) handleAdminCommand(p *player.Player, message string) bool {
 	cmd := strings.ToLower(parts[0])
 	args := parts[1:]
 
+	// Player-level commands (no admin required)
+	switch cmd {
+	case "joinparty":
+		e.playerJoinParty(p, args)
+		return true
+	case "leaveparty":
+		e.playerLeaveParty(p)
+		return true
+	}
+
 	// Check admin level for the command
 	requiredLevel := getRequiredLevel(cmd)
 	if p.AdminLevel < requiredLevel {
@@ -844,4 +854,72 @@ func (e *Engine) disconnectAllClients() {
 		}
 		return true
 	})
+}
+
+// =========================================================================
+// Player-level commands (no admin required)
+// =========================================================================
+
+// playerJoinParty handles /joinparty <name> — requests to join a player's party.
+func (e *Engine) playerJoinParty(p *player.Player, args []string) {
+	if len(args) < 1 {
+		e.sendNotification(p, "Usage: /joinparty <name>", 2)
+		return
+	}
+	target := e.findPlayerByName(args[0])
+	if target == nil {
+		e.sendNotification(p, fmt.Sprintf("Player %q not found or offline", args[0]), 2)
+		return
+	}
+	if target.ObjectID == p.ObjectID {
+		e.sendNotification(p, "You cannot join your own party", 2)
+		return
+	}
+
+	// Check if target is in a party; if so, request to join. If not, invite them.
+	existingParty := e.parties.GetPlayerParty(p.ObjectID)
+	if existingParty != nil {
+		e.sendNotification(p, "You are already in a party. Use /leaveparty first.", 2)
+		return
+	}
+
+	// Send invite request to the target — reuse the party invite protocol
+	err := e.parties.InvitePlayer(target.ObjectID, p.ObjectID)
+	if err != nil {
+		e.sendNotification(p, err.Error(), 2)
+		return
+	}
+
+	// Notify both players
+	e.sendNotification(p, fmt.Sprintf("Party invite sent to %s", target.Name), 3)
+	inviteMsg := &pb.PartyInvite{
+		InviterObjectId: target.ObjectID,
+		InviterName:     p.Name,
+	}
+	data, _ := network.Encode(network.MsgPartyInviteMsg, inviteMsg)
+	target.Send(data)
+}
+
+// playerLeaveParty handles /leaveparty — leaves the current party.
+func (e *Engine) playerLeaveParty(p *player.Player) {
+	party := e.parties.GetPlayerParty(p.ObjectID)
+	if party == nil {
+		e.sendNotification(p, "You are not in a party", 2)
+		return
+	}
+
+	err := e.parties.LeaveParty(p.ObjectID)
+	if err != nil {
+		e.sendNotification(p, err.Error(), 2)
+		return
+	}
+	e.sendNotification(p, "You left the party", 3)
+
+	// Notify remaining members
+	for _, memberID := range party.GetMemberIDs() {
+		if val, ok := e.players.Load(memberID); ok {
+			mp := val.(*player.Player)
+			e.sendNotification(mp, fmt.Sprintf("%s left the party", p.Name), 3)
+		}
+	}
 }

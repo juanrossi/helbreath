@@ -6,11 +6,11 @@ package game
 var (
 	// HitBonus is added to hit chance percentage (0 = no bonus).
 	// At 3x easier: +30 hit chance makes most attacks land.
-	HitBonus = 30
+	HitBonus = 50
 
 	// DamageMultiplier scales player damage output.
-	// At 3x easier: players deal 3x damage.
-	DamageMultiplier = 3
+	// At 3x easier: players deal 4x damage.
+	DamageMultiplier = 4
 
 	// DropRateMultiplier scales loot drop chances.
 	// At 3x easier: 3x more likely to get item drops.

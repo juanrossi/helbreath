@@ -758,6 +758,14 @@ export class GameScene extends Phaser.Scene {
       this.updateNPCPosition(npcEntity);
     }
 
+    // Auto-attack: repeat attacks while mouse is held down near an NPC
+    if (this.isMouseDown && !this.isDead && !this.isMoving) {
+      const pointer = this.input.activePointer;
+      if (pointer.leftButtonDown()) {
+        this.tryAttackNPCAtPointer(pointer);
+      }
+    }
+
     // Update weather
     this.weatherManager.update(delta);
 
@@ -2821,6 +2829,47 @@ export class GameScene extends Phaser.Scene {
   }
 
   private onDamageEvent(data: DamageEventData): void {
+    // Play attack animation on the attacker (remote players only)
+    if (data.attackerId && data.attackerId !== this.playerObjectId) {
+      const rp = this.remotePlayers.get(data.attackerId);
+      if (rp && rp.assets) {
+        // Calculate direction from attacker to target
+        let targetTX = 0, targetTY = 0;
+        if (data.targetType === 2) {
+          const npc = this.npcs.get(data.targetId);
+          if (npc) { targetTX = npc.tileX; targetTY = npc.tileY; }
+        } else {
+          if (data.targetId === this.playerObjectId) {
+            targetTX = this.tileX; targetTY = this.tileY;
+          } else {
+            const target = this.remotePlayers.get(data.targetId);
+            if (target) { targetTX = target.tileX; targetTY = target.tileY; }
+          }
+        }
+        const dx = targetTX - rp.tileX;
+        const dy = targetTY - rp.tileY;
+        let dir = rp.direction;
+        if (dx !== 0 || dy !== 0) {
+          const cx = dx > 0 ? 1 : dx < 0 ? -1 : 0;
+          const cy = dy > 0 ? 1 : dy < 0 ? -1 : 0;
+          const dirLookup: Record<string, number> = {
+            '0,-1': 1, '1,-1': 2, '1,0': 3, '1,1': 4,
+            '0,1': 5, '-1,1': 6, '-1,0': 7, '-1,-1': 8,
+          };
+          dir = dirLookup[`${cx},${cy}`] ?? rp.direction;
+        }
+        rp.direction = dir;
+        const spriteDir = Math.max(0, dir - 1);
+        this.updatePlayerAnimation(rp.assets, PlayerState.MeleeAttack, spriteDir);
+        // Return to idle after attack animation
+        this.time.delayedCall(500, () => {
+          if (rp.assets) {
+            this.updatePlayerAnimation(rp.assets, PlayerState.IdlePeace, spriteDir);
+          }
+        });
+      }
+    }
+
     // Update NPC HP if target is NPC
     if (data.targetType === 2) {
       const npcEntity = this.npcs.get(data.targetId);
@@ -3159,32 +3208,29 @@ export class GameScene extends Phaser.Scene {
         </div>
 
         <div>
-          <div style="color:#3498db; font-weight:bold; margin-bottom:6px;">Chat Commands</div>
+          <div style="color:#3498db; font-weight:bold; margin-bottom:6px;">Chat Prefixes</div>
           <div style="line-height:1.8; font-size:11px;">
-            <div><code>!text</code> Global chat</div>
-            <div><code>~text</code> Town chat</div>
-            <div><code>^text</code> or <code>@text</code> Guild chat</div>
-            <div><code>$text</code> Party chat</div>
-            <div><code>#text</code> Local chat</div>
-            <div><code>/to name msg</code> Whisper to player</div>
-            <div><code>/mute name</code> Mute a player</div>
-            <div><code>/unmute name</code> Unmute a player</div>
+            <div>(no prefix) Local chat (nearby)</div>
+            <div><code>!text</code> <span style="color:#FFD700;">Global shout</span> (entire map)</div>
+            <div><code>~text</code> <span style="color:#e67e22;">Town chat</span> (your faction)</div>
+            <div><code>^text</code> <span style="color:#2ecc71;">Guild chat</span></div>
+            <div><code>$text</code> <span style="color:#3498db;">Party chat</span></div>
+            <div><code>#text</code> Local chat (explicit)</div>
+            <div><code>@name msg</code> <span style="color:#9b59b6;">Whisper</span> to player</div>
+            <div><code>/to name msg</code> <span style="color:#9b59b6;">Whisper</span> (alt)</div>
           </div>
 
-          <div style="color:#3498db; font-weight:bold; margin:10px 0 6px;">Party & Summon</div>
+          <div style="color:#3498db; font-weight:bold; margin:10px 0 6px;">Social Commands</div>
           <div style="line-height:1.8; font-size:11px;">
-            <div><code>/joinparty name</code> Join player's party</div>
+            <div><code>/joinparty name</code> Request to join party</div>
             <div><code>/leaveparty</code> Leave current party</div>
-            <div><code>/tgt name</code> Summons attack player</div>
-            <div><code>/hold</code> Hold your summons</div>
-            <div><code>/free</code> Free your summons</div>
+            <div><code>/mute name</code> Mute a player locally</div>
+            <div><code>/unmute name</code> Unmute a player</div>
           </div>
 
           <div style="color:#3498db; font-weight:bold; margin:10px 0 6px;">Display</div>
           <div style="line-height:1.8; font-size:11px;">
-            <div><code>/bigitems</code> Large ground item icons</div>
-            <div><code>/ekscreenshot</code> Auto screenshot on EK</div>
-            <div><code>/grid</code> Tile grid overlay</div>
+            <div><code>/grid</code> Toggle tile grid overlay</div>
           </div>
         </div>
       </div>
@@ -3274,34 +3320,9 @@ export class GameScene extends Phaser.Scene {
     chatInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && chatInput.value.trim()) {
         const msg = chatInput.value.trim();
-        let type = 0;
-        let target = '';
-        let text = msg;
-
-        if (msg.startsWith('!')) {
-          type = 1;
-          text = msg.slice(1).trim();
-        } else if (msg.startsWith('@')) {
-          type = 2;
-          const spaceIdx = msg.indexOf(' ');
-          if (spaceIdx > 0) {
-            target = msg.slice(1, spaceIdx);
-            text = msg.slice(spaceIdx + 1).trim();
-          }
-        }
-
-        if (text) {
-          this.msgHandler.sendMessage(Proto.MSG_CHAT_REQUEST, { type, message: text, target });
-          const log = document.getElementById('chat-log');
-          if (log) {
-            const line = document.createElement('div');
-            line.textContent = `${this.playerName}: ${text}`;
-            log.appendChild(line);
-            log.scrollTop = log.scrollHeight;
-          }
-        }
         chatInput.value = '';
         e.stopPropagation();
+        this.processChatInput(msg);
       }
     });
 
@@ -3310,18 +3331,104 @@ export class GameScene extends Phaser.Scene {
 
     this.msgHandler.on(Proto.MSG_CHAT_MESSAGE, (data: ChatMessageData) => {
       if (data.objectId === this.playerObjectId) return;
+      if (this.mutedPlayers.has(data.senderName.toLowerCase())) return;
       const log = document.getElementById('chat-log');
       if (log) {
         const line = document.createElement('div');
-        const prefix = data.type === 1 ? '[SHOUT] ' : data.type === 2 ? '[WHISPER] ' : '';
-        line.textContent = `${prefix}${data.senderName}: ${data.message}`;
-        line.style.color = data.type === 1 ? '#FFD700' : data.type === 2 ? '#9b59b6' : '#fff';
+        const prefixes: Record<number, string> = { 1: '[SHOUT] ', 2: '[WHISPER] ', 3: '[GUILD] ', 4: '[PARTY] ', 5: '[TOWN] ' };
+        const colors: Record<number, string> = { 0: '#fff', 1: '#FFD700', 2: '#9b59b6', 3: '#2ecc71', 4: '#3498db', 5: '#e67e22' };
+        line.textContent = `${prefixes[data.type] || ''}${data.senderName}: ${data.message}`;
+        line.style.color = colors[data.type] || '#fff';
         log.appendChild(line);
         log.scrollTop = log.scrollHeight;
       }
     });
 
     this.events.on('shutdown', () => { div.remove(); });
+  }
+
+  private mutedPlayers = new Set<string>();
+  private gridVisible = false;
+
+  private processChatInput(msg: string): void {
+    let type = 0; // normal/local
+    let target = '';
+    let text = msg;
+    let localPrefix = '';
+
+    // --- Client-side slash commands (not sent to server) ---
+    const lower = msg.toLowerCase();
+    if (lower === '/grid') {
+      this.toggleGridDisplay();
+      this.showSystemMessage(this.gridVisible ? 'Grid overlay: ON' : 'Grid overlay: OFF');
+      return;
+    }
+    if (lower.startsWith('/mute ')) {
+      const name = msg.slice(6).trim();
+      if (name) { this.mutedPlayers.add(name.toLowerCase()); this.showSystemMessage(`Muted ${name}`); }
+      return;
+    }
+    if (lower.startsWith('/unmute ')) {
+      const name = msg.slice(8).trim();
+      if (name) { this.mutedPlayers.delete(name.toLowerCase()); this.showSystemMessage(`Unmuted ${name}`); }
+      return;
+    }
+
+    // --- Chat prefixes ---
+    if (msg.startsWith('!')) {
+      type = 1; text = msg.slice(1).trim(); localPrefix = '[SHOUT] ';
+    } else if (msg.startsWith('~')) {
+      type = 5; text = msg.slice(1).trim(); localPrefix = '[TOWN] '; // town chat
+    } else if (msg.startsWith('^') || (msg.startsWith('@') && !msg.slice(1).includes(' '))) {
+      // Guild chat: ^text or @text (if no space = guild, with space = whisper)
+      type = 3; text = msg.slice(1).trim(); localPrefix = '[GUILD] ';
+    } else if (msg.startsWith('$')) {
+      type = 4; text = msg.slice(1).trim(); localPrefix = '[PARTY] ';
+    } else if (msg.startsWith('#')) {
+      type = 0; text = msg.slice(1).trim(); // explicit local
+    } else if (msg.startsWith('@')) {
+      // Whisper: @name message
+      type = 2;
+      const spaceIdx = msg.indexOf(' ');
+      if (spaceIdx > 0) {
+        target = msg.slice(1, spaceIdx);
+        text = msg.slice(spaceIdx + 1).trim();
+        localPrefix = `[TO ${target}] `;
+      }
+    } else if (lower.startsWith('/to ')) {
+      // Whisper: /to name message
+      type = 2;
+      const rest = msg.slice(4).trim();
+      const spaceIdx = rest.indexOf(' ');
+      if (spaceIdx > 0) {
+        target = rest.slice(0, spaceIdx);
+        text = rest.slice(spaceIdx + 1).trim();
+        localPrefix = `[TO ${target}] `;
+      } else {
+        this.showSystemMessage('Usage: /to <name> <message>');
+        return;
+      }
+    } else if (lower.startsWith('/joinparty ')) {
+      // Send as chat type 0 with /joinparty — server admin command handler will pick it up
+      type = 0; text = msg;
+    } else if (lower === '/leaveparty') {
+      type = 0; text = msg;
+    }
+
+    if (!text) return;
+
+    this.msgHandler.sendMessage(Proto.MSG_CHAT_REQUEST, { type, message: text, target });
+
+    // Show in local chat log
+    const log = document.getElementById('chat-log');
+    if (log) {
+      const colors: Record<number, string> = { 0: '#fff', 1: '#FFD700', 2: '#9b59b6', 3: '#2ecc71', 4: '#3498db', 5: '#e67e22' };
+      const line = document.createElement('div');
+      line.textContent = `${localPrefix}${this.playerName}: ${text}`;
+      line.style.color = colors[type] || '#fff';
+      log.appendChild(line);
+      log.scrollTop = log.scrollHeight;
+    }
   }
 
   // ---------------------------------------------------------------------------

@@ -1682,9 +1682,21 @@ func (e *Engine) handleChat(client *network.Client, req *pb.ChatRequest) {
 	case 1: // shout - all players on map
 		e.broadcastToMap(p.MapName, network.MsgChatMessage, chatMsg)
 	case 2: // whisper - specific player
+		if req.Target == "" {
+			e.sendNotification(p, "Usage: @name message or /to name message", 2)
+			return
+		}
 		e.sendWhisper(req.Target, chatMsg)
+		// Echo back to sender so they see their own whisper
+		chatMsg.Type = 2
+		data, _ := network.Encode(network.MsgChatMessage, chatMsg)
+		p.Send(data)
 	case 3: // guild chat
 		e.handleGuildChat(p, msg)
+	case 4: // party chat
+		e.handlePartyChat(p, chatMsg)
+	case 5: // town chat - broadcast to all players on same side
+		e.broadcastToSide(p.Side, chatMsg)
 	}
 }
 
@@ -1857,13 +1869,8 @@ func (e *Engine) handleNPCDeath(n *npc.NPC, killer *player.Player, gm *mapdata.G
 	goldDrop := items.RollGoldDrop(n.Type.XP)
 	killer.Gold += goldDrop
 
-	// Roll loot based on NPC type (boss vs regular)
-	var lootDrops []*items.Item
-	if n.Type.BossType > 0 {
-		lootDrops = items.RollBossLoot()
-	} else {
-		lootDrops = items.RollMultiTierLoot(n.Type.ID, n.Type.XP)
-	}
+	// Roll loot based on NPC type
+	lootDrops := items.RollMultiTierLoot(n.Type.ID, n.Type.XP)
 
 	// Apply random attributes to equipment drops (4.6)
 	for _, drop := range lootDrops {
@@ -2029,6 +2036,36 @@ func (e *Engine) sendWhisper(targetName string, msg *pb.ChatMessage) {
 			data, _ := network.Encode(network.MsgChatMessage, msg)
 			p.Send(data)
 			return false // stop iterating
+		}
+		return true
+	})
+}
+
+// handlePartyChat sends a chat message to all party members.
+func (e *Engine) handlePartyChat(p *player.Player, chatMsg *pb.ChatMessage) {
+	party := e.parties.GetPlayerParty(p.ObjectID)
+	if party == nil {
+		e.sendNotification(p, "You are not in a party", 2)
+		return
+	}
+	data, _ := network.Encode(network.MsgChatMessage, chatMsg)
+	for _, memberID := range party.GetMemberIDs() {
+		if val, ok := e.players.Load(memberID); ok {
+			val.(*player.Player).Send(data)
+		}
+	}
+}
+
+// broadcastToSide sends a chat message to all online players of the same faction.
+func (e *Engine) broadcastToSide(side int, chatMsg *pb.ChatMessage) {
+	if side == 0 {
+		return // neutral players have no town
+	}
+	data, _ := network.Encode(network.MsgChatMessage, chatMsg)
+	e.players.Range(func(_, value any) bool {
+		p := value.(*player.Player)
+		if p.Side == side {
+			p.Send(data)
 		}
 		return true
 	})
