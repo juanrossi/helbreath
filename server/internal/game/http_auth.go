@@ -115,7 +115,12 @@ func (e *Engine) HandleHTTPLogin(w http.ResponseWriter, r *http.Request) {
 		}
 		accountID, err := e.store.CreateAccount(ctx, req.Username, string(hash), req.Email)
 		if err != nil {
-			writeJSON(w, http.StatusConflict, map[string]any{"success": false, "error": "Username already taken"})
+			log.Printf("CreateAccount failed for %q: %v", req.Username, err)
+			errMsg := "Username already taken"
+			if !strings.Contains(err.Error(), "unique") && !strings.Contains(err.Error(), "duplicate") {
+				errMsg = "Account creation failed — check server logs"
+			}
+			writeJSON(w, http.StatusConflict, map[string]any{"success": false, "error": errMsg})
 			return
 		}
 

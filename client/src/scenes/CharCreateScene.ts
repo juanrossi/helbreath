@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { MessageHandler, CreateCharacterResponse } from '../network/MessageHandler';
 import * as Proto from '../network/Protocol';
+import { API_BASE } from '../env';
 
 export class CharCreateScene extends Phaser.Scene {
   private formDiv: HTMLDivElement | null = null;
@@ -91,12 +92,8 @@ export class CharCreateScene extends Phaser.Scene {
 
       // Use HTTP API for character creation
       const token = localStorage.getItem('hb_token') || '';
-      const host = window.location.hostname;
-      const isLocal = host === 'localhost' || host === '127.0.0.1';
-      const apiBase = isLocal ? `http://${host}:8080` : '';
-
       try {
-        const resp = await fetch(`${apiBase}/api/characters/create`, {
+        const resp = await fetch(`${API_BASE}/api/characters/create`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

@@ -904,6 +904,38 @@ func (e *Engine) OnDisconnect(client *network.Client) {
 	}
 }
 
+// kickPlayer saves, removes, and disconnects an existing player.
+// Used when a duplicate login is detected.
+func (e *Engine) kickPlayer(p *player.Player, reason string) {
+	// Notify the player
+	notif := &pb.Notification{Message: reason, Type: 3}
+	data, _ := network.Encode(network.MsgNotification, notif)
+	p.Send(data)
+
+	// Save state
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := savePlayerToDB(e.store, ctx, p); err != nil {
+		log.Printf("Failed to save kicked player %s: %v", p.Name, err)
+	}
+
+	// Remove from map
+	if gm, ok := e.maps[p.MapName]; ok {
+		gm.ClearOwner(p.X, p.Y)
+		gm.RemovePlayerFromSector(p.X, p.Y, p.ObjectID)
+		disappear := &pb.PlayerDisappear{ObjectId: p.ObjectID}
+		e.broadcastToNearby(gm, p.X, p.Y, p.ObjectID, network.MsgPlayerDisappear, disappear)
+	}
+
+	// Remove from players map
+	e.players.Delete(p.ObjectID)
+
+	// Disconnect
+	if p.Client != nil {
+		p.Client.CloseGracefully()
+	}
+}
+
 // LogoutCountdownSeconds is how long a player must wait before logging out.
 const LogoutCountdownSeconds = 5
 
@@ -1219,6 +1251,17 @@ func (e *Engine) handleEnterGame(client *network.Client, req *pb.EnterGameReques
 			return
 		}
 	}
+
+	// Kick any existing session for this account (prevents duplicate logins)
+	e.players.Range(func(_, value any) bool {
+		existing := value.(*player.Player)
+		if existing.AccountID == client.AccountID {
+			log.Printf("Duplicate login for account %d (%s) — kicking previous session (obj=%d)",
+				client.AccountID, existing.Name, existing.ObjectID)
+			e.kickPlayer(existing, "Another session logged in with this account")
+		}
+		return true
+	})
 
 	charRow, err := e.store.GetCharacterByID(ctx, int(req.CharacterId), client.AccountID)
 	if err != nil {

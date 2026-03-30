@@ -103,7 +103,9 @@ type Client struct {
 	conn      *websocket.Conn
 	server    *Server
 	sendChan  chan []byte
+	done      chan struct{} // closed when the client is dead (WritePump or ReadPump exited)
 	closeOnce sync.Once
+	doneOnce  sync.Once
 	mu        sync.Mutex
 
 	// Set by game engine after auth
@@ -120,10 +122,18 @@ func NewClient(conn *websocket.Conn, server *Server) *Client {
 		conn:     conn,
 		server:   server,
 		sendChan: make(chan []byte, 256),
+		done:     make(chan struct{}),
 	}
 }
 
+// Send queues data to be written by WritePump. If the client is dead or the
+// buffer is full, the message is silently dropped.
 func (c *Client) Send(data []byte) {
+	select {
+	case <-c.done:
+		return // client is dead, don't even try
+	default:
+	}
 	select {
 	case c.sendChan <- data:
 	default:
@@ -137,17 +147,25 @@ func (c *Client) Close() {
 	c.conn.Close()
 }
 
+// markDead signals that this client is no longer functional.
+// Safe to call multiple times from either pump.
+func (c *Client) markDead() {
+	c.doneOnce.Do(func() { close(c.done) })
+}
+
 // CloseGracefully closes the send channel so WritePump drains all pending
 // messages, then closes the underlying WebSocket connection.
 func (c *Client) CloseGracefully() {
 	c.closeOnce.Do(func() { close(c.sendChan) })
 	// Give WritePump a moment to flush remaining messages
 	time.Sleep(100 * time.Millisecond)
+	c.markDead()
 	c.Close()
 }
 
 func (c *Client) ReadPump() {
 	defer func() {
+		c.markDead()
 		c.server.RemoveClient(c)
 		c.Close()
 	}()
@@ -171,7 +189,11 @@ func (c *Client) ReadPump() {
 }
 
 func (c *Client) WritePump() {
-	defer c.Close()
+	defer func() {
+		c.markDead()
+		// Close the underlying connection so ReadPump unblocks and exits too
+		c.Close()
+	}()
 
 	for data := range c.sendChan {
 		c.mu.Lock()

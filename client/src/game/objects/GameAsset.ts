@@ -170,8 +170,12 @@ export class GameAsset {
         // Check if frame index exists in texture (if frameIndex is specified)
         if (config.frameIndex !== undefined) {
             const texture = scene.textures.get(textureKey);
-            if (!texture.has(String(config.frameIndex))) {
-                throw new Error(`Frame index ${config.frameIndex} does not exist in texture "${textureKey}"`);
+            if (!texture || !texture.has(String(config.frameIndex))) {
+                // Silently create an invisible sprite for missing frames (common in map data)
+                this.sprite = scene.add.sprite(config.x, config.y, '__DEFAULT');
+                this.sprite.setVisible(false);
+                this._constructionComplete = true;
+                return;
             }
         }
 

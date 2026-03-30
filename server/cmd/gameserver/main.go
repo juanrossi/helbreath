@@ -96,7 +96,7 @@ func main() {
 	mux.HandleFunc("/api/characters/delete", engine.HandleHTTPDeleteCharacter)
 
 	// Wrap with CORS middleware
-	allowedOrigins := envOrDefault("ALLOWED_ORIGINS", "http://localhost:3000")
+	allowedOrigins := envOrDefault("ALLOWED_ORIGINS", "http://localhost:3000,https://helbreath.xyz,https://www.helbreath.xyz")
 	handler := corsMiddleware(mux, allowedOrigins)
 	httpServer := &http.Server{Addr: *addr, Handler: handler}
 

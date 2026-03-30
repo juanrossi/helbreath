@@ -102,6 +102,7 @@ func DefaultSpawnConfig() *SpawnConfig {
 			// ================================================================
 			// ARESDEN BUILDINGS — positions from original MapData .txt files
 			// ================================================================
+			{MapName: "cityhall_1", NpcTypeID: 26, SpawnX: 45, SpawnY: 35},  // Kennedy (Aresden faction leader)
 			{MapName: "bsmith_1", NpcTypeID: 24, SpawnX: 49, SpawnY: 33},    // Tom
 			{MapName: "gshop_1", NpcTypeID: 15, SpawnX: 59, SpawnY: 42},     // ShopKeeper-W
 			{MapName: "gshop_1f", NpcTypeID: 15, SpawnX: 65, SpawnY: 41},    // ShopKeeper-W
@@ -122,6 +123,7 @@ func DefaultSpawnConfig() *SpawnConfig {
 			// ================================================================
 			// ELVINE BUILDINGS
 			// ================================================================
+			{MapName: "cityhall_2", NpcTypeID: 25, SpawnX: 45, SpawnY: 35},  // William (Elvine faction leader)
 			{MapName: "bsmith_2", NpcTypeID: 24, SpawnX: 49, SpawnY: 33},    // Tom
 			{MapName: "gshop_2", NpcTypeID: 15, SpawnX: 59, SpawnY: 42},     // ShopKeeper-W
 			{MapName: "gshop_2f", NpcTypeID: 15, SpawnX: 65, SpawnY: 41},    // ShopKeeper-W

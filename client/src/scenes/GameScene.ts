@@ -1569,18 +1569,39 @@ export class GameScene extends Phaser.Scene {
    * Returns true if the player is currently able to move.
    * Blocked by: attacking, casting, stunlocked, dead, knockback, already moving.
    */
+  // Max time any one-shot animation can block movement (safety valve against stuck states)
+  private lastBlockingStateTime = 0;
+  private static readonly MAX_ANIMATION_BLOCK_MS = 1200;
+
   private canMove(): boolean {
     if (this.isMoving) return false;
     if (this.isDead) return false;
     if (this.knockbackActive) return false;
     if (this.isStunlocked()) return false;
-    // Block during one-shot animations
-    if (this.playerState === PlayerState.MeleeAttack) return false;
-    if (this.playerState === PlayerState.BowAttack) return false;
-    if (this.playerState === PlayerState.Cast) return false;
-    if (this.playerState === PlayerState.PickUp) return false;
-    if (this.playerState === PlayerState.TakeDamage) return false;
-    if (this.playerState === PlayerState.TakeDamageWithKnockback) return false;
+
+    // Block during one-shot animations, but with a safety timeout
+    // to prevent permanently stuck states
+    const blockingStates = [
+      PlayerState.MeleeAttack, PlayerState.BowAttack,
+      PlayerState.Cast, PlayerState.PickUp,
+      PlayerState.TakeDamage, PlayerState.TakeDamageWithKnockback,
+    ];
+    if (blockingStates.includes(this.playerState)) {
+      // Track when we first entered a blocking state
+      if (this.lastBlockingStateTime === 0) this.lastBlockingStateTime = this.time.now;
+      const elapsed = this.time.now - this.lastBlockingStateTime;
+      if (elapsed < GameScene.MAX_ANIMATION_BLOCK_MS) {
+        return false;
+      }
+      // Safety: force reset to idle if animation blocked too long
+      console.warn(`[MOVE] Force-resetting stuck state ${this.playerState} after ${elapsed}ms`);
+      this.playerState = PlayerState.IdlePeace;
+      if (this.playerAssets) {
+        this.updatePlayerAnimation(this.playerAssets, PlayerState.IdlePeace, Math.max(0, this.playerDirection - 1));
+      }
+    }
+    // Not in a blocking state — reset the timer
+    this.lastBlockingStateTime = 0;
     if (this.playerState === PlayerState.Die) return false;
     return true;
   }
@@ -1618,9 +1639,21 @@ export class GameScene extends Phaser.Scene {
     const dx = worldPoint.x - playerCenterX;
     const dy = worldPoint.y - playerCenterY;
 
-    // Dead zone - don't move if clicking very close to player
+    // Dead zone - clicking very close to player = bend down (pick up gesture)
     const dist = Math.sqrt(dx * dx + dy * dy);
-    if (dist < TILE_SIZE * 0.5) return;
+    if (dist < TILE_SIZE * 0.8) {
+      if (this.playerState !== PlayerState.PickUp && this.playerAssets) {
+        this.playerState = PlayerState.PickUp;
+        this.updatePlayerAnimation(this.playerAssets, PlayerState.PickUp, Math.max(0, this.playerDirection - 1));
+        this.time.delayedCall(400, () => {
+          if (this.playerState === PlayerState.PickUp && this.playerAssets) {
+            this.playerState = PlayerState.IdlePeace;
+            this.updatePlayerAnimation(this.playerAssets, PlayerState.IdlePeace, Math.max(0, this.playerDirection - 1));
+          }
+        });
+      }
+      return;
+    }
 
     // Calculate 8-direction from angle
     const dir = this.angleToDirection(dx, dy);
@@ -3183,6 +3216,9 @@ export class GameScene extends Phaser.Scene {
           <button id="btn-party" class="hud-btn" title="Party (P)">
             <div style="font-size:16px;">&#x1F465;</div><div style="font-size:8px;">Party</div>
           </button>
+          <button id="btn-sound" class="hud-btn" title="Sound Settings">
+            <div style="font-size:16px;">&#x1F50A;</div><div style="font-size:8px;">Sound</div>
+          </button>
           <div style="width:1px; background:#444; margin:4px 2px;"></div>
           <button id="btn-logout" class="hud-btn" title="Logout" style="background:linear-gradient(to bottom,#5a2a2a,#3a1a1a); border-color:#733;">
             <div style="font-size:14px;">&#x23FB;</div><div style="font-size:8px;">Logout</div>
@@ -3212,9 +3248,95 @@ export class GameScene extends Phaser.Scene {
     document.getElementById('btn-guild')?.addEventListener('click', () => this.toggleGuild());
     document.getElementById('btn-party')?.addEventListener('click', () => this.toggleParty());
     document.getElementById('hud-lupool')?.addEventListener('click', () => this.toggleStats());
+    document.getElementById('btn-sound')?.addEventListener('click', () => this.toggleSoundPanel());
     document.getElementById('btn-logout')?.addEventListener('click', () => this.requestLogout());
 
     this.events.on('shutdown', () => { div.remove(); });
+  }
+
+  // ---------------------------------------------------------------------------
+  // Sound / Music Controls
+  // ---------------------------------------------------------------------------
+
+  private soundPanelDiv: HTMLDivElement | null = null;
+
+  private toggleSoundPanel(): void {
+    if (this.soundPanelDiv) {
+      this.soundPanelDiv.remove();
+      this.soundPanelDiv = null;
+      return;
+    }
+    const div = document.createElement('div');
+    div.id = 'sound-panel';
+    div.style.cssText = 'position:fixed; bottom:70px; right:10px; z-index:200; background:rgba(20,20,30,0.95); color:#fff; padding:15px; font-size:12px; min-width:220px; border:1px solid #555; border-radius:4px;';
+
+    const musicVol = this.musicManager?.getVolume?.() ?? 50;  // 0-100
+    const soundVol = this.soundManager?.getVolume?.() ?? 50;  // 0-100
+
+    div.innerHTML = `
+      <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+        <strong>Sound Settings</strong>
+        <button id="sound-close" style="cursor:pointer; background:none; border:none; color:#fff; font-size:14px;">X</button>
+      </div>
+      <div style="margin-bottom:10px;">
+        <label style="display:flex; justify-content:space-between; margin-bottom:4px;">
+          <span>Music</span>
+          <span id="music-vol-label">${Math.round(musicVol)}%</span>
+        </label>
+        <input type="range" id="music-volume" min="0" max="100" value="${Math.round(musicVol)}" style="width:100%;">
+        <button id="music-mute" style="margin-top:4px; cursor:pointer; padding:3px 8px; font-size:11px;">
+          ${musicVol === 0 ? 'Unmute' : 'Mute'} Music
+        </button>
+      </div>
+      <div>
+        <label style="display:flex; justify-content:space-between; margin-bottom:4px;">
+          <span>Sound Effects</span>
+          <span id="sfx-vol-label">${Math.round(soundVol)}%</span>
+        </label>
+        <input type="range" id="sfx-volume" min="0" max="100" value="${Math.round(soundVol)}" style="width:100%;">
+        <button id="sfx-mute" style="margin-top:4px; cursor:pointer; padding:3px 8px; font-size:11px;">
+          ${soundVol === 0 ? 'Unmute' : 'Mute'} SFX
+        </button>
+      </div>
+    `;
+    document.body.appendChild(div);
+    this.soundPanelDiv = div;
+
+    document.getElementById('sound-close')?.addEventListener('click', () => this.toggleSoundPanel());
+
+    document.getElementById('music-volume')?.addEventListener('input', (e) => {
+      const val = parseInt((e.target as HTMLInputElement).value);
+      this.musicManager?.setVolume?.(val);
+      const label = document.getElementById('music-vol-label');
+      if (label) label.textContent = `${val}%`;
+    });
+
+    document.getElementById('sfx-volume')?.addEventListener('input', (e) => {
+      const val = parseInt((e.target as HTMLInputElement).value);
+      this.soundManager?.setVolume?.(val);
+      const label = document.getElementById('sfx-vol-label');
+      if (label) label.textContent = `${val}%`;
+    });
+
+    document.getElementById('music-mute')?.addEventListener('click', () => {
+      const current = this.musicManager?.getVolume?.() ?? 0;
+      const newVol = current > 0 ? 0 : 50;
+      this.musicManager?.setVolume?.(newVol);
+      (document.getElementById('music-volume') as HTMLInputElement).value = String(newVol);
+      const label = document.getElementById('music-vol-label');
+      if (label) label.textContent = `${newVol}%`;
+      (document.getElementById('music-mute') as HTMLButtonElement).textContent = newVol === 0 ? 'Unmute Music' : 'Mute Music';
+    });
+
+    document.getElementById('sfx-mute')?.addEventListener('click', () => {
+      const current = this.soundManager?.getVolume?.() ?? 0;
+      const newVol = current > 0 ? 0 : 50;
+      this.soundManager?.setVolume?.(newVol);
+      (document.getElementById('sfx-volume') as HTMLInputElement).value = String(newVol);
+      const label = document.getElementById('sfx-vol-label');
+      if (label) label.textContent = `${newVol}%`;
+      (document.getElementById('sfx-mute') as HTMLButtonElement).textContent = newVol === 0 ? 'Unmute SFX' : 'Mute SFX';
+    });
   }
 
   // ---------------------------------------------------------------------------
