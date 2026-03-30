@@ -2,6 +2,7 @@ package game
 
 import (
 	"context"
+	"encoding/json"
 	"log"
 
 	"github.com/juanrossi/hbonline/server/internal/db"
@@ -47,14 +48,40 @@ func serializePlayerInventory(p *player.Player) (inventoryJSON, equipmentJSON st
 	return
 }
 
-// savePlayerToDB persists all player state (stats, position, inventory) to the database.
+// serializeSpells converts a player's learned spells map into a JSON string.
+func serializeSpells(p *player.Player) string {
+	ids := make([]int, 0, len(p.LearnedSpells))
+	for id := range p.LearnedSpells {
+		ids = append(ids, id)
+	}
+	data, _ := json.Marshal(ids)
+	return string(data)
+}
+
+// loadSpells restores a player's learned spells from a JSON string.
+func loadSpells(p *player.Player, raw string) {
+	if raw == "" {
+		return
+	}
+	var ids []int
+	if err := json.Unmarshal([]byte(raw), &ids); err != nil {
+		log.Printf("Warning: failed to deserialize spell data for char %d: %v", p.CharacterID, err)
+		return
+	}
+	for _, id := range ids {
+		p.LearnedSpells[id] = true
+	}
+}
+
+// savePlayerToDB persists all player state (stats, position, inventory, spells) to the database.
 func savePlayerToDB(store db.DataStore, ctx context.Context, p *player.Player) error {
 	invJSON, eqJSON := serializePlayerInventory(p)
+	spellJSON := serializeSpells(p)
 	return store.SaveCharacter(ctx, p.CharacterID, p.MapName, p.X, p.Y, p.Direction,
 		p.Level, p.Experience, p.HP, p.MP, p.SP,
 		p.STR, p.VIT, p.DEX, p.INT, p.MAG, p.CHR, p.LUPool,
 		p.Side, p.Gold, p.PKCount, p.EKCount, p.Hunger,
-		invJSON, eqJSON)
+		invJSON, eqJSON, spellJSON)
 }
 
 // loadPlayerInventory restores a player's inventory and equipment from the
@@ -109,6 +136,9 @@ func loadPlayerInventory(p *player.Player, row *db.CharacterRow) {
 			}
 		}
 	}
+
+	// Load learned spells
+	loadSpells(p, row.SpellDataJSON)
 
 	// Update appearance and combat stats from loaded equipment
 	p.SyncEquipmentAppearance()

@@ -557,6 +557,24 @@ const SOUND_ASSETS: AssetData[] = [
 ];
 
 // ---------------------------------------------------------------------------
+// Spell Effect Sprites — .spr files for spell visual effects
+// ---------------------------------------------------------------------------
+
+const EFFECT_SPRITE_ASSETS: AssetData[] = [
+    { key: 'effect', fileName: 'effect.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Effect },
+    { key: 'effect2', fileName: 'effect2.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Effect },
+    { key: 'effect3', fileName: 'effect3.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Effect },
+    { key: 'effect4', fileName: 'effect4.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Effect },
+    { key: 'effect5', fileName: 'effect5.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Effect },
+    { key: 'effect6', fileName: 'effect6.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Effect },
+    { key: 'effect7', fileName: 'effect7.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Effect },
+    { key: 'effect8', fileName: 'effect8.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Effect },
+    { key: 'effect9', fileName: 'effect9.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Effect },
+    { key: 'effect10', fileName: 'effect10.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Effect },
+    { key: 'magic-effects', fileName: 'magic-effects.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Effect },
+];
+
+// ---------------------------------------------------------------------------
 // Combined static registry
 // ---------------------------------------------------------------------------
 
@@ -574,6 +592,7 @@ const ASSETS: AssetData[] = [
 const DEFERRED_ASSETS: AssetData[] = [
     ...EQUIPMENT_SPRITE_ASSETS,
     ...MONSTER_SPRITE_ASSETS,
+    ...EFFECT_SPRITE_ASSETS,
 ];
 
 // ---------------------------------------------------------------------------

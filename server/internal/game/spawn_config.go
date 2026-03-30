@@ -135,24 +135,64 @@ func DefaultSpawnConfig() *SpawnConfig {
 			{MapName: "cmdhall_2", NpcTypeID: 90, SpawnX: 57, SpawnY: 50},   // Gail
 
 			// ================================================================
-			// MIDDLELAND — progressive difficulty zones
+			// MIDDLELAND — spawns ported from middleland.txt (v3.82)
+			// Format: spot-mob-generator = NUM TYPE RECT(x1 y1 x2 y2) MOB_ID COUNT
 			// ================================================================
-			// South (near Aresden) — Slimes + Scorpions
-			{MapName: "middleland", NpcTypeID: 10, Count: 10, SpawnX: 165, SpawnY: 480, SpawnRadius: 20},
-			{MapName: "middleland", NpcTypeID: 10, Count: 10, SpawnX: 345, SpawnY: 475, SpawnRadius: 20},
-			{MapName: "middleland", NpcTypeID: 17, Count: 8, SpawnX: 220, SpawnY: 400, SpawnRadius: 25},
-			{MapName: "middleland", NpcTypeID: 17, Count: 8, SpawnX: 290, SpawnY: 410, SpawnRadius: 25},
-			// Mid — Skeletons + Orcs
-			{MapName: "middleland", NpcTypeID: 11, Count: 8, SpawnX: 200, SpawnY: 300, SpawnRadius: 25},
-			{MapName: "middleland", NpcTypeID: 14, Count: 6, SpawnX: 250, SpawnY: 300, SpawnRadius: 20},
-			{MapName: "middleland", NpcTypeID: 14, Count: 6, SpawnX: 260, SpawnY: 280, SpawnRadius: 20},
-			// Center — Trolls + Ogres
-			{MapName: "middleland", NpcTypeID: 28, Count: 4, SpawnX: 250, SpawnY: 250, SpawnRadius: 15},
-			{MapName: "middleland", NpcTypeID: 29, Count: 3, SpawnX: 260, SpawnY: 240, SpawnRadius: 15},
-			// North (near Elvine)
-			{MapName: "middleland", NpcTypeID: 10, Count: 10, SpawnX: 115, SpawnY: 45, SpawnRadius: 20},
-			{MapName: "middleland", NpcTypeID: 10, Count: 10, SpawnX: 315, SpawnY: 45, SpawnRadius: 20},
-			{MapName: "middleland", NpcTypeID: 11, Count: 8, SpawnX: 210, SpawnY: 110, SpawnRadius: 25},
+
+			// Ogre (29) — 4 zones, 28 total
+			{MapName: "middleland", NpcTypeID: 29, Count: 6, SpawnX: 155, SpawnY: 348, SpawnRadius: 18},  // zone 1
+			{MapName: "middleland", NpcTypeID: 29, Count: 6, SpawnX: 440, SpawnY: 330, SpawnRadius: 25},  // zone 2
+			{MapName: "middleland", NpcTypeID: 29, Count: 10, SpawnX: 67, SpawnY: 76, SpawnRadius: 25},   // zone 3
+			{MapName: "middleland", NpcTypeID: 29, Count: 6, SpawnX: 430, SpawnY: 210, SpawnRadius: 25},  // zone 4
+
+			// Zombie (18) — 2 zones, 40 total
+			{MapName: "middleland", NpcTypeID: 18, Count: 20, SpawnX: 172, SpawnY: 475, SpawnRadius: 15}, // south near Aresden
+			{MapName: "middleland", NpcTypeID: 18, Count: 20, SpawnX: 324, SpawnY: 55, SpawnRadius: 15},  // north near Elvine
+
+			// Scorpion (17) — 2 zones, 40 total
+			{MapName: "middleland", NpcTypeID: 17, Count: 20, SpawnX: 290, SpawnY: 475, SpawnRadius: 15}, // south
+			{MapName: "middleland", NpcTypeID: 17, Count: 20, SpawnX: 95, SpawnY: 120, SpawnRadius: 15},  // north
+
+			// Amphis (22) — 2 zones, 30 total
+			{MapName: "middleland", NpcTypeID: 22, Count: 15, SpawnX: 300, SpawnY: 310, SpawnRadius: 10}, // mid
+			{MapName: "middleland", NpcTypeID: 22, Count: 15, SpawnX: 220, SpawnY: 190, SpawnRadius: 10}, // center
+
+			// Skeleton (11) — 2 zones, 30 total
+			{MapName: "middleland", NpcTypeID: 11, Count: 15, SpawnX: 100, SpawnY: 400, SpawnRadius: 15}, // SW
+			{MapName: "middleland", NpcTypeID: 11, Count: 15, SpawnX: 70, SpawnY: 170, SpawnRadius: 15},  // NW
+
+			// Orc (14) + Orc-Mage (1001) — 2 zones, 40 total
+			{MapName: "middleland", NpcTypeID: 14, Count: 12, SpawnX: 312, SpawnY: 205, SpawnRadius: 20}, // mid-east
+			{MapName: "middleland", NpcTypeID: 1001, Count: 8, SpawnX: 312, SpawnY: 205, SpawnRadius: 15},
+			{MapName: "middleland", NpcTypeID: 14, Count: 12, SpawnX: 407, SpawnY: 372, SpawnRadius: 20}, // SE
+			{MapName: "middleland", NpcTypeID: 1001, Count: 8, SpawnX: 407, SpawnY: 372, SpawnRadius: 15},
+
+			// Giant-Ant (16) — 3 zones, 60 total
+			{MapName: "middleland", NpcTypeID: 16, Count: 15, SpawnX: 210, SpawnY: 105, SpawnRadius: 10}, // north
+			{MapName: "middleland", NpcTypeID: 16, Count: 15, SpawnX: 180, SpawnY: 380, SpawnRadius: 10}, // south
+			{MapName: "middleland", NpcTypeID: 16, Count: 30, SpawnX: 230, SpawnY: 272, SpawnRadius: 30}, // center (big zone)
+
+			// WereWolf (33) — 2 zones, 20 total
+			{MapName: "middleland", NpcTypeID: 33, Count: 10, SpawnX: 345, SpawnY: 445, SpawnRadius: 20}, // SE
+			{MapName: "middleland", NpcTypeID: 33, Count: 10, SpawnX: 385, SpawnY: 125, SpawnRadius: 20}, // NE
+
+			// Cyclops (13) — 2 zones, 16 total
+			{MapName: "middleland", NpcTypeID: 13, Count: 8, SpawnX: 255, SpawnY: 365, SpawnRadius: 20},  // center-south
+			{MapName: "middleland", NpcTypeID: 13, Count: 8, SpawnX: 160, SpawnY: 130, SpawnRadius: 20},  // center-north
+
+			// Stalker (48) — river zone, 18 total
+			{MapName: "middleland", NpcTypeID: 48, Count: 18, SpawnX: 262, SpawnY: 253, SpawnRadius: 60}, // central river
+
+			// Plant (60) — rare quest mob, 2 total
+			{MapName: "middleland", NpcTypeID: 60, Count: 2, SpawnX: 262, SpawnY: 262, SpawnRadius: 150},
+
+			// Hellclaw (49) — rare boss spawns, 6 total
+			{MapName: "middleland", NpcTypeID: 49, Count: 1, SpawnX: 61, SpawnY: 165, SpawnRadius: 25},
+			{MapName: "middleland", NpcTypeID: 49, Count: 1, SpawnX: 450, SpawnY: 130, SpawnRadius: 20},
+			{MapName: "middleland", NpcTypeID: 49, Count: 1, SpawnX: 117, SpawnY: 393, SpawnRadius: 35},
+			{MapName: "middleland", NpcTypeID: 49, Count: 1, SpawnX: 370, SpawnY: 415, SpawnRadius: 40},
+			{MapName: "middleland", NpcTypeID: 49, Count: 1, SpawnX: 194, SpawnY: 277, SpawnRadius: 25},
+			{MapName: "middleland", NpcTypeID: 49, Count: 1, SpawnX: 446, SpawnY: 60, SpawnRadius: 20},
 
 			// ================================================================
 			// HUNT ZONES — dense leveling areas

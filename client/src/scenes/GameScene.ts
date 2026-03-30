@@ -566,11 +566,15 @@ export class GameScene extends Phaser.Scene {
     this.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
       if (this.isDead) return;
       if (pointer.rightButtonDown()) {
-        if (!GameScene.INDOOR_MAPS.has(this.currentMapName)) {
+        if (GameScene.INDOOR_MAPS.has(this.currentMapName)) return;
+        // Right-click: cast spell at range if one is selected, otherwise melee
+        if (this.selectedSpellId > 0) {
+          this.handleSpellCast(pointer);
+        } else {
           this.handleAttackClick(pointer);
         }
       } else if (pointer.leftButtonDown()) {
-        // Check if clicking on or near an NPC first
+        // Left-click always allows movement; attack NPC only if adjacent and no spell
         if (!this.tryAttackNPCAtPointer(pointer)) {
           this.isMouseDown = true;
           this.handleMouseMove(pointer);
@@ -2759,12 +2763,6 @@ export class GameScene extends Phaser.Scene {
 
     this.lastAttackTime = now;
 
-    // If a spell is selected, cast it instead of melee attacking
-    if (this.selectedSpellId > 0) {
-      this.castSpellOnTarget(closestNPC.objectId, closestNPC.tileX, closestNPC.tileY);
-      return;
-    }
-
     // Face the NPC
     const dir = this.angleToDirection(
       closestNPC.tileX * TILE_SIZE - this.visualX,
@@ -3220,8 +3218,8 @@ export class GameScene extends Phaser.Scene {
           <button id="btn-party" class="hud-btn" title="Party (P)">
             <div style="font-size:16px;">&#x1F465;</div><div style="font-size:8px;">Party</div>
           </button>
-          <button id="btn-sound" class="hud-btn" title="Sound Settings">
-            <div style="font-size:16px;">&#x1F50A;</div><div style="font-size:8px;">Sound</div>
+          <button id="btn-controls" class="hud-btn" title="Controls">
+            <div style="font-size:16px;">&#x2699;</div><div style="font-size:8px;">Controls</div>
           </button>
           <div style="width:1px; background:#444; margin:4px 2px;"></div>
           <button id="btn-logout" class="hud-btn" title="Logout" style="background:linear-gradient(to bottom,#5a2a2a,#3a1a1a); border-color:#733;">
@@ -3252,7 +3250,7 @@ export class GameScene extends Phaser.Scene {
     document.getElementById('btn-guild')?.addEventListener('click', () => this.toggleGuild());
     document.getElementById('btn-party')?.addEventListener('click', () => this.toggleParty());
     document.getElementById('hud-lupool')?.addEventListener('click', () => this.toggleStats());
-    document.getElementById('btn-sound')?.addEventListener('click', () => this.toggleSoundPanel());
+    document.getElementById('btn-controls')?.addEventListener('click', () => this.toggleControlsPanel());
     document.getElementById('btn-logout')?.addEventListener('click', () => this.requestLogout());
 
     this.events.on('shutdown', () => { div.remove(); });
@@ -3262,84 +3260,109 @@ export class GameScene extends Phaser.Scene {
   // Sound / Music Controls
   // ---------------------------------------------------------------------------
 
-  private soundPanelDiv: HTMLDivElement | null = null;
+  private controlsPanelDiv: HTMLDivElement | null = null;
+  private minimapHidden = false;
 
-  private toggleSoundPanel(): void {
-    if (this.soundPanelDiv) {
-      this.soundPanelDiv.remove();
-      this.soundPanelDiv = null;
+  private toggleControlsPanel(): void {
+    if (this.controlsPanelDiv) {
+      this.controlsPanelDiv.remove();
+      this.controlsPanelDiv = null;
       return;
     }
     const div = document.createElement('div');
-    div.id = 'sound-panel';
-    div.style.cssText = 'position:fixed; bottom:70px; right:10px; z-index:200; background:rgba(20,20,30,0.95); color:#fff; padding:15px; font-size:12px; min-width:220px; border:1px solid #555; border-radius:4px;';
+    div.id = 'controls-panel';
+    div.style.cssText = 'position:fixed; bottom:70px; right:10px; z-index:200; background:rgba(20,20,30,0.95); color:#fff; padding:15px; font-size:12px; min-width:240px; border:1px solid #555; border-radius:4px;';
 
-    const musicVol = this.musicManager?.getVolume?.() ?? 50;  // 0-100
-    const soundVol = this.soundManager?.getVolume?.() ?? 50;  // 0-100
+    const musicVol = this.musicManager?.getVolume?.() ?? 50;
+    const soundVol = this.soundManager?.getVolume?.() ?? 50;
 
     div.innerHTML = `
-      <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-        <strong>Sound Settings</strong>
-        <button id="sound-close" style="cursor:pointer; background:none; border:none; color:#fff; font-size:14px;">X</button>
+      <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+        <strong>Controls</strong>
+        <button id="ctrl-close" style="cursor:pointer; background:none; border:none; color:#fff; font-size:14px;">X</button>
       </div>
-      <div style="margin-bottom:10px;">
-        <label style="display:flex; justify-content:space-between; margin-bottom:4px;">
-          <span>Music</span>
-          <span id="music-vol-label">${Math.round(musicVol)}%</span>
+
+      <div style="border-bottom:1px solid #444; padding-bottom:10px; margin-bottom:10px;">
+        <div style="color:#aaa; font-size:10px; margin-bottom:6px;">DISPLAY</div>
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+          <input type="checkbox" id="ctrl-minimap" ${this.minimapHidden ? '' : 'checked'} style="cursor:pointer;">
+          <span>Show Minimap</span>
         </label>
-        <input type="range" id="music-volume" min="0" max="100" value="${Math.round(musicVol)}" style="width:100%;">
-        <button id="music-mute" style="margin-top:4px; cursor:pointer; padding:3px 8px; font-size:11px;">
-          ${musicVol === 0 ? 'Unmute' : 'Mute'} Music
+      </div>
+
+      <div style="border-bottom:1px solid #444; padding-bottom:10px; margin-bottom:10px;">
+        <div style="color:#aaa; font-size:10px; margin-bottom:6px;">MUSIC</div>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <input type="range" id="ctrl-music-vol" min="0" max="100" value="${musicVol}" style="flex:1;">
+          <span id="ctrl-music-label" style="min-width:35px; text-align:right;">${musicVol}%</span>
+        </div>
+        <button id="ctrl-music-mute" style="margin-top:4px; cursor:pointer; padding:3px 8px; font-size:11px;">
+          ${musicVol === 0 ? 'Unmute' : 'Mute'}
         </button>
       </div>
+
       <div>
-        <label style="display:flex; justify-content:space-between; margin-bottom:4px;">
-          <span>Sound Effects</span>
-          <span id="sfx-vol-label">${Math.round(soundVol)}%</span>
-        </label>
-        <input type="range" id="sfx-volume" min="0" max="100" value="${Math.round(soundVol)}" style="width:100%;">
-        <button id="sfx-mute" style="margin-top:4px; cursor:pointer; padding:3px 8px; font-size:11px;">
-          ${soundVol === 0 ? 'Unmute' : 'Mute'} SFX
+        <div style="color:#aaa; font-size:10px; margin-bottom:6px;">SOUND EFFECTS</div>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <input type="range" id="ctrl-sfx-vol" min="0" max="100" value="${soundVol}" style="flex:1;">
+          <span id="ctrl-sfx-label" style="min-width:35px; text-align:right;">${soundVol}%</span>
+        </div>
+        <button id="ctrl-sfx-mute" style="margin-top:4px; cursor:pointer; padding:3px 8px; font-size:11px;">
+          ${soundVol === 0 ? 'Unmute' : 'Mute'}
         </button>
       </div>
     `;
     document.body.appendChild(div);
-    this.soundPanelDiv = div;
+    this.controlsPanelDiv = div;
 
-    document.getElementById('sound-close')?.addEventListener('click', () => this.toggleSoundPanel());
+    // Close button
+    document.getElementById('ctrl-close')?.addEventListener('click', () => this.toggleControlsPanel());
 
-    document.getElementById('music-volume')?.addEventListener('input', (e) => {
+    // Minimap toggle
+    document.getElementById('ctrl-minimap')?.addEventListener('change', (e) => {
+      const checked = (e.target as HTMLInputElement).checked;
+      this.minimapHidden = !checked;
+      if (this.minimapContainer) this.minimapContainer.setVisible(checked);
+      if (this.minimapBorder) this.minimapBorder.setVisible(checked);
+      if (this.minimapPlayerDot) this.minimapPlayerDot.setVisible(checked);
+    });
+
+    // Music volume
+    document.getElementById('ctrl-music-vol')?.addEventListener('input', (e) => {
       const val = parseInt((e.target as HTMLInputElement).value);
       this.musicManager?.setVolume?.(val);
-      const label = document.getElementById('music-vol-label');
+      const label = document.getElementById('ctrl-music-label');
       if (label) label.textContent = `${val}%`;
     });
 
-    document.getElementById('sfx-volume')?.addEventListener('input', (e) => {
+    // SFX volume
+    document.getElementById('ctrl-sfx-vol')?.addEventListener('input', (e) => {
       const val = parseInt((e.target as HTMLInputElement).value);
       this.soundManager?.setVolume?.(val);
-      const label = document.getElementById('sfx-vol-label');
+      const label = document.getElementById('ctrl-sfx-label');
       if (label) label.textContent = `${val}%`;
     });
 
-    document.getElementById('music-mute')?.addEventListener('click', () => {
+    // Music mute
+    document.getElementById('ctrl-music-mute')?.addEventListener('click', () => {
       const current = this.musicManager?.getVolume?.() ?? 0;
       const newVol = current > 0 ? 0 : 50;
       this.musicManager?.setVolume?.(newVol);
-      (document.getElementById('music-volume') as HTMLInputElement).value = String(newVol);
-      const label = document.getElementById('music-vol-label');
+      (document.getElementById('ctrl-music-vol') as HTMLInputElement).value = String(newVol);
+      const label = document.getElementById('ctrl-music-label');
       if (label) label.textContent = `${newVol}%`;
-      (document.getElementById('music-mute') as HTMLButtonElement).textContent = newVol === 0 ? 'Unmute Music' : 'Mute Music';
+      (document.getElementById('ctrl-music-mute') as HTMLButtonElement).textContent = newVol === 0 ? 'Unmute' : 'Mute';
     });
 
-    document.getElementById('sfx-mute')?.addEventListener('click', () => {
+    // SFX mute
+    document.getElementById('ctrl-sfx-mute')?.addEventListener('click', () => {
       const current = this.soundManager?.getVolume?.() ?? 0;
       const newVol = current > 0 ? 0 : 50;
       this.soundManager?.setVolume?.(newVol);
-      (document.getElementById('sfx-volume') as HTMLInputElement).value = String(newVol);
-      const label = document.getElementById('sfx-vol-label');
+      (document.getElementById('ctrl-sfx-vol') as HTMLInputElement).value = String(newVol);
+      const label = document.getElementById('ctrl-sfx-label');
       if (label) label.textContent = `${newVol}%`;
-      (document.getElementById('sfx-mute') as HTMLButtonElement).textContent = newVol === 0 ? 'Unmute SFX' : 'Mute SFX';
+      (document.getElementById('ctrl-sfx-mute') as HTMLButtonElement).textContent = newVol === 0 ? 'Unmute' : 'Mute';
     });
   }
 
@@ -3858,43 +3881,120 @@ export class GameScene extends Phaser.Scene {
     }
   }
 
+  // Maps server spriteId → { effect spr file key, sprite sheet index within that file }
+  // Based on original Helbreath effect file layout.
+  private static SPELL_EFFECT_MAP: Record<number, { file: string; sheet: number }> = {
+    // Damage spells
+    1:  { file: 'effect', sheet: 0 },   // Energy Bolt
+    2:  { file: 'effect', sheet: 1 },   // Magic Missile
+    3:  { file: 'effect2', sheet: 0 },  // Fireball
+    4:  { file: 'effect2', sheet: 1 },  // Lightning Bolt
+    5:  { file: 'effect3', sheet: 0 },  // Ice Strike
+    // AOE spells
+    10: { file: 'effect4', sheet: 0 },  // Fire Wall
+    11: { file: 'effect5', sheet: 0 },  // Blizzard
+    12: { file: 'effect6', sheet: 0 },  // Meteor Strike
+    // Healing spells
+    20: { file: 'effect7', sheet: 0 },  // Heal
+    21: { file: 'effect7', sheet: 1 },  // Greater Heal
+    22: { file: 'effect7', sheet: 2 },  // Divine Heal
+    // Buff spells
+    30: { file: 'effect8', sheet: 0 },  // Protection
+    31: { file: 'effect8', sheet: 1 },  // Strength
+    32: { file: 'effect8', sheet: 2 },  // Haste
+    // Debuff spells
+    40: { file: 'effect9', sheet: 0 },  // Slow
+    41: { file: 'effect9', sheet: 1 },  // Weaken
+    50: { file: 'effect10', sheet: 0 }, // Poison Cloud
+    51: { file: 'effect10', sheet: 1 }, // Toxic Cloud
+    52: { file: 'effect3', sheet: 1 },  // Freeze
+    53: { file: 'effect3', sheet: 2 },  // Deep Freeze
+    54: { file: 'effect5', sheet: 1 },  // Berserk
+    55: { file: 'effect5', sheet: 2 },  // Greater Berserk
+    56: { file: 'effect6', sheet: 1 },  // Invisibility
+    57: { file: 'effect6', sheet: 2 },  // Silence
+    58: { file: 'effect8', sheet: 3 },  // Defense Shield
+    59: { file: 'effect8', sheet: 4 },  // Greater Defense Shield
+    60: { file: 'effect9', sheet: 2 },  // Magic Protection
+    61: { file: 'effect9', sheet: 3 },  // Greater Magic Protection
+  };
+
+  /** Preload the effect sprite for a spell so it's ready when cast. */
+  private preloadSpellEffect(spellId: number): void {
+    const spell = this.learnedSpells.find(s => s.spellId === spellId);
+    if (!spell) return;
+    const mapping = GameScene.SPELL_EFFECT_MAP[spell.spriteId];
+    if (mapping) {
+      this.ensureSpriteLoaded(mapping.file);
+    }
+  }
+
   private onSpellEffect(data: SpellEffectData): void {
-    // Show spell visual at target position
     const tx = data.targetPosition?.x ?? 0;
     const ty = data.targetPosition?.y ?? 0;
     const screenX = tx * TILE_SIZE + TILE_SIZE / 2;
     const screenY = ty * TILE_SIZE + TILE_SIZE / 2;
 
-    // Flash circle effect at target
-    const colors: Record<number, number> = {
-      1: 0xff4400, // fire
-      2: 0x00aaff, // ice
-      3: 0xffff00, // light
-      4: 0x88ff44, // earth
-    };
-    const color = colors[data.spriteId] || 0xffffff;
+    // Try to play a sprite-based effect animation
+    const mapping = GameScene.SPELL_EFFECT_MAP[data.spriteId];
+    let playedSprite = false;
 
-    const circle = this.add.circle(screenX, screenY, 20, color, 0.7);
-    circle.setDepth(99999);
-    this.tweens.add({
-      targets: circle,
-      scaleX: 2.5,
-      scaleY: 2.5,
-      alpha: 0,
-      duration: 600,
-      onComplete: () => circle.destroy(),
-    });
+    if (mapping) {
+      const { file, sheet } = mapping;
+      const animKey = `${file}-${sheet}`;
 
-    // Show damage/heal number
+      if (this.ensureSpriteLoaded(file)) {
+        // Sprite is loaded — check if the specific animation exists
+        if (this.anims.exists(animKey)) {
+          try {
+            // Get the first frame's texture key to create the sprite
+            const anim = this.anims.get(animKey);
+            const firstFrame = anim.frames[0];
+            if (firstFrame) {
+              const sprite = this.add.sprite(screenX, screenY, firstFrame.textureKey, firstFrame.textureFrame);
+              sprite.setDepth(99999);
+              sprite.play({ key: animKey, repeat: 0 });
+              sprite.once('animationcomplete', () => sprite.destroy());
+              // Safety: destroy after 2s in case animation is very long or broken
+              this.time.delayedCall(2000, () => { if (sprite.active) sprite.destroy(); });
+              playedSprite = true;
+            }
+          } catch (err) {
+            console.warn(`[SPELL] Failed to play effect animation ${animKey}:`, err);
+          }
+        }
+      }
+      // If sprite not loaded yet, ensureSpriteLoaded triggered the load — fall through to circle
+    }
+
+    // Fallback: colored expanding ring based on spell type (spriteId ranges)
+    if (!playedSprite) {
+      const sid = data.spriteId;
+      let color = 0xffffff;
+      let radius = 20;
+      if (sid >= 1 && sid <= 5) { color = sid === 5 ? 0x00aaff : sid === 3 ? 0xff4400 : 0xffff00; } // damage
+      else if (sid >= 10 && sid <= 12) { color = sid === 11 ? 0x00aaff : 0xff6600; radius = 30; } // AOE
+      else if (sid >= 20 && sid <= 22) { color = 0x44ff44; } // heal
+      else if (sid >= 30 && sid <= 32 || sid === 54 || sid === 55 || sid === 56 || sid === 58 || sid === 59 || sid === 60 || sid === 61) { color = 0x4488ff; } // buff
+      else if (sid >= 40 && sid <= 53 || sid === 57) { color = 0xaa44ff; } // debuff
+
+      const circle = this.add.circle(screenX, screenY, radius, color, 0.7);
+      circle.setDepth(99999);
+      this.tweens.add({
+        targets: circle,
+        scaleX: 2.5, scaleY: 2.5, alpha: 0,
+        duration: 600,
+        onComplete: () => circle.destroy(),
+      });
+    }
+
+    // Damage/heal floating numbers
     if (data.damage > 0) {
       const dmgText = this.add.text(screenX, screenY - 20, `-${data.damage}`, {
         fontSize: '14px', color: '#ff4444', fontStyle: 'bold',
       }).setOrigin(0.5).setDepth(99999);
       this.tweens.add({
-        targets: dmgText,
-        y: screenY - 50,
-        alpha: 0,
-        duration: 1000,
+        targets: dmgText, y: screenY - 50, alpha: 0, duration: 1000,
         onComplete: () => dmgText.destroy(),
       });
     } else if (data.healAmount > 0) {
@@ -3902,10 +4002,7 @@ export class GameScene extends Phaser.Scene {
         fontSize: '14px', color: '#44ff44', fontStyle: 'bold',
       }).setOrigin(0.5).setDepth(99999);
       this.tweens.add({
-        targets: healText,
-        y: screenY - 50,
-        alpha: 0,
-        duration: 1000,
+        targets: healText, y: screenY - 50, alpha: 0, duration: 1000,
         onComplete: () => healText.destroy(),
       });
     }
@@ -4002,7 +4099,7 @@ export class GameScene extends Phaser.Scene {
         html += '</div>';
       }
       if (this.selectedSpellId > 0) {
-        html += `<div style="margin-top:8px; font-size:11px; color:#aaa;">Selected spell active. Click a target to cast.</div>`;
+        html += `<div style="margin-top:8px; font-size:11px; color:#aaa;">Right-click to cast. Click spell again to deselect.</div>`;
       }
     } else {
       // Learn spells tab
@@ -4050,7 +4147,13 @@ export class GameScene extends Phaser.Scene {
     div.querySelector('#tab-learn')?.addEventListener('click', () => { this.spellBookTab = 'learn'; this.renderSpellBarUI(); });
     div.querySelectorAll('.spell-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        this.selectedSpellId = parseInt((btn as HTMLElement).dataset.spell || '0');
+        const spellId = parseInt((btn as HTMLElement).dataset.spell || '0');
+        if (this.selectedSpellId === spellId) {
+          this.selectedSpellId = 0; // Deselect
+        } else {
+          this.selectedSpellId = spellId;
+          this.preloadSpellEffect(spellId);
+        }
         this.renderSpellBarUI();
       });
     });
@@ -4062,6 +4165,62 @@ export class GameScene extends Phaser.Scene {
     });
 
     this.events.on('shutdown', () => div.remove());
+  }
+
+  /** Handle left-click when a spell is selected — cast at clicked tile or NPC. */
+  private handleSpellCast(pointer: Phaser.Input.Pointer): void {
+    if (this.selectedSpellId <= 0) return;
+
+    const worldPoint = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
+    const clickTileX = Math.floor(worldPoint.x / TILE_SIZE);
+    const clickTileY = Math.floor(worldPoint.y / TILE_SIZE);
+
+    // Check if an NPC is at or near the clicked tile (within 1 tile of click)
+    let targetNPC: GameNPC | null = null;
+    for (const npc of this.npcs.values()) {
+      if (Math.abs(clickTileX - npc.tileX) <= 1 && Math.abs(clickTileY - npc.tileY) <= 1) {
+        targetNPC = npc;
+        break;
+      }
+    }
+
+    // Also check for remote players at clicked tile
+    let targetPlayer: RemotePlayer | null = null;
+    if (!targetNPC) {
+      for (const rp of this.remotePlayers.values()) {
+        if (Math.abs(clickTileX - rp.tileX) <= 1 && Math.abs(clickTileY - rp.tileY) <= 1) {
+          targetPlayer = rp;
+          break;
+        }
+      }
+    }
+
+    // Play cast animation
+    if (this.playerAssets) {
+      const dir = this.angleToDirection(
+        clickTileX * TILE_SIZE - this.visualX,
+        clickTileY * TILE_SIZE - this.visualY,
+      );
+      this.playerDirection = dir;
+      this.playerState = PlayerState.Cast;
+      this.updatePlayerAnimation(this.playerAssets, PlayerState.Cast, dir - 1);
+      this.soundManager.playOnce(PLAYER_CAST);
+      setTimeout(() => {
+        if (this.playerState === PlayerState.Cast && this.playerAssets) {
+          this.playerState = PlayerState.IdlePeace;
+          this.updatePlayerAnimation(this.playerAssets, PlayerState.IdlePeace, this.playerDirection - 1);
+        }
+      }, 600);
+    }
+
+    if (targetNPC) {
+      this.castSpellOnTarget(targetNPC.objectId, targetNPC.tileX, targetNPC.tileY);
+    } else if (targetPlayer) {
+      this.castSpellOnTarget(targetPlayer.objectId, targetPlayer.tileX, targetPlayer.tileY);
+    } else {
+      // AOE / ground-targeted: cast at the tile position
+      this.castSpellOnTarget(0, clickTileX, clickTileY);
+    }
   }
 
   private castSpellOnTarget(targetId: number, targetX?: number, targetY?: number): void {

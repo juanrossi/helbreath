@@ -19,7 +19,7 @@ type DataStore interface {
 		level int, experience int64, hp, mp, sp int,
 		str, vit, dex, intStat, mag, chr, luPool int,
 		side int, gold int64, pkCount, ekCount, hunger int,
-		inventoryJSON, equipmentJSON string) error
+		inventoryJSON, equipmentJSON, spellDataJSON string) error
 	CountCharacters(ctx context.Context, accountID int) (int, error)
 }
 

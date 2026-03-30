@@ -188,7 +188,7 @@ func (m *MemoryStore) SaveCharacter(_ context.Context, charID int, mapName strin
 	level int, experience int64, hp, mp, sp int,
 	str, vit, dex, intStat, mag, chr, luPool int,
 	side int, gold int64, pkCount, ekCount, hunger int,
-	inventoryJSON, equipmentJSON string) error {
+	inventoryJSON, equipmentJSON, spellDataJSON string) error {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
@@ -219,6 +219,7 @@ func (m *MemoryStore) SaveCharacter(_ context.Context, charID int, mapName strin
 	c.Hunger = hunger
 	c.InventoryJSON = inventoryJSON
 	c.EquipmentJSON = equipmentJSON
+	c.SpellDataJSON = spellDataJSON
 	return nil
 }
 
