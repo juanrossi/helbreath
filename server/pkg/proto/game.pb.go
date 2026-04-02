@@ -121,6 +121,7 @@ type PlayerContents struct {
 	EkCount       int32 `protobuf:"varint,25,opt,name=ek_count,json=ekCount,proto3" json:"ek_count,omitempty"`
 	Hunger        int32 `protobuf:"varint,26,opt,name=hunger,proto3" json:"hunger,omitempty"`
 	AdminLevel    int32 `protobuf:"varint,27,opt,name=admin_level,json=adminLevel,proto3" json:"admin_level,omitempty"`
+	IntroShown    bool  `protobuf:"varint,28,opt,name=intro_shown,json=introShown,proto3" json:"intro_shown,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -342,6 +343,13 @@ func (x *PlayerContents) GetAdminLevel() int32 {
 		return x.AdminLevel
 	}
 	return 0
+}
+
+func (x *PlayerContents) GetIntroShown() bool {
+	if x != nil {
+		return x.IntroShown
+	}
+	return false
 }
 
 // Map metadata sent to client
@@ -1656,6 +1664,43 @@ func (x *LogoutResponse) GetReason() string {
 	return ""
 }
 
+// Client -> Server: Mark intro modal as dismissed
+type DismissIntroRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DismissIntroRequest) Reset() {
+	*x = DismissIntroRequest{}
+	mi := &file_game_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DismissIntroRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DismissIntroRequest) ProtoMessage() {}
+
+func (x *DismissIntroRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_game_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DismissIntroRequest.ProtoReflect.Descriptor instead.
+func (*DismissIntroRequest) Descriptor() ([]byte, []int) {
+	return file_game_proto_rawDescGZIP(), []int{18}
+}
+
 // Entity info for initial world state
 type EntityInfo struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -1676,7 +1721,7 @@ type EntityInfo struct {
 
 func (x *EntityInfo) Reset() {
 	*x = EntityInfo{}
-	mi := &file_game_proto_msgTypes[18]
+	mi := &file_game_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1688,7 +1733,7 @@ func (x *EntityInfo) String() string {
 func (*EntityInfo) ProtoMessage() {}
 
 func (x *EntityInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_game_proto_msgTypes[18]
+	mi := &file_game_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1701,7 +1746,7 @@ func (x *EntityInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EntityInfo.ProtoReflect.Descriptor instead.
 func (*EntityInfo) Descriptor() ([]byte, []int) {
-	return file_game_proto_rawDescGZIP(), []int{18}
+	return file_game_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *EntityInfo) GetObjectId() int32 {
@@ -1792,7 +1837,7 @@ const file_game_proto_rawDesc = "" +
 	"\bmap_info\x18\x02 \x01(\v2\x11.hbonline.MapInfoR\amapInfo\x12;\n" +
 	"\x0enearby_players\x18\x03 \x03(\v2\x14.hbonline.EntityInfoR\rnearbyPlayers\x125\n" +
 	"\vnearby_npcs\x18\x04 \x03(\v2\x14.hbonline.EntityInfoR\n" +
-	"nearbyNpcs\"\xb6\x05\n" +
+	"nearbyNpcs\"\xd7\x05\n" +
 	"\x0ePlayerContents\x12\x1b\n" +
 	"\tobject_id\x18\x01 \x01(\x05R\bobjectId\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x19\n" +
@@ -1826,7 +1871,9 @@ const file_game_proto_rawDesc = "" +
 	"\bek_count\x18\x19 \x01(\x05R\aekCount\x12\x16\n" +
 	"\x06hunger\x18\x1a \x01(\x05R\x06hunger\x12\x1f\n" +
 	"\vadmin_level\x18\x1b \x01(\x05R\n" +
-	"adminLevel\"r\n" +
+	"adminLevel\x12\x1f\n" +
+	"\vintro_shown\x18\x1c \x01(\bR\n" +
+	"introShown\"r\n" +
 	"\aMapInfo\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n" +
 	"\x05width\x18\x02 \x01(\x05R\x05width\x12\x16\n" +
@@ -1948,7 +1995,8 @@ const file_game_proto_rawDesc = "" +
 	"\x0eLogoutResponse\x12+\n" +
 	"\x11seconds_remaining\x18\x01 \x01(\x05R\x10secondsRemaining\x12\x1c\n" +
 	"\tcancelled\x18\x02 \x01(\bR\tcancelled\x12\x16\n" +
-	"\x06reason\x18\x03 \x01(\tR\x06reason\"\xd3\x02\n" +
+	"\x06reason\x18\x03 \x01(\tR\x06reason\"\x15\n" +
+	"\x13DismissIntroRequest\"\xd3\x02\n" +
 	"\n" +
 	"EntityInfo\x12\x1b\n" +
 	"\tobject_id\x18\x01 \x01(\x05R\bobjectId\x12\x1f\n" +
@@ -1979,51 +2027,52 @@ func file_game_proto_rawDescGZIP() []byte {
 	return file_game_proto_rawDescData
 }
 
-var file_game_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
+var file_game_proto_msgTypes = make([]protoimpl.MessageInfo, 20)
 var file_game_proto_goTypes = []any{
-	(*EnterGameResponse)(nil), // 0: hbonline.EnterGameResponse
-	(*PlayerContents)(nil),    // 1: hbonline.PlayerContents
-	(*MapInfo)(nil),           // 2: hbonline.MapInfo
-	(*MotionRequest)(nil),     // 3: hbonline.MotionRequest
-	(*MotionEvent)(nil),       // 4: hbonline.MotionEvent
-	(*PlayerAppear)(nil),      // 5: hbonline.PlayerAppear
-	(*PlayerDisappear)(nil),   // 6: hbonline.PlayerDisappear
-	(*NpcAppear)(nil),         // 7: hbonline.NpcAppear
-	(*NpcDisappear)(nil),      // 8: hbonline.NpcDisappear
-	(*NpcMotion)(nil),         // 9: hbonline.NpcMotion
-	(*Notification)(nil),      // 10: hbonline.Notification
-	(*MapChangeResponse)(nil), // 11: hbonline.MapChangeResponse
-	(*DamageEvent)(nil),       // 12: hbonline.DamageEvent
-	(*StatUpdate)(nil),        // 13: hbonline.StatUpdate
-	(*DeathEvent)(nil),        // 14: hbonline.DeathEvent
-	(*RespawnEvent)(nil),      // 15: hbonline.RespawnEvent
-	(*LogoutRequest)(nil),     // 16: hbonline.LogoutRequest
-	(*LogoutResponse)(nil),    // 17: hbonline.LogoutResponse
-	(*EntityInfo)(nil),        // 18: hbonline.EntityInfo
-	(*Vec2)(nil),              // 19: hbonline.Vec2
-	(*Appearance)(nil),        // 20: hbonline.Appearance
+	(*EnterGameResponse)(nil),   // 0: hbonline.EnterGameResponse
+	(*PlayerContents)(nil),      // 1: hbonline.PlayerContents
+	(*MapInfo)(nil),             // 2: hbonline.MapInfo
+	(*MotionRequest)(nil),       // 3: hbonline.MotionRequest
+	(*MotionEvent)(nil),         // 4: hbonline.MotionEvent
+	(*PlayerAppear)(nil),        // 5: hbonline.PlayerAppear
+	(*PlayerDisappear)(nil),     // 6: hbonline.PlayerDisappear
+	(*NpcAppear)(nil),           // 7: hbonline.NpcAppear
+	(*NpcDisappear)(nil),        // 8: hbonline.NpcDisappear
+	(*NpcMotion)(nil),           // 9: hbonline.NpcMotion
+	(*Notification)(nil),        // 10: hbonline.Notification
+	(*MapChangeResponse)(nil),   // 11: hbonline.MapChangeResponse
+	(*DamageEvent)(nil),         // 12: hbonline.DamageEvent
+	(*StatUpdate)(nil),          // 13: hbonline.StatUpdate
+	(*DeathEvent)(nil),          // 14: hbonline.DeathEvent
+	(*RespawnEvent)(nil),        // 15: hbonline.RespawnEvent
+	(*LogoutRequest)(nil),       // 16: hbonline.LogoutRequest
+	(*LogoutResponse)(nil),      // 17: hbonline.LogoutResponse
+	(*DismissIntroRequest)(nil), // 18: hbonline.DismissIntroRequest
+	(*EntityInfo)(nil),          // 19: hbonline.EntityInfo
+	(*Vec2)(nil),                // 20: hbonline.Vec2
+	(*Appearance)(nil),          // 21: hbonline.Appearance
 }
 var file_game_proto_depIdxs = []int32{
 	1,  // 0: hbonline.EnterGameResponse.player:type_name -> hbonline.PlayerContents
 	2,  // 1: hbonline.EnterGameResponse.map_info:type_name -> hbonline.MapInfo
-	18, // 2: hbonline.EnterGameResponse.nearby_players:type_name -> hbonline.EntityInfo
-	18, // 3: hbonline.EnterGameResponse.nearby_npcs:type_name -> hbonline.EntityInfo
-	19, // 4: hbonline.PlayerContents.position:type_name -> hbonline.Vec2
-	20, // 5: hbonline.PlayerContents.appearance:type_name -> hbonline.Appearance
-	19, // 6: hbonline.MotionRequest.position:type_name -> hbonline.Vec2
-	19, // 7: hbonline.MotionEvent.position:type_name -> hbonline.Vec2
-	19, // 8: hbonline.MotionEvent.destination:type_name -> hbonline.Vec2
-	20, // 9: hbonline.MotionEvent.appearance:type_name -> hbonline.Appearance
-	19, // 10: hbonline.PlayerAppear.position:type_name -> hbonline.Vec2
-	20, // 11: hbonline.PlayerAppear.appearance:type_name -> hbonline.Appearance
-	19, // 12: hbonline.NpcAppear.position:type_name -> hbonline.Vec2
-	19, // 13: hbonline.NpcMotion.position:type_name -> hbonline.Vec2
-	19, // 14: hbonline.NpcMotion.destination:type_name -> hbonline.Vec2
-	19, // 15: hbonline.MapChangeResponse.position:type_name -> hbonline.Vec2
-	19, // 16: hbonline.DeathEvent.position:type_name -> hbonline.Vec2
-	19, // 17: hbonline.RespawnEvent.position:type_name -> hbonline.Vec2
-	19, // 18: hbonline.EntityInfo.position:type_name -> hbonline.Vec2
-	20, // 19: hbonline.EntityInfo.appearance:type_name -> hbonline.Appearance
+	19, // 2: hbonline.EnterGameResponse.nearby_players:type_name -> hbonline.EntityInfo
+	19, // 3: hbonline.EnterGameResponse.nearby_npcs:type_name -> hbonline.EntityInfo
+	20, // 4: hbonline.PlayerContents.position:type_name -> hbonline.Vec2
+	21, // 5: hbonline.PlayerContents.appearance:type_name -> hbonline.Appearance
+	20, // 6: hbonline.MotionRequest.position:type_name -> hbonline.Vec2
+	20, // 7: hbonline.MotionEvent.position:type_name -> hbonline.Vec2
+	20, // 8: hbonline.MotionEvent.destination:type_name -> hbonline.Vec2
+	21, // 9: hbonline.MotionEvent.appearance:type_name -> hbonline.Appearance
+	20, // 10: hbonline.PlayerAppear.position:type_name -> hbonline.Vec2
+	21, // 11: hbonline.PlayerAppear.appearance:type_name -> hbonline.Appearance
+	20, // 12: hbonline.NpcAppear.position:type_name -> hbonline.Vec2
+	20, // 13: hbonline.NpcMotion.position:type_name -> hbonline.Vec2
+	20, // 14: hbonline.NpcMotion.destination:type_name -> hbonline.Vec2
+	20, // 15: hbonline.MapChangeResponse.position:type_name -> hbonline.Vec2
+	20, // 16: hbonline.DeathEvent.position:type_name -> hbonline.Vec2
+	20, // 17: hbonline.RespawnEvent.position:type_name -> hbonline.Vec2
+	20, // 18: hbonline.EntityInfo.position:type_name -> hbonline.Vec2
+	21, // 19: hbonline.EntityInfo.appearance:type_name -> hbonline.Appearance
 	20, // [20:20] is the sub-list for method output_type
 	20, // [20:20] is the sub-list for method input_type
 	20, // [20:20] is the sub-list for extension type_name
@@ -2043,7 +2092,7 @@ func file_game_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_game_proto_rawDesc), len(file_game_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   19,
+			NumMessages:   20,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

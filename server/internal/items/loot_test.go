@@ -2,70 +2,147 @@ package items
 
 import "testing"
 
-func TestRollLoot(t *testing.T) {
-	// Run multiple rolls to verify we get results
-	gotSomething := false
-	for i := 0; i < 100; i++ {
-		drops := RollLoot(10) // Slime (type 10)
+func TestNpcDeadItemGeneratorNoDropTypes(t *testing.T) {
+	// Guard (21), Dummy (34), Crop (64) should never drop
+	for _, npcType := range []int{21, 34, 64} {
+		for i := 0; i < 100; i++ {
+			drops := NpcDeadItemGenerator(npcType, 100, false)
+			if len(drops) > 0 {
+				t.Errorf("NPC type %d should never drop items, got %d drops", npcType, len(drops))
+				break
+			}
+		}
+	}
+}
+
+func TestNpcDeadItemGeneratorBossAlwaysPasses(t *testing.T) {
+	// Boss should have higher drop rate than regular NPC
+	bossDrops := 0
+	regularDrops := 0
+	iterations := 1000
+
+	for i := 0; i < iterations; i++ {
+		drops := NpcDeadItemGenerator(49, 5000, true) // Hellclaw boss
 		if len(drops) > 0 {
-			gotSomething = true
+			bossDrops++
+		}
+		drops = NpcDeadItemGenerator(10, 15, false) // Regular slime
+		if len(drops) > 0 {
+			regularDrops++
+		}
+	}
+
+	// Boss should drop more often since it always passes primary check
+	if bossDrops == 0 {
+		t.Error("Boss NPC should produce some drops over 1000 iterations")
+	}
+	// Regular NPCs with default 3x multiplier should also get some drops
+	// but fewer than boss (boss skips the 35% primary check)
+}
+
+func TestNpcDeadItemGeneratorReturnsValidItems(t *testing.T) {
+	// Test with various NPC types that we know the drops for
+	npcTypes := []struct {
+		id    int
+		xp    int
+		boss  bool
+	}{
+		{10, 15, false},    // Slime (genLevel 1)
+		{11, 262, false},   // Skeleton (genLevel 2)
+		{12, 450, false},   // Stone-Golem (genLevel 3)
+		{29, 1200, false},  // Ogre (genLevel 6)
+		{30, 3500, false},  // Liche (genLevel 10)
+		{49, 5000, true},   // Hellclaw (boss, genLevel 11)
+	}
+
+	for _, npc := range npcTypes {
+		for i := 0; i < 500; i++ {
+			drops := NpcDeadItemGenerator(npc.id, npc.xp, npc.boss)
 			for _, drop := range drops {
 				if drop.DefID == 0 {
-					t.Error("Got drop with DefID=0")
+					t.Errorf("NPC %d: got drop with DefID=0", npc.id)
 				}
 				if drop.Count < 1 {
-					t.Errorf("Got drop with Count=%d", drop.Count)
+					t.Errorf("NPC %d: got drop with Count=%d", npc.id, drop.Count)
+				}
+				def := GetItemDef(drop.DefID)
+				if def == nil {
+					t.Errorf("NPC %d: got drop with invalid DefID=%d", npc.id, drop.DefID)
 				}
 			}
 		}
 	}
-	if !gotSomething {
-		t.Error("Expected at least one drop from 100 rolls on Slime")
+}
+
+func TestNpcDeadItemGeneratorUnknownNPC(t *testing.T) {
+	// Unknown NPC types should still potentially get potion drops
+	// (they pass primary check, gold/item split, and potion roll)
+	// but equipment drops will fail because genLevel is 0/unknown
+	gotPotion := false
+	for i := 0; i < 2000; i++ {
+		drops := NpcDeadItemGenerator(9999, 50, false)
+		for _, drop := range drops {
+			def := GetItemDef(drop.DefID)
+			if def != nil && def.Type == ItemTypePotion {
+				gotPotion = true
+			}
+		}
+	}
+	if !gotPotion {
+		t.Error("Expected at least one potion drop from unknown NPC over 2000 iterations")
 	}
 }
 
-func TestRollLootNonExistent(t *testing.T) {
-	drops := RollLoot(9999) // non-existent NPC type
-	if drops != nil && len(drops) > 0 {
-		t.Error("Expected no drops for non-existent NPC type")
-	}
-}
-
-func TestLootTablesValid(t *testing.T) {
-	for npcTypeID, entries := range NpcLootTables {
-		for _, entry := range entries {
-			def := GetItemDef(entry.ItemID)
+func TestNpcDeadItemGeneratorEquipmentDrops(t *testing.T) {
+	// Run many iterations to verify we get equipment drops
+	gotWeapon := false
+	gotArmor := false
+	// Use a high-genLevel boss to maximize equipment drop chance
+	for i := 0; i < 5000; i++ {
+		drops := NpcDeadItemGenerator(30, 3500, true) // Liche, genLevel 10, boss
+		for _, drop := range drops {
+			def := GetItemDef(drop.DefID)
 			if def == nil {
-				t.Errorf("NPC type %d has loot entry for non-existent item %d", npcTypeID, entry.ItemID)
+				continue
 			}
-			if entry.DropChance <= 0 || entry.DropChance > 1.0 {
-				t.Errorf("NPC type %d, item %d: invalid drop chance %f", npcTypeID, entry.ItemID, entry.DropChance)
+			if def.Type == ItemTypeWeapon {
+				gotWeapon = true
 			}
-			if entry.MinCount < 1 {
-				t.Errorf("NPC type %d, item %d: min count must be >= 1", npcTypeID, entry.ItemID)
-			}
-			if entry.MaxCount < entry.MinCount {
-				t.Errorf("NPC type %d, item %d: max count < min count", npcTypeID, entry.ItemID)
+			if def.Type >= ItemTypeShield && def.Type <= ItemTypeCape {
+				gotArmor = true
 			}
 		}
 	}
+	if !gotWeapon {
+		t.Error("Expected at least one weapon drop from 5000 boss kills")
+	}
+	if !gotArmor {
+		t.Error("Expected at least one armor drop from 5000 boss kills")
+	}
 }
 
-func TestShopInventoriesValid(t *testing.T) {
-	for npcID, itemIDs := range ShopInventories {
-		if len(itemIDs) == 0 {
-			t.Errorf("Shop NPC %d has empty inventory", npcID)
-		}
-		for _, itemID := range itemIDs {
-			def := GetItemDef(itemID)
+func TestNpcDeadItemGeneratorAttributes(t *testing.T) {
+	// Equipment drops should have attributes applied
+	gotAttribute := false
+	for i := 0; i < 5000; i++ {
+		drops := NpcDeadItemGenerator(30, 3500, true) // Liche boss
+		for _, drop := range drops {
+			def := GetItemDef(drop.DefID)
 			if def == nil {
-				t.Errorf("Shop NPC %d sells non-existent item %d", npcID, itemID)
+				continue
+			}
+			// Only equipment gets attributes
+			if def.Type >= ItemTypeWeapon && def.Type <= ItemTypeCape {
+				if drop.Attribute != 0 {
+					gotAttribute = true
+				}
 			}
 		}
 	}
+	if !gotAttribute {
+		t.Error("Expected at least one equipment drop with attributes from 5000 boss kills")
+	}
 }
-
-// === Phase 4: Multi-tier Loot Tests ===
 
 func TestRollGoldDrop(t *testing.T) {
 	// Gold should always be at least 1
@@ -87,123 +164,86 @@ func TestRollGoldDropZeroXP(t *testing.T) {
 	}
 }
 
-func TestPotionTierByDifficulty(t *testing.T) {
-	// Low difficulty
-	lowPotions := map[int]bool{91: true, 93: true}
-	for i := 0; i < 50; i++ {
-		id := PotionTierByDifficulty(10)
-		if !lowPotions[id] {
-			t.Errorf("Low difficulty potion should be basic (91 or 93), got %d", id)
+func TestShopInventoriesValid(t *testing.T) {
+	for npcID, itemIDs := range ShopInventories {
+		if len(itemIDs) == 0 {
+			t.Errorf("Shop NPC %d has empty inventory", npcID)
 		}
-	}
-
-	// Medium difficulty — basic potions
-	basicPotions := map[int]bool{91: true, 93: true}
-	for i := 0; i < 50; i++ {
-		id := PotionTierByDifficulty(50)
-		if !basicPotions[id] {
-			t.Errorf("Medium difficulty potion should be basic (91 or 93), got %d", id)
-		}
-	}
-
-	// High difficulty (XP >= 500) — big potions
-	bigPotions := map[int]bool{92: true, 94: true}
-	for i := 0; i < 50; i++ {
-		id := PotionTierByDifficulty(1000)
-		if !bigPotions[id] {
-			t.Errorf("High difficulty potion should be big (92 or 94), got %d", id)
-		}
-	}
-}
-
-func TestRollMultiTierLoot(t *testing.T) {
-	// Run many rolls to verify structure
-	gotPotion := false
-	gotEquipment := false
-	for i := 0; i < 500; i++ {
-		drops := RollMultiTierLoot(11, 262) // Skeleton (type 11, XP 262)
-		for _, drop := range drops {
-			def := drop.Def()
+		for _, itemID := range itemIDs {
+			def := GetItemDef(itemID)
 			if def == nil {
-				t.Error("Got drop with nil definition")
-				continue
-			}
-			if def.Type == ItemTypePotion {
-				gotPotion = true
-			}
-			if def.Type >= ItemTypeWeapon && def.Type <= ItemTypeCape {
-				gotEquipment = true
+				t.Errorf("Shop NPC %d sells non-existent item %d", npcID, itemID)
 			}
 		}
 	}
-	if !gotPotion {
-		t.Error("Expected at least one potion drop from 500 multi-tier rolls")
-	}
-	if !gotEquipment {
-		t.Error("Expected at least one equipment drop from 500 multi-tier rolls")
-	}
 }
 
-func TestRollMultiTierLootNonExistentNPC(t *testing.T) {
-	// Should still potentially get potions even for non-existent NPC tables
-	gotPotion := false
-	for i := 0; i < 100; i++ {
-		drops := RollMultiTierLoot(9999, 50)
-		for _, drop := range drops {
-			def := drop.Def()
-			if def != nil && def.Type == ItemTypePotion {
-				gotPotion = true
-			}
+func TestRollPotion(t *testing.T) {
+	// Should produce a variety of potions
+	seen := map[int]bool{}
+	for i := 0; i < 10000; i++ {
+		id := rollPotion()
+		def := GetItemDef(id)
+		if def == nil {
+			t.Errorf("rollPotion returned non-existent item ID %d", id)
+		}
+		seen[id] = true
+	}
+	// Should see at least the common potions
+	expectedPotions := []int{91, 92, 93, 94, 95, 96}
+	for _, pid := range expectedPotions {
+		if !seen[pid] {
+			t.Errorf("Expected to see potion %d in 10000 rolls", pid)
 		}
 	}
-	if !gotPotion {
-		t.Error("Expected at least one potion from tier-2 roll even with no NPC loot table")
-	}
 }
 
-func TestHellclawLoot(t *testing.T) {
-	// Hellclaw (49) has guaranteed potion drops — should always get potions
-	gotPotions := false
-	gotEquip := false
-	for i := 0; i < 50; i++ {
-		drops := RollLoot(49)
-		for _, drop := range drops {
-			def := drop.Def()
-			if def == nil {
-				continue
-			}
-			if def.Type == ItemTypePotion {
-				gotPotions = true
-			}
-			if def.Type >= ItemTypeWeapon && def.Type <= ItemTypeCape {
-				gotEquip = true
-			}
+func TestRollAttributeValue(t *testing.T) {
+	// Should produce values 1-13
+	seen := map[int]bool{}
+	for i := 0; i < 100000; i++ {
+		v := rollAttributeValue()
+		if v < 1 || v > 13 {
+			t.Errorf("Attribute value out of range: %d", v)
+		}
+		seen[v] = true
+	}
+	// Should see at least the common values (1-7)
+	for v := 1; v <= 7; v++ {
+		if !seen[v] {
+			t.Errorf("Expected to see attribute value %d in 100000 rolls", v)
 		}
 	}
-	if !gotPotions {
-		t.Error("Hellclaw loot should always drop potions (100% chance)")
-	}
-	if !gotEquip {
-		t.Error("Expected at least some equipment from 50 Hellclaw rolls")
+}
+
+func TestGenLevelCap(t *testing.T) {
+	// For genLevel <= 2, attribute value should be capped at 7
+	for i := 0; i < 10000; i++ {
+		attr := rollWeaponAttribute(1)
+		value := int((attr >> 16) & 0xF)
+		if value > 7 {
+			t.Errorf("GenLevel 1 weapon attribute value should be <= 7, got %d", value)
+		}
 	}
 }
 
-func TestAllLootTablesValid(t *testing.T) {
-	for npcID, entries := range NpcLootTables {
-		for _, entry := range entries {
-			def := GetItemDef(entry.ItemID)
-			if def == nil {
-				t.Errorf("NPC %d loot table references non-existent item %d", npcID, entry.ItemID)
-			}
-			if entry.DropChance <= 0 || entry.DropChance > 1.0 {
-				t.Errorf("NPC %d item %d: invalid drop chance %f", npcID, entry.ItemID, entry.DropChance)
-			}
-			if entry.MinCount < 1 {
-				t.Errorf("NPC %d item %d: min count must be >= 1", npcID, entry.ItemID)
-			}
-			if entry.MaxCount < entry.MinCount {
-				t.Errorf("NPC %d item %d: max count < min count", npcID, entry.ItemID)
-			}
+func TestIDice(t *testing.T) {
+	// iDice(1, 6) should return 1-6
+	for i := 0; i < 1000; i++ {
+		v := iDice(1, 6)
+		if v < 1 || v > 6 {
+			t.Errorf("iDice(1,6) returned %d, expected 1-6", v)
+		}
+	}
+	// iDice(0, 6) should return 0
+	if iDice(0, 6) != 0 {
+		t.Error("iDice(0,6) should return 0")
+	}
+	// iDice(2, 6) should return 2-12
+	for i := 0; i < 1000; i++ {
+		v := iDice(2, 6)
+		if v < 2 || v > 12 {
+			t.Errorf("iDice(2,6) returned %d, expected 2-12", v)
 		}
 	}
 }

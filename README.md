@@ -334,3 +334,5 @@ go run ./tools/magicimport/ > internal/magic/spelldefs_gen.go    # 63 spells
 ## License
 
 The source code of this project is released under the MIT License. Original Helbreath assets are property of Siementech Co. Ltd.
+
+Although the client implementation was done from scratch, I used [helbreath-base-game](https://github.com/ErkoKnoll/helbreath-base-game) for inspiration and took things from there that were working much better.

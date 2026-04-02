@@ -14,6 +14,7 @@ type DataStore interface {
 	GetCharacterByID(ctx context.Context, charID, accountID int) (*CharacterRow, error)
 	CreateCharacter(ctx context.Context, accountID int, name string, gender, skinColor, hairStyle, hairColor, underwearColor, str, vit, dex, intStat, mag, chr int) (int, error)
 	DeleteCharacter(ctx context.Context, charID, accountID int) error
+	MarkIntroShown(ctx context.Context, charID int) error
 	SaveCharacterPosition(ctx context.Context, charID int, mapName string, x, y, direction int) error
 	SaveCharacter(ctx context.Context, charID int, mapName string, x, y, direction int,
 		level int, experience int64, hp, mp, sp int,

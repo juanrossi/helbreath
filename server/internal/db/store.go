@@ -91,6 +91,7 @@ type CharacterRow struct {
 	InventoryJSON  string // JSON-serialized inventory items
 	EquipmentJSON  string // JSON-serialized equipment items
 	SpellDataJSON  string // JSON-serialized learned spell IDs
+	IntroShown     bool
 }
 
 func (s *Store) GetCharactersByAccount(ctx context.Context, accountID int) ([]CharacterRow, error) {
@@ -100,7 +101,7 @@ func (s *Store) GetCharactersByAccount(ctx context.Context, accountID int) ([]Ch
 		        mag, charisma, lu_pool, hp, mp, sp, map_name, pos_x, pos_y,
 		        direction, admin_level, pk_count, ek_count, reward_gold, hunger, gold,
 		        COALESCE(inventory_data, ''), COALESCE(equipment_data, ''),
-		        COALESCE(spell_data, '')
+		        COALESCE(spell_data, ''), COALESCE(intro_shown, false)
 		 FROM characters WHERE account_id = $1 ORDER BY id`, accountID)
 	if err != nil {
 		return nil, err
@@ -116,7 +117,7 @@ func (s *Store) GetCharactersByAccount(ctx context.Context, accountID int) ([]Ch
 			&c.LUPool, &c.HP, &c.MP, &c.SP, &c.MapName, &c.PosX, &c.PosY,
 			&c.Direction, &c.AdminLevel, &c.PKCount, &c.EKCount, &c.RewardGold,
 			&c.Hunger, &c.Gold, &c.InventoryJSON, &c.EquipmentJSON,
-			&c.SpellDataJSON)
+			&c.SpellDataJSON, &c.IntroShown)
 		if err != nil {
 			return nil, err
 		}
@@ -133,7 +134,7 @@ func (s *Store) GetCharacterByID(ctx context.Context, charID, accountID int) (*C
 		        mag, charisma, lu_pool, hp, mp, sp, map_name, pos_x, pos_y,
 		        direction, admin_level, pk_count, ek_count, reward_gold, hunger, gold,
 		        COALESCE(inventory_data, ''), COALESCE(equipment_data, ''),
-		        COALESCE(spell_data, '')
+		        COALESCE(spell_data, ''), COALESCE(intro_shown, false)
 		 FROM characters WHERE id = $1 AND account_id = $2`,
 		charID, accountID).Scan(&c.ID, &c.AccountID, &c.Name, &c.Gender, &c.SkinColor,
 		&c.HairStyle, &c.HairColor, &c.UnderwearColor, &c.Side, &c.Level,
@@ -141,7 +142,7 @@ func (s *Store) GetCharacterByID(ctx context.Context, charID, accountID int) (*C
 		&c.LUPool, &c.HP, &c.MP, &c.SP, &c.MapName, &c.PosX, &c.PosY,
 		&c.Direction, &c.AdminLevel, &c.PKCount, &c.EKCount, &c.RewardGold,
 		&c.Hunger, &c.Gold, &c.InventoryJSON, &c.EquipmentJSON,
-		&c.SpellDataJSON)
+		&c.SpellDataJSON, &c.IntroShown)
 	if err != nil {
 		return nil, err
 	}
@@ -184,6 +185,12 @@ func (s *Store) SaveCharacter(ctx context.Context, charID int, mapName string, x
 		str, vit, dex, intStat, mag, chr, luPool,
 		side, gold, pkCount, ekCount, hunger,
 		inventoryJSON, equipmentJSON, spellDataJSON)
+	return err
+}
+
+func (s *Store) MarkIntroShown(ctx context.Context, charID int) error {
+	_, err := s.pool.Exec(ctx,
+		`UPDATE characters SET intro_shown = true WHERE id = $1`, charID)
 	return err
 }
 

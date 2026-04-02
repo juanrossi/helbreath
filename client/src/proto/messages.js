@@ -100,19 +100,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified LoginRequest message, length delimited. Does not implicitly {@link hbonline.LoginRequest.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.LoginRequest
-         * @static
-         * @param {hbonline.ILoginRequest} message LoginRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        LoginRequest.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a LoginRequest message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.LoginRequest
@@ -150,104 +137,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a LoginRequest message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.LoginRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.LoginRequest} LoginRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        LoginRequest.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a LoginRequest message.
-         * @function verify
-         * @memberof hbonline.LoginRequest
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        LoginRequest.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.username != null && message.hasOwnProperty("username"))
-                if (!$util.isString(message.username))
-                    return "username: string expected";
-            if (message.password != null && message.hasOwnProperty("password"))
-                if (!$util.isString(message.password))
-                    return "password: string expected";
-            if (message.register != null && message.hasOwnProperty("register"))
-                if (typeof message.register !== "boolean")
-                    return "register: boolean expected";
-            return null;
-        };
-
-        /**
-         * Creates a LoginRequest message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.LoginRequest
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.LoginRequest} LoginRequest
-         */
-        LoginRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.LoginRequest)
-                return object;
-            let message = new $root.hbonline.LoginRequest();
-            if (object.username != null)
-                message.username = String(object.username);
-            if (object.password != null)
-                message.password = String(object.password);
-            if (object.register != null)
-                message.register = Boolean(object.register);
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a LoginRequest message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.LoginRequest
-         * @static
-         * @param {hbonline.LoginRequest} message LoginRequest
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        LoginRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.username = "";
-                object.password = "";
-                object.register = false;
-            }
-            if (message.username != null && message.hasOwnProperty("username"))
-                object.username = message.username;
-            if (message.password != null && message.hasOwnProperty("password"))
-                object.password = message.password;
-            if (message.register != null && message.hasOwnProperty("register"))
-                object.register = message.register;
-            return object;
-        };
-
-        /**
-         * Converts this LoginRequest to JSON.
-         * @function toJSON
-         * @memberof hbonline.LoginRequest
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        LoginRequest.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -365,19 +254,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified LoginResponse message, length delimited. Does not implicitly {@link hbonline.LoginResponse.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.LoginResponse
-         * @static
-         * @param {hbonline.ILoginResponse} message LoginResponse message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        LoginResponse.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a LoginResponse message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.LoginResponse
@@ -421,130 +297,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a LoginResponse message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.LoginResponse
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.LoginResponse} LoginResponse
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        LoginResponse.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a LoginResponse message.
-         * @function verify
-         * @memberof hbonline.LoginResponse
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        LoginResponse.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.success != null && message.hasOwnProperty("success"))
-                if (typeof message.success !== "boolean")
-                    return "success: boolean expected";
-            if (message.error != null && message.hasOwnProperty("error"))
-                if (!$util.isString(message.error))
-                    return "error: string expected";
-            if (message.characters != null && message.hasOwnProperty("characters")) {
-                if (!Array.isArray(message.characters))
-                    return "characters: array expected";
-                for (let i = 0; i < message.characters.length; ++i) {
-                    let error = $root.hbonline.CharacterSummary.verify(message.characters[i]);
-                    if (error)
-                        return "characters." + error;
-                }
-            }
-            if (message.token != null && message.hasOwnProperty("token"))
-                if (!$util.isString(message.token))
-                    return "token: string expected";
-            return null;
-        };
-
-        /**
-         * Creates a LoginResponse message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.LoginResponse
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.LoginResponse} LoginResponse
-         */
-        LoginResponse.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.LoginResponse)
-                return object;
-            let message = new $root.hbonline.LoginResponse();
-            if (object.success != null)
-                message.success = Boolean(object.success);
-            if (object.error != null)
-                message.error = String(object.error);
-            if (object.characters) {
-                if (!Array.isArray(object.characters))
-                    throw TypeError(".hbonline.LoginResponse.characters: array expected");
-                message.characters = [];
-                for (let i = 0; i < object.characters.length; ++i) {
-                    if (typeof object.characters[i] !== "object")
-                        throw TypeError(".hbonline.LoginResponse.characters: object expected");
-                    message.characters[i] = $root.hbonline.CharacterSummary.fromObject(object.characters[i]);
-                }
-            }
-            if (object.token != null)
-                message.token = String(object.token);
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a LoginResponse message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.LoginResponse
-         * @static
-         * @param {hbonline.LoginResponse} message LoginResponse
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        LoginResponse.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.arrays || options.defaults)
-                object.characters = [];
-            if (options.defaults) {
-                object.success = false;
-                object.error = "";
-                object.token = "";
-            }
-            if (message.success != null && message.hasOwnProperty("success"))
-                object.success = message.success;
-            if (message.error != null && message.hasOwnProperty("error"))
-                object.error = message.error;
-            if (message.characters && message.characters.length) {
-                object.characters = [];
-                for (let j = 0; j < message.characters.length; ++j)
-                    object.characters[j] = $root.hbonline.CharacterSummary.toObject(message.characters[j], options);
-            }
-            if (message.token != null && message.hasOwnProperty("token"))
-                object.token = message.token;
-            return object;
-        };
-
-        /**
-         * Converts this LoginResponse to JSON.
-         * @function toJSON
-         * @memberof hbonline.LoginResponse
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        LoginResponse.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -693,19 +445,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified CharacterSummary message, length delimited. Does not implicitly {@link hbonline.CharacterSummary.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.CharacterSummary
-         * @static
-         * @param {hbonline.ICharacterSummary} message CharacterSummary message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        CharacterSummary.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a CharacterSummary message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.CharacterSummary
@@ -759,141 +498,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a CharacterSummary message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.CharacterSummary
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.CharacterSummary} CharacterSummary
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        CharacterSummary.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a CharacterSummary message.
-         * @function verify
-         * @memberof hbonline.CharacterSummary
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        CharacterSummary.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.id != null && message.hasOwnProperty("id"))
-                if (!$util.isInteger(message.id))
-                    return "id: integer expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.level != null && message.hasOwnProperty("level"))
-                if (!$util.isInteger(message.level))
-                    return "level: integer expected";
-            if (message.gender != null && message.hasOwnProperty("gender"))
-                if (!$util.isInteger(message.gender))
-                    return "gender: integer expected";
-            if (message.side != null && message.hasOwnProperty("side"))
-                if (!$util.isInteger(message.side))
-                    return "side: integer expected";
-            if (message.mapName != null && message.hasOwnProperty("mapName"))
-                if (!$util.isString(message.mapName))
-                    return "mapName: string expected";
-            if (message.appearance != null && message.hasOwnProperty("appearance")) {
-                let error = $root.hbonline.Appearance.verify(message.appearance);
-                if (error)
-                    return "appearance." + error;
-            }
-            return null;
-        };
-
-        /**
-         * Creates a CharacterSummary message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.CharacterSummary
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.CharacterSummary} CharacterSummary
-         */
-        CharacterSummary.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.CharacterSummary)
-                return object;
-            let message = new $root.hbonline.CharacterSummary();
-            if (object.id != null)
-                message.id = object.id | 0;
-            if (object.name != null)
-                message.name = String(object.name);
-            if (object.level != null)
-                message.level = object.level | 0;
-            if (object.gender != null)
-                message.gender = object.gender | 0;
-            if (object.side != null)
-                message.side = object.side | 0;
-            if (object.mapName != null)
-                message.mapName = String(object.mapName);
-            if (object.appearance != null) {
-                if (typeof object.appearance !== "object")
-                    throw TypeError(".hbonline.CharacterSummary.appearance: object expected");
-                message.appearance = $root.hbonline.Appearance.fromObject(object.appearance);
-            }
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a CharacterSummary message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.CharacterSummary
-         * @static
-         * @param {hbonline.CharacterSummary} message CharacterSummary
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        CharacterSummary.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.id = 0;
-                object.name = "";
-                object.level = 0;
-                object.gender = 0;
-                object.side = 0;
-                object.mapName = "";
-                object.appearance = null;
-            }
-            if (message.id != null && message.hasOwnProperty("id"))
-                object.id = message.id;
-            if (message.name != null && message.hasOwnProperty("name"))
-                object.name = message.name;
-            if (message.level != null && message.hasOwnProperty("level"))
-                object.level = message.level;
-            if (message.gender != null && message.hasOwnProperty("gender"))
-                object.gender = message.gender;
-            if (message.side != null && message.hasOwnProperty("side"))
-                object.side = message.side;
-            if (message.mapName != null && message.hasOwnProperty("mapName"))
-                object.mapName = message.mapName;
-            if (message.appearance != null && message.hasOwnProperty("appearance"))
-                object.appearance = $root.hbonline.Appearance.toObject(message.appearance, options);
-            return object;
-        };
-
-        /**
-         * Converts this CharacterSummary to JSON.
-         * @function toJSON
-         * @memberof hbonline.CharacterSummary
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        CharacterSummary.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -1097,19 +701,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified CreateCharacterRequest message, length delimited. Does not implicitly {@link hbonline.CreateCharacterRequest.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.CreateCharacterRequest
-         * @static
-         * @param {hbonline.ICreateCharacterRequest} message CreateCharacterRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        CreateCharacterRequest.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a CreateCharacterRequest message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.CreateCharacterRequest
@@ -1183,176 +774,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a CreateCharacterRequest message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.CreateCharacterRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.CreateCharacterRequest} CreateCharacterRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        CreateCharacterRequest.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a CreateCharacterRequest message.
-         * @function verify
-         * @memberof hbonline.CreateCharacterRequest
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        CreateCharacterRequest.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.gender != null && message.hasOwnProperty("gender"))
-                if (!$util.isInteger(message.gender))
-                    return "gender: integer expected";
-            if (message.skinColor != null && message.hasOwnProperty("skinColor"))
-                if (!$util.isInteger(message.skinColor))
-                    return "skinColor: integer expected";
-            if (message.hairStyle != null && message.hasOwnProperty("hairStyle"))
-                if (!$util.isInteger(message.hairStyle))
-                    return "hairStyle: integer expected";
-            if (message.hairColor != null && message.hasOwnProperty("hairColor"))
-                if (!$util.isInteger(message.hairColor))
-                    return "hairColor: integer expected";
-            if (message.underwearColor != null && message.hasOwnProperty("underwearColor"))
-                if (!$util.isInteger(message.underwearColor))
-                    return "underwearColor: integer expected";
-            if (message.str != null && message.hasOwnProperty("str"))
-                if (!$util.isInteger(message.str))
-                    return "str: integer expected";
-            if (message.vit != null && message.hasOwnProperty("vit"))
-                if (!$util.isInteger(message.vit))
-                    return "vit: integer expected";
-            if (message.dex != null && message.hasOwnProperty("dex"))
-                if (!$util.isInteger(message.dex))
-                    return "dex: integer expected";
-            if (message.intStat != null && message.hasOwnProperty("intStat"))
-                if (!$util.isInteger(message.intStat))
-                    return "intStat: integer expected";
-            if (message.mag != null && message.hasOwnProperty("mag"))
-                if (!$util.isInteger(message.mag))
-                    return "mag: integer expected";
-            if (message.charisma != null && message.hasOwnProperty("charisma"))
-                if (!$util.isInteger(message.charisma))
-                    return "charisma: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a CreateCharacterRequest message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.CreateCharacterRequest
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.CreateCharacterRequest} CreateCharacterRequest
-         */
-        CreateCharacterRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.CreateCharacterRequest)
-                return object;
-            let message = new $root.hbonline.CreateCharacterRequest();
-            if (object.name != null)
-                message.name = String(object.name);
-            if (object.gender != null)
-                message.gender = object.gender | 0;
-            if (object.skinColor != null)
-                message.skinColor = object.skinColor | 0;
-            if (object.hairStyle != null)
-                message.hairStyle = object.hairStyle | 0;
-            if (object.hairColor != null)
-                message.hairColor = object.hairColor | 0;
-            if (object.underwearColor != null)
-                message.underwearColor = object.underwearColor | 0;
-            if (object.str != null)
-                message.str = object.str | 0;
-            if (object.vit != null)
-                message.vit = object.vit | 0;
-            if (object.dex != null)
-                message.dex = object.dex | 0;
-            if (object.intStat != null)
-                message.intStat = object.intStat | 0;
-            if (object.mag != null)
-                message.mag = object.mag | 0;
-            if (object.charisma != null)
-                message.charisma = object.charisma | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a CreateCharacterRequest message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.CreateCharacterRequest
-         * @static
-         * @param {hbonline.CreateCharacterRequest} message CreateCharacterRequest
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        CreateCharacterRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.name = "";
-                object.gender = 0;
-                object.skinColor = 0;
-                object.hairStyle = 0;
-                object.hairColor = 0;
-                object.underwearColor = 0;
-                object.str = 0;
-                object.vit = 0;
-                object.dex = 0;
-                object.intStat = 0;
-                object.mag = 0;
-                object.charisma = 0;
-            }
-            if (message.name != null && message.hasOwnProperty("name"))
-                object.name = message.name;
-            if (message.gender != null && message.hasOwnProperty("gender"))
-                object.gender = message.gender;
-            if (message.skinColor != null && message.hasOwnProperty("skinColor"))
-                object.skinColor = message.skinColor;
-            if (message.hairStyle != null && message.hasOwnProperty("hairStyle"))
-                object.hairStyle = message.hairStyle;
-            if (message.hairColor != null && message.hasOwnProperty("hairColor"))
-                object.hairColor = message.hairColor;
-            if (message.underwearColor != null && message.hasOwnProperty("underwearColor"))
-                object.underwearColor = message.underwearColor;
-            if (message.str != null && message.hasOwnProperty("str"))
-                object.str = message.str;
-            if (message.vit != null && message.hasOwnProperty("vit"))
-                object.vit = message.vit;
-            if (message.dex != null && message.hasOwnProperty("dex"))
-                object.dex = message.dex;
-            if (message.intStat != null && message.hasOwnProperty("intStat"))
-                object.intStat = message.intStat;
-            if (message.mag != null && message.hasOwnProperty("mag"))
-                object.mag = message.mag;
-            if (message.charisma != null && message.hasOwnProperty("charisma"))
-                object.charisma = message.charisma;
-            return object;
-        };
-
-        /**
-         * Converts this CreateCharacterRequest to JSON.
-         * @function toJSON
-         * @memberof hbonline.CreateCharacterRequest
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        CreateCharacterRequest.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -1459,19 +880,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified CreateCharacterResponse message, length delimited. Does not implicitly {@link hbonline.CreateCharacterResponse.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.CreateCharacterResponse
-         * @static
-         * @param {hbonline.ICreateCharacterResponse} message CreateCharacterResponse message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        CreateCharacterResponse.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a CreateCharacterResponse message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.CreateCharacterResponse
@@ -1511,122 +919,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a CreateCharacterResponse message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.CreateCharacterResponse
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.CreateCharacterResponse} CreateCharacterResponse
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        CreateCharacterResponse.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a CreateCharacterResponse message.
-         * @function verify
-         * @memberof hbonline.CreateCharacterResponse
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        CreateCharacterResponse.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.success != null && message.hasOwnProperty("success"))
-                if (typeof message.success !== "boolean")
-                    return "success: boolean expected";
-            if (message.error != null && message.hasOwnProperty("error"))
-                if (!$util.isString(message.error))
-                    return "error: string expected";
-            if (message.characters != null && message.hasOwnProperty("characters")) {
-                if (!Array.isArray(message.characters))
-                    return "characters: array expected";
-                for (let i = 0; i < message.characters.length; ++i) {
-                    let error = $root.hbonline.CharacterSummary.verify(message.characters[i]);
-                    if (error)
-                        return "characters." + error;
-                }
-            }
-            return null;
-        };
-
-        /**
-         * Creates a CreateCharacterResponse message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.CreateCharacterResponse
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.CreateCharacterResponse} CreateCharacterResponse
-         */
-        CreateCharacterResponse.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.CreateCharacterResponse)
-                return object;
-            let message = new $root.hbonline.CreateCharacterResponse();
-            if (object.success != null)
-                message.success = Boolean(object.success);
-            if (object.error != null)
-                message.error = String(object.error);
-            if (object.characters) {
-                if (!Array.isArray(object.characters))
-                    throw TypeError(".hbonline.CreateCharacterResponse.characters: array expected");
-                message.characters = [];
-                for (let i = 0; i < object.characters.length; ++i) {
-                    if (typeof object.characters[i] !== "object")
-                        throw TypeError(".hbonline.CreateCharacterResponse.characters: object expected");
-                    message.characters[i] = $root.hbonline.CharacterSummary.fromObject(object.characters[i]);
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a CreateCharacterResponse message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.CreateCharacterResponse
-         * @static
-         * @param {hbonline.CreateCharacterResponse} message CreateCharacterResponse
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        CreateCharacterResponse.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.arrays || options.defaults)
-                object.characters = [];
-            if (options.defaults) {
-                object.success = false;
-                object.error = "";
-            }
-            if (message.success != null && message.hasOwnProperty("success"))
-                object.success = message.success;
-            if (message.error != null && message.hasOwnProperty("error"))
-                object.error = message.error;
-            if (message.characters && message.characters.length) {
-                object.characters = [];
-                for (let j = 0; j < message.characters.length; ++j)
-                    object.characters[j] = $root.hbonline.CharacterSummary.toObject(message.characters[j], options);
-            }
-            return object;
-        };
-
-        /**
-         * Converts this CreateCharacterResponse to JSON.
-         * @function toJSON
-         * @memberof hbonline.CreateCharacterResponse
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        CreateCharacterResponse.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -1709,19 +1001,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified EnterGameRequest message, length delimited. Does not implicitly {@link hbonline.EnterGameRequest.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.EnterGameRequest
-         * @static
-         * @param {hbonline.IEnterGameRequest} message EnterGameRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        EnterGameRequest.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes an EnterGameRequest message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.EnterGameRequest
@@ -1751,87 +1030,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes an EnterGameRequest message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.EnterGameRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.EnterGameRequest} EnterGameRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        EnterGameRequest.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies an EnterGameRequest message.
-         * @function verify
-         * @memberof hbonline.EnterGameRequest
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        EnterGameRequest.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.characterId != null && message.hasOwnProperty("characterId"))
-                if (!$util.isInteger(message.characterId))
-                    return "characterId: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates an EnterGameRequest message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.EnterGameRequest
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.EnterGameRequest} EnterGameRequest
-         */
-        EnterGameRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.EnterGameRequest)
-                return object;
-            let message = new $root.hbonline.EnterGameRequest();
-            if (object.characterId != null)
-                message.characterId = object.characterId | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from an EnterGameRequest message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.EnterGameRequest
-         * @static
-         * @param {hbonline.EnterGameRequest} message EnterGameRequest
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        EnterGameRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults)
-                object.characterId = 0;
-            if (message.characterId != null && message.hasOwnProperty("characterId"))
-                object.characterId = message.characterId;
-            return object;
-        };
-
-        /**
-         * Converts this EnterGameRequest to JSON.
-         * @function toJSON
-         * @memberof hbonline.EnterGameRequest
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        EnterGameRequest.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -1914,19 +1112,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified DeleteCharacterRequest message, length delimited. Does not implicitly {@link hbonline.DeleteCharacterRequest.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.DeleteCharacterRequest
-         * @static
-         * @param {hbonline.IDeleteCharacterRequest} message DeleteCharacterRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        DeleteCharacterRequest.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a DeleteCharacterRequest message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.DeleteCharacterRequest
@@ -1956,87 +1141,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a DeleteCharacterRequest message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.DeleteCharacterRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.DeleteCharacterRequest} DeleteCharacterRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        DeleteCharacterRequest.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a DeleteCharacterRequest message.
-         * @function verify
-         * @memberof hbonline.DeleteCharacterRequest
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        DeleteCharacterRequest.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.characterId != null && message.hasOwnProperty("characterId"))
-                if (!$util.isInteger(message.characterId))
-                    return "characterId: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a DeleteCharacterRequest message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.DeleteCharacterRequest
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.DeleteCharacterRequest} DeleteCharacterRequest
-         */
-        DeleteCharacterRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.DeleteCharacterRequest)
-                return object;
-            let message = new $root.hbonline.DeleteCharacterRequest();
-            if (object.characterId != null)
-                message.characterId = object.characterId | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a DeleteCharacterRequest message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.DeleteCharacterRequest
-         * @static
-         * @param {hbonline.DeleteCharacterRequest} message DeleteCharacterRequest
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        DeleteCharacterRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults)
-                object.characterId = 0;
-            if (message.characterId != null && message.hasOwnProperty("characterId"))
-                object.characterId = message.characterId;
-            return object;
-        };
-
-        /**
-         * Converts this DeleteCharacterRequest to JSON.
-         * @function toJSON
-         * @memberof hbonline.DeleteCharacterRequest
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        DeleteCharacterRequest.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -2143,19 +1247,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified DeleteCharacterResponse message, length delimited. Does not implicitly {@link hbonline.DeleteCharacterResponse.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.DeleteCharacterResponse
-         * @static
-         * @param {hbonline.IDeleteCharacterResponse} message DeleteCharacterResponse message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        DeleteCharacterResponse.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a DeleteCharacterResponse message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.DeleteCharacterResponse
@@ -2195,122 +1286,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a DeleteCharacterResponse message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.DeleteCharacterResponse
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.DeleteCharacterResponse} DeleteCharacterResponse
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        DeleteCharacterResponse.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a DeleteCharacterResponse message.
-         * @function verify
-         * @memberof hbonline.DeleteCharacterResponse
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        DeleteCharacterResponse.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.success != null && message.hasOwnProperty("success"))
-                if (typeof message.success !== "boolean")
-                    return "success: boolean expected";
-            if (message.error != null && message.hasOwnProperty("error"))
-                if (!$util.isString(message.error))
-                    return "error: string expected";
-            if (message.characters != null && message.hasOwnProperty("characters")) {
-                if (!Array.isArray(message.characters))
-                    return "characters: array expected";
-                for (let i = 0; i < message.characters.length; ++i) {
-                    let error = $root.hbonline.CharacterSummary.verify(message.characters[i]);
-                    if (error)
-                        return "characters." + error;
-                }
-            }
-            return null;
-        };
-
-        /**
-         * Creates a DeleteCharacterResponse message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.DeleteCharacterResponse
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.DeleteCharacterResponse} DeleteCharacterResponse
-         */
-        DeleteCharacterResponse.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.DeleteCharacterResponse)
-                return object;
-            let message = new $root.hbonline.DeleteCharacterResponse();
-            if (object.success != null)
-                message.success = Boolean(object.success);
-            if (object.error != null)
-                message.error = String(object.error);
-            if (object.characters) {
-                if (!Array.isArray(object.characters))
-                    throw TypeError(".hbonline.DeleteCharacterResponse.characters: array expected");
-                message.characters = [];
-                for (let i = 0; i < object.characters.length; ++i) {
-                    if (typeof object.characters[i] !== "object")
-                        throw TypeError(".hbonline.DeleteCharacterResponse.characters: object expected");
-                    message.characters[i] = $root.hbonline.CharacterSummary.fromObject(object.characters[i]);
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a DeleteCharacterResponse message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.DeleteCharacterResponse
-         * @static
-         * @param {hbonline.DeleteCharacterResponse} message DeleteCharacterResponse
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        DeleteCharacterResponse.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.arrays || options.defaults)
-                object.characters = [];
-            if (options.defaults) {
-                object.success = false;
-                object.error = "";
-            }
-            if (message.success != null && message.hasOwnProperty("success"))
-                object.success = message.success;
-            if (message.error != null && message.hasOwnProperty("error"))
-                object.error = message.error;
-            if (message.characters && message.characters.length) {
-                object.characters = [];
-                for (let j = 0; j < message.characters.length; ++j)
-                    object.characters[j] = $root.hbonline.CharacterSummary.toObject(message.characters[j], options);
-            }
-            return object;
-        };
-
-        /**
-         * Converts this DeleteCharacterResponse to JSON.
-         * @function toJSON
-         * @memberof hbonline.DeleteCharacterResponse
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        DeleteCharacterResponse.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -2404,19 +1379,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified Vec2 message, length delimited. Does not implicitly {@link hbonline.Vec2.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.Vec2
-         * @static
-         * @param {hbonline.IVec2} message Vec2 message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        Vec2.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a Vec2 message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.Vec2
@@ -2450,96 +1412,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a Vec2 message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.Vec2
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.Vec2} Vec2
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        Vec2.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a Vec2 message.
-         * @function verify
-         * @memberof hbonline.Vec2
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        Vec2.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.x != null && message.hasOwnProperty("x"))
-                if (!$util.isInteger(message.x))
-                    return "x: integer expected";
-            if (message.y != null && message.hasOwnProperty("y"))
-                if (!$util.isInteger(message.y))
-                    return "y: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a Vec2 message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.Vec2
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.Vec2} Vec2
-         */
-        Vec2.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.Vec2)
-                return object;
-            let message = new $root.hbonline.Vec2();
-            if (object.x != null)
-                message.x = object.x | 0;
-            if (object.y != null)
-                message.y = object.y | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a Vec2 message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.Vec2
-         * @static
-         * @param {hbonline.Vec2} message Vec2
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        Vec2.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.x = 0;
-                object.y = 0;
-            }
-            if (message.x != null && message.hasOwnProperty("x"))
-                object.x = message.x;
-            if (message.y != null && message.hasOwnProperty("y"))
-                object.y = message.y;
-            return object;
-        };
-
-        /**
-         * Converts this Vec2 to JSON.
-         * @function toJSON
-         * @memberof hbonline.Vec2
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        Vec2.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -2765,19 +1637,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified Appearance message, length delimited. Does not implicitly {@link hbonline.Appearance.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.Appearance
-         * @static
-         * @param {hbonline.IAppearance} message Appearance message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        Appearance.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes an Appearance message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.Appearance
@@ -2859,192 +1718,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes an Appearance message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.Appearance
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.Appearance} Appearance
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        Appearance.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies an Appearance message.
-         * @function verify
-         * @memberof hbonline.Appearance
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        Appearance.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.gender != null && message.hasOwnProperty("gender"))
-                if (!$util.isInteger(message.gender))
-                    return "gender: integer expected";
-            if (message.skinColor != null && message.hasOwnProperty("skinColor"))
-                if (!$util.isInteger(message.skinColor))
-                    return "skinColor: integer expected";
-            if (message.hairStyle != null && message.hasOwnProperty("hairStyle"))
-                if (!$util.isInteger(message.hairStyle))
-                    return "hairStyle: integer expected";
-            if (message.hairColor != null && message.hasOwnProperty("hairColor"))
-                if (!$util.isInteger(message.hairColor))
-                    return "hairColor: integer expected";
-            if (message.underwearColor != null && message.hasOwnProperty("underwearColor"))
-                if (!$util.isInteger(message.underwearColor))
-                    return "underwearColor: integer expected";
-            if (message.bodyArmor != null && message.hasOwnProperty("bodyArmor"))
-                if (!$util.isInteger(message.bodyArmor))
-                    return "bodyArmor: integer expected";
-            if (message.armArmor != null && message.hasOwnProperty("armArmor"))
-                if (!$util.isInteger(message.armArmor))
-                    return "armArmor: integer expected";
-            if (message.leggings != null && message.hasOwnProperty("leggings"))
-                if (!$util.isInteger(message.leggings))
-                    return "leggings: integer expected";
-            if (message.helm != null && message.hasOwnProperty("helm"))
-                if (!$util.isInteger(message.helm))
-                    return "helm: integer expected";
-            if (message.weapon != null && message.hasOwnProperty("weapon"))
-                if (!$util.isInteger(message.weapon))
-                    return "weapon: integer expected";
-            if (message.shield != null && message.hasOwnProperty("shield"))
-                if (!$util.isInteger(message.shield))
-                    return "shield: integer expected";
-            if (message.cape != null && message.hasOwnProperty("cape"))
-                if (!$util.isInteger(message.cape))
-                    return "cape: integer expected";
-            if (message.boots != null && message.hasOwnProperty("boots"))
-                if (!$util.isInteger(message.boots))
-                    return "boots: integer expected";
-            if (message.apprColor != null && message.hasOwnProperty("apprColor"))
-                if (!$util.isInteger(message.apprColor))
-                    return "apprColor: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates an Appearance message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.Appearance
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.Appearance} Appearance
-         */
-        Appearance.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.Appearance)
-                return object;
-            let message = new $root.hbonline.Appearance();
-            if (object.gender != null)
-                message.gender = object.gender | 0;
-            if (object.skinColor != null)
-                message.skinColor = object.skinColor | 0;
-            if (object.hairStyle != null)
-                message.hairStyle = object.hairStyle | 0;
-            if (object.hairColor != null)
-                message.hairColor = object.hairColor | 0;
-            if (object.underwearColor != null)
-                message.underwearColor = object.underwearColor | 0;
-            if (object.bodyArmor != null)
-                message.bodyArmor = object.bodyArmor | 0;
-            if (object.armArmor != null)
-                message.armArmor = object.armArmor | 0;
-            if (object.leggings != null)
-                message.leggings = object.leggings | 0;
-            if (object.helm != null)
-                message.helm = object.helm | 0;
-            if (object.weapon != null)
-                message.weapon = object.weapon | 0;
-            if (object.shield != null)
-                message.shield = object.shield | 0;
-            if (object.cape != null)
-                message.cape = object.cape | 0;
-            if (object.boots != null)
-                message.boots = object.boots | 0;
-            if (object.apprColor != null)
-                message.apprColor = object.apprColor | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from an Appearance message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.Appearance
-         * @static
-         * @param {hbonline.Appearance} message Appearance
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        Appearance.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.gender = 0;
-                object.skinColor = 0;
-                object.hairStyle = 0;
-                object.hairColor = 0;
-                object.underwearColor = 0;
-                object.bodyArmor = 0;
-                object.armArmor = 0;
-                object.leggings = 0;
-                object.helm = 0;
-                object.weapon = 0;
-                object.shield = 0;
-                object.cape = 0;
-                object.boots = 0;
-                object.apprColor = 0;
-            }
-            if (message.gender != null && message.hasOwnProperty("gender"))
-                object.gender = message.gender;
-            if (message.skinColor != null && message.hasOwnProperty("skinColor"))
-                object.skinColor = message.skinColor;
-            if (message.hairStyle != null && message.hasOwnProperty("hairStyle"))
-                object.hairStyle = message.hairStyle;
-            if (message.hairColor != null && message.hasOwnProperty("hairColor"))
-                object.hairColor = message.hairColor;
-            if (message.underwearColor != null && message.hasOwnProperty("underwearColor"))
-                object.underwearColor = message.underwearColor;
-            if (message.bodyArmor != null && message.hasOwnProperty("bodyArmor"))
-                object.bodyArmor = message.bodyArmor;
-            if (message.armArmor != null && message.hasOwnProperty("armArmor"))
-                object.armArmor = message.armArmor;
-            if (message.leggings != null && message.hasOwnProperty("leggings"))
-                object.leggings = message.leggings;
-            if (message.helm != null && message.hasOwnProperty("helm"))
-                object.helm = message.helm;
-            if (message.weapon != null && message.hasOwnProperty("weapon"))
-                object.weapon = message.weapon;
-            if (message.shield != null && message.hasOwnProperty("shield"))
-                object.shield = message.shield;
-            if (message.cape != null && message.hasOwnProperty("cape"))
-                object.cape = message.cape;
-            if (message.boots != null && message.hasOwnProperty("boots"))
-                object.boots = message.boots;
-            if (message.apprColor != null && message.hasOwnProperty("apprColor"))
-                object.apprColor = message.apprColor;
-            return object;
-        };
-
-        /**
-         * Converts this Appearance to JSON.
-         * @function toJSON
-         * @memberof hbonline.Appearance
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        Appearance.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -3149,19 +1822,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified ChatRequest message, length delimited. Does not implicitly {@link hbonline.ChatRequest.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.ChatRequest
-         * @static
-         * @param {hbonline.IChatRequest} message ChatRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        ChatRequest.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a ChatRequest message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.ChatRequest
@@ -3199,104 +1859,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a ChatRequest message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.ChatRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.ChatRequest} ChatRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        ChatRequest.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a ChatRequest message.
-         * @function verify
-         * @memberof hbonline.ChatRequest
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        ChatRequest.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.type != null && message.hasOwnProperty("type"))
-                if (!$util.isInteger(message.type))
-                    return "type: integer expected";
-            if (message.message != null && message.hasOwnProperty("message"))
-                if (!$util.isString(message.message))
-                    return "message: string expected";
-            if (message.target != null && message.hasOwnProperty("target"))
-                if (!$util.isString(message.target))
-                    return "target: string expected";
-            return null;
-        };
-
-        /**
-         * Creates a ChatRequest message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.ChatRequest
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.ChatRequest} ChatRequest
-         */
-        ChatRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.ChatRequest)
-                return object;
-            let message = new $root.hbonline.ChatRequest();
-            if (object.type != null)
-                message.type = object.type | 0;
-            if (object.message != null)
-                message.message = String(object.message);
-            if (object.target != null)
-                message.target = String(object.target);
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a ChatRequest message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.ChatRequest
-         * @static
-         * @param {hbonline.ChatRequest} message ChatRequest
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        ChatRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.type = 0;
-                object.message = "";
-                object.target = "";
-            }
-            if (message.type != null && message.hasOwnProperty("type"))
-                object.type = message.type;
-            if (message.message != null && message.hasOwnProperty("message"))
-                object.message = message.message;
-            if (message.target != null && message.hasOwnProperty("target"))
-                object.target = message.target;
-            return object;
-        };
-
-        /**
-         * Converts this ChatRequest to JSON.
-         * @function toJSON
-         * @memberof hbonline.ChatRequest
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        ChatRequest.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -3423,19 +1985,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified ChatMessage message, length delimited. Does not implicitly {@link hbonline.ChatMessage.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.ChatMessage
-         * @static
-         * @param {hbonline.IChatMessage} message ChatMessage message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        ChatMessage.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a ChatMessage message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.ChatMessage
@@ -3481,125 +2030,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a ChatMessage message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.ChatMessage
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.ChatMessage} ChatMessage
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        ChatMessage.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a ChatMessage message.
-         * @function verify
-         * @memberof hbonline.ChatMessage
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        ChatMessage.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.objectId != null && message.hasOwnProperty("objectId"))
-                if (!$util.isInteger(message.objectId))
-                    return "objectId: integer expected";
-            if (message.senderName != null && message.hasOwnProperty("senderName"))
-                if (!$util.isString(message.senderName))
-                    return "senderName: string expected";
-            if (message.type != null && message.hasOwnProperty("type"))
-                if (!$util.isInteger(message.type))
-                    return "type: integer expected";
-            if (message.message != null && message.hasOwnProperty("message"))
-                if (!$util.isString(message.message))
-                    return "message: string expected";
-            if (message.position != null && message.hasOwnProperty("position")) {
-                let error = $root.hbonline.Vec2.verify(message.position);
-                if (error)
-                    return "position." + error;
-            }
-            return null;
-        };
-
-        /**
-         * Creates a ChatMessage message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.ChatMessage
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.ChatMessage} ChatMessage
-         */
-        ChatMessage.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.ChatMessage)
-                return object;
-            let message = new $root.hbonline.ChatMessage();
-            if (object.objectId != null)
-                message.objectId = object.objectId | 0;
-            if (object.senderName != null)
-                message.senderName = String(object.senderName);
-            if (object.type != null)
-                message.type = object.type | 0;
-            if (object.message != null)
-                message.message = String(object.message);
-            if (object.position != null) {
-                if (typeof object.position !== "object")
-                    throw TypeError(".hbonline.ChatMessage.position: object expected");
-                message.position = $root.hbonline.Vec2.fromObject(object.position);
-            }
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a ChatMessage message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.ChatMessage
-         * @static
-         * @param {hbonline.ChatMessage} message ChatMessage
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        ChatMessage.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.objectId = 0;
-                object.senderName = "";
-                object.type = 0;
-                object.message = "";
-                object.position = null;
-            }
-            if (message.objectId != null && message.hasOwnProperty("objectId"))
-                object.objectId = message.objectId;
-            if (message.senderName != null && message.hasOwnProperty("senderName"))
-                object.senderName = message.senderName;
-            if (message.type != null && message.hasOwnProperty("type"))
-                object.type = message.type;
-            if (message.message != null && message.hasOwnProperty("message"))
-                object.message = message.message;
-            if (message.position != null && message.hasOwnProperty("position"))
-                object.position = $root.hbonline.Vec2.toObject(message.position, options);
-            return object;
-        };
-
-        /**
-         * Converts this ChatMessage to JSON.
-         * @function toJSON
-         * @memberof hbonline.ChatMessage
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        ChatMessage.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -3719,19 +2149,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified EnterGameResponse message, length delimited. Does not implicitly {@link hbonline.EnterGameResponse.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.EnterGameResponse
-         * @static
-         * @param {hbonline.IEnterGameResponse} message EnterGameResponse message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        EnterGameResponse.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes an EnterGameResponse message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.EnterGameResponse
@@ -3777,158 +2194,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes an EnterGameResponse message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.EnterGameResponse
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.EnterGameResponse} EnterGameResponse
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        EnterGameResponse.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies an EnterGameResponse message.
-         * @function verify
-         * @memberof hbonline.EnterGameResponse
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        EnterGameResponse.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.player != null && message.hasOwnProperty("player")) {
-                let error = $root.hbonline.PlayerContents.verify(message.player);
-                if (error)
-                    return "player." + error;
-            }
-            if (message.mapInfo != null && message.hasOwnProperty("mapInfo")) {
-                let error = $root.hbonline.MapInfo.verify(message.mapInfo);
-                if (error)
-                    return "mapInfo." + error;
-            }
-            if (message.nearbyPlayers != null && message.hasOwnProperty("nearbyPlayers")) {
-                if (!Array.isArray(message.nearbyPlayers))
-                    return "nearbyPlayers: array expected";
-                for (let i = 0; i < message.nearbyPlayers.length; ++i) {
-                    let error = $root.hbonline.EntityInfo.verify(message.nearbyPlayers[i]);
-                    if (error)
-                        return "nearbyPlayers." + error;
-                }
-            }
-            if (message.nearbyNpcs != null && message.hasOwnProperty("nearbyNpcs")) {
-                if (!Array.isArray(message.nearbyNpcs))
-                    return "nearbyNpcs: array expected";
-                for (let i = 0; i < message.nearbyNpcs.length; ++i) {
-                    let error = $root.hbonline.EntityInfo.verify(message.nearbyNpcs[i]);
-                    if (error)
-                        return "nearbyNpcs." + error;
-                }
-            }
-            return null;
-        };
-
-        /**
-         * Creates an EnterGameResponse message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.EnterGameResponse
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.EnterGameResponse} EnterGameResponse
-         */
-        EnterGameResponse.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.EnterGameResponse)
-                return object;
-            let message = new $root.hbonline.EnterGameResponse();
-            if (object.player != null) {
-                if (typeof object.player !== "object")
-                    throw TypeError(".hbonline.EnterGameResponse.player: object expected");
-                message.player = $root.hbonline.PlayerContents.fromObject(object.player);
-            }
-            if (object.mapInfo != null) {
-                if (typeof object.mapInfo !== "object")
-                    throw TypeError(".hbonline.EnterGameResponse.mapInfo: object expected");
-                message.mapInfo = $root.hbonline.MapInfo.fromObject(object.mapInfo);
-            }
-            if (object.nearbyPlayers) {
-                if (!Array.isArray(object.nearbyPlayers))
-                    throw TypeError(".hbonline.EnterGameResponse.nearbyPlayers: array expected");
-                message.nearbyPlayers = [];
-                for (let i = 0; i < object.nearbyPlayers.length; ++i) {
-                    if (typeof object.nearbyPlayers[i] !== "object")
-                        throw TypeError(".hbonline.EnterGameResponse.nearbyPlayers: object expected");
-                    message.nearbyPlayers[i] = $root.hbonline.EntityInfo.fromObject(object.nearbyPlayers[i]);
-                }
-            }
-            if (object.nearbyNpcs) {
-                if (!Array.isArray(object.nearbyNpcs))
-                    throw TypeError(".hbonline.EnterGameResponse.nearbyNpcs: array expected");
-                message.nearbyNpcs = [];
-                for (let i = 0; i < object.nearbyNpcs.length; ++i) {
-                    if (typeof object.nearbyNpcs[i] !== "object")
-                        throw TypeError(".hbonline.EnterGameResponse.nearbyNpcs: object expected");
-                    message.nearbyNpcs[i] = $root.hbonline.EntityInfo.fromObject(object.nearbyNpcs[i]);
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Creates a plain object from an EnterGameResponse message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.EnterGameResponse
-         * @static
-         * @param {hbonline.EnterGameResponse} message EnterGameResponse
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        EnterGameResponse.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.arrays || options.defaults) {
-                object.nearbyPlayers = [];
-                object.nearbyNpcs = [];
-            }
-            if (options.defaults) {
-                object.player = null;
-                object.mapInfo = null;
-            }
-            if (message.player != null && message.hasOwnProperty("player"))
-                object.player = $root.hbonline.PlayerContents.toObject(message.player, options);
-            if (message.mapInfo != null && message.hasOwnProperty("mapInfo"))
-                object.mapInfo = $root.hbonline.MapInfo.toObject(message.mapInfo, options);
-            if (message.nearbyPlayers && message.nearbyPlayers.length) {
-                object.nearbyPlayers = [];
-                for (let j = 0; j < message.nearbyPlayers.length; ++j)
-                    object.nearbyPlayers[j] = $root.hbonline.EntityInfo.toObject(message.nearbyPlayers[j], options);
-            }
-            if (message.nearbyNpcs && message.nearbyNpcs.length) {
-                object.nearbyNpcs = [];
-                for (let j = 0; j < message.nearbyNpcs.length; ++j)
-                    object.nearbyNpcs[j] = $root.hbonline.EntityInfo.toObject(message.nearbyNpcs[j], options);
-            }
-            return object;
-        };
-
-        /**
-         * Converts this EnterGameResponse to JSON.
-         * @function toJSON
-         * @memberof hbonline.EnterGameResponse
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        EnterGameResponse.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -3982,6 +2247,7 @@ export const hbonline = $root.hbonline = (() => {
          * @property {number|null} [ekCount] PlayerContents ekCount
          * @property {number|null} [hunger] PlayerContents hunger
          * @property {number|null} [adminLevel] PlayerContents adminLevel
+         * @property {boolean|null} [introShown] PlayerContents introShown
          */
 
         /**
@@ -4216,6 +2482,14 @@ export const hbonline = $root.hbonline = (() => {
         PlayerContents.prototype.adminLevel = 0;
 
         /**
+         * PlayerContents introShown.
+         * @member {boolean} introShown
+         * @memberof hbonline.PlayerContents
+         * @instance
+         */
+        PlayerContents.prototype.introShown = false;
+
+        /**
          * Creates a new PlayerContents instance using the specified properties.
          * @function create
          * @memberof hbonline.PlayerContents
@@ -4293,20 +2567,9 @@ export const hbonline = $root.hbonline = (() => {
                 writer.uint32(/* id 26, wireType 0 =*/208).int32(message.hunger);
             if (message.adminLevel != null && Object.hasOwnProperty.call(message, "adminLevel"))
                 writer.uint32(/* id 27, wireType 0 =*/216).int32(message.adminLevel);
+            if (message.introShown != null && Object.hasOwnProperty.call(message, "introShown"))
+                writer.uint32(/* id 28, wireType 0 =*/224).bool(message.introShown);
             return writer;
-        };
-
-        /**
-         * Encodes the specified PlayerContents message, length delimited. Does not implicitly {@link hbonline.PlayerContents.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.PlayerContents
-         * @static
-         * @param {hbonline.IPlayerContents} message PlayerContents message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        PlayerContents.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
         };
 
         /**
@@ -4437,340 +2700,16 @@ export const hbonline = $root.hbonline = (() => {
                         message.adminLevel = reader.int32();
                         break;
                     }
+                case 28: {
+                        message.introShown = reader.bool();
+                        break;
+                    }
                 default:
                     reader.skipType(tag & 7);
                     break;
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a PlayerContents message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.PlayerContents
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.PlayerContents} PlayerContents
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        PlayerContents.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a PlayerContents message.
-         * @function verify
-         * @memberof hbonline.PlayerContents
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        PlayerContents.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.objectId != null && message.hasOwnProperty("objectId"))
-                if (!$util.isInteger(message.objectId))
-                    return "objectId: integer expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.mapName != null && message.hasOwnProperty("mapName"))
-                if (!$util.isString(message.mapName))
-                    return "mapName: string expected";
-            if (message.position != null && message.hasOwnProperty("position")) {
-                let error = $root.hbonline.Vec2.verify(message.position);
-                if (error)
-                    return "position." + error;
-            }
-            if (message.direction != null && message.hasOwnProperty("direction"))
-                if (!$util.isInteger(message.direction))
-                    return "direction: integer expected";
-            if (message.appearance != null && message.hasOwnProperty("appearance")) {
-                let error = $root.hbonline.Appearance.verify(message.appearance);
-                if (error)
-                    return "appearance." + error;
-            }
-            if (message.level != null && message.hasOwnProperty("level"))
-                if (!$util.isInteger(message.level))
-                    return "level: integer expected";
-            if (message.experience != null && message.hasOwnProperty("experience"))
-                if (!$util.isInteger(message.experience) && !(message.experience && $util.isInteger(message.experience.low) && $util.isInteger(message.experience.high)))
-                    return "experience: integer|Long expected";
-            if (message.hp != null && message.hasOwnProperty("hp"))
-                if (!$util.isInteger(message.hp))
-                    return "hp: integer expected";
-            if (message.maxHp != null && message.hasOwnProperty("maxHp"))
-                if (!$util.isInteger(message.maxHp))
-                    return "maxHp: integer expected";
-            if (message.mp != null && message.hasOwnProperty("mp"))
-                if (!$util.isInteger(message.mp))
-                    return "mp: integer expected";
-            if (message.maxMp != null && message.hasOwnProperty("maxMp"))
-                if (!$util.isInteger(message.maxMp))
-                    return "maxMp: integer expected";
-            if (message.sp != null && message.hasOwnProperty("sp"))
-                if (!$util.isInteger(message.sp))
-                    return "sp: integer expected";
-            if (message.maxSp != null && message.hasOwnProperty("maxSp"))
-                if (!$util.isInteger(message.maxSp))
-                    return "maxSp: integer expected";
-            if (message.str != null && message.hasOwnProperty("str"))
-                if (!$util.isInteger(message.str))
-                    return "str: integer expected";
-            if (message.vit != null && message.hasOwnProperty("vit"))
-                if (!$util.isInteger(message.vit))
-                    return "vit: integer expected";
-            if (message.dex != null && message.hasOwnProperty("dex"))
-                if (!$util.isInteger(message.dex))
-                    return "dex: integer expected";
-            if (message.intStat != null && message.hasOwnProperty("intStat"))
-                if (!$util.isInteger(message.intStat))
-                    return "intStat: integer expected";
-            if (message.mag != null && message.hasOwnProperty("mag"))
-                if (!$util.isInteger(message.mag))
-                    return "mag: integer expected";
-            if (message.charisma != null && message.hasOwnProperty("charisma"))
-                if (!$util.isInteger(message.charisma))
-                    return "charisma: integer expected";
-            if (message.luPool != null && message.hasOwnProperty("luPool"))
-                if (!$util.isInteger(message.luPool))
-                    return "luPool: integer expected";
-            if (message.side != null && message.hasOwnProperty("side"))
-                if (!$util.isInteger(message.side))
-                    return "side: integer expected";
-            if (message.gold != null && message.hasOwnProperty("gold"))
-                if (!$util.isInteger(message.gold) && !(message.gold && $util.isInteger(message.gold.low) && $util.isInteger(message.gold.high)))
-                    return "gold: integer|Long expected";
-            if (message.pkCount != null && message.hasOwnProperty("pkCount"))
-                if (!$util.isInteger(message.pkCount))
-                    return "pkCount: integer expected";
-            if (message.ekCount != null && message.hasOwnProperty("ekCount"))
-                if (!$util.isInteger(message.ekCount))
-                    return "ekCount: integer expected";
-            if (message.hunger != null && message.hasOwnProperty("hunger"))
-                if (!$util.isInteger(message.hunger))
-                    return "hunger: integer expected";
-            if (message.adminLevel != null && message.hasOwnProperty("adminLevel"))
-                if (!$util.isInteger(message.adminLevel))
-                    return "adminLevel: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a PlayerContents message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.PlayerContents
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.PlayerContents} PlayerContents
-         */
-        PlayerContents.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.PlayerContents)
-                return object;
-            let message = new $root.hbonline.PlayerContents();
-            if (object.objectId != null)
-                message.objectId = object.objectId | 0;
-            if (object.name != null)
-                message.name = String(object.name);
-            if (object.mapName != null)
-                message.mapName = String(object.mapName);
-            if (object.position != null) {
-                if (typeof object.position !== "object")
-                    throw TypeError(".hbonline.PlayerContents.position: object expected");
-                message.position = $root.hbonline.Vec2.fromObject(object.position);
-            }
-            if (object.direction != null)
-                message.direction = object.direction | 0;
-            if (object.appearance != null) {
-                if (typeof object.appearance !== "object")
-                    throw TypeError(".hbonline.PlayerContents.appearance: object expected");
-                message.appearance = $root.hbonline.Appearance.fromObject(object.appearance);
-            }
-            if (object.level != null)
-                message.level = object.level | 0;
-            if (object.experience != null)
-                if ($util.Long)
-                    (message.experience = $util.Long.fromValue(object.experience)).unsigned = false;
-                else if (typeof object.experience === "string")
-                    message.experience = parseInt(object.experience, 10);
-                else if (typeof object.experience === "number")
-                    message.experience = object.experience;
-                else if (typeof object.experience === "object")
-                    message.experience = new $util.LongBits(object.experience.low >>> 0, object.experience.high >>> 0).toNumber();
-            if (object.hp != null)
-                message.hp = object.hp | 0;
-            if (object.maxHp != null)
-                message.maxHp = object.maxHp | 0;
-            if (object.mp != null)
-                message.mp = object.mp | 0;
-            if (object.maxMp != null)
-                message.maxMp = object.maxMp | 0;
-            if (object.sp != null)
-                message.sp = object.sp | 0;
-            if (object.maxSp != null)
-                message.maxSp = object.maxSp | 0;
-            if (object.str != null)
-                message.str = object.str | 0;
-            if (object.vit != null)
-                message.vit = object.vit | 0;
-            if (object.dex != null)
-                message.dex = object.dex | 0;
-            if (object.intStat != null)
-                message.intStat = object.intStat | 0;
-            if (object.mag != null)
-                message.mag = object.mag | 0;
-            if (object.charisma != null)
-                message.charisma = object.charisma | 0;
-            if (object.luPool != null)
-                message.luPool = object.luPool | 0;
-            if (object.side != null)
-                message.side = object.side | 0;
-            if (object.gold != null)
-                if ($util.Long)
-                    (message.gold = $util.Long.fromValue(object.gold)).unsigned = false;
-                else if (typeof object.gold === "string")
-                    message.gold = parseInt(object.gold, 10);
-                else if (typeof object.gold === "number")
-                    message.gold = object.gold;
-                else if (typeof object.gold === "object")
-                    message.gold = new $util.LongBits(object.gold.low >>> 0, object.gold.high >>> 0).toNumber();
-            if (object.pkCount != null)
-                message.pkCount = object.pkCount | 0;
-            if (object.ekCount != null)
-                message.ekCount = object.ekCount | 0;
-            if (object.hunger != null)
-                message.hunger = object.hunger | 0;
-            if (object.adminLevel != null)
-                message.adminLevel = object.adminLevel | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a PlayerContents message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.PlayerContents
-         * @static
-         * @param {hbonline.PlayerContents} message PlayerContents
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        PlayerContents.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.objectId = 0;
-                object.name = "";
-                object.mapName = "";
-                object.position = null;
-                object.direction = 0;
-                object.appearance = null;
-                object.level = 0;
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
-                    object.experience = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.experience = options.longs === String ? "0" : 0;
-                object.hp = 0;
-                object.maxHp = 0;
-                object.mp = 0;
-                object.maxMp = 0;
-                object.sp = 0;
-                object.maxSp = 0;
-                object.str = 0;
-                object.vit = 0;
-                object.dex = 0;
-                object.intStat = 0;
-                object.mag = 0;
-                object.charisma = 0;
-                object.luPool = 0;
-                object.side = 0;
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
-                    object.gold = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.gold = options.longs === String ? "0" : 0;
-                object.pkCount = 0;
-                object.ekCount = 0;
-                object.hunger = 0;
-                object.adminLevel = 0;
-            }
-            if (message.objectId != null && message.hasOwnProperty("objectId"))
-                object.objectId = message.objectId;
-            if (message.name != null && message.hasOwnProperty("name"))
-                object.name = message.name;
-            if (message.mapName != null && message.hasOwnProperty("mapName"))
-                object.mapName = message.mapName;
-            if (message.position != null && message.hasOwnProperty("position"))
-                object.position = $root.hbonline.Vec2.toObject(message.position, options);
-            if (message.direction != null && message.hasOwnProperty("direction"))
-                object.direction = message.direction;
-            if (message.appearance != null && message.hasOwnProperty("appearance"))
-                object.appearance = $root.hbonline.Appearance.toObject(message.appearance, options);
-            if (message.level != null && message.hasOwnProperty("level"))
-                object.level = message.level;
-            if (message.experience != null && message.hasOwnProperty("experience"))
-                if (typeof message.experience === "number")
-                    object.experience = options.longs === String ? String(message.experience) : message.experience;
-                else
-                    object.experience = options.longs === String ? $util.Long.prototype.toString.call(message.experience) : options.longs === Number ? new $util.LongBits(message.experience.low >>> 0, message.experience.high >>> 0).toNumber() : message.experience;
-            if (message.hp != null && message.hasOwnProperty("hp"))
-                object.hp = message.hp;
-            if (message.maxHp != null && message.hasOwnProperty("maxHp"))
-                object.maxHp = message.maxHp;
-            if (message.mp != null && message.hasOwnProperty("mp"))
-                object.mp = message.mp;
-            if (message.maxMp != null && message.hasOwnProperty("maxMp"))
-                object.maxMp = message.maxMp;
-            if (message.sp != null && message.hasOwnProperty("sp"))
-                object.sp = message.sp;
-            if (message.maxSp != null && message.hasOwnProperty("maxSp"))
-                object.maxSp = message.maxSp;
-            if (message.str != null && message.hasOwnProperty("str"))
-                object.str = message.str;
-            if (message.vit != null && message.hasOwnProperty("vit"))
-                object.vit = message.vit;
-            if (message.dex != null && message.hasOwnProperty("dex"))
-                object.dex = message.dex;
-            if (message.intStat != null && message.hasOwnProperty("intStat"))
-                object.intStat = message.intStat;
-            if (message.mag != null && message.hasOwnProperty("mag"))
-                object.mag = message.mag;
-            if (message.charisma != null && message.hasOwnProperty("charisma"))
-                object.charisma = message.charisma;
-            if (message.luPool != null && message.hasOwnProperty("luPool"))
-                object.luPool = message.luPool;
-            if (message.side != null && message.hasOwnProperty("side"))
-                object.side = message.side;
-            if (message.gold != null && message.hasOwnProperty("gold"))
-                if (typeof message.gold === "number")
-                    object.gold = options.longs === String ? String(message.gold) : message.gold;
-                else
-                    object.gold = options.longs === String ? $util.Long.prototype.toString.call(message.gold) : options.longs === Number ? new $util.LongBits(message.gold.low >>> 0, message.gold.high >>> 0).toNumber() : message.gold;
-            if (message.pkCount != null && message.hasOwnProperty("pkCount"))
-                object.pkCount = message.pkCount;
-            if (message.ekCount != null && message.hasOwnProperty("ekCount"))
-                object.ekCount = message.ekCount;
-            if (message.hunger != null && message.hasOwnProperty("hunger"))
-                object.hunger = message.hunger;
-            if (message.adminLevel != null && message.hasOwnProperty("adminLevel"))
-                object.adminLevel = message.adminLevel;
-            return object;
-        };
-
-        /**
-         * Converts this PlayerContents to JSON.
-         * @function toJSON
-         * @memberof hbonline.PlayerContents
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        PlayerContents.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -4886,19 +2825,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified MapInfo message, length delimited. Does not implicitly {@link hbonline.MapInfo.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.MapInfo
-         * @static
-         * @param {hbonline.IMapInfo} message MapInfo message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        MapInfo.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a MapInfo message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.MapInfo
@@ -4940,121 +2866,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a MapInfo message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.MapInfo
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.MapInfo} MapInfo
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        MapInfo.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a MapInfo message.
-         * @function verify
-         * @memberof hbonline.MapInfo
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        MapInfo.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.width != null && message.hasOwnProperty("width"))
-                if (!$util.isInteger(message.width))
-                    return "width: integer expected";
-            if (message.height != null && message.hasOwnProperty("height"))
-                if (!$util.isInteger(message.height))
-                    return "height: integer expected";
-            if (message.collisionGrid != null && message.hasOwnProperty("collisionGrid"))
-                if (!(message.collisionGrid && typeof message.collisionGrid.length === "number" || $util.isString(message.collisionGrid)))
-                    return "collisionGrid: buffer expected";
-            return null;
-        };
-
-        /**
-         * Creates a MapInfo message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.MapInfo
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.MapInfo} MapInfo
-         */
-        MapInfo.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.MapInfo)
-                return object;
-            let message = new $root.hbonline.MapInfo();
-            if (object.name != null)
-                message.name = String(object.name);
-            if (object.width != null)
-                message.width = object.width | 0;
-            if (object.height != null)
-                message.height = object.height | 0;
-            if (object.collisionGrid != null)
-                if (typeof object.collisionGrid === "string")
-                    $util.base64.decode(object.collisionGrid, message.collisionGrid = $util.newBuffer($util.base64.length(object.collisionGrid)), 0);
-                else if (object.collisionGrid.length >= 0)
-                    message.collisionGrid = object.collisionGrid;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a MapInfo message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.MapInfo
-         * @static
-         * @param {hbonline.MapInfo} message MapInfo
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        MapInfo.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.name = "";
-                object.width = 0;
-                object.height = 0;
-                if (options.bytes === String)
-                    object.collisionGrid = "";
-                else {
-                    object.collisionGrid = [];
-                    if (options.bytes !== Array)
-                        object.collisionGrid = $util.newBuffer(object.collisionGrid);
-                }
-            }
-            if (message.name != null && message.hasOwnProperty("name"))
-                object.name = message.name;
-            if (message.width != null && message.hasOwnProperty("width"))
-                object.width = message.width;
-            if (message.height != null && message.hasOwnProperty("height"))
-                object.height = message.height;
-            if (message.collisionGrid != null && message.hasOwnProperty("collisionGrid"))
-                object.collisionGrid = options.bytes === String ? $util.base64.encode(message.collisionGrid, 0, message.collisionGrid.length) : options.bytes === Array ? Array.prototype.slice.call(message.collisionGrid) : message.collisionGrid;
-            return object;
-        };
-
-        /**
-         * Converts this MapInfo to JSON.
-         * @function toJSON
-         * @memberof hbonline.MapInfo
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        MapInfo.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -5181,19 +2992,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified MotionRequest message, length delimited. Does not implicitly {@link hbonline.MotionRequest.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.MotionRequest
-         * @static
-         * @param {hbonline.IMotionRequest} message MotionRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        MotionRequest.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a MotionRequest message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.MotionRequest
@@ -5239,125 +3037,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a MotionRequest message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.MotionRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.MotionRequest} MotionRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        MotionRequest.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a MotionRequest message.
-         * @function verify
-         * @memberof hbonline.MotionRequest
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        MotionRequest.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.direction != null && message.hasOwnProperty("direction"))
-                if (!$util.isInteger(message.direction))
-                    return "direction: integer expected";
-            if (message.action != null && message.hasOwnProperty("action"))
-                if (!$util.isInteger(message.action))
-                    return "action: integer expected";
-            if (message.position != null && message.hasOwnProperty("position")) {
-                let error = $root.hbonline.Vec2.verify(message.position);
-                if (error)
-                    return "position." + error;
-            }
-            if (message.targetId != null && message.hasOwnProperty("targetId"))
-                if (!$util.isInteger(message.targetId))
-                    return "targetId: integer expected";
-            if (message.spellId != null && message.hasOwnProperty("spellId"))
-                if (!$util.isInteger(message.spellId))
-                    return "spellId: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a MotionRequest message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.MotionRequest
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.MotionRequest} MotionRequest
-         */
-        MotionRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.MotionRequest)
-                return object;
-            let message = new $root.hbonline.MotionRequest();
-            if (object.direction != null)
-                message.direction = object.direction | 0;
-            if (object.action != null)
-                message.action = object.action | 0;
-            if (object.position != null) {
-                if (typeof object.position !== "object")
-                    throw TypeError(".hbonline.MotionRequest.position: object expected");
-                message.position = $root.hbonline.Vec2.fromObject(object.position);
-            }
-            if (object.targetId != null)
-                message.targetId = object.targetId | 0;
-            if (object.spellId != null)
-                message.spellId = object.spellId | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a MotionRequest message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.MotionRequest
-         * @static
-         * @param {hbonline.MotionRequest} message MotionRequest
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        MotionRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.direction = 0;
-                object.action = 0;
-                object.position = null;
-                object.targetId = 0;
-                object.spellId = 0;
-            }
-            if (message.direction != null && message.hasOwnProperty("direction"))
-                object.direction = message.direction;
-            if (message.action != null && message.hasOwnProperty("action"))
-                object.action = message.action;
-            if (message.position != null && message.hasOwnProperty("position"))
-                object.position = $root.hbonline.Vec2.toObject(message.position, options);
-            if (message.targetId != null && message.hasOwnProperty("targetId"))
-                object.targetId = message.targetId;
-            if (message.spellId != null && message.hasOwnProperty("spellId"))
-                object.spellId = message.spellId;
-            return object;
-        };
-
-        /**
-         * Converts this MotionRequest to JSON.
-         * @function toJSON
-         * @memberof hbonline.MotionRequest
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        MotionRequest.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -5539,19 +3218,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified MotionEvent message, length delimited. Does not implicitly {@link hbonline.MotionEvent.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.MotionEvent
-         * @static
-         * @param {hbonline.IMotionEvent} message MotionEvent message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        MotionEvent.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a MotionEvent message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.MotionEvent
@@ -5617,175 +3283,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a MotionEvent message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.MotionEvent
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.MotionEvent} MotionEvent
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        MotionEvent.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a MotionEvent message.
-         * @function verify
-         * @memberof hbonline.MotionEvent
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        MotionEvent.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.objectId != null && message.hasOwnProperty("objectId"))
-                if (!$util.isInteger(message.objectId))
-                    return "objectId: integer expected";
-            if (message.ownerType != null && message.hasOwnProperty("ownerType"))
-                if (!$util.isInteger(message.ownerType))
-                    return "ownerType: integer expected";
-            if (message.action != null && message.hasOwnProperty("action"))
-                if (!$util.isInteger(message.action))
-                    return "action: integer expected";
-            if (message.direction != null && message.hasOwnProperty("direction"))
-                if (!$util.isInteger(message.direction))
-                    return "direction: integer expected";
-            if (message.position != null && message.hasOwnProperty("position")) {
-                let error = $root.hbonline.Vec2.verify(message.position);
-                if (error)
-                    return "position." + error;
-            }
-            if (message.destination != null && message.hasOwnProperty("destination")) {
-                let error = $root.hbonline.Vec2.verify(message.destination);
-                if (error)
-                    return "destination." + error;
-            }
-            if (message.speed != null && message.hasOwnProperty("speed"))
-                if (!$util.isInteger(message.speed))
-                    return "speed: integer expected";
-            if (message.appearance != null && message.hasOwnProperty("appearance")) {
-                let error = $root.hbonline.Appearance.verify(message.appearance);
-                if (error)
-                    return "appearance." + error;
-            }
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.status != null && message.hasOwnProperty("status"))
-                if (!$util.isInteger(message.status))
-                    return "status: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a MotionEvent message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.MotionEvent
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.MotionEvent} MotionEvent
-         */
-        MotionEvent.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.MotionEvent)
-                return object;
-            let message = new $root.hbonline.MotionEvent();
-            if (object.objectId != null)
-                message.objectId = object.objectId | 0;
-            if (object.ownerType != null)
-                message.ownerType = object.ownerType | 0;
-            if (object.action != null)
-                message.action = object.action | 0;
-            if (object.direction != null)
-                message.direction = object.direction | 0;
-            if (object.position != null) {
-                if (typeof object.position !== "object")
-                    throw TypeError(".hbonline.MotionEvent.position: object expected");
-                message.position = $root.hbonline.Vec2.fromObject(object.position);
-            }
-            if (object.destination != null) {
-                if (typeof object.destination !== "object")
-                    throw TypeError(".hbonline.MotionEvent.destination: object expected");
-                message.destination = $root.hbonline.Vec2.fromObject(object.destination);
-            }
-            if (object.speed != null)
-                message.speed = object.speed | 0;
-            if (object.appearance != null) {
-                if (typeof object.appearance !== "object")
-                    throw TypeError(".hbonline.MotionEvent.appearance: object expected");
-                message.appearance = $root.hbonline.Appearance.fromObject(object.appearance);
-            }
-            if (object.name != null)
-                message.name = String(object.name);
-            if (object.status != null)
-                message.status = object.status | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a MotionEvent message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.MotionEvent
-         * @static
-         * @param {hbonline.MotionEvent} message MotionEvent
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        MotionEvent.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.objectId = 0;
-                object.ownerType = 0;
-                object.action = 0;
-                object.direction = 0;
-                object.position = null;
-                object.destination = null;
-                object.speed = 0;
-                object.appearance = null;
-                object.name = "";
-                object.status = 0;
-            }
-            if (message.objectId != null && message.hasOwnProperty("objectId"))
-                object.objectId = message.objectId;
-            if (message.ownerType != null && message.hasOwnProperty("ownerType"))
-                object.ownerType = message.ownerType;
-            if (message.action != null && message.hasOwnProperty("action"))
-                object.action = message.action;
-            if (message.direction != null && message.hasOwnProperty("direction"))
-                object.direction = message.direction;
-            if (message.position != null && message.hasOwnProperty("position"))
-                object.position = $root.hbonline.Vec2.toObject(message.position, options);
-            if (message.destination != null && message.hasOwnProperty("destination"))
-                object.destination = $root.hbonline.Vec2.toObject(message.destination, options);
-            if (message.speed != null && message.hasOwnProperty("speed"))
-                object.speed = message.speed;
-            if (message.appearance != null && message.hasOwnProperty("appearance"))
-                object.appearance = $root.hbonline.Appearance.toObject(message.appearance, options);
-            if (message.name != null && message.hasOwnProperty("name"))
-                object.name = message.name;
-            if (message.status != null && message.hasOwnProperty("status"))
-                object.status = message.status;
-            return object;
-        };
-
-        /**
-         * Converts this MotionEvent to JSON.
-         * @function toJSON
-         * @memberof hbonline.MotionEvent
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        MotionEvent.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -5967,19 +3464,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified PlayerAppear message, length delimited. Does not implicitly {@link hbonline.PlayerAppear.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.PlayerAppear
-         * @static
-         * @param {hbonline.IPlayerAppear} message PlayerAppear message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        PlayerAppear.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a PlayerAppear message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.PlayerAppear
@@ -6045,170 +3529,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a PlayerAppear message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.PlayerAppear
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.PlayerAppear} PlayerAppear
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        PlayerAppear.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a PlayerAppear message.
-         * @function verify
-         * @memberof hbonline.PlayerAppear
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        PlayerAppear.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.objectId != null && message.hasOwnProperty("objectId"))
-                if (!$util.isInteger(message.objectId))
-                    return "objectId: integer expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.position != null && message.hasOwnProperty("position")) {
-                let error = $root.hbonline.Vec2.verify(message.position);
-                if (error)
-                    return "position." + error;
-            }
-            if (message.direction != null && message.hasOwnProperty("direction"))
-                if (!$util.isInteger(message.direction))
-                    return "direction: integer expected";
-            if (message.appearance != null && message.hasOwnProperty("appearance")) {
-                let error = $root.hbonline.Appearance.verify(message.appearance);
-                if (error)
-                    return "appearance." + error;
-            }
-            if (message.action != null && message.hasOwnProperty("action"))
-                if (!$util.isInteger(message.action))
-                    return "action: integer expected";
-            if (message.level != null && message.hasOwnProperty("level"))
-                if (!$util.isInteger(message.level))
-                    return "level: integer expected";
-            if (message.side != null && message.hasOwnProperty("side"))
-                if (!$util.isInteger(message.side))
-                    return "side: integer expected";
-            if (message.status != null && message.hasOwnProperty("status"))
-                if (!$util.isInteger(message.status))
-                    return "status: integer expected";
-            if (message.pkCount != null && message.hasOwnProperty("pkCount"))
-                if (!$util.isInteger(message.pkCount))
-                    return "pkCount: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a PlayerAppear message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.PlayerAppear
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.PlayerAppear} PlayerAppear
-         */
-        PlayerAppear.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.PlayerAppear)
-                return object;
-            let message = new $root.hbonline.PlayerAppear();
-            if (object.objectId != null)
-                message.objectId = object.objectId | 0;
-            if (object.name != null)
-                message.name = String(object.name);
-            if (object.position != null) {
-                if (typeof object.position !== "object")
-                    throw TypeError(".hbonline.PlayerAppear.position: object expected");
-                message.position = $root.hbonline.Vec2.fromObject(object.position);
-            }
-            if (object.direction != null)
-                message.direction = object.direction | 0;
-            if (object.appearance != null) {
-                if (typeof object.appearance !== "object")
-                    throw TypeError(".hbonline.PlayerAppear.appearance: object expected");
-                message.appearance = $root.hbonline.Appearance.fromObject(object.appearance);
-            }
-            if (object.action != null)
-                message.action = object.action | 0;
-            if (object.level != null)
-                message.level = object.level | 0;
-            if (object.side != null)
-                message.side = object.side | 0;
-            if (object.status != null)
-                message.status = object.status | 0;
-            if (object.pkCount != null)
-                message.pkCount = object.pkCount | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a PlayerAppear message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.PlayerAppear
-         * @static
-         * @param {hbonline.PlayerAppear} message PlayerAppear
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        PlayerAppear.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.objectId = 0;
-                object.name = "";
-                object.position = null;
-                object.direction = 0;
-                object.appearance = null;
-                object.action = 0;
-                object.level = 0;
-                object.side = 0;
-                object.status = 0;
-                object.pkCount = 0;
-            }
-            if (message.objectId != null && message.hasOwnProperty("objectId"))
-                object.objectId = message.objectId;
-            if (message.name != null && message.hasOwnProperty("name"))
-                object.name = message.name;
-            if (message.position != null && message.hasOwnProperty("position"))
-                object.position = $root.hbonline.Vec2.toObject(message.position, options);
-            if (message.direction != null && message.hasOwnProperty("direction"))
-                object.direction = message.direction;
-            if (message.appearance != null && message.hasOwnProperty("appearance"))
-                object.appearance = $root.hbonline.Appearance.toObject(message.appearance, options);
-            if (message.action != null && message.hasOwnProperty("action"))
-                object.action = message.action;
-            if (message.level != null && message.hasOwnProperty("level"))
-                object.level = message.level;
-            if (message.side != null && message.hasOwnProperty("side"))
-                object.side = message.side;
-            if (message.status != null && message.hasOwnProperty("status"))
-                object.status = message.status;
-            if (message.pkCount != null && message.hasOwnProperty("pkCount"))
-                object.pkCount = message.pkCount;
-            return object;
-        };
-
-        /**
-         * Converts this PlayerAppear to JSON.
-         * @function toJSON
-         * @memberof hbonline.PlayerAppear
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        PlayerAppear.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -6291,19 +3611,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified PlayerDisappear message, length delimited. Does not implicitly {@link hbonline.PlayerDisappear.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.PlayerDisappear
-         * @static
-         * @param {hbonline.IPlayerDisappear} message PlayerDisappear message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        PlayerDisappear.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a PlayerDisappear message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.PlayerDisappear
@@ -6333,87 +3640,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a PlayerDisappear message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.PlayerDisappear
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.PlayerDisappear} PlayerDisappear
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        PlayerDisappear.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a PlayerDisappear message.
-         * @function verify
-         * @memberof hbonline.PlayerDisappear
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        PlayerDisappear.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.objectId != null && message.hasOwnProperty("objectId"))
-                if (!$util.isInteger(message.objectId))
-                    return "objectId: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a PlayerDisappear message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.PlayerDisappear
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.PlayerDisappear} PlayerDisappear
-         */
-        PlayerDisappear.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.PlayerDisappear)
-                return object;
-            let message = new $root.hbonline.PlayerDisappear();
-            if (object.objectId != null)
-                message.objectId = object.objectId | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a PlayerDisappear message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.PlayerDisappear
-         * @static
-         * @param {hbonline.PlayerDisappear} message PlayerDisappear
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        PlayerDisappear.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults)
-                object.objectId = 0;
-            if (message.objectId != null && message.hasOwnProperty("objectId"))
-                object.objectId = message.objectId;
-            return object;
-        };
-
-        /**
-         * Converts this PlayerDisappear to JSON.
-         * @function toJSON
-         * @memberof hbonline.PlayerDisappear
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        PlayerDisappear.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -6562,19 +3788,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified NpcAppear message, length delimited. Does not implicitly {@link hbonline.NpcAppear.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.NpcAppear
-         * @static
-         * @param {hbonline.INpcAppear} message NpcAppear message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        NpcAppear.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a NpcAppear message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.NpcAppear
@@ -6628,141 +3841,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a NpcAppear message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.NpcAppear
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.NpcAppear} NpcAppear
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        NpcAppear.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a NpcAppear message.
-         * @function verify
-         * @memberof hbonline.NpcAppear
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        NpcAppear.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.objectId != null && message.hasOwnProperty("objectId"))
-                if (!$util.isInteger(message.objectId))
-                    return "objectId: integer expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.npcType != null && message.hasOwnProperty("npcType"))
-                if (!$util.isInteger(message.npcType))
-                    return "npcType: integer expected";
-            if (message.position != null && message.hasOwnProperty("position")) {
-                let error = $root.hbonline.Vec2.verify(message.position);
-                if (error)
-                    return "position." + error;
-            }
-            if (message.direction != null && message.hasOwnProperty("direction"))
-                if (!$util.isInteger(message.direction))
-                    return "direction: integer expected";
-            if (message.action != null && message.hasOwnProperty("action"))
-                if (!$util.isInteger(message.action))
-                    return "action: integer expected";
-            if (message.status != null && message.hasOwnProperty("status"))
-                if (!$util.isInteger(message.status))
-                    return "status: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a NpcAppear message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.NpcAppear
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.NpcAppear} NpcAppear
-         */
-        NpcAppear.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.NpcAppear)
-                return object;
-            let message = new $root.hbonline.NpcAppear();
-            if (object.objectId != null)
-                message.objectId = object.objectId | 0;
-            if (object.name != null)
-                message.name = String(object.name);
-            if (object.npcType != null)
-                message.npcType = object.npcType | 0;
-            if (object.position != null) {
-                if (typeof object.position !== "object")
-                    throw TypeError(".hbonline.NpcAppear.position: object expected");
-                message.position = $root.hbonline.Vec2.fromObject(object.position);
-            }
-            if (object.direction != null)
-                message.direction = object.direction | 0;
-            if (object.action != null)
-                message.action = object.action | 0;
-            if (object.status != null)
-                message.status = object.status | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a NpcAppear message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.NpcAppear
-         * @static
-         * @param {hbonline.NpcAppear} message NpcAppear
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        NpcAppear.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.objectId = 0;
-                object.name = "";
-                object.npcType = 0;
-                object.position = null;
-                object.direction = 0;
-                object.action = 0;
-                object.status = 0;
-            }
-            if (message.objectId != null && message.hasOwnProperty("objectId"))
-                object.objectId = message.objectId;
-            if (message.name != null && message.hasOwnProperty("name"))
-                object.name = message.name;
-            if (message.npcType != null && message.hasOwnProperty("npcType"))
-                object.npcType = message.npcType;
-            if (message.position != null && message.hasOwnProperty("position"))
-                object.position = $root.hbonline.Vec2.toObject(message.position, options);
-            if (message.direction != null && message.hasOwnProperty("direction"))
-                object.direction = message.direction;
-            if (message.action != null && message.hasOwnProperty("action"))
-                object.action = message.action;
-            if (message.status != null && message.hasOwnProperty("status"))
-                object.status = message.status;
-            return object;
-        };
-
-        /**
-         * Converts this NpcAppear to JSON.
-         * @function toJSON
-         * @memberof hbonline.NpcAppear
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        NpcAppear.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -6845,19 +3923,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified NpcDisappear message, length delimited. Does not implicitly {@link hbonline.NpcDisappear.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.NpcDisappear
-         * @static
-         * @param {hbonline.INpcDisappear} message NpcDisappear message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        NpcDisappear.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a NpcDisappear message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.NpcDisappear
@@ -6887,87 +3952,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a NpcDisappear message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.NpcDisappear
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.NpcDisappear} NpcDisappear
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        NpcDisappear.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a NpcDisappear message.
-         * @function verify
-         * @memberof hbonline.NpcDisappear
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        NpcDisappear.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.objectId != null && message.hasOwnProperty("objectId"))
-                if (!$util.isInteger(message.objectId))
-                    return "objectId: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a NpcDisappear message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.NpcDisappear
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.NpcDisappear} NpcDisappear
-         */
-        NpcDisappear.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.NpcDisappear)
-                return object;
-            let message = new $root.hbonline.NpcDisappear();
-            if (object.objectId != null)
-                message.objectId = object.objectId | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a NpcDisappear message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.NpcDisappear
-         * @static
-         * @param {hbonline.NpcDisappear} message NpcDisappear
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        NpcDisappear.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults)
-                object.objectId = 0;
-            if (message.objectId != null && message.hasOwnProperty("objectId"))
-                object.objectId = message.objectId;
-            return object;
-        };
-
-        /**
-         * Converts this NpcDisappear to JSON.
-         * @function toJSON
-         * @memberof hbonline.NpcDisappear
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        NpcDisappear.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -7127,19 +4111,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified NpcMotion message, length delimited. Does not implicitly {@link hbonline.NpcMotion.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.NpcMotion
-         * @static
-         * @param {hbonline.INpcMotion} message NpcMotion message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        NpcMotion.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a NpcMotion message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.NpcMotion
@@ -7197,154 +4168,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a NpcMotion message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.NpcMotion
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.NpcMotion} NpcMotion
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        NpcMotion.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a NpcMotion message.
-         * @function verify
-         * @memberof hbonline.NpcMotion
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        NpcMotion.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.objectId != null && message.hasOwnProperty("objectId"))
-                if (!$util.isInteger(message.objectId))
-                    return "objectId: integer expected";
-            if (message.action != null && message.hasOwnProperty("action"))
-                if (!$util.isInteger(message.action))
-                    return "action: integer expected";
-            if (message.direction != null && message.hasOwnProperty("direction"))
-                if (!$util.isInteger(message.direction))
-                    return "direction: integer expected";
-            if (message.position != null && message.hasOwnProperty("position")) {
-                let error = $root.hbonline.Vec2.verify(message.position);
-                if (error)
-                    return "position." + error;
-            }
-            if (message.destination != null && message.hasOwnProperty("destination")) {
-                let error = $root.hbonline.Vec2.verify(message.destination);
-                if (error)
-                    return "destination." + error;
-            }
-            if (message.speed != null && message.hasOwnProperty("speed"))
-                if (!$util.isInteger(message.speed))
-                    return "speed: integer expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.npcType != null && message.hasOwnProperty("npcType"))
-                if (!$util.isInteger(message.npcType))
-                    return "npcType: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a NpcMotion message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.NpcMotion
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.NpcMotion} NpcMotion
-         */
-        NpcMotion.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.NpcMotion)
-                return object;
-            let message = new $root.hbonline.NpcMotion();
-            if (object.objectId != null)
-                message.objectId = object.objectId | 0;
-            if (object.action != null)
-                message.action = object.action | 0;
-            if (object.direction != null)
-                message.direction = object.direction | 0;
-            if (object.position != null) {
-                if (typeof object.position !== "object")
-                    throw TypeError(".hbonline.NpcMotion.position: object expected");
-                message.position = $root.hbonline.Vec2.fromObject(object.position);
-            }
-            if (object.destination != null) {
-                if (typeof object.destination !== "object")
-                    throw TypeError(".hbonline.NpcMotion.destination: object expected");
-                message.destination = $root.hbonline.Vec2.fromObject(object.destination);
-            }
-            if (object.speed != null)
-                message.speed = object.speed | 0;
-            if (object.name != null)
-                message.name = String(object.name);
-            if (object.npcType != null)
-                message.npcType = object.npcType | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a NpcMotion message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.NpcMotion
-         * @static
-         * @param {hbonline.NpcMotion} message NpcMotion
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        NpcMotion.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.objectId = 0;
-                object.action = 0;
-                object.direction = 0;
-                object.position = null;
-                object.destination = null;
-                object.speed = 0;
-                object.name = "";
-                object.npcType = 0;
-            }
-            if (message.objectId != null && message.hasOwnProperty("objectId"))
-                object.objectId = message.objectId;
-            if (message.action != null && message.hasOwnProperty("action"))
-                object.action = message.action;
-            if (message.direction != null && message.hasOwnProperty("direction"))
-                object.direction = message.direction;
-            if (message.position != null && message.hasOwnProperty("position"))
-                object.position = $root.hbonline.Vec2.toObject(message.position, options);
-            if (message.destination != null && message.hasOwnProperty("destination"))
-                object.destination = $root.hbonline.Vec2.toObject(message.destination, options);
-            if (message.speed != null && message.hasOwnProperty("speed"))
-                object.speed = message.speed;
-            if (message.name != null && message.hasOwnProperty("name"))
-                object.name = message.name;
-            if (message.npcType != null && message.hasOwnProperty("npcType"))
-                object.npcType = message.npcType;
-            return object;
-        };
-
-        /**
-         * Converts this NpcMotion to JSON.
-         * @function toJSON
-         * @memberof hbonline.NpcMotion
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        NpcMotion.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -7438,19 +4261,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified Notification message, length delimited. Does not implicitly {@link hbonline.Notification.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.Notification
-         * @static
-         * @param {hbonline.INotification} message Notification message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        Notification.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a Notification message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.Notification
@@ -7484,96 +4294,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a Notification message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.Notification
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.Notification} Notification
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        Notification.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a Notification message.
-         * @function verify
-         * @memberof hbonline.Notification
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        Notification.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.message != null && message.hasOwnProperty("message"))
-                if (!$util.isString(message.message))
-                    return "message: string expected";
-            if (message.type != null && message.hasOwnProperty("type"))
-                if (!$util.isInteger(message.type))
-                    return "type: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a Notification message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.Notification
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.Notification} Notification
-         */
-        Notification.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.Notification)
-                return object;
-            let message = new $root.hbonline.Notification();
-            if (object.message != null)
-                message.message = String(object.message);
-            if (object.type != null)
-                message.type = object.type | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a Notification message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.Notification
-         * @static
-         * @param {hbonline.Notification} message Notification
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        Notification.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.message = "";
-                object.type = 0;
-            }
-            if (message.message != null && message.hasOwnProperty("message"))
-                object.message = message.message;
-            if (message.type != null && message.hasOwnProperty("type"))
-                object.type = message.type;
-            return object;
-        };
-
-        /**
-         * Converts this Notification to JSON.
-         * @function toJSON
-         * @memberof hbonline.Notification
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        Notification.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -7678,19 +4398,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified MapChangeResponse message, length delimited. Does not implicitly {@link hbonline.MapChangeResponse.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.MapChangeResponse
-         * @static
-         * @param {hbonline.IMapChangeResponse} message MapChangeResponse message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        MapChangeResponse.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a MapChangeResponse message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.MapChangeResponse
@@ -7728,109 +4435,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a MapChangeResponse message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.MapChangeResponse
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.MapChangeResponse} MapChangeResponse
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        MapChangeResponse.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a MapChangeResponse message.
-         * @function verify
-         * @memberof hbonline.MapChangeResponse
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        MapChangeResponse.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.mapName != null && message.hasOwnProperty("mapName"))
-                if (!$util.isString(message.mapName))
-                    return "mapName: string expected";
-            if (message.position != null && message.hasOwnProperty("position")) {
-                let error = $root.hbonline.Vec2.verify(message.position);
-                if (error)
-                    return "position." + error;
-            }
-            if (message.direction != null && message.hasOwnProperty("direction"))
-                if (!$util.isInteger(message.direction))
-                    return "direction: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a MapChangeResponse message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.MapChangeResponse
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.MapChangeResponse} MapChangeResponse
-         */
-        MapChangeResponse.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.MapChangeResponse)
-                return object;
-            let message = new $root.hbonline.MapChangeResponse();
-            if (object.mapName != null)
-                message.mapName = String(object.mapName);
-            if (object.position != null) {
-                if (typeof object.position !== "object")
-                    throw TypeError(".hbonline.MapChangeResponse.position: object expected");
-                message.position = $root.hbonline.Vec2.fromObject(object.position);
-            }
-            if (object.direction != null)
-                message.direction = object.direction | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a MapChangeResponse message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.MapChangeResponse
-         * @static
-         * @param {hbonline.MapChangeResponse} message MapChangeResponse
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        MapChangeResponse.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.mapName = "";
-                object.position = null;
-                object.direction = 0;
-            }
-            if (message.mapName != null && message.hasOwnProperty("mapName"))
-                object.mapName = message.mapName;
-            if (message.position != null && message.hasOwnProperty("position"))
-                object.position = $root.hbonline.Vec2.toObject(message.position, options);
-            if (message.direction != null && message.hasOwnProperty("direction"))
-                object.direction = message.direction;
-            return object;
-        };
-
-        /**
-         * Converts this MapChangeResponse to JSON.
-         * @function toJSON
-         * @memberof hbonline.MapChangeResponse
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        MapChangeResponse.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -7990,19 +4594,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified DamageEvent message, length delimited. Does not implicitly {@link hbonline.DamageEvent.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.DamageEvent
-         * @static
-         * @param {hbonline.IDamageEvent} message DamageEvent message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        DamageEvent.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a DamageEvent message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.DamageEvent
@@ -8060,144 +4651,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a DamageEvent message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.DamageEvent
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.DamageEvent} DamageEvent
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        DamageEvent.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a DamageEvent message.
-         * @function verify
-         * @memberof hbonline.DamageEvent
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        DamageEvent.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.attackerId != null && message.hasOwnProperty("attackerId"))
-                if (!$util.isInteger(message.attackerId))
-                    return "attackerId: integer expected";
-            if (message.targetId != null && message.hasOwnProperty("targetId"))
-                if (!$util.isInteger(message.targetId))
-                    return "targetId: integer expected";
-            if (message.targetType != null && message.hasOwnProperty("targetType"))
-                if (!$util.isInteger(message.targetType))
-                    return "targetType: integer expected";
-            if (message.damage != null && message.hasOwnProperty("damage"))
-                if (!$util.isInteger(message.damage))
-                    return "damage: integer expected";
-            if (message.critical != null && message.hasOwnProperty("critical"))
-                if (typeof message.critical !== "boolean")
-                    return "critical: boolean expected";
-            if (message.miss != null && message.hasOwnProperty("miss"))
-                if (typeof message.miss !== "boolean")
-                    return "miss: boolean expected";
-            if (message.targetHp != null && message.hasOwnProperty("targetHp"))
-                if (!$util.isInteger(message.targetHp))
-                    return "targetHp: integer expected";
-            if (message.targetMaxHp != null && message.hasOwnProperty("targetMaxHp"))
-                if (!$util.isInteger(message.targetMaxHp))
-                    return "targetMaxHp: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a DamageEvent message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.DamageEvent
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.DamageEvent} DamageEvent
-         */
-        DamageEvent.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.DamageEvent)
-                return object;
-            let message = new $root.hbonline.DamageEvent();
-            if (object.attackerId != null)
-                message.attackerId = object.attackerId | 0;
-            if (object.targetId != null)
-                message.targetId = object.targetId | 0;
-            if (object.targetType != null)
-                message.targetType = object.targetType | 0;
-            if (object.damage != null)
-                message.damage = object.damage | 0;
-            if (object.critical != null)
-                message.critical = Boolean(object.critical);
-            if (object.miss != null)
-                message.miss = Boolean(object.miss);
-            if (object.targetHp != null)
-                message.targetHp = object.targetHp | 0;
-            if (object.targetMaxHp != null)
-                message.targetMaxHp = object.targetMaxHp | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a DamageEvent message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.DamageEvent
-         * @static
-         * @param {hbonline.DamageEvent} message DamageEvent
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        DamageEvent.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.attackerId = 0;
-                object.targetId = 0;
-                object.targetType = 0;
-                object.damage = 0;
-                object.critical = false;
-                object.miss = false;
-                object.targetHp = 0;
-                object.targetMaxHp = 0;
-            }
-            if (message.attackerId != null && message.hasOwnProperty("attackerId"))
-                object.attackerId = message.attackerId;
-            if (message.targetId != null && message.hasOwnProperty("targetId"))
-                object.targetId = message.targetId;
-            if (message.targetType != null && message.hasOwnProperty("targetType"))
-                object.targetType = message.targetType;
-            if (message.damage != null && message.hasOwnProperty("damage"))
-                object.damage = message.damage;
-            if (message.critical != null && message.hasOwnProperty("critical"))
-                object.critical = message.critical;
-            if (message.miss != null && message.hasOwnProperty("miss"))
-                object.miss = message.miss;
-            if (message.targetHp != null && message.hasOwnProperty("targetHp"))
-                object.targetHp = message.targetHp;
-            if (message.targetMaxHp != null && message.hasOwnProperty("targetMaxHp"))
-                object.targetMaxHp = message.targetMaxHp;
-            return object;
-        };
-
-        /**
-         * Converts this DamageEvent to JSON.
-         * @function toJSON
-         * @memberof hbonline.DamageEvent
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        DamageEvent.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -8445,19 +4898,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified StatUpdate message, length delimited. Does not implicitly {@link hbonline.StatUpdate.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.StatUpdate
-         * @static
-         * @param {hbonline.IStatUpdate} message StatUpdate message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        StatUpdate.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a StatUpdate message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.StatUpdate
@@ -8547,236 +4987,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a StatUpdate message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.StatUpdate
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.StatUpdate} StatUpdate
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        StatUpdate.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a StatUpdate message.
-         * @function verify
-         * @memberof hbonline.StatUpdate
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        StatUpdate.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.hp != null && message.hasOwnProperty("hp"))
-                if (!$util.isInteger(message.hp))
-                    return "hp: integer expected";
-            if (message.maxHp != null && message.hasOwnProperty("maxHp"))
-                if (!$util.isInteger(message.maxHp))
-                    return "maxHp: integer expected";
-            if (message.mp != null && message.hasOwnProperty("mp"))
-                if (!$util.isInteger(message.mp))
-                    return "mp: integer expected";
-            if (message.maxMp != null && message.hasOwnProperty("maxMp"))
-                if (!$util.isInteger(message.maxMp))
-                    return "maxMp: integer expected";
-            if (message.sp != null && message.hasOwnProperty("sp"))
-                if (!$util.isInteger(message.sp))
-                    return "sp: integer expected";
-            if (message.maxSp != null && message.hasOwnProperty("maxSp"))
-                if (!$util.isInteger(message.maxSp))
-                    return "maxSp: integer expected";
-            if (message.experience != null && message.hasOwnProperty("experience"))
-                if (!$util.isInteger(message.experience) && !(message.experience && $util.isInteger(message.experience.low) && $util.isInteger(message.experience.high)))
-                    return "experience: integer|Long expected";
-            if (message.level != null && message.hasOwnProperty("level"))
-                if (!$util.isInteger(message.level))
-                    return "level: integer expected";
-            if (message.luPool != null && message.hasOwnProperty("luPool"))
-                if (!$util.isInteger(message.luPool))
-                    return "luPool: integer expected";
-            if (message.str != null && message.hasOwnProperty("str"))
-                if (!$util.isInteger(message.str))
-                    return "str: integer expected";
-            if (message.vit != null && message.hasOwnProperty("vit"))
-                if (!$util.isInteger(message.vit))
-                    return "vit: integer expected";
-            if (message.dex != null && message.hasOwnProperty("dex"))
-                if (!$util.isInteger(message.dex))
-                    return "dex: integer expected";
-            if (message.intStat != null && message.hasOwnProperty("intStat"))
-                if (!$util.isInteger(message.intStat))
-                    return "intStat: integer expected";
-            if (message.mag != null && message.hasOwnProperty("mag"))
-                if (!$util.isInteger(message.mag))
-                    return "mag: integer expected";
-            if (message.charisma != null && message.hasOwnProperty("charisma"))
-                if (!$util.isInteger(message.charisma))
-                    return "charisma: integer expected";
-            if (message.gold != null && message.hasOwnProperty("gold"))
-                if (!$util.isInteger(message.gold) && !(message.gold && $util.isInteger(message.gold.low) && $util.isInteger(message.gold.high)))
-                    return "gold: integer|Long expected";
-            return null;
-        };
-
-        /**
-         * Creates a StatUpdate message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.StatUpdate
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.StatUpdate} StatUpdate
-         */
-        StatUpdate.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.StatUpdate)
-                return object;
-            let message = new $root.hbonline.StatUpdate();
-            if (object.hp != null)
-                message.hp = object.hp | 0;
-            if (object.maxHp != null)
-                message.maxHp = object.maxHp | 0;
-            if (object.mp != null)
-                message.mp = object.mp | 0;
-            if (object.maxMp != null)
-                message.maxMp = object.maxMp | 0;
-            if (object.sp != null)
-                message.sp = object.sp | 0;
-            if (object.maxSp != null)
-                message.maxSp = object.maxSp | 0;
-            if (object.experience != null)
-                if ($util.Long)
-                    (message.experience = $util.Long.fromValue(object.experience)).unsigned = false;
-                else if (typeof object.experience === "string")
-                    message.experience = parseInt(object.experience, 10);
-                else if (typeof object.experience === "number")
-                    message.experience = object.experience;
-                else if (typeof object.experience === "object")
-                    message.experience = new $util.LongBits(object.experience.low >>> 0, object.experience.high >>> 0).toNumber();
-            if (object.level != null)
-                message.level = object.level | 0;
-            if (object.luPool != null)
-                message.luPool = object.luPool | 0;
-            if (object.str != null)
-                message.str = object.str | 0;
-            if (object.vit != null)
-                message.vit = object.vit | 0;
-            if (object.dex != null)
-                message.dex = object.dex | 0;
-            if (object.intStat != null)
-                message.intStat = object.intStat | 0;
-            if (object.mag != null)
-                message.mag = object.mag | 0;
-            if (object.charisma != null)
-                message.charisma = object.charisma | 0;
-            if (object.gold != null)
-                if ($util.Long)
-                    (message.gold = $util.Long.fromValue(object.gold)).unsigned = false;
-                else if (typeof object.gold === "string")
-                    message.gold = parseInt(object.gold, 10);
-                else if (typeof object.gold === "number")
-                    message.gold = object.gold;
-                else if (typeof object.gold === "object")
-                    message.gold = new $util.LongBits(object.gold.low >>> 0, object.gold.high >>> 0).toNumber();
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a StatUpdate message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.StatUpdate
-         * @static
-         * @param {hbonline.StatUpdate} message StatUpdate
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        StatUpdate.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.hp = 0;
-                object.maxHp = 0;
-                object.mp = 0;
-                object.maxMp = 0;
-                object.sp = 0;
-                object.maxSp = 0;
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
-                    object.experience = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.experience = options.longs === String ? "0" : 0;
-                object.level = 0;
-                object.luPool = 0;
-                object.str = 0;
-                object.vit = 0;
-                object.dex = 0;
-                object.intStat = 0;
-                object.mag = 0;
-                object.charisma = 0;
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
-                    object.gold = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.gold = options.longs === String ? "0" : 0;
-            }
-            if (message.hp != null && message.hasOwnProperty("hp"))
-                object.hp = message.hp;
-            if (message.maxHp != null && message.hasOwnProperty("maxHp"))
-                object.maxHp = message.maxHp;
-            if (message.mp != null && message.hasOwnProperty("mp"))
-                object.mp = message.mp;
-            if (message.maxMp != null && message.hasOwnProperty("maxMp"))
-                object.maxMp = message.maxMp;
-            if (message.sp != null && message.hasOwnProperty("sp"))
-                object.sp = message.sp;
-            if (message.maxSp != null && message.hasOwnProperty("maxSp"))
-                object.maxSp = message.maxSp;
-            if (message.experience != null && message.hasOwnProperty("experience"))
-                if (typeof message.experience === "number")
-                    object.experience = options.longs === String ? String(message.experience) : message.experience;
-                else
-                    object.experience = options.longs === String ? $util.Long.prototype.toString.call(message.experience) : options.longs === Number ? new $util.LongBits(message.experience.low >>> 0, message.experience.high >>> 0).toNumber() : message.experience;
-            if (message.level != null && message.hasOwnProperty("level"))
-                object.level = message.level;
-            if (message.luPool != null && message.hasOwnProperty("luPool"))
-                object.luPool = message.luPool;
-            if (message.str != null && message.hasOwnProperty("str"))
-                object.str = message.str;
-            if (message.vit != null && message.hasOwnProperty("vit"))
-                object.vit = message.vit;
-            if (message.dex != null && message.hasOwnProperty("dex"))
-                object.dex = message.dex;
-            if (message.intStat != null && message.hasOwnProperty("intStat"))
-                object.intStat = message.intStat;
-            if (message.mag != null && message.hasOwnProperty("mag"))
-                object.mag = message.mag;
-            if (message.charisma != null && message.hasOwnProperty("charisma"))
-                object.charisma = message.charisma;
-            if (message.gold != null && message.hasOwnProperty("gold"))
-                if (typeof message.gold === "number")
-                    object.gold = options.longs === String ? String(message.gold) : message.gold;
-                else
-                    object.gold = options.longs === String ? $util.Long.prototype.toString.call(message.gold) : options.longs === Number ? new $util.LongBits(message.gold.low >>> 0, message.gold.high >>> 0).toNumber() : message.gold;
-            return object;
-        };
-
-        /**
-         * Converts this StatUpdate to JSON.
-         * @function toJSON
-         * @memberof hbonline.StatUpdate
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        StatUpdate.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -8903,19 +5113,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified DeathEvent message, length delimited. Does not implicitly {@link hbonline.DeathEvent.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.DeathEvent
-         * @static
-         * @param {hbonline.IDeathEvent} message DeathEvent message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        DeathEvent.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a DeathEvent message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.DeathEvent
@@ -8961,125 +5158,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a DeathEvent message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.DeathEvent
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.DeathEvent} DeathEvent
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        DeathEvent.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a DeathEvent message.
-         * @function verify
-         * @memberof hbonline.DeathEvent
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        DeathEvent.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.objectId != null && message.hasOwnProperty("objectId"))
-                if (!$util.isInteger(message.objectId))
-                    return "objectId: integer expected";
-            if (message.objectType != null && message.hasOwnProperty("objectType"))
-                if (!$util.isInteger(message.objectType))
-                    return "objectType: integer expected";
-            if (message.killerId != null && message.hasOwnProperty("killerId"))
-                if (!$util.isInteger(message.killerId))
-                    return "killerId: integer expected";
-            if (message.killerName != null && message.hasOwnProperty("killerName"))
-                if (!$util.isString(message.killerName))
-                    return "killerName: string expected";
-            if (message.position != null && message.hasOwnProperty("position")) {
-                let error = $root.hbonline.Vec2.verify(message.position);
-                if (error)
-                    return "position." + error;
-            }
-            return null;
-        };
-
-        /**
-         * Creates a DeathEvent message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.DeathEvent
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.DeathEvent} DeathEvent
-         */
-        DeathEvent.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.DeathEvent)
-                return object;
-            let message = new $root.hbonline.DeathEvent();
-            if (object.objectId != null)
-                message.objectId = object.objectId | 0;
-            if (object.objectType != null)
-                message.objectType = object.objectType | 0;
-            if (object.killerId != null)
-                message.killerId = object.killerId | 0;
-            if (object.killerName != null)
-                message.killerName = String(object.killerName);
-            if (object.position != null) {
-                if (typeof object.position !== "object")
-                    throw TypeError(".hbonline.DeathEvent.position: object expected");
-                message.position = $root.hbonline.Vec2.fromObject(object.position);
-            }
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a DeathEvent message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.DeathEvent
-         * @static
-         * @param {hbonline.DeathEvent} message DeathEvent
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        DeathEvent.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.objectId = 0;
-                object.objectType = 0;
-                object.killerId = 0;
-                object.killerName = "";
-                object.position = null;
-            }
-            if (message.objectId != null && message.hasOwnProperty("objectId"))
-                object.objectId = message.objectId;
-            if (message.objectType != null && message.hasOwnProperty("objectType"))
-                object.objectType = message.objectType;
-            if (message.killerId != null && message.hasOwnProperty("killerId"))
-                object.killerId = message.killerId;
-            if (message.killerName != null && message.hasOwnProperty("killerName"))
-                object.killerName = message.killerName;
-            if (message.position != null && message.hasOwnProperty("position"))
-                object.position = $root.hbonline.Vec2.toObject(message.position, options);
-            return object;
-        };
-
-        /**
-         * Converts this DeathEvent to JSON.
-         * @function toJSON
-         * @memberof hbonline.DeathEvent
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        DeathEvent.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -9217,19 +5295,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified RespawnEvent message, length delimited. Does not implicitly {@link hbonline.RespawnEvent.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.RespawnEvent
-         * @static
-         * @param {hbonline.IRespawnEvent} message RespawnEvent message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        RespawnEvent.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a RespawnEvent message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.RespawnEvent
@@ -9279,133 +5344,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a RespawnEvent message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.RespawnEvent
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.RespawnEvent} RespawnEvent
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        RespawnEvent.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a RespawnEvent message.
-         * @function verify
-         * @memberof hbonline.RespawnEvent
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        RespawnEvent.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.position != null && message.hasOwnProperty("position")) {
-                let error = $root.hbonline.Vec2.verify(message.position);
-                if (error)
-                    return "position." + error;
-            }
-            if (message.direction != null && message.hasOwnProperty("direction"))
-                if (!$util.isInteger(message.direction))
-                    return "direction: integer expected";
-            if (message.mapName != null && message.hasOwnProperty("mapName"))
-                if (!$util.isString(message.mapName))
-                    return "mapName: string expected";
-            if (message.hp != null && message.hasOwnProperty("hp"))
-                if (!$util.isInteger(message.hp))
-                    return "hp: integer expected";
-            if (message.mp != null && message.hasOwnProperty("mp"))
-                if (!$util.isInteger(message.mp))
-                    return "mp: integer expected";
-            if (message.sp != null && message.hasOwnProperty("sp"))
-                if (!$util.isInteger(message.sp))
-                    return "sp: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a RespawnEvent message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.RespawnEvent
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.RespawnEvent} RespawnEvent
-         */
-        RespawnEvent.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.RespawnEvent)
-                return object;
-            let message = new $root.hbonline.RespawnEvent();
-            if (object.position != null) {
-                if (typeof object.position !== "object")
-                    throw TypeError(".hbonline.RespawnEvent.position: object expected");
-                message.position = $root.hbonline.Vec2.fromObject(object.position);
-            }
-            if (object.direction != null)
-                message.direction = object.direction | 0;
-            if (object.mapName != null)
-                message.mapName = String(object.mapName);
-            if (object.hp != null)
-                message.hp = object.hp | 0;
-            if (object.mp != null)
-                message.mp = object.mp | 0;
-            if (object.sp != null)
-                message.sp = object.sp | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a RespawnEvent message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.RespawnEvent
-         * @static
-         * @param {hbonline.RespawnEvent} message RespawnEvent
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        RespawnEvent.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.position = null;
-                object.direction = 0;
-                object.mapName = "";
-                object.hp = 0;
-                object.mp = 0;
-                object.sp = 0;
-            }
-            if (message.position != null && message.hasOwnProperty("position"))
-                object.position = $root.hbonline.Vec2.toObject(message.position, options);
-            if (message.direction != null && message.hasOwnProperty("direction"))
-                object.direction = message.direction;
-            if (message.mapName != null && message.hasOwnProperty("mapName"))
-                object.mapName = message.mapName;
-            if (message.hp != null && message.hasOwnProperty("hp"))
-                object.hp = message.hp;
-            if (message.mp != null && message.hasOwnProperty("mp"))
-                object.mp = message.mp;
-            if (message.sp != null && message.hasOwnProperty("sp"))
-                object.sp = message.sp;
-            return object;
-        };
-
-        /**
-         * Converts this RespawnEvent to JSON.
-         * @function toJSON
-         * @memberof hbonline.RespawnEvent
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        RespawnEvent.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -9488,19 +5426,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified LogoutRequest message, length delimited. Does not implicitly {@link hbonline.LogoutRequest.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.LogoutRequest
-         * @static
-         * @param {hbonline.ILogoutRequest} message LogoutRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        LogoutRequest.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a LogoutRequest message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.LogoutRequest
@@ -9530,87 +5455,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a LogoutRequest message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.LogoutRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.LogoutRequest} LogoutRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        LogoutRequest.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a LogoutRequest message.
-         * @function verify
-         * @memberof hbonline.LogoutRequest
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        LogoutRequest.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.cancel != null && message.hasOwnProperty("cancel"))
-                if (typeof message.cancel !== "boolean")
-                    return "cancel: boolean expected";
-            return null;
-        };
-
-        /**
-         * Creates a LogoutRequest message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.LogoutRequest
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.LogoutRequest} LogoutRequest
-         */
-        LogoutRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.LogoutRequest)
-                return object;
-            let message = new $root.hbonline.LogoutRequest();
-            if (object.cancel != null)
-                message.cancel = Boolean(object.cancel);
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a LogoutRequest message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.LogoutRequest
-         * @static
-         * @param {hbonline.LogoutRequest} message LogoutRequest
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        LogoutRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults)
-                object.cancel = false;
-            if (message.cancel != null && message.hasOwnProperty("cancel"))
-                object.cancel = message.cancel;
-            return object;
-        };
-
-        /**
-         * Converts this LogoutRequest to JSON.
-         * @function toJSON
-         * @memberof hbonline.LogoutRequest
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        LogoutRequest.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -9715,19 +5559,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified LogoutResponse message, length delimited. Does not implicitly {@link hbonline.LogoutResponse.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.LogoutResponse
-         * @static
-         * @param {hbonline.ILogoutResponse} message LogoutResponse message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        LogoutResponse.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a LogoutResponse message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.LogoutResponse
@@ -9768,104 +5599,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Decodes a LogoutResponse message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.LogoutResponse
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.LogoutResponse} LogoutResponse
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        LogoutResponse.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a LogoutResponse message.
-         * @function verify
-         * @memberof hbonline.LogoutResponse
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        LogoutResponse.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.secondsRemaining != null && message.hasOwnProperty("secondsRemaining"))
-                if (!$util.isInteger(message.secondsRemaining))
-                    return "secondsRemaining: integer expected";
-            if (message.cancelled != null && message.hasOwnProperty("cancelled"))
-                if (typeof message.cancelled !== "boolean")
-                    return "cancelled: boolean expected";
-            if (message.reason != null && message.hasOwnProperty("reason"))
-                if (!$util.isString(message.reason))
-                    return "reason: string expected";
-            return null;
-        };
-
-        /**
-         * Creates a LogoutResponse message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.LogoutResponse
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.LogoutResponse} LogoutResponse
-         */
-        LogoutResponse.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.LogoutResponse)
-                return object;
-            let message = new $root.hbonline.LogoutResponse();
-            if (object.secondsRemaining != null)
-                message.secondsRemaining = object.secondsRemaining | 0;
-            if (object.cancelled != null)
-                message.cancelled = Boolean(object.cancelled);
-            if (object.reason != null)
-                message.reason = String(object.reason);
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a LogoutResponse message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.LogoutResponse
-         * @static
-         * @param {hbonline.LogoutResponse} message LogoutResponse
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        LogoutResponse.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.secondsRemaining = 0;
-                object.cancelled = false;
-                object.reason = "";
-            }
-            if (message.secondsRemaining != null && message.hasOwnProperty("secondsRemaining"))
-                object.secondsRemaining = message.secondsRemaining;
-            if (message.cancelled != null && message.hasOwnProperty("cancelled"))
-                object.cancelled = message.cancelled;
-            if (message.reason != null && message.hasOwnProperty("reason"))
-                object.reason = message.reason;
-            return object;
-        };
-
-        /**
-         * Converts this LogoutResponse to JSON.
-         * @function toJSON
-         * @memberof hbonline.LogoutResponse
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        LogoutResponse.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        /**
          * Gets the default type url for LogoutResponse
          * @function getTypeUrl
          * @memberof hbonline.LogoutResponse
@@ -9881,6 +5614,102 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         return LogoutResponse;
+    })();
+
+    hbonline.DismissIntroRequest = (function() {
+
+        /**
+         * Properties of a DismissIntroRequest.
+         * @memberof hbonline
+         * @interface IDismissIntroRequest
+         */
+
+        /**
+         * Constructs a new DismissIntroRequest.
+         * @memberof hbonline
+         * @classdesc Represents a DismissIntroRequest.
+         * @implements IDismissIntroRequest
+         * @constructor
+         * @param {hbonline.IDismissIntroRequest=} [properties] Properties to set
+         */
+        function DismissIntroRequest(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * Creates a new DismissIntroRequest instance using the specified properties.
+         * @function create
+         * @memberof hbonline.DismissIntroRequest
+         * @static
+         * @param {hbonline.IDismissIntroRequest=} [properties] Properties to set
+         * @returns {hbonline.DismissIntroRequest} DismissIntroRequest instance
+         */
+        DismissIntroRequest.create = function create(properties) {
+            return new DismissIntroRequest(properties);
+        };
+
+        /**
+         * Encodes the specified DismissIntroRequest message. Does not implicitly {@link hbonline.DismissIntroRequest.verify|verify} messages.
+         * @function encode
+         * @memberof hbonline.DismissIntroRequest
+         * @static
+         * @param {hbonline.IDismissIntroRequest} message DismissIntroRequest message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        DismissIntroRequest.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            return writer;
+        };
+
+        /**
+         * Decodes a DismissIntroRequest message from the specified reader or buffer.
+         * @function decode
+         * @memberof hbonline.DismissIntroRequest
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {hbonline.DismissIntroRequest} DismissIntroRequest
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        DismissIntroRequest.decode = function decode(reader, length, error) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.hbonline.DismissIntroRequest();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                if (tag === error)
+                    break;
+                switch (tag >>> 3) {
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Gets the default type url for DismissIntroRequest
+         * @function getTypeUrl
+         * @memberof hbonline.DismissIntroRequest
+         * @static
+         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns {string} The default type url
+         */
+        DismissIntroRequest.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+            if (typeUrlPrefix === undefined) {
+                typeUrlPrefix = "type.googleapis.com";
+            }
+            return typeUrlPrefix + "/hbonline.DismissIntroRequest";
+        };
+
+        return DismissIntroRequest;
     })();
 
     hbonline.EntityInfo = (function() {
@@ -10055,19 +5884,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified EntityInfo message, length delimited. Does not implicitly {@link hbonline.EntityInfo.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.EntityInfo
-         * @static
-         * @param {hbonline.IEntityInfo} message EntityInfo message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        EntityInfo.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes an EntityInfo message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.EntityInfo
@@ -10137,178 +5953,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes an EntityInfo message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.EntityInfo
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.EntityInfo} EntityInfo
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        EntityInfo.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies an EntityInfo message.
-         * @function verify
-         * @memberof hbonline.EntityInfo
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        EntityInfo.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.objectId != null && message.hasOwnProperty("objectId"))
-                if (!$util.isInteger(message.objectId))
-                    return "objectId: integer expected";
-            if (message.entityType != null && message.hasOwnProperty("entityType"))
-                if (!$util.isInteger(message.entityType))
-                    return "entityType: integer expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.position != null && message.hasOwnProperty("position")) {
-                let error = $root.hbonline.Vec2.verify(message.position);
-                if (error)
-                    return "position." + error;
-            }
-            if (message.direction != null && message.hasOwnProperty("direction"))
-                if (!$util.isInteger(message.direction))
-                    return "direction: integer expected";
-            if (message.action != null && message.hasOwnProperty("action"))
-                if (!$util.isInteger(message.action))
-                    return "action: integer expected";
-            if (message.status != null && message.hasOwnProperty("status"))
-                if (!$util.isInteger(message.status))
-                    return "status: integer expected";
-            if (message.appearance != null && message.hasOwnProperty("appearance")) {
-                let error = $root.hbonline.Appearance.verify(message.appearance);
-                if (error)
-                    return "appearance." + error;
-            }
-            if (message.npcType != null && message.hasOwnProperty("npcType"))
-                if (!$util.isInteger(message.npcType))
-                    return "npcType: integer expected";
-            if (message.level != null && message.hasOwnProperty("level"))
-                if (!$util.isInteger(message.level))
-                    return "level: integer expected";
-            if (message.side != null && message.hasOwnProperty("side"))
-                if (!$util.isInteger(message.side))
-                    return "side: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates an EntityInfo message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.EntityInfo
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.EntityInfo} EntityInfo
-         */
-        EntityInfo.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.EntityInfo)
-                return object;
-            let message = new $root.hbonline.EntityInfo();
-            if (object.objectId != null)
-                message.objectId = object.objectId | 0;
-            if (object.entityType != null)
-                message.entityType = object.entityType | 0;
-            if (object.name != null)
-                message.name = String(object.name);
-            if (object.position != null) {
-                if (typeof object.position !== "object")
-                    throw TypeError(".hbonline.EntityInfo.position: object expected");
-                message.position = $root.hbonline.Vec2.fromObject(object.position);
-            }
-            if (object.direction != null)
-                message.direction = object.direction | 0;
-            if (object.action != null)
-                message.action = object.action | 0;
-            if (object.status != null)
-                message.status = object.status | 0;
-            if (object.appearance != null) {
-                if (typeof object.appearance !== "object")
-                    throw TypeError(".hbonline.EntityInfo.appearance: object expected");
-                message.appearance = $root.hbonline.Appearance.fromObject(object.appearance);
-            }
-            if (object.npcType != null)
-                message.npcType = object.npcType | 0;
-            if (object.level != null)
-                message.level = object.level | 0;
-            if (object.side != null)
-                message.side = object.side | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from an EntityInfo message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.EntityInfo
-         * @static
-         * @param {hbonline.EntityInfo} message EntityInfo
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        EntityInfo.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.objectId = 0;
-                object.entityType = 0;
-                object.name = "";
-                object.position = null;
-                object.direction = 0;
-                object.action = 0;
-                object.status = 0;
-                object.appearance = null;
-                object.npcType = 0;
-                object.level = 0;
-                object.side = 0;
-            }
-            if (message.objectId != null && message.hasOwnProperty("objectId"))
-                object.objectId = message.objectId;
-            if (message.entityType != null && message.hasOwnProperty("entityType"))
-                object.entityType = message.entityType;
-            if (message.name != null && message.hasOwnProperty("name"))
-                object.name = message.name;
-            if (message.position != null && message.hasOwnProperty("position"))
-                object.position = $root.hbonline.Vec2.toObject(message.position, options);
-            if (message.direction != null && message.hasOwnProperty("direction"))
-                object.direction = message.direction;
-            if (message.action != null && message.hasOwnProperty("action"))
-                object.action = message.action;
-            if (message.status != null && message.hasOwnProperty("status"))
-                object.status = message.status;
-            if (message.appearance != null && message.hasOwnProperty("appearance"))
-                object.appearance = $root.hbonline.Appearance.toObject(message.appearance, options);
-            if (message.npcType != null && message.hasOwnProperty("npcType"))
-                object.npcType = message.npcType;
-            if (message.level != null && message.hasOwnProperty("level"))
-                object.level = message.level;
-            if (message.side != null && message.hasOwnProperty("side"))
-                object.side = message.side;
-            return object;
-        };
-
-        /**
-         * Converts this EntityInfo to JSON.
-         * @function toJSON
-         * @memberof hbonline.EntityInfo
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        EntityInfo.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -10446,19 +6090,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified ItemInstance message, length delimited. Does not implicitly {@link hbonline.ItemInstance.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.ItemInstance
-         * @static
-         * @param {hbonline.IItemInstance} message ItemInstance message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        ItemInstance.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes an ItemInstance message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.ItemInstance
@@ -10508,128 +6139,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes an ItemInstance message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.ItemInstance
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.ItemInstance} ItemInstance
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        ItemInstance.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies an ItemInstance message.
-         * @function verify
-         * @memberof hbonline.ItemInstance
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        ItemInstance.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.itemId != null && message.hasOwnProperty("itemId"))
-                if (!$util.isInteger(message.itemId))
-                    return "itemId: integer expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.count != null && message.hasOwnProperty("count"))
-                if (!$util.isInteger(message.count))
-                    return "count: integer expected";
-            if (message.durability != null && message.hasOwnProperty("durability"))
-                if (!$util.isInteger(message.durability))
-                    return "durability: integer expected";
-            if (message.maxDurability != null && message.hasOwnProperty("maxDurability"))
-                if (!$util.isInteger(message.maxDurability))
-                    return "maxDurability: integer expected";
-            if (message.slotIndex != null && message.hasOwnProperty("slotIndex"))
-                if (!$util.isInteger(message.slotIndex))
-                    return "slotIndex: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates an ItemInstance message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.ItemInstance
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.ItemInstance} ItemInstance
-         */
-        ItemInstance.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.ItemInstance)
-                return object;
-            let message = new $root.hbonline.ItemInstance();
-            if (object.itemId != null)
-                message.itemId = object.itemId | 0;
-            if (object.name != null)
-                message.name = String(object.name);
-            if (object.count != null)
-                message.count = object.count | 0;
-            if (object.durability != null)
-                message.durability = object.durability | 0;
-            if (object.maxDurability != null)
-                message.maxDurability = object.maxDurability | 0;
-            if (object.slotIndex != null)
-                message.slotIndex = object.slotIndex | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from an ItemInstance message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.ItemInstance
-         * @static
-         * @param {hbonline.ItemInstance} message ItemInstance
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        ItemInstance.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.itemId = 0;
-                object.name = "";
-                object.count = 0;
-                object.durability = 0;
-                object.maxDurability = 0;
-                object.slotIndex = 0;
-            }
-            if (message.itemId != null && message.hasOwnProperty("itemId"))
-                object.itemId = message.itemId;
-            if (message.name != null && message.hasOwnProperty("name"))
-                object.name = message.name;
-            if (message.count != null && message.hasOwnProperty("count"))
-                object.count = message.count;
-            if (message.durability != null && message.hasOwnProperty("durability"))
-                object.durability = message.durability;
-            if (message.maxDurability != null && message.hasOwnProperty("maxDurability"))
-                object.maxDurability = message.maxDurability;
-            if (message.slotIndex != null && message.hasOwnProperty("slotIndex"))
-                object.slotIndex = message.slotIndex;
-            return object;
-        };
-
-        /**
-         * Converts this ItemInstance to JSON.
-         * @function toJSON
-         * @memberof hbonline.ItemInstance
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        ItemInstance.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -10738,19 +6247,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified InventoryUpdate message, length delimited. Does not implicitly {@link hbonline.InventoryUpdate.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.InventoryUpdate
-         * @static
-         * @param {hbonline.IInventoryUpdate} message InventoryUpdate message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        InventoryUpdate.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes an InventoryUpdate message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.InventoryUpdate
@@ -10792,153 +6288,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes an InventoryUpdate message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.InventoryUpdate
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.InventoryUpdate} InventoryUpdate
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        InventoryUpdate.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies an InventoryUpdate message.
-         * @function verify
-         * @memberof hbonline.InventoryUpdate
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        InventoryUpdate.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.items != null && message.hasOwnProperty("items")) {
-                if (!Array.isArray(message.items))
-                    return "items: array expected";
-                for (let i = 0; i < message.items.length; ++i) {
-                    let error = $root.hbonline.ItemInstance.verify(message.items[i]);
-                    if (error)
-                        return "items." + error;
-                }
-            }
-            if (message.equipment != null && message.hasOwnProperty("equipment")) {
-                if (!Array.isArray(message.equipment))
-                    return "equipment: array expected";
-                for (let i = 0; i < message.equipment.length; ++i) {
-                    let error = $root.hbonline.ItemInstance.verify(message.equipment[i]);
-                    if (error)
-                        return "equipment." + error;
-                }
-            }
-            if (message.gold != null && message.hasOwnProperty("gold"))
-                if (!$util.isInteger(message.gold) && !(message.gold && $util.isInteger(message.gold.low) && $util.isInteger(message.gold.high)))
-                    return "gold: integer|Long expected";
-            return null;
-        };
-
-        /**
-         * Creates an InventoryUpdate message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.InventoryUpdate
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.InventoryUpdate} InventoryUpdate
-         */
-        InventoryUpdate.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.InventoryUpdate)
-                return object;
-            let message = new $root.hbonline.InventoryUpdate();
-            if (object.items) {
-                if (!Array.isArray(object.items))
-                    throw TypeError(".hbonline.InventoryUpdate.items: array expected");
-                message.items = [];
-                for (let i = 0; i < object.items.length; ++i) {
-                    if (typeof object.items[i] !== "object")
-                        throw TypeError(".hbonline.InventoryUpdate.items: object expected");
-                    message.items[i] = $root.hbonline.ItemInstance.fromObject(object.items[i]);
-                }
-            }
-            if (object.equipment) {
-                if (!Array.isArray(object.equipment))
-                    throw TypeError(".hbonline.InventoryUpdate.equipment: array expected");
-                message.equipment = [];
-                for (let i = 0; i < object.equipment.length; ++i) {
-                    if (typeof object.equipment[i] !== "object")
-                        throw TypeError(".hbonline.InventoryUpdate.equipment: object expected");
-                    message.equipment[i] = $root.hbonline.ItemInstance.fromObject(object.equipment[i]);
-                }
-            }
-            if (object.gold != null)
-                if ($util.Long)
-                    (message.gold = $util.Long.fromValue(object.gold)).unsigned = false;
-                else if (typeof object.gold === "string")
-                    message.gold = parseInt(object.gold, 10);
-                else if (typeof object.gold === "number")
-                    message.gold = object.gold;
-                else if (typeof object.gold === "object")
-                    message.gold = new $util.LongBits(object.gold.low >>> 0, object.gold.high >>> 0).toNumber();
-            return message;
-        };
-
-        /**
-         * Creates a plain object from an InventoryUpdate message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.InventoryUpdate
-         * @static
-         * @param {hbonline.InventoryUpdate} message InventoryUpdate
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        InventoryUpdate.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.arrays || options.defaults) {
-                object.items = [];
-                object.equipment = [];
-            }
-            if (options.defaults)
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
-                    object.gold = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.gold = options.longs === String ? "0" : 0;
-            if (message.items && message.items.length) {
-                object.items = [];
-                for (let j = 0; j < message.items.length; ++j)
-                    object.items[j] = $root.hbonline.ItemInstance.toObject(message.items[j], options);
-            }
-            if (message.equipment && message.equipment.length) {
-                object.equipment = [];
-                for (let j = 0; j < message.equipment.length; ++j)
-                    object.equipment[j] = $root.hbonline.ItemInstance.toObject(message.equipment[j], options);
-            }
-            if (message.gold != null && message.hasOwnProperty("gold"))
-                if (typeof message.gold === "number")
-                    object.gold = options.longs === String ? String(message.gold) : message.gold;
-                else
-                    object.gold = options.longs === String ? $util.Long.prototype.toString.call(message.gold) : options.longs === Number ? new $util.LongBits(message.gold.low >>> 0, message.gold.high >>> 0).toNumber() : message.gold;
-            return object;
-        };
-
-        /**
-         * Converts this InventoryUpdate to JSON.
-         * @function toJSON
-         * @memberof hbonline.InventoryUpdate
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        InventoryUpdate.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -11065,19 +6414,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified GroundItemAppear message, length delimited. Does not implicitly {@link hbonline.GroundItemAppear.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.GroundItemAppear
-         * @static
-         * @param {hbonline.IGroundItemAppear} message GroundItemAppear message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        GroundItemAppear.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a GroundItemAppear message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.GroundItemAppear
@@ -11123,125 +6459,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a GroundItemAppear message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.GroundItemAppear
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.GroundItemAppear} GroundItemAppear
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        GroundItemAppear.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a GroundItemAppear message.
-         * @function verify
-         * @memberof hbonline.GroundItemAppear
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        GroundItemAppear.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.groundId != null && message.hasOwnProperty("groundId"))
-                if (!$util.isInteger(message.groundId))
-                    return "groundId: integer expected";
-            if (message.itemId != null && message.hasOwnProperty("itemId"))
-                if (!$util.isInteger(message.itemId))
-                    return "itemId: integer expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.count != null && message.hasOwnProperty("count"))
-                if (!$util.isInteger(message.count))
-                    return "count: integer expected";
-            if (message.position != null && message.hasOwnProperty("position")) {
-                let error = $root.hbonline.Vec2.verify(message.position);
-                if (error)
-                    return "position." + error;
-            }
-            return null;
-        };
-
-        /**
-         * Creates a GroundItemAppear message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.GroundItemAppear
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.GroundItemAppear} GroundItemAppear
-         */
-        GroundItemAppear.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.GroundItemAppear)
-                return object;
-            let message = new $root.hbonline.GroundItemAppear();
-            if (object.groundId != null)
-                message.groundId = object.groundId | 0;
-            if (object.itemId != null)
-                message.itemId = object.itemId | 0;
-            if (object.name != null)
-                message.name = String(object.name);
-            if (object.count != null)
-                message.count = object.count | 0;
-            if (object.position != null) {
-                if (typeof object.position !== "object")
-                    throw TypeError(".hbonline.GroundItemAppear.position: object expected");
-                message.position = $root.hbonline.Vec2.fromObject(object.position);
-            }
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a GroundItemAppear message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.GroundItemAppear
-         * @static
-         * @param {hbonline.GroundItemAppear} message GroundItemAppear
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        GroundItemAppear.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.groundId = 0;
-                object.itemId = 0;
-                object.name = "";
-                object.count = 0;
-                object.position = null;
-            }
-            if (message.groundId != null && message.hasOwnProperty("groundId"))
-                object.groundId = message.groundId;
-            if (message.itemId != null && message.hasOwnProperty("itemId"))
-                object.itemId = message.itemId;
-            if (message.name != null && message.hasOwnProperty("name"))
-                object.name = message.name;
-            if (message.count != null && message.hasOwnProperty("count"))
-                object.count = message.count;
-            if (message.position != null && message.hasOwnProperty("position"))
-                object.position = $root.hbonline.Vec2.toObject(message.position, options);
-            return object;
-        };
-
-        /**
-         * Converts this GroundItemAppear to JSON.
-         * @function toJSON
-         * @memberof hbonline.GroundItemAppear
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        GroundItemAppear.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -11324,19 +6541,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified GroundItemDisappear message, length delimited. Does not implicitly {@link hbonline.GroundItemDisappear.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.GroundItemDisappear
-         * @static
-         * @param {hbonline.IGroundItemDisappear} message GroundItemDisappear message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        GroundItemDisappear.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a GroundItemDisappear message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.GroundItemDisappear
@@ -11366,87 +6570,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a GroundItemDisappear message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.GroundItemDisappear
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.GroundItemDisappear} GroundItemDisappear
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        GroundItemDisappear.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a GroundItemDisappear message.
-         * @function verify
-         * @memberof hbonline.GroundItemDisappear
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        GroundItemDisappear.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.groundId != null && message.hasOwnProperty("groundId"))
-                if (!$util.isInteger(message.groundId))
-                    return "groundId: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a GroundItemDisappear message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.GroundItemDisappear
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.GroundItemDisappear} GroundItemDisappear
-         */
-        GroundItemDisappear.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.GroundItemDisappear)
-                return object;
-            let message = new $root.hbonline.GroundItemDisappear();
-            if (object.groundId != null)
-                message.groundId = object.groundId | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a GroundItemDisappear message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.GroundItemDisappear
-         * @static
-         * @param {hbonline.GroundItemDisappear} message GroundItemDisappear
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        GroundItemDisappear.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults)
-                object.groundId = 0;
-            if (message.groundId != null && message.hasOwnProperty("groundId"))
-                object.groundId = message.groundId;
-            return object;
-        };
-
-        /**
-         * Converts this GroundItemDisappear to JSON.
-         * @function toJSON
-         * @memberof hbonline.GroundItemDisappear
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        GroundItemDisappear.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -11529,19 +6652,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified ItemPickupRequest message, length delimited. Does not implicitly {@link hbonline.ItemPickupRequest.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.ItemPickupRequest
-         * @static
-         * @param {hbonline.IItemPickupRequest} message ItemPickupRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        ItemPickupRequest.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes an ItemPickupRequest message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.ItemPickupRequest
@@ -11571,87 +6681,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes an ItemPickupRequest message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.ItemPickupRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.ItemPickupRequest} ItemPickupRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        ItemPickupRequest.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies an ItemPickupRequest message.
-         * @function verify
-         * @memberof hbonline.ItemPickupRequest
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        ItemPickupRequest.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.groundId != null && message.hasOwnProperty("groundId"))
-                if (!$util.isInteger(message.groundId))
-                    return "groundId: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates an ItemPickupRequest message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.ItemPickupRequest
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.ItemPickupRequest} ItemPickupRequest
-         */
-        ItemPickupRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.ItemPickupRequest)
-                return object;
-            let message = new $root.hbonline.ItemPickupRequest();
-            if (object.groundId != null)
-                message.groundId = object.groundId | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from an ItemPickupRequest message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.ItemPickupRequest
-         * @static
-         * @param {hbonline.ItemPickupRequest} message ItemPickupRequest
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        ItemPickupRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults)
-                object.groundId = 0;
-            if (message.groundId != null && message.hasOwnProperty("groundId"))
-                object.groundId = message.groundId;
-            return object;
-        };
-
-        /**
-         * Converts this ItemPickupRequest to JSON.
-         * @function toJSON
-         * @memberof hbonline.ItemPickupRequest
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        ItemPickupRequest.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -11734,19 +6763,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified ItemUseRequest message, length delimited. Does not implicitly {@link hbonline.ItemUseRequest.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.ItemUseRequest
-         * @static
-         * @param {hbonline.IItemUseRequest} message ItemUseRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        ItemUseRequest.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes an ItemUseRequest message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.ItemUseRequest
@@ -11776,87 +6792,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes an ItemUseRequest message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.ItemUseRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.ItemUseRequest} ItemUseRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        ItemUseRequest.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies an ItemUseRequest message.
-         * @function verify
-         * @memberof hbonline.ItemUseRequest
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        ItemUseRequest.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.slotIndex != null && message.hasOwnProperty("slotIndex"))
-                if (!$util.isInteger(message.slotIndex))
-                    return "slotIndex: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates an ItemUseRequest message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.ItemUseRequest
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.ItemUseRequest} ItemUseRequest
-         */
-        ItemUseRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.ItemUseRequest)
-                return object;
-            let message = new $root.hbonline.ItemUseRequest();
-            if (object.slotIndex != null)
-                message.slotIndex = object.slotIndex | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from an ItemUseRequest message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.ItemUseRequest
-         * @static
-         * @param {hbonline.ItemUseRequest} message ItemUseRequest
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        ItemUseRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults)
-                object.slotIndex = 0;
-            if (message.slotIndex != null && message.hasOwnProperty("slotIndex"))
-                object.slotIndex = message.slotIndex;
-            return object;
-        };
-
-        /**
-         * Converts this ItemUseRequest to JSON.
-         * @function toJSON
-         * @memberof hbonline.ItemUseRequest
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        ItemUseRequest.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -11950,19 +6885,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified ItemEquipRequest message, length delimited. Does not implicitly {@link hbonline.ItemEquipRequest.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.ItemEquipRequest
-         * @static
-         * @param {hbonline.IItemEquipRequest} message ItemEquipRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        ItemEquipRequest.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes an ItemEquipRequest message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.ItemEquipRequest
@@ -11996,96 +6918,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes an ItemEquipRequest message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.ItemEquipRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.ItemEquipRequest} ItemEquipRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        ItemEquipRequest.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies an ItemEquipRequest message.
-         * @function verify
-         * @memberof hbonline.ItemEquipRequest
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        ItemEquipRequest.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.slotIndex != null && message.hasOwnProperty("slotIndex"))
-                if (!$util.isInteger(message.slotIndex))
-                    return "slotIndex: integer expected";
-            if (message.equipSlot != null && message.hasOwnProperty("equipSlot"))
-                if (!$util.isInteger(message.equipSlot))
-                    return "equipSlot: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates an ItemEquipRequest message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.ItemEquipRequest
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.ItemEquipRequest} ItemEquipRequest
-         */
-        ItemEquipRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.ItemEquipRequest)
-                return object;
-            let message = new $root.hbonline.ItemEquipRequest();
-            if (object.slotIndex != null)
-                message.slotIndex = object.slotIndex | 0;
-            if (object.equipSlot != null)
-                message.equipSlot = object.equipSlot | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from an ItemEquipRequest message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.ItemEquipRequest
-         * @static
-         * @param {hbonline.ItemEquipRequest} message ItemEquipRequest
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        ItemEquipRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.slotIndex = 0;
-                object.equipSlot = 0;
-            }
-            if (message.slotIndex != null && message.hasOwnProperty("slotIndex"))
-                object.slotIndex = message.slotIndex;
-            if (message.equipSlot != null && message.hasOwnProperty("equipSlot"))
-                object.equipSlot = message.equipSlot;
-            return object;
-        };
-
-        /**
-         * Converts this ItemEquipRequest to JSON.
-         * @function toJSON
-         * @memberof hbonline.ItemEquipRequest
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        ItemEquipRequest.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -12179,19 +7011,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified ItemDropRequest message, length delimited. Does not implicitly {@link hbonline.ItemDropRequest.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.ItemDropRequest
-         * @static
-         * @param {hbonline.IItemDropRequest} message ItemDropRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        ItemDropRequest.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes an ItemDropRequest message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.ItemDropRequest
@@ -12225,96 +7044,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes an ItemDropRequest message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.ItemDropRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.ItemDropRequest} ItemDropRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        ItemDropRequest.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies an ItemDropRequest message.
-         * @function verify
-         * @memberof hbonline.ItemDropRequest
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        ItemDropRequest.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.slotIndex != null && message.hasOwnProperty("slotIndex"))
-                if (!$util.isInteger(message.slotIndex))
-                    return "slotIndex: integer expected";
-            if (message.count != null && message.hasOwnProperty("count"))
-                if (!$util.isInteger(message.count))
-                    return "count: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates an ItemDropRequest message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.ItemDropRequest
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.ItemDropRequest} ItemDropRequest
-         */
-        ItemDropRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.ItemDropRequest)
-                return object;
-            let message = new $root.hbonline.ItemDropRequest();
-            if (object.slotIndex != null)
-                message.slotIndex = object.slotIndex | 0;
-            if (object.count != null)
-                message.count = object.count | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from an ItemDropRequest message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.ItemDropRequest
-         * @static
-         * @param {hbonline.ItemDropRequest} message ItemDropRequest
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        ItemDropRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.slotIndex = 0;
-                object.count = 0;
-            }
-            if (message.slotIndex != null && message.hasOwnProperty("slotIndex"))
-                object.slotIndex = message.slotIndex;
-            if (message.count != null && message.hasOwnProperty("count"))
-                object.count = message.count;
-            return object;
-        };
-
-        /**
-         * Converts this ItemDropRequest to JSON.
-         * @function toJSON
-         * @memberof hbonline.ItemDropRequest
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        ItemDropRequest.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -12408,19 +7137,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified StatAllocRequest message, length delimited. Does not implicitly {@link hbonline.StatAllocRequest.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.StatAllocRequest
-         * @static
-         * @param {hbonline.IStatAllocRequest} message StatAllocRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        StatAllocRequest.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a StatAllocRequest message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.StatAllocRequest
@@ -12454,96 +7170,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a StatAllocRequest message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.StatAllocRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.StatAllocRequest} StatAllocRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        StatAllocRequest.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a StatAllocRequest message.
-         * @function verify
-         * @memberof hbonline.StatAllocRequest
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        StatAllocRequest.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.statType != null && message.hasOwnProperty("statType"))
-                if (!$util.isInteger(message.statType))
-                    return "statType: integer expected";
-            if (message.points != null && message.hasOwnProperty("points"))
-                if (!$util.isInteger(message.points))
-                    return "points: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a StatAllocRequest message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.StatAllocRequest
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.StatAllocRequest} StatAllocRequest
-         */
-        StatAllocRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.StatAllocRequest)
-                return object;
-            let message = new $root.hbonline.StatAllocRequest();
-            if (object.statType != null)
-                message.statType = object.statType | 0;
-            if (object.points != null)
-                message.points = object.points | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a StatAllocRequest message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.StatAllocRequest
-         * @static
-         * @param {hbonline.StatAllocRequest} message StatAllocRequest
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        StatAllocRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.statType = 0;
-                object.points = 0;
-            }
-            if (message.statType != null && message.hasOwnProperty("statType"))
-                object.statType = message.statType;
-            if (message.points != null && message.hasOwnProperty("points"))
-                object.points = message.points;
-            return object;
-        };
-
-        /**
-         * Converts this StatAllocRequest to JSON.
-         * @function toJSON
-         * @memberof hbonline.StatAllocRequest
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        StatAllocRequest.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -12650,19 +7276,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified ShopOpen message, length delimited. Does not implicitly {@link hbonline.ShopOpen.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.ShopOpen
-         * @static
-         * @param {hbonline.IShopOpen} message ShopOpen message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        ShopOpen.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a ShopOpen message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.ShopOpen
@@ -12702,122 +7315,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a ShopOpen message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.ShopOpen
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.ShopOpen} ShopOpen
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        ShopOpen.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a ShopOpen message.
-         * @function verify
-         * @memberof hbonline.ShopOpen
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        ShopOpen.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.npcId != null && message.hasOwnProperty("npcId"))
-                if (!$util.isInteger(message.npcId))
-                    return "npcId: integer expected";
-            if (message.shopName != null && message.hasOwnProperty("shopName"))
-                if (!$util.isString(message.shopName))
-                    return "shopName: string expected";
-            if (message.items != null && message.hasOwnProperty("items")) {
-                if (!Array.isArray(message.items))
-                    return "items: array expected";
-                for (let i = 0; i < message.items.length; ++i) {
-                    let error = $root.hbonline.ShopItem.verify(message.items[i]);
-                    if (error)
-                        return "items." + error;
-                }
-            }
-            return null;
-        };
-
-        /**
-         * Creates a ShopOpen message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.ShopOpen
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.ShopOpen} ShopOpen
-         */
-        ShopOpen.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.ShopOpen)
-                return object;
-            let message = new $root.hbonline.ShopOpen();
-            if (object.npcId != null)
-                message.npcId = object.npcId | 0;
-            if (object.shopName != null)
-                message.shopName = String(object.shopName);
-            if (object.items) {
-                if (!Array.isArray(object.items))
-                    throw TypeError(".hbonline.ShopOpen.items: array expected");
-                message.items = [];
-                for (let i = 0; i < object.items.length; ++i) {
-                    if (typeof object.items[i] !== "object")
-                        throw TypeError(".hbonline.ShopOpen.items: object expected");
-                    message.items[i] = $root.hbonline.ShopItem.fromObject(object.items[i]);
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a ShopOpen message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.ShopOpen
-         * @static
-         * @param {hbonline.ShopOpen} message ShopOpen
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        ShopOpen.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.arrays || options.defaults)
-                object.items = [];
-            if (options.defaults) {
-                object.npcId = 0;
-                object.shopName = "";
-            }
-            if (message.npcId != null && message.hasOwnProperty("npcId"))
-                object.npcId = message.npcId;
-            if (message.shopName != null && message.hasOwnProperty("shopName"))
-                object.shopName = message.shopName;
-            if (message.items && message.items.length) {
-                object.items = [];
-                for (let j = 0; j < message.items.length; ++j)
-                    object.items[j] = $root.hbonline.ShopItem.toObject(message.items[j], options);
-            }
-            return object;
-        };
-
-        /**
-         * Converts this ShopOpen to JSON.
-         * @function toJSON
-         * @memberof hbonline.ShopOpen
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        ShopOpen.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -12933,19 +7430,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified ShopItem message, length delimited. Does not implicitly {@link hbonline.ShopItem.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.ShopItem
-         * @static
-         * @param {hbonline.IShopItem} message ShopItem message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        ShopItem.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a ShopItem message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.ShopItem
@@ -12987,126 +7471,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a ShopItem message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.ShopItem
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.ShopItem} ShopItem
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        ShopItem.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a ShopItem message.
-         * @function verify
-         * @memberof hbonline.ShopItem
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        ShopItem.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.itemId != null && message.hasOwnProperty("itemId"))
-                if (!$util.isInteger(message.itemId))
-                    return "itemId: integer expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.price != null && message.hasOwnProperty("price"))
-                if (!$util.isInteger(message.price) && !(message.price && $util.isInteger(message.price.low) && $util.isInteger(message.price.high)))
-                    return "price: integer|Long expected";
-            if (message.itemType != null && message.hasOwnProperty("itemType"))
-                if (!$util.isInteger(message.itemType))
-                    return "itemType: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a ShopItem message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.ShopItem
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.ShopItem} ShopItem
-         */
-        ShopItem.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.ShopItem)
-                return object;
-            let message = new $root.hbonline.ShopItem();
-            if (object.itemId != null)
-                message.itemId = object.itemId | 0;
-            if (object.name != null)
-                message.name = String(object.name);
-            if (object.price != null)
-                if ($util.Long)
-                    (message.price = $util.Long.fromValue(object.price)).unsigned = false;
-                else if (typeof object.price === "string")
-                    message.price = parseInt(object.price, 10);
-                else if (typeof object.price === "number")
-                    message.price = object.price;
-                else if (typeof object.price === "object")
-                    message.price = new $util.LongBits(object.price.low >>> 0, object.price.high >>> 0).toNumber();
-            if (object.itemType != null)
-                message.itemType = object.itemType | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a ShopItem message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.ShopItem
-         * @static
-         * @param {hbonline.ShopItem} message ShopItem
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        ShopItem.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.itemId = 0;
-                object.name = "";
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
-                    object.price = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.price = options.longs === String ? "0" : 0;
-                object.itemType = 0;
-            }
-            if (message.itemId != null && message.hasOwnProperty("itemId"))
-                object.itemId = message.itemId;
-            if (message.name != null && message.hasOwnProperty("name"))
-                object.name = message.name;
-            if (message.price != null && message.hasOwnProperty("price"))
-                if (typeof message.price === "number")
-                    object.price = options.longs === String ? String(message.price) : message.price;
-                else
-                    object.price = options.longs === String ? $util.Long.prototype.toString.call(message.price) : options.longs === Number ? new $util.LongBits(message.price.low >>> 0, message.price.high >>> 0).toNumber() : message.price;
-            if (message.itemType != null && message.hasOwnProperty("itemType"))
-                object.itemType = message.itemType;
-            return object;
-        };
-
-        /**
-         * Converts this ShopItem to JSON.
-         * @function toJSON
-         * @memberof hbonline.ShopItem
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        ShopItem.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -13211,19 +7575,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified ShopBuyRequest message, length delimited. Does not implicitly {@link hbonline.ShopBuyRequest.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.ShopBuyRequest
-         * @static
-         * @param {hbonline.IShopBuyRequest} message ShopBuyRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        ShopBuyRequest.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a ShopBuyRequest message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.ShopBuyRequest
@@ -13261,104 +7612,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a ShopBuyRequest message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.ShopBuyRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.ShopBuyRequest} ShopBuyRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        ShopBuyRequest.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a ShopBuyRequest message.
-         * @function verify
-         * @memberof hbonline.ShopBuyRequest
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        ShopBuyRequest.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.npcId != null && message.hasOwnProperty("npcId"))
-                if (!$util.isInteger(message.npcId))
-                    return "npcId: integer expected";
-            if (message.itemId != null && message.hasOwnProperty("itemId"))
-                if (!$util.isInteger(message.itemId))
-                    return "itemId: integer expected";
-            if (message.count != null && message.hasOwnProperty("count"))
-                if (!$util.isInteger(message.count))
-                    return "count: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a ShopBuyRequest message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.ShopBuyRequest
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.ShopBuyRequest} ShopBuyRequest
-         */
-        ShopBuyRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.ShopBuyRequest)
-                return object;
-            let message = new $root.hbonline.ShopBuyRequest();
-            if (object.npcId != null)
-                message.npcId = object.npcId | 0;
-            if (object.itemId != null)
-                message.itemId = object.itemId | 0;
-            if (object.count != null)
-                message.count = object.count | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a ShopBuyRequest message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.ShopBuyRequest
-         * @static
-         * @param {hbonline.ShopBuyRequest} message ShopBuyRequest
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        ShopBuyRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.npcId = 0;
-                object.itemId = 0;
-                object.count = 0;
-            }
-            if (message.npcId != null && message.hasOwnProperty("npcId"))
-                object.npcId = message.npcId;
-            if (message.itemId != null && message.hasOwnProperty("itemId"))
-                object.itemId = message.itemId;
-            if (message.count != null && message.hasOwnProperty("count"))
-                object.count = message.count;
-            return object;
-        };
-
-        /**
-         * Converts this ShopBuyRequest to JSON.
-         * @function toJSON
-         * @memberof hbonline.ShopBuyRequest
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        ShopBuyRequest.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -13463,19 +7716,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified ShopSellRequest message, length delimited. Does not implicitly {@link hbonline.ShopSellRequest.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.ShopSellRequest
-         * @static
-         * @param {hbonline.IShopSellRequest} message ShopSellRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        ShopSellRequest.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a ShopSellRequest message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.ShopSellRequest
@@ -13513,104 +7753,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a ShopSellRequest message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.ShopSellRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.ShopSellRequest} ShopSellRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        ShopSellRequest.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a ShopSellRequest message.
-         * @function verify
-         * @memberof hbonline.ShopSellRequest
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        ShopSellRequest.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.npcId != null && message.hasOwnProperty("npcId"))
-                if (!$util.isInteger(message.npcId))
-                    return "npcId: integer expected";
-            if (message.slotIndex != null && message.hasOwnProperty("slotIndex"))
-                if (!$util.isInteger(message.slotIndex))
-                    return "slotIndex: integer expected";
-            if (message.count != null && message.hasOwnProperty("count"))
-                if (!$util.isInteger(message.count))
-                    return "count: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a ShopSellRequest message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.ShopSellRequest
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.ShopSellRequest} ShopSellRequest
-         */
-        ShopSellRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.ShopSellRequest)
-                return object;
-            let message = new $root.hbonline.ShopSellRequest();
-            if (object.npcId != null)
-                message.npcId = object.npcId | 0;
-            if (object.slotIndex != null)
-                message.slotIndex = object.slotIndex | 0;
-            if (object.count != null)
-                message.count = object.count | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a ShopSellRequest message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.ShopSellRequest
-         * @static
-         * @param {hbonline.ShopSellRequest} message ShopSellRequest
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        ShopSellRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.npcId = 0;
-                object.slotIndex = 0;
-                object.count = 0;
-            }
-            if (message.npcId != null && message.hasOwnProperty("npcId"))
-                object.npcId = message.npcId;
-            if (message.slotIndex != null && message.hasOwnProperty("slotIndex"))
-                object.slotIndex = message.slotIndex;
-            if (message.count != null && message.hasOwnProperty("count"))
-                object.count = message.count;
-            return object;
-        };
-
-        /**
-         * Converts this ShopSellRequest to JSON.
-         * @function toJSON
-         * @memberof hbonline.ShopSellRequest
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        ShopSellRequest.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -13704,19 +7846,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified ShopResponse message, length delimited. Does not implicitly {@link hbonline.ShopResponse.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.ShopResponse
-         * @static
-         * @param {hbonline.IShopResponse} message ShopResponse message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        ShopResponse.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a ShopResponse message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.ShopResponse
@@ -13750,96 +7879,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a ShopResponse message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.ShopResponse
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.ShopResponse} ShopResponse
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        ShopResponse.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a ShopResponse message.
-         * @function verify
-         * @memberof hbonline.ShopResponse
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        ShopResponse.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.success != null && message.hasOwnProperty("success"))
-                if (typeof message.success !== "boolean")
-                    return "success: boolean expected";
-            if (message.error != null && message.hasOwnProperty("error"))
-                if (!$util.isString(message.error))
-                    return "error: string expected";
-            return null;
-        };
-
-        /**
-         * Creates a ShopResponse message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.ShopResponse
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.ShopResponse} ShopResponse
-         */
-        ShopResponse.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.ShopResponse)
-                return object;
-            let message = new $root.hbonline.ShopResponse();
-            if (object.success != null)
-                message.success = Boolean(object.success);
-            if (object.error != null)
-                message.error = String(object.error);
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a ShopResponse message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.ShopResponse
-         * @static
-         * @param {hbonline.ShopResponse} message ShopResponse
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        ShopResponse.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.success = false;
-                object.error = "";
-            }
-            if (message.success != null && message.hasOwnProperty("success"))
-                object.success = message.success;
-            if (message.error != null && message.hasOwnProperty("error"))
-                object.error = message.error;
-            return object;
-        };
-
-        /**
-         * Converts this ShopResponse to JSON.
-         * @function toJSON
-         * @memberof hbonline.ShopResponse
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        ShopResponse.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -13944,19 +7983,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified SpellCastRequest message, length delimited. Does not implicitly {@link hbonline.SpellCastRequest.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.SpellCastRequest
-         * @static
-         * @param {hbonline.ISpellCastRequest} message SpellCastRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        SpellCastRequest.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a SpellCastRequest message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.SpellCastRequest
@@ -13994,109 +8020,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a SpellCastRequest message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.SpellCastRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.SpellCastRequest} SpellCastRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        SpellCastRequest.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a SpellCastRequest message.
-         * @function verify
-         * @memberof hbonline.SpellCastRequest
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        SpellCastRequest.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.spellId != null && message.hasOwnProperty("spellId"))
-                if (!$util.isInteger(message.spellId))
-                    return "spellId: integer expected";
-            if (message.targetId != null && message.hasOwnProperty("targetId"))
-                if (!$util.isInteger(message.targetId))
-                    return "targetId: integer expected";
-            if (message.targetPosition != null && message.hasOwnProperty("targetPosition")) {
-                let error = $root.hbonline.Vec2.verify(message.targetPosition);
-                if (error)
-                    return "targetPosition." + error;
-            }
-            return null;
-        };
-
-        /**
-         * Creates a SpellCastRequest message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.SpellCastRequest
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.SpellCastRequest} SpellCastRequest
-         */
-        SpellCastRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.SpellCastRequest)
-                return object;
-            let message = new $root.hbonline.SpellCastRequest();
-            if (object.spellId != null)
-                message.spellId = object.spellId | 0;
-            if (object.targetId != null)
-                message.targetId = object.targetId | 0;
-            if (object.targetPosition != null) {
-                if (typeof object.targetPosition !== "object")
-                    throw TypeError(".hbonline.SpellCastRequest.targetPosition: object expected");
-                message.targetPosition = $root.hbonline.Vec2.fromObject(object.targetPosition);
-            }
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a SpellCastRequest message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.SpellCastRequest
-         * @static
-         * @param {hbonline.SpellCastRequest} message SpellCastRequest
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        SpellCastRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.spellId = 0;
-                object.targetId = 0;
-                object.targetPosition = null;
-            }
-            if (message.spellId != null && message.hasOwnProperty("spellId"))
-                object.spellId = message.spellId;
-            if (message.targetId != null && message.hasOwnProperty("targetId"))
-                object.targetId = message.targetId;
-            if (message.targetPosition != null && message.hasOwnProperty("targetPosition"))
-                object.targetPosition = $root.hbonline.Vec2.toObject(message.targetPosition, options);
-            return object;
-        };
-
-        /**
-         * Converts this SpellCastRequest to JSON.
-         * @function toJSON
-         * @memberof hbonline.SpellCastRequest
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        SpellCastRequest.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -14278,19 +8201,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified SpellEffectEvent message, length delimited. Does not implicitly {@link hbonline.SpellEffectEvent.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.SpellEffectEvent
-         * @static
-         * @param {hbonline.ISpellEffectEvent} message SpellEffectEvent message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        SpellEffectEvent.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a SpellEffectEvent message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.SpellEffectEvent
@@ -14356,170 +8266,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a SpellEffectEvent message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.SpellEffectEvent
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.SpellEffectEvent} SpellEffectEvent
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        SpellEffectEvent.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a SpellEffectEvent message.
-         * @function verify
-         * @memberof hbonline.SpellEffectEvent
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        SpellEffectEvent.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.casterId != null && message.hasOwnProperty("casterId"))
-                if (!$util.isInteger(message.casterId))
-                    return "casterId: integer expected";
-            if (message.spellId != null && message.hasOwnProperty("spellId"))
-                if (!$util.isInteger(message.spellId))
-                    return "spellId: integer expected";
-            if (message.targetId != null && message.hasOwnProperty("targetId"))
-                if (!$util.isInteger(message.targetId))
-                    return "targetId: integer expected";
-            if (message.casterPosition != null && message.hasOwnProperty("casterPosition")) {
-                let error = $root.hbonline.Vec2.verify(message.casterPosition);
-                if (error)
-                    return "casterPosition." + error;
-            }
-            if (message.targetPosition != null && message.hasOwnProperty("targetPosition")) {
-                let error = $root.hbonline.Vec2.verify(message.targetPosition);
-                if (error)
-                    return "targetPosition." + error;
-            }
-            if (message.damage != null && message.hasOwnProperty("damage"))
-                if (!$util.isInteger(message.damage))
-                    return "damage: integer expected";
-            if (message.healAmount != null && message.hasOwnProperty("healAmount"))
-                if (!$util.isInteger(message.healAmount))
-                    return "healAmount: integer expected";
-            if (message.miss != null && message.hasOwnProperty("miss"))
-                if (typeof message.miss !== "boolean")
-                    return "miss: boolean expected";
-            if (message.spriteId != null && message.hasOwnProperty("spriteId"))
-                if (!$util.isInteger(message.spriteId))
-                    return "spriteId: integer expected";
-            if (message.soundId != null && message.hasOwnProperty("soundId"))
-                if (!$util.isInteger(message.soundId))
-                    return "soundId: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a SpellEffectEvent message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.SpellEffectEvent
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.SpellEffectEvent} SpellEffectEvent
-         */
-        SpellEffectEvent.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.SpellEffectEvent)
-                return object;
-            let message = new $root.hbonline.SpellEffectEvent();
-            if (object.casterId != null)
-                message.casterId = object.casterId | 0;
-            if (object.spellId != null)
-                message.spellId = object.spellId | 0;
-            if (object.targetId != null)
-                message.targetId = object.targetId | 0;
-            if (object.casterPosition != null) {
-                if (typeof object.casterPosition !== "object")
-                    throw TypeError(".hbonline.SpellEffectEvent.casterPosition: object expected");
-                message.casterPosition = $root.hbonline.Vec2.fromObject(object.casterPosition);
-            }
-            if (object.targetPosition != null) {
-                if (typeof object.targetPosition !== "object")
-                    throw TypeError(".hbonline.SpellEffectEvent.targetPosition: object expected");
-                message.targetPosition = $root.hbonline.Vec2.fromObject(object.targetPosition);
-            }
-            if (object.damage != null)
-                message.damage = object.damage | 0;
-            if (object.healAmount != null)
-                message.healAmount = object.healAmount | 0;
-            if (object.miss != null)
-                message.miss = Boolean(object.miss);
-            if (object.spriteId != null)
-                message.spriteId = object.spriteId | 0;
-            if (object.soundId != null)
-                message.soundId = object.soundId | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a SpellEffectEvent message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.SpellEffectEvent
-         * @static
-         * @param {hbonline.SpellEffectEvent} message SpellEffectEvent
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        SpellEffectEvent.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.casterId = 0;
-                object.spellId = 0;
-                object.targetId = 0;
-                object.casterPosition = null;
-                object.targetPosition = null;
-                object.damage = 0;
-                object.healAmount = 0;
-                object.miss = false;
-                object.spriteId = 0;
-                object.soundId = 0;
-            }
-            if (message.casterId != null && message.hasOwnProperty("casterId"))
-                object.casterId = message.casterId;
-            if (message.spellId != null && message.hasOwnProperty("spellId"))
-                object.spellId = message.spellId;
-            if (message.targetId != null && message.hasOwnProperty("targetId"))
-                object.targetId = message.targetId;
-            if (message.casterPosition != null && message.hasOwnProperty("casterPosition"))
-                object.casterPosition = $root.hbonline.Vec2.toObject(message.casterPosition, options);
-            if (message.targetPosition != null && message.hasOwnProperty("targetPosition"))
-                object.targetPosition = $root.hbonline.Vec2.toObject(message.targetPosition, options);
-            if (message.damage != null && message.hasOwnProperty("damage"))
-                object.damage = message.damage;
-            if (message.healAmount != null && message.hasOwnProperty("healAmount"))
-                object.healAmount = message.healAmount;
-            if (message.miss != null && message.hasOwnProperty("miss"))
-                object.miss = message.miss;
-            if (message.spriteId != null && message.hasOwnProperty("spriteId"))
-                object.spriteId = message.spriteId;
-            if (message.soundId != null && message.hasOwnProperty("soundId"))
-                object.soundId = message.soundId;
-            return object;
-        };
-
-        /**
-         * Converts this SpellEffectEvent to JSON.
-         * @function toJSON
-         * @memberof hbonline.SpellEffectEvent
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        SpellEffectEvent.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -14668,19 +8414,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified BuffUpdate message, length delimited. Does not implicitly {@link hbonline.BuffUpdate.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.BuffUpdate
-         * @static
-         * @param {hbonline.IBuffUpdate} message BuffUpdate message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        BuffUpdate.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a BuffUpdate message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.BuffUpdate
@@ -14734,136 +8467,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a BuffUpdate message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.BuffUpdate
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.BuffUpdate} BuffUpdate
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        BuffUpdate.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a BuffUpdate message.
-         * @function verify
-         * @memberof hbonline.BuffUpdate
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        BuffUpdate.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.objectId != null && message.hasOwnProperty("objectId"))
-                if (!$util.isInteger(message.objectId))
-                    return "objectId: integer expected";
-            if (message.spellId != null && message.hasOwnProperty("spellId"))
-                if (!$util.isInteger(message.spellId))
-                    return "spellId: integer expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.statType != null && message.hasOwnProperty("statType"))
-                if (!$util.isInteger(message.statType))
-                    return "statType: integer expected";
-            if (message.amount != null && message.hasOwnProperty("amount"))
-                if (!$util.isInteger(message.amount))
-                    return "amount: integer expected";
-            if (message.remainingSeconds != null && message.hasOwnProperty("remainingSeconds"))
-                if (!$util.isInteger(message.remainingSeconds))
-                    return "remainingSeconds: integer expected";
-            if (message.removed != null && message.hasOwnProperty("removed"))
-                if (typeof message.removed !== "boolean")
-                    return "removed: boolean expected";
-            return null;
-        };
-
-        /**
-         * Creates a BuffUpdate message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.BuffUpdate
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.BuffUpdate} BuffUpdate
-         */
-        BuffUpdate.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.BuffUpdate)
-                return object;
-            let message = new $root.hbonline.BuffUpdate();
-            if (object.objectId != null)
-                message.objectId = object.objectId | 0;
-            if (object.spellId != null)
-                message.spellId = object.spellId | 0;
-            if (object.name != null)
-                message.name = String(object.name);
-            if (object.statType != null)
-                message.statType = object.statType | 0;
-            if (object.amount != null)
-                message.amount = object.amount | 0;
-            if (object.remainingSeconds != null)
-                message.remainingSeconds = object.remainingSeconds | 0;
-            if (object.removed != null)
-                message.removed = Boolean(object.removed);
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a BuffUpdate message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.BuffUpdate
-         * @static
-         * @param {hbonline.BuffUpdate} message BuffUpdate
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        BuffUpdate.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.objectId = 0;
-                object.spellId = 0;
-                object.name = "";
-                object.statType = 0;
-                object.amount = 0;
-                object.remainingSeconds = 0;
-                object.removed = false;
-            }
-            if (message.objectId != null && message.hasOwnProperty("objectId"))
-                object.objectId = message.objectId;
-            if (message.spellId != null && message.hasOwnProperty("spellId"))
-                object.spellId = message.spellId;
-            if (message.name != null && message.hasOwnProperty("name"))
-                object.name = message.name;
-            if (message.statType != null && message.hasOwnProperty("statType"))
-                object.statType = message.statType;
-            if (message.amount != null && message.hasOwnProperty("amount"))
-                object.amount = message.amount;
-            if (message.remainingSeconds != null && message.hasOwnProperty("remainingSeconds"))
-                object.remainingSeconds = message.remainingSeconds;
-            if (message.removed != null && message.hasOwnProperty("removed"))
-                object.removed = message.removed;
-            return object;
-        };
-
-        /**
-         * Converts this BuffUpdate to JSON.
-         * @function toJSON
-         * @memberof hbonline.BuffUpdate
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        BuffUpdate.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -14948,19 +8551,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified SpellListUpdate message, length delimited. Does not implicitly {@link hbonline.SpellListUpdate.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.SpellListUpdate
-         * @static
-         * @param {hbonline.ISpellListUpdate} message SpellListUpdate message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        SpellListUpdate.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a SpellListUpdate message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.SpellListUpdate
@@ -14992,104 +8582,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a SpellListUpdate message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.SpellListUpdate
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.SpellListUpdate} SpellListUpdate
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        SpellListUpdate.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a SpellListUpdate message.
-         * @function verify
-         * @memberof hbonline.SpellListUpdate
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        SpellListUpdate.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.spells != null && message.hasOwnProperty("spells")) {
-                if (!Array.isArray(message.spells))
-                    return "spells: array expected";
-                for (let i = 0; i < message.spells.length; ++i) {
-                    let error = $root.hbonline.LearnedSpell.verify(message.spells[i]);
-                    if (error)
-                        return "spells." + error;
-                }
-            }
-            return null;
-        };
-
-        /**
-         * Creates a SpellListUpdate message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.SpellListUpdate
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.SpellListUpdate} SpellListUpdate
-         */
-        SpellListUpdate.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.SpellListUpdate)
-                return object;
-            let message = new $root.hbonline.SpellListUpdate();
-            if (object.spells) {
-                if (!Array.isArray(object.spells))
-                    throw TypeError(".hbonline.SpellListUpdate.spells: array expected");
-                message.spells = [];
-                for (let i = 0; i < object.spells.length; ++i) {
-                    if (typeof object.spells[i] !== "object")
-                        throw TypeError(".hbonline.SpellListUpdate.spells: object expected");
-                    message.spells[i] = $root.hbonline.LearnedSpell.fromObject(object.spells[i]);
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a SpellListUpdate message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.SpellListUpdate
-         * @static
-         * @param {hbonline.SpellListUpdate} message SpellListUpdate
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        SpellListUpdate.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.arrays || options.defaults)
-                object.spells = [];
-            if (message.spells && message.spells.length) {
-                object.spells = [];
-                for (let j = 0; j < message.spells.length; ++j)
-                    object.spells[j] = $root.hbonline.LearnedSpell.toObject(message.spells[j], options);
-            }
-            return object;
-        };
-
-        /**
-         * Converts this SpellListUpdate to JSON.
-         * @function toJSON
-         * @memberof hbonline.SpellListUpdate
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        SpellListUpdate.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -15227,19 +8719,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified LearnedSpell message, length delimited. Does not implicitly {@link hbonline.LearnedSpell.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.LearnedSpell
-         * @static
-         * @param {hbonline.ILearnedSpell} message LearnedSpell message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        LearnedSpell.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a LearnedSpell message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.LearnedSpell
@@ -15289,128 +8768,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a LearnedSpell message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.LearnedSpell
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.LearnedSpell} LearnedSpell
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        LearnedSpell.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a LearnedSpell message.
-         * @function verify
-         * @memberof hbonline.LearnedSpell
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        LearnedSpell.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.spellId != null && message.hasOwnProperty("spellId"))
-                if (!$util.isInteger(message.spellId))
-                    return "spellId: integer expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.manaCost != null && message.hasOwnProperty("manaCost"))
-                if (!$util.isInteger(message.manaCost))
-                    return "manaCost: integer expected";
-            if (message.cooldownMs != null && message.hasOwnProperty("cooldownMs"))
-                if (!$util.isInteger(message.cooldownMs))
-                    return "cooldownMs: integer expected";
-            if (message.spellType != null && message.hasOwnProperty("spellType"))
-                if (!$util.isInteger(message.spellType))
-                    return "spellType: integer expected";
-            if (message.spriteId != null && message.hasOwnProperty("spriteId"))
-                if (!$util.isInteger(message.spriteId))
-                    return "spriteId: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a LearnedSpell message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.LearnedSpell
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.LearnedSpell} LearnedSpell
-         */
-        LearnedSpell.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.LearnedSpell)
-                return object;
-            let message = new $root.hbonline.LearnedSpell();
-            if (object.spellId != null)
-                message.spellId = object.spellId | 0;
-            if (object.name != null)
-                message.name = String(object.name);
-            if (object.manaCost != null)
-                message.manaCost = object.manaCost | 0;
-            if (object.cooldownMs != null)
-                message.cooldownMs = object.cooldownMs | 0;
-            if (object.spellType != null)
-                message.spellType = object.spellType | 0;
-            if (object.spriteId != null)
-                message.spriteId = object.spriteId | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a LearnedSpell message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.LearnedSpell
-         * @static
-         * @param {hbonline.LearnedSpell} message LearnedSpell
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        LearnedSpell.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.spellId = 0;
-                object.name = "";
-                object.manaCost = 0;
-                object.cooldownMs = 0;
-                object.spellType = 0;
-                object.spriteId = 0;
-            }
-            if (message.spellId != null && message.hasOwnProperty("spellId"))
-                object.spellId = message.spellId;
-            if (message.name != null && message.hasOwnProperty("name"))
-                object.name = message.name;
-            if (message.manaCost != null && message.hasOwnProperty("manaCost"))
-                object.manaCost = message.manaCost;
-            if (message.cooldownMs != null && message.hasOwnProperty("cooldownMs"))
-                object.cooldownMs = message.cooldownMs;
-            if (message.spellType != null && message.hasOwnProperty("spellType"))
-                object.spellType = message.spellType;
-            if (message.spriteId != null && message.hasOwnProperty("spriteId"))
-                object.spriteId = message.spriteId;
-            return object;
-        };
-
-        /**
-         * Converts this LearnedSpell to JSON.
-         * @function toJSON
-         * @memberof hbonline.LearnedSpell
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        LearnedSpell.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -15495,19 +8852,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified SpellCatalog message, length delimited. Does not implicitly {@link hbonline.SpellCatalog.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.SpellCatalog
-         * @static
-         * @param {hbonline.ISpellCatalog} message SpellCatalog message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        SpellCatalog.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a SpellCatalog message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.SpellCatalog
@@ -15539,104 +8883,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a SpellCatalog message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.SpellCatalog
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.SpellCatalog} SpellCatalog
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        SpellCatalog.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a SpellCatalog message.
-         * @function verify
-         * @memberof hbonline.SpellCatalog
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        SpellCatalog.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.spells != null && message.hasOwnProperty("spells")) {
-                if (!Array.isArray(message.spells))
-                    return "spells: array expected";
-                for (let i = 0; i < message.spells.length; ++i) {
-                    let error = $root.hbonline.SpellCatalogEntry.verify(message.spells[i]);
-                    if (error)
-                        return "spells." + error;
-                }
-            }
-            return null;
-        };
-
-        /**
-         * Creates a SpellCatalog message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.SpellCatalog
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.SpellCatalog} SpellCatalog
-         */
-        SpellCatalog.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.SpellCatalog)
-                return object;
-            let message = new $root.hbonline.SpellCatalog();
-            if (object.spells) {
-                if (!Array.isArray(object.spells))
-                    throw TypeError(".hbonline.SpellCatalog.spells: array expected");
-                message.spells = [];
-                for (let i = 0; i < object.spells.length; ++i) {
-                    if (typeof object.spells[i] !== "object")
-                        throw TypeError(".hbonline.SpellCatalog.spells: object expected");
-                    message.spells[i] = $root.hbonline.SpellCatalogEntry.fromObject(object.spells[i]);
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a SpellCatalog message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.SpellCatalog
-         * @static
-         * @param {hbonline.SpellCatalog} message SpellCatalog
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        SpellCatalog.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.arrays || options.defaults)
-                object.spells = [];
-            if (message.spells && message.spells.length) {
-                object.spells = [];
-                for (let j = 0; j < message.spells.length; ++j)
-                    object.spells[j] = $root.hbonline.SpellCatalogEntry.toObject(message.spells[j], options);
-            }
-            return object;
-        };
-
-        /**
-         * Converts this SpellCatalog to JSON.
-         * @function toJSON
-         * @memberof hbonline.SpellCatalog
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        SpellCatalog.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -15796,19 +9042,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified SpellCatalogEntry message, length delimited. Does not implicitly {@link hbonline.SpellCatalogEntry.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.SpellCatalogEntry
-         * @static
-         * @param {hbonline.ISpellCatalogEntry} message SpellCatalogEntry message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        SpellCatalogEntry.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a SpellCatalogEntry message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.SpellCatalogEntry
@@ -15866,144 +9099,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a SpellCatalogEntry message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.SpellCatalogEntry
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.SpellCatalogEntry} SpellCatalogEntry
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        SpellCatalogEntry.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a SpellCatalogEntry message.
-         * @function verify
-         * @memberof hbonline.SpellCatalogEntry
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        SpellCatalogEntry.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.spellId != null && message.hasOwnProperty("spellId"))
-                if (!$util.isInteger(message.spellId))
-                    return "spellId: integer expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.spellType != null && message.hasOwnProperty("spellType"))
-                if (!$util.isInteger(message.spellType))
-                    return "spellType: integer expected";
-            if (message.manaCost != null && message.hasOwnProperty("manaCost"))
-                if (!$util.isInteger(message.manaCost))
-                    return "manaCost: integer expected";
-            if (message.reqLevel != null && message.hasOwnProperty("reqLevel"))
-                if (!$util.isInteger(message.reqLevel))
-                    return "reqLevel: integer expected";
-            if (message.reqMag != null && message.hasOwnProperty("reqMag"))
-                if (!$util.isInteger(message.reqMag))
-                    return "reqMag: integer expected";
-            if (message.reqInt != null && message.hasOwnProperty("reqInt"))
-                if (!$util.isInteger(message.reqInt))
-                    return "reqInt: integer expected";
-            if (message.learned != null && message.hasOwnProperty("learned"))
-                if (typeof message.learned !== "boolean")
-                    return "learned: boolean expected";
-            return null;
-        };
-
-        /**
-         * Creates a SpellCatalogEntry message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.SpellCatalogEntry
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.SpellCatalogEntry} SpellCatalogEntry
-         */
-        SpellCatalogEntry.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.SpellCatalogEntry)
-                return object;
-            let message = new $root.hbonline.SpellCatalogEntry();
-            if (object.spellId != null)
-                message.spellId = object.spellId | 0;
-            if (object.name != null)
-                message.name = String(object.name);
-            if (object.spellType != null)
-                message.spellType = object.spellType | 0;
-            if (object.manaCost != null)
-                message.manaCost = object.manaCost | 0;
-            if (object.reqLevel != null)
-                message.reqLevel = object.reqLevel | 0;
-            if (object.reqMag != null)
-                message.reqMag = object.reqMag | 0;
-            if (object.reqInt != null)
-                message.reqInt = object.reqInt | 0;
-            if (object.learned != null)
-                message.learned = Boolean(object.learned);
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a SpellCatalogEntry message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.SpellCatalogEntry
-         * @static
-         * @param {hbonline.SpellCatalogEntry} message SpellCatalogEntry
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        SpellCatalogEntry.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.spellId = 0;
-                object.name = "";
-                object.spellType = 0;
-                object.manaCost = 0;
-                object.reqLevel = 0;
-                object.reqMag = 0;
-                object.reqInt = 0;
-                object.learned = false;
-            }
-            if (message.spellId != null && message.hasOwnProperty("spellId"))
-                object.spellId = message.spellId;
-            if (message.name != null && message.hasOwnProperty("name"))
-                object.name = message.name;
-            if (message.spellType != null && message.hasOwnProperty("spellType"))
-                object.spellType = message.spellType;
-            if (message.manaCost != null && message.hasOwnProperty("manaCost"))
-                object.manaCost = message.manaCost;
-            if (message.reqLevel != null && message.hasOwnProperty("reqLevel"))
-                object.reqLevel = message.reqLevel;
-            if (message.reqMag != null && message.hasOwnProperty("reqMag"))
-                object.reqMag = message.reqMag;
-            if (message.reqInt != null && message.hasOwnProperty("reqInt"))
-                object.reqInt = message.reqInt;
-            if (message.learned != null && message.hasOwnProperty("learned"))
-                object.learned = message.learned;
-            return object;
-        };
-
-        /**
-         * Converts this SpellCatalogEntry to JSON.
-         * @function toJSON
-         * @memberof hbonline.SpellCatalogEntry
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        SpellCatalogEntry.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -16086,19 +9181,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified LearnSpellRequest message, length delimited. Does not implicitly {@link hbonline.LearnSpellRequest.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.LearnSpellRequest
-         * @static
-         * @param {hbonline.ILearnSpellRequest} message LearnSpellRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        LearnSpellRequest.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a LearnSpellRequest message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.LearnSpellRequest
@@ -16128,87 +9210,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a LearnSpellRequest message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.LearnSpellRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.LearnSpellRequest} LearnSpellRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        LearnSpellRequest.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a LearnSpellRequest message.
-         * @function verify
-         * @memberof hbonline.LearnSpellRequest
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        LearnSpellRequest.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.spellId != null && message.hasOwnProperty("spellId"))
-                if (!$util.isInteger(message.spellId))
-                    return "spellId: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a LearnSpellRequest message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.LearnSpellRequest
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.LearnSpellRequest} LearnSpellRequest
-         */
-        LearnSpellRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.LearnSpellRequest)
-                return object;
-            let message = new $root.hbonline.LearnSpellRequest();
-            if (object.spellId != null)
-                message.spellId = object.spellId | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a LearnSpellRequest message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.LearnSpellRequest
-         * @static
-         * @param {hbonline.LearnSpellRequest} message LearnSpellRequest
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        LearnSpellRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults)
-                object.spellId = 0;
-            if (message.spellId != null && message.hasOwnProperty("spellId"))
-                object.spellId = message.spellId;
-            return object;
-        };
-
-        /**
-         * Converts this LearnSpellRequest to JSON.
-         * @function toJSON
-         * @memberof hbonline.LearnSpellRequest
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        LearnSpellRequest.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -16315,19 +9316,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified SkillListUpdate message, length delimited. Does not implicitly {@link hbonline.SkillListUpdate.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.SkillListUpdate
-         * @static
-         * @param {hbonline.ISkillListUpdate} message SkillListUpdate message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        SkillListUpdate.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a SkillListUpdate message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.SkillListUpdate
@@ -16367,122 +9355,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a SkillListUpdate message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.SkillListUpdate
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.SkillListUpdate} SkillListUpdate
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        SkillListUpdate.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a SkillListUpdate message.
-         * @function verify
-         * @memberof hbonline.SkillListUpdate
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        SkillListUpdate.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.skills != null && message.hasOwnProperty("skills")) {
-                if (!Array.isArray(message.skills))
-                    return "skills: array expected";
-                for (let i = 0; i < message.skills.length; ++i) {
-                    let error = $root.hbonline.SkillEntry.verify(message.skills[i]);
-                    if (error)
-                        return "skills." + error;
-                }
-            }
-            if (message.totalMastery != null && message.hasOwnProperty("totalMastery"))
-                if (!$util.isInteger(message.totalMastery))
-                    return "totalMastery: integer expected";
-            if (message.masteryCap != null && message.hasOwnProperty("masteryCap"))
-                if (!$util.isInteger(message.masteryCap))
-                    return "masteryCap: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a SkillListUpdate message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.SkillListUpdate
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.SkillListUpdate} SkillListUpdate
-         */
-        SkillListUpdate.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.SkillListUpdate)
-                return object;
-            let message = new $root.hbonline.SkillListUpdate();
-            if (object.skills) {
-                if (!Array.isArray(object.skills))
-                    throw TypeError(".hbonline.SkillListUpdate.skills: array expected");
-                message.skills = [];
-                for (let i = 0; i < object.skills.length; ++i) {
-                    if (typeof object.skills[i] !== "object")
-                        throw TypeError(".hbonline.SkillListUpdate.skills: object expected");
-                    message.skills[i] = $root.hbonline.SkillEntry.fromObject(object.skills[i]);
-                }
-            }
-            if (object.totalMastery != null)
-                message.totalMastery = object.totalMastery | 0;
-            if (object.masteryCap != null)
-                message.masteryCap = object.masteryCap | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a SkillListUpdate message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.SkillListUpdate
-         * @static
-         * @param {hbonline.SkillListUpdate} message SkillListUpdate
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        SkillListUpdate.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.arrays || options.defaults)
-                object.skills = [];
-            if (options.defaults) {
-                object.totalMastery = 0;
-                object.masteryCap = 0;
-            }
-            if (message.skills && message.skills.length) {
-                object.skills = [];
-                for (let j = 0; j < message.skills.length; ++j)
-                    object.skills[j] = $root.hbonline.SkillEntry.toObject(message.skills[j], options);
-            }
-            if (message.totalMastery != null && message.hasOwnProperty("totalMastery"))
-                object.totalMastery = message.totalMastery;
-            if (message.masteryCap != null && message.hasOwnProperty("masteryCap"))
-                object.masteryCap = message.masteryCap;
-            return object;
-        };
-
-        /**
-         * Converts this SkillListUpdate to JSON.
-         * @function toJSON
-         * @memberof hbonline.SkillListUpdate
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        SkillListUpdate.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -16587,19 +9459,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified SkillEntry message, length delimited. Does not implicitly {@link hbonline.SkillEntry.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.SkillEntry
-         * @static
-         * @param {hbonline.ISkillEntry} message SkillEntry message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        SkillEntry.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a SkillEntry message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.SkillEntry
@@ -16637,104 +9496,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a SkillEntry message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.SkillEntry
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.SkillEntry} SkillEntry
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        SkillEntry.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a SkillEntry message.
-         * @function verify
-         * @memberof hbonline.SkillEntry
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        SkillEntry.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.skillId != null && message.hasOwnProperty("skillId"))
-                if (!$util.isInteger(message.skillId))
-                    return "skillId: integer expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.mastery != null && message.hasOwnProperty("mastery"))
-                if (!$util.isInteger(message.mastery))
-                    return "mastery: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a SkillEntry message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.SkillEntry
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.SkillEntry} SkillEntry
-         */
-        SkillEntry.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.SkillEntry)
-                return object;
-            let message = new $root.hbonline.SkillEntry();
-            if (object.skillId != null)
-                message.skillId = object.skillId | 0;
-            if (object.name != null)
-                message.name = String(object.name);
-            if (object.mastery != null)
-                message.mastery = object.mastery | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a SkillEntry message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.SkillEntry
-         * @static
-         * @param {hbonline.SkillEntry} message SkillEntry
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        SkillEntry.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.skillId = 0;
-                object.name = "";
-                object.mastery = 0;
-            }
-            if (message.skillId != null && message.hasOwnProperty("skillId"))
-                object.skillId = message.skillId;
-            if (message.name != null && message.hasOwnProperty("name"))
-                object.name = message.name;
-            if (message.mastery != null && message.hasOwnProperty("mastery"))
-                object.mastery = message.mastery;
-            return object;
-        };
-
-        /**
-         * Converts this SkillEntry to JSON.
-         * @function toJSON
-         * @memberof hbonline.SkillEntry
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        SkillEntry.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -16839,19 +9600,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified SkillUseRequest message, length delimited. Does not implicitly {@link hbonline.SkillUseRequest.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.SkillUseRequest
-         * @static
-         * @param {hbonline.ISkillUseRequest} message SkillUseRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        SkillUseRequest.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a SkillUseRequest message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.SkillUseRequest
@@ -16889,109 +9637,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a SkillUseRequest message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.SkillUseRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.SkillUseRequest} SkillUseRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        SkillUseRequest.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a SkillUseRequest message.
-         * @function verify
-         * @memberof hbonline.SkillUseRequest
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        SkillUseRequest.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.skillId != null && message.hasOwnProperty("skillId"))
-                if (!$util.isInteger(message.skillId))
-                    return "skillId: integer expected";
-            if (message.targetPosition != null && message.hasOwnProperty("targetPosition")) {
-                let error = $root.hbonline.Vec2.verify(message.targetPosition);
-                if (error)
-                    return "targetPosition." + error;
-            }
-            if (message.targetId != null && message.hasOwnProperty("targetId"))
-                if (!$util.isInteger(message.targetId))
-                    return "targetId: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a SkillUseRequest message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.SkillUseRequest
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.SkillUseRequest} SkillUseRequest
-         */
-        SkillUseRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.SkillUseRequest)
-                return object;
-            let message = new $root.hbonline.SkillUseRequest();
-            if (object.skillId != null)
-                message.skillId = object.skillId | 0;
-            if (object.targetPosition != null) {
-                if (typeof object.targetPosition !== "object")
-                    throw TypeError(".hbonline.SkillUseRequest.targetPosition: object expected");
-                message.targetPosition = $root.hbonline.Vec2.fromObject(object.targetPosition);
-            }
-            if (object.targetId != null)
-                message.targetId = object.targetId | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a SkillUseRequest message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.SkillUseRequest
-         * @static
-         * @param {hbonline.SkillUseRequest} message SkillUseRequest
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        SkillUseRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.skillId = 0;
-                object.targetPosition = null;
-                object.targetId = 0;
-            }
-            if (message.skillId != null && message.hasOwnProperty("skillId"))
-                object.skillId = message.skillId;
-            if (message.targetPosition != null && message.hasOwnProperty("targetPosition"))
-                object.targetPosition = $root.hbonline.Vec2.toObject(message.targetPosition, options);
-            if (message.targetId != null && message.hasOwnProperty("targetId"))
-                object.targetId = message.targetId;
-            return object;
-        };
-
-        /**
-         * Converts this SkillUseRequest to JSON.
-         * @function toJSON
-         * @memberof hbonline.SkillUseRequest
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        SkillUseRequest.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -17118,19 +9763,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified SkillResultEvent message, length delimited. Does not implicitly {@link hbonline.SkillResultEvent.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.SkillResultEvent
-         * @static
-         * @param {hbonline.ISkillResultEvent} message SkillResultEvent message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        SkillResultEvent.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a SkillResultEvent message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.SkillResultEvent
@@ -17176,120 +9808,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a SkillResultEvent message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.SkillResultEvent
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.SkillResultEvent} SkillResultEvent
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        SkillResultEvent.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a SkillResultEvent message.
-         * @function verify
-         * @memberof hbonline.SkillResultEvent
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        SkillResultEvent.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.skillId != null && message.hasOwnProperty("skillId"))
-                if (!$util.isInteger(message.skillId))
-                    return "skillId: integer expected";
-            if (message.success != null && message.hasOwnProperty("success"))
-                if (typeof message.success !== "boolean")
-                    return "success: boolean expected";
-            if (message.message != null && message.hasOwnProperty("message"))
-                if (!$util.isString(message.message))
-                    return "message: string expected";
-            if (message.newMastery != null && message.hasOwnProperty("newMastery"))
-                if (!$util.isInteger(message.newMastery))
-                    return "newMastery: integer expected";
-            if (message.itemGainedId != null && message.hasOwnProperty("itemGainedId"))
-                if (!$util.isInteger(message.itemGainedId))
-                    return "itemGainedId: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a SkillResultEvent message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.SkillResultEvent
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.SkillResultEvent} SkillResultEvent
-         */
-        SkillResultEvent.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.SkillResultEvent)
-                return object;
-            let message = new $root.hbonline.SkillResultEvent();
-            if (object.skillId != null)
-                message.skillId = object.skillId | 0;
-            if (object.success != null)
-                message.success = Boolean(object.success);
-            if (object.message != null)
-                message.message = String(object.message);
-            if (object.newMastery != null)
-                message.newMastery = object.newMastery | 0;
-            if (object.itemGainedId != null)
-                message.itemGainedId = object.itemGainedId | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a SkillResultEvent message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.SkillResultEvent
-         * @static
-         * @param {hbonline.SkillResultEvent} message SkillResultEvent
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        SkillResultEvent.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.skillId = 0;
-                object.success = false;
-                object.message = "";
-                object.newMastery = 0;
-                object.itemGainedId = 0;
-            }
-            if (message.skillId != null && message.hasOwnProperty("skillId"))
-                object.skillId = message.skillId;
-            if (message.success != null && message.hasOwnProperty("success"))
-                object.success = message.success;
-            if (message.message != null && message.hasOwnProperty("message"))
-                object.message = message.message;
-            if (message.newMastery != null && message.hasOwnProperty("newMastery"))
-                object.newMastery = message.newMastery;
-            if (message.itemGainedId != null && message.hasOwnProperty("itemGainedId"))
-                object.itemGainedId = message.itemGainedId;
-            return object;
-        };
-
-        /**
-         * Converts this SkillResultEvent to JSON.
-         * @function toJSON
-         * @memberof hbonline.SkillResultEvent
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        SkillResultEvent.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -17372,19 +9890,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified CraftRequest message, length delimited. Does not implicitly {@link hbonline.CraftRequest.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.CraftRequest
-         * @static
-         * @param {hbonline.ICraftRequest} message CraftRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        CraftRequest.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a CraftRequest message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.CraftRequest
@@ -17414,87 +9919,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a CraftRequest message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.CraftRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.CraftRequest} CraftRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        CraftRequest.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a CraftRequest message.
-         * @function verify
-         * @memberof hbonline.CraftRequest
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        CraftRequest.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.recipeId != null && message.hasOwnProperty("recipeId"))
-                if (!$util.isInteger(message.recipeId))
-                    return "recipeId: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a CraftRequest message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.CraftRequest
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.CraftRequest} CraftRequest
-         */
-        CraftRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.CraftRequest)
-                return object;
-            let message = new $root.hbonline.CraftRequest();
-            if (object.recipeId != null)
-                message.recipeId = object.recipeId | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a CraftRequest message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.CraftRequest
-         * @static
-         * @param {hbonline.CraftRequest} message CraftRequest
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        CraftRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults)
-                object.recipeId = 0;
-            if (message.recipeId != null && message.hasOwnProperty("recipeId"))
-                object.recipeId = message.recipeId;
-            return object;
-        };
-
-        /**
-         * Converts this CraftRequest to JSON.
-         * @function toJSON
-         * @memberof hbonline.CraftRequest
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        CraftRequest.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -17610,19 +10034,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified CraftResult message, length delimited. Does not implicitly {@link hbonline.CraftResult.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.CraftResult
-         * @static
-         * @param {hbonline.ICraftResult} message CraftResult message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        CraftResult.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a CraftResult message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.CraftResult
@@ -17664,112 +10075,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a CraftResult message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.CraftResult
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.CraftResult} CraftResult
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        CraftResult.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a CraftResult message.
-         * @function verify
-         * @memberof hbonline.CraftResult
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        CraftResult.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.success != null && message.hasOwnProperty("success"))
-                if (typeof message.success !== "boolean")
-                    return "success: boolean expected";
-            if (message.message != null && message.hasOwnProperty("message"))
-                if (!$util.isString(message.message))
-                    return "message: string expected";
-            if (message.itemId != null && message.hasOwnProperty("itemId"))
-                if (!$util.isInteger(message.itemId))
-                    return "itemId: integer expected";
-            if (message.count != null && message.hasOwnProperty("count"))
-                if (!$util.isInteger(message.count))
-                    return "count: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a CraftResult message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.CraftResult
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.CraftResult} CraftResult
-         */
-        CraftResult.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.CraftResult)
-                return object;
-            let message = new $root.hbonline.CraftResult();
-            if (object.success != null)
-                message.success = Boolean(object.success);
-            if (object.message != null)
-                message.message = String(object.message);
-            if (object.itemId != null)
-                message.itemId = object.itemId | 0;
-            if (object.count != null)
-                message.count = object.count | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a CraftResult message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.CraftResult
-         * @static
-         * @param {hbonline.CraftResult} message CraftResult
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        CraftResult.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.success = false;
-                object.message = "";
-                object.itemId = 0;
-                object.count = 0;
-            }
-            if (message.success != null && message.hasOwnProperty("success"))
-                object.success = message.success;
-            if (message.message != null && message.hasOwnProperty("message"))
-                object.message = message.message;
-            if (message.itemId != null && message.hasOwnProperty("itemId"))
-                object.itemId = message.itemId;
-            if (message.count != null && message.hasOwnProperty("count"))
-                object.count = message.count;
-            return object;
-        };
-
-        /**
-         * Converts this CraftResult to JSON.
-         * @function toJSON
-         * @memberof hbonline.CraftResult
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        CraftResult.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -17852,19 +10157,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified QuestAcceptRequest message, length delimited. Does not implicitly {@link hbonline.QuestAcceptRequest.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.QuestAcceptRequest
-         * @static
-         * @param {hbonline.IQuestAcceptRequest} message QuestAcceptRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        QuestAcceptRequest.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a QuestAcceptRequest message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.QuestAcceptRequest
@@ -17894,87 +10186,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a QuestAcceptRequest message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.QuestAcceptRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.QuestAcceptRequest} QuestAcceptRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        QuestAcceptRequest.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a QuestAcceptRequest message.
-         * @function verify
-         * @memberof hbonline.QuestAcceptRequest
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        QuestAcceptRequest.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.questId != null && message.hasOwnProperty("questId"))
-                if (!$util.isInteger(message.questId))
-                    return "questId: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a QuestAcceptRequest message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.QuestAcceptRequest
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.QuestAcceptRequest} QuestAcceptRequest
-         */
-        QuestAcceptRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.QuestAcceptRequest)
-                return object;
-            let message = new $root.hbonline.QuestAcceptRequest();
-            if (object.questId != null)
-                message.questId = object.questId | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a QuestAcceptRequest message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.QuestAcceptRequest
-         * @static
-         * @param {hbonline.QuestAcceptRequest} message QuestAcceptRequest
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        QuestAcceptRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults)
-                object.questId = 0;
-            if (message.questId != null && message.hasOwnProperty("questId"))
-                object.questId = message.questId;
-            return object;
-        };
-
-        /**
-         * Converts this QuestAcceptRequest to JSON.
-         * @function toJSON
-         * @memberof hbonline.QuestAcceptRequest
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        QuestAcceptRequest.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -18057,19 +10268,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified QuestTurnInRequest message, length delimited. Does not implicitly {@link hbonline.QuestTurnInRequest.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.QuestTurnInRequest
-         * @static
-         * @param {hbonline.IQuestTurnInRequest} message QuestTurnInRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        QuestTurnInRequest.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a QuestTurnInRequest message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.QuestTurnInRequest
@@ -18099,87 +10297,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a QuestTurnInRequest message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.QuestTurnInRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.QuestTurnInRequest} QuestTurnInRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        QuestTurnInRequest.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a QuestTurnInRequest message.
-         * @function verify
-         * @memberof hbonline.QuestTurnInRequest
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        QuestTurnInRequest.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.questId != null && message.hasOwnProperty("questId"))
-                if (!$util.isInteger(message.questId))
-                    return "questId: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a QuestTurnInRequest message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.QuestTurnInRequest
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.QuestTurnInRequest} QuestTurnInRequest
-         */
-        QuestTurnInRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.QuestTurnInRequest)
-                return object;
-            let message = new $root.hbonline.QuestTurnInRequest();
-            if (object.questId != null)
-                message.questId = object.questId | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a QuestTurnInRequest message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.QuestTurnInRequest
-         * @static
-         * @param {hbonline.QuestTurnInRequest} message QuestTurnInRequest
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        QuestTurnInRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults)
-                object.questId = 0;
-            if (message.questId != null && message.hasOwnProperty("questId"))
-                object.questId = message.questId;
-            return object;
-        };
-
-        /**
-         * Converts this QuestTurnInRequest to JSON.
-         * @function toJSON
-         * @memberof hbonline.QuestTurnInRequest
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        QuestTurnInRequest.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -18280,19 +10397,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified QuestListUpdate message, length delimited. Does not implicitly {@link hbonline.QuestListUpdate.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.QuestListUpdate
-         * @static
-         * @param {hbonline.IQuestListUpdate} message QuestListUpdate message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        QuestListUpdate.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a QuestListUpdate message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.QuestListUpdate
@@ -18335,125 +10439,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a QuestListUpdate message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.QuestListUpdate
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.QuestListUpdate} QuestListUpdate
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        QuestListUpdate.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a QuestListUpdate message.
-         * @function verify
-         * @memberof hbonline.QuestListUpdate
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        QuestListUpdate.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.activeQuests != null && message.hasOwnProperty("activeQuests")) {
-                if (!Array.isArray(message.activeQuests))
-                    return "activeQuests: array expected";
-                for (let i = 0; i < message.activeQuests.length; ++i) {
-                    let error = $root.hbonline.QuestEntry.verify(message.activeQuests[i]);
-                    if (error)
-                        return "activeQuests." + error;
-                }
-            }
-            if (message.availableQuestIds != null && message.hasOwnProperty("availableQuestIds")) {
-                if (!Array.isArray(message.availableQuestIds))
-                    return "availableQuestIds: array expected";
-                for (let i = 0; i < message.availableQuestIds.length; ++i)
-                    if (!$util.isInteger(message.availableQuestIds[i]))
-                        return "availableQuestIds: integer[] expected";
-            }
-            return null;
-        };
-
-        /**
-         * Creates a QuestListUpdate message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.QuestListUpdate
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.QuestListUpdate} QuestListUpdate
-         */
-        QuestListUpdate.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.QuestListUpdate)
-                return object;
-            let message = new $root.hbonline.QuestListUpdate();
-            if (object.activeQuests) {
-                if (!Array.isArray(object.activeQuests))
-                    throw TypeError(".hbonline.QuestListUpdate.activeQuests: array expected");
-                message.activeQuests = [];
-                for (let i = 0; i < object.activeQuests.length; ++i) {
-                    if (typeof object.activeQuests[i] !== "object")
-                        throw TypeError(".hbonline.QuestListUpdate.activeQuests: object expected");
-                    message.activeQuests[i] = $root.hbonline.QuestEntry.fromObject(object.activeQuests[i]);
-                }
-            }
-            if (object.availableQuestIds) {
-                if (!Array.isArray(object.availableQuestIds))
-                    throw TypeError(".hbonline.QuestListUpdate.availableQuestIds: array expected");
-                message.availableQuestIds = [];
-                for (let i = 0; i < object.availableQuestIds.length; ++i)
-                    message.availableQuestIds[i] = object.availableQuestIds[i] | 0;
-            }
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a QuestListUpdate message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.QuestListUpdate
-         * @static
-         * @param {hbonline.QuestListUpdate} message QuestListUpdate
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        QuestListUpdate.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.arrays || options.defaults) {
-                object.activeQuests = [];
-                object.availableQuestIds = [];
-            }
-            if (message.activeQuests && message.activeQuests.length) {
-                object.activeQuests = [];
-                for (let j = 0; j < message.activeQuests.length; ++j)
-                    object.activeQuests[j] = $root.hbonline.QuestEntry.toObject(message.activeQuests[j], options);
-            }
-            if (message.availableQuestIds && message.availableQuestIds.length) {
-                object.availableQuestIds = [];
-                for (let j = 0; j < message.availableQuestIds.length; ++j)
-                    object.availableQuestIds[j] = message.availableQuestIds[j];
-            }
-            return object;
-        };
-
-        /**
-         * Converts this QuestListUpdate to JSON.
-         * @function toJSON
-         * @memberof hbonline.QuestListUpdate
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        QuestListUpdate.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -18624,19 +10609,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified QuestEntry message, length delimited. Does not implicitly {@link hbonline.QuestEntry.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.QuestEntry
-         * @static
-         * @param {hbonline.IQuestEntry} message QuestEntry message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        QuestEntry.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a QuestEntry message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.QuestEntry
@@ -18698,166 +10670,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a QuestEntry message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.QuestEntry
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.QuestEntry} QuestEntry
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        QuestEntry.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a QuestEntry message.
-         * @function verify
-         * @memberof hbonline.QuestEntry
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        QuestEntry.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.questId != null && message.hasOwnProperty("questId"))
-                if (!$util.isInteger(message.questId))
-                    return "questId: integer expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.description != null && message.hasOwnProperty("description"))
-                if (!$util.isString(message.description))
-                    return "description: string expected";
-            if (message.questType != null && message.hasOwnProperty("questType"))
-                if (!$util.isInteger(message.questType))
-                    return "questType: integer expected";
-            if (message.state != null && message.hasOwnProperty("state"))
-                if (!$util.isInteger(message.state))
-                    return "state: integer expected";
-            if (message.progress != null && message.hasOwnProperty("progress"))
-                if (!$util.isInteger(message.progress))
-                    return "progress: integer expected";
-            if (message.targetCount != null && message.hasOwnProperty("targetCount"))
-                if (!$util.isInteger(message.targetCount))
-                    return "targetCount: integer expected";
-            if (message.rewardXp != null && message.hasOwnProperty("rewardXp"))
-                if (!$util.isInteger(message.rewardXp))
-                    return "rewardXp: integer expected";
-            if (message.rewardGold != null && message.hasOwnProperty("rewardGold"))
-                if (!$util.isInteger(message.rewardGold) && !(message.rewardGold && $util.isInteger(message.rewardGold.low) && $util.isInteger(message.rewardGold.high)))
-                    return "rewardGold: integer|Long expected";
-            return null;
-        };
-
-        /**
-         * Creates a QuestEntry message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.QuestEntry
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.QuestEntry} QuestEntry
-         */
-        QuestEntry.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.QuestEntry)
-                return object;
-            let message = new $root.hbonline.QuestEntry();
-            if (object.questId != null)
-                message.questId = object.questId | 0;
-            if (object.name != null)
-                message.name = String(object.name);
-            if (object.description != null)
-                message.description = String(object.description);
-            if (object.questType != null)
-                message.questType = object.questType | 0;
-            if (object.state != null)
-                message.state = object.state | 0;
-            if (object.progress != null)
-                message.progress = object.progress | 0;
-            if (object.targetCount != null)
-                message.targetCount = object.targetCount | 0;
-            if (object.rewardXp != null)
-                message.rewardXp = object.rewardXp | 0;
-            if (object.rewardGold != null)
-                if ($util.Long)
-                    (message.rewardGold = $util.Long.fromValue(object.rewardGold)).unsigned = false;
-                else if (typeof object.rewardGold === "string")
-                    message.rewardGold = parseInt(object.rewardGold, 10);
-                else if (typeof object.rewardGold === "number")
-                    message.rewardGold = object.rewardGold;
-                else if (typeof object.rewardGold === "object")
-                    message.rewardGold = new $util.LongBits(object.rewardGold.low >>> 0, object.rewardGold.high >>> 0).toNumber();
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a QuestEntry message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.QuestEntry
-         * @static
-         * @param {hbonline.QuestEntry} message QuestEntry
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        QuestEntry.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.questId = 0;
-                object.name = "";
-                object.description = "";
-                object.questType = 0;
-                object.state = 0;
-                object.progress = 0;
-                object.targetCount = 0;
-                object.rewardXp = 0;
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
-                    object.rewardGold = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.rewardGold = options.longs === String ? "0" : 0;
-            }
-            if (message.questId != null && message.hasOwnProperty("questId"))
-                object.questId = message.questId;
-            if (message.name != null && message.hasOwnProperty("name"))
-                object.name = message.name;
-            if (message.description != null && message.hasOwnProperty("description"))
-                object.description = message.description;
-            if (message.questType != null && message.hasOwnProperty("questType"))
-                object.questType = message.questType;
-            if (message.state != null && message.hasOwnProperty("state"))
-                object.state = message.state;
-            if (message.progress != null && message.hasOwnProperty("progress"))
-                object.progress = message.progress;
-            if (message.targetCount != null && message.hasOwnProperty("targetCount"))
-                object.targetCount = message.targetCount;
-            if (message.rewardXp != null && message.hasOwnProperty("rewardXp"))
-                object.rewardXp = message.rewardXp;
-            if (message.rewardGold != null && message.hasOwnProperty("rewardGold"))
-                if (typeof message.rewardGold === "number")
-                    object.rewardGold = options.longs === String ? String(message.rewardGold) : message.rewardGold;
-                else
-                    object.rewardGold = options.longs === String ? $util.Long.prototype.toString.call(message.rewardGold) : options.longs === Number ? new $util.LongBits(message.rewardGold.low >>> 0, message.rewardGold.high >>> 0).toNumber() : message.rewardGold;
-            return object;
-        };
-
-        /**
-         * Converts this QuestEntry to JSON.
-         * @function toJSON
-         * @memberof hbonline.QuestEntry
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        QuestEntry.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -18973,19 +10785,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified QuestProgressUpdate message, length delimited. Does not implicitly {@link hbonline.QuestProgressUpdate.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.QuestProgressUpdate
-         * @static
-         * @param {hbonline.IQuestProgressUpdate} message QuestProgressUpdate message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        QuestProgressUpdate.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a QuestProgressUpdate message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.QuestProgressUpdate
@@ -19027,112 +10826,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a QuestProgressUpdate message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.QuestProgressUpdate
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.QuestProgressUpdate} QuestProgressUpdate
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        QuestProgressUpdate.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a QuestProgressUpdate message.
-         * @function verify
-         * @memberof hbonline.QuestProgressUpdate
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        QuestProgressUpdate.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.questId != null && message.hasOwnProperty("questId"))
-                if (!$util.isInteger(message.questId))
-                    return "questId: integer expected";
-            if (message.progress != null && message.hasOwnProperty("progress"))
-                if (!$util.isInteger(message.progress))
-                    return "progress: integer expected";
-            if (message.targetCount != null && message.hasOwnProperty("targetCount"))
-                if (!$util.isInteger(message.targetCount))
-                    return "targetCount: integer expected";
-            if (message.completed != null && message.hasOwnProperty("completed"))
-                if (typeof message.completed !== "boolean")
-                    return "completed: boolean expected";
-            return null;
-        };
-
-        /**
-         * Creates a QuestProgressUpdate message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.QuestProgressUpdate
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.QuestProgressUpdate} QuestProgressUpdate
-         */
-        QuestProgressUpdate.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.QuestProgressUpdate)
-                return object;
-            let message = new $root.hbonline.QuestProgressUpdate();
-            if (object.questId != null)
-                message.questId = object.questId | 0;
-            if (object.progress != null)
-                message.progress = object.progress | 0;
-            if (object.targetCount != null)
-                message.targetCount = object.targetCount | 0;
-            if (object.completed != null)
-                message.completed = Boolean(object.completed);
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a QuestProgressUpdate message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.QuestProgressUpdate
-         * @static
-         * @param {hbonline.QuestProgressUpdate} message QuestProgressUpdate
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        QuestProgressUpdate.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.questId = 0;
-                object.progress = 0;
-                object.targetCount = 0;
-                object.completed = false;
-            }
-            if (message.questId != null && message.hasOwnProperty("questId"))
-                object.questId = message.questId;
-            if (message.progress != null && message.hasOwnProperty("progress"))
-                object.progress = message.progress;
-            if (message.targetCount != null && message.hasOwnProperty("targetCount"))
-                object.targetCount = message.targetCount;
-            if (message.completed != null && message.hasOwnProperty("completed"))
-                object.completed = message.completed;
-            return object;
-        };
-
-        /**
-         * Converts this QuestProgressUpdate to JSON.
-         * @function toJSON
-         * @memberof hbonline.QuestProgressUpdate
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        QuestProgressUpdate.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -19270,19 +10963,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified QuestRewardNotification message, length delimited. Does not implicitly {@link hbonline.QuestRewardNotification.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.QuestRewardNotification
-         * @static
-         * @param {hbonline.IQuestRewardNotification} message QuestRewardNotification message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        QuestRewardNotification.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a QuestRewardNotification message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.QuestRewardNotification
@@ -19332,156 +11012,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a QuestRewardNotification message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.QuestRewardNotification
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.QuestRewardNotification} QuestRewardNotification
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        QuestRewardNotification.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a QuestRewardNotification message.
-         * @function verify
-         * @memberof hbonline.QuestRewardNotification
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        QuestRewardNotification.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.questId != null && message.hasOwnProperty("questId"))
-                if (!$util.isInteger(message.questId))
-                    return "questId: integer expected";
-            if (message.questName != null && message.hasOwnProperty("questName"))
-                if (!$util.isString(message.questName))
-                    return "questName: string expected";
-            if (message.xpGained != null && message.hasOwnProperty("xpGained"))
-                if (!$util.isInteger(message.xpGained) && !(message.xpGained && $util.isInteger(message.xpGained.low) && $util.isInteger(message.xpGained.high)))
-                    return "xpGained: integer|Long expected";
-            if (message.goldGained != null && message.hasOwnProperty("goldGained"))
-                if (!$util.isInteger(message.goldGained) && !(message.goldGained && $util.isInteger(message.goldGained.low) && $util.isInteger(message.goldGained.high)))
-                    return "goldGained: integer|Long expected";
-            if (message.itemId != null && message.hasOwnProperty("itemId"))
-                if (!$util.isInteger(message.itemId))
-                    return "itemId: integer expected";
-            if (message.itemCount != null && message.hasOwnProperty("itemCount"))
-                if (!$util.isInteger(message.itemCount))
-                    return "itemCount: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a QuestRewardNotification message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.QuestRewardNotification
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.QuestRewardNotification} QuestRewardNotification
-         */
-        QuestRewardNotification.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.QuestRewardNotification)
-                return object;
-            let message = new $root.hbonline.QuestRewardNotification();
-            if (object.questId != null)
-                message.questId = object.questId | 0;
-            if (object.questName != null)
-                message.questName = String(object.questName);
-            if (object.xpGained != null)
-                if ($util.Long)
-                    (message.xpGained = $util.Long.fromValue(object.xpGained)).unsigned = false;
-                else if (typeof object.xpGained === "string")
-                    message.xpGained = parseInt(object.xpGained, 10);
-                else if (typeof object.xpGained === "number")
-                    message.xpGained = object.xpGained;
-                else if (typeof object.xpGained === "object")
-                    message.xpGained = new $util.LongBits(object.xpGained.low >>> 0, object.xpGained.high >>> 0).toNumber();
-            if (object.goldGained != null)
-                if ($util.Long)
-                    (message.goldGained = $util.Long.fromValue(object.goldGained)).unsigned = false;
-                else if (typeof object.goldGained === "string")
-                    message.goldGained = parseInt(object.goldGained, 10);
-                else if (typeof object.goldGained === "number")
-                    message.goldGained = object.goldGained;
-                else if (typeof object.goldGained === "object")
-                    message.goldGained = new $util.LongBits(object.goldGained.low >>> 0, object.goldGained.high >>> 0).toNumber();
-            if (object.itemId != null)
-                message.itemId = object.itemId | 0;
-            if (object.itemCount != null)
-                message.itemCount = object.itemCount | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a QuestRewardNotification message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.QuestRewardNotification
-         * @static
-         * @param {hbonline.QuestRewardNotification} message QuestRewardNotification
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        QuestRewardNotification.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.questId = 0;
-                object.questName = "";
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
-                    object.xpGained = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.xpGained = options.longs === String ? "0" : 0;
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
-                    object.goldGained = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.goldGained = options.longs === String ? "0" : 0;
-                object.itemId = 0;
-                object.itemCount = 0;
-            }
-            if (message.questId != null && message.hasOwnProperty("questId"))
-                object.questId = message.questId;
-            if (message.questName != null && message.hasOwnProperty("questName"))
-                object.questName = message.questName;
-            if (message.xpGained != null && message.hasOwnProperty("xpGained"))
-                if (typeof message.xpGained === "number")
-                    object.xpGained = options.longs === String ? String(message.xpGained) : message.xpGained;
-                else
-                    object.xpGained = options.longs === String ? $util.Long.prototype.toString.call(message.xpGained) : options.longs === Number ? new $util.LongBits(message.xpGained.low >>> 0, message.xpGained.high >>> 0).toNumber() : message.xpGained;
-            if (message.goldGained != null && message.hasOwnProperty("goldGained"))
-                if (typeof message.goldGained === "number")
-                    object.goldGained = options.longs === String ? String(message.goldGained) : message.goldGained;
-                else
-                    object.goldGained = options.longs === String ? $util.Long.prototype.toString.call(message.goldGained) : options.longs === Number ? new $util.LongBits(message.goldGained.low >>> 0, message.goldGained.high >>> 0).toNumber() : message.goldGained;
-            if (message.itemId != null && message.hasOwnProperty("itemId"))
-                object.itemId = message.itemId;
-            if (message.itemCount != null && message.hasOwnProperty("itemCount"))
-                object.itemCount = message.itemCount;
-            return object;
-        };
-
-        /**
-         * Converts this QuestRewardNotification to JSON.
-         * @function toJSON
-         * @memberof hbonline.QuestRewardNotification
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        QuestRewardNotification.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -19564,19 +11094,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified FactionSelectRequest message, length delimited. Does not implicitly {@link hbonline.FactionSelectRequest.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.FactionSelectRequest
-         * @static
-         * @param {hbonline.IFactionSelectRequest} message FactionSelectRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        FactionSelectRequest.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a FactionSelectRequest message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.FactionSelectRequest
@@ -19606,87 +11123,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a FactionSelectRequest message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.FactionSelectRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.FactionSelectRequest} FactionSelectRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        FactionSelectRequest.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a FactionSelectRequest message.
-         * @function verify
-         * @memberof hbonline.FactionSelectRequest
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        FactionSelectRequest.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.side != null && message.hasOwnProperty("side"))
-                if (!$util.isInteger(message.side))
-                    return "side: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a FactionSelectRequest message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.FactionSelectRequest
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.FactionSelectRequest} FactionSelectRequest
-         */
-        FactionSelectRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.FactionSelectRequest)
-                return object;
-            let message = new $root.hbonline.FactionSelectRequest();
-            if (object.side != null)
-                message.side = object.side | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a FactionSelectRequest message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.FactionSelectRequest
-         * @static
-         * @param {hbonline.FactionSelectRequest} message FactionSelectRequest
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        FactionSelectRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults)
-                object.side = 0;
-            if (message.side != null && message.hasOwnProperty("side"))
-                object.side = message.side;
-            return object;
-        };
-
-        /**
-         * Converts this FactionSelectRequest to JSON.
-         * @function toJSON
-         * @memberof hbonline.FactionSelectRequest
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        FactionSelectRequest.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -19791,19 +11227,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified FactionSelectResponse message, length delimited. Does not implicitly {@link hbonline.FactionSelectResponse.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.FactionSelectResponse
-         * @static
-         * @param {hbonline.IFactionSelectResponse} message FactionSelectResponse message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        FactionSelectResponse.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a FactionSelectResponse message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.FactionSelectResponse
@@ -19841,104 +11264,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a FactionSelectResponse message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.FactionSelectResponse
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.FactionSelectResponse} FactionSelectResponse
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        FactionSelectResponse.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a FactionSelectResponse message.
-         * @function verify
-         * @memberof hbonline.FactionSelectResponse
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        FactionSelectResponse.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.success != null && message.hasOwnProperty("success"))
-                if (typeof message.success !== "boolean")
-                    return "success: boolean expected";
-            if (message.error != null && message.hasOwnProperty("error"))
-                if (!$util.isString(message.error))
-                    return "error: string expected";
-            if (message.side != null && message.hasOwnProperty("side"))
-                if (!$util.isInteger(message.side))
-                    return "side: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a FactionSelectResponse message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.FactionSelectResponse
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.FactionSelectResponse} FactionSelectResponse
-         */
-        FactionSelectResponse.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.FactionSelectResponse)
-                return object;
-            let message = new $root.hbonline.FactionSelectResponse();
-            if (object.success != null)
-                message.success = Boolean(object.success);
-            if (object.error != null)
-                message.error = String(object.error);
-            if (object.side != null)
-                message.side = object.side | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a FactionSelectResponse message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.FactionSelectResponse
-         * @static
-         * @param {hbonline.FactionSelectResponse} message FactionSelectResponse
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        FactionSelectResponse.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.success = false;
-                object.error = "";
-                object.side = 0;
-            }
-            if (message.success != null && message.hasOwnProperty("success"))
-                object.success = message.success;
-            if (message.error != null && message.hasOwnProperty("error"))
-                object.error = message.error;
-            if (message.side != null && message.hasOwnProperty("side"))
-                object.side = message.side;
-            return object;
-        };
-
-        /**
-         * Converts this FactionSelectResponse to JSON.
-         * @function toJSON
-         * @memberof hbonline.FactionSelectResponse
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        FactionSelectResponse.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -20021,19 +11346,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified GuildCreateRequest message, length delimited. Does not implicitly {@link hbonline.GuildCreateRequest.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.GuildCreateRequest
-         * @static
-         * @param {hbonline.IGuildCreateRequest} message GuildCreateRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        GuildCreateRequest.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a GuildCreateRequest message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.GuildCreateRequest
@@ -20063,87 +11375,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a GuildCreateRequest message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.GuildCreateRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.GuildCreateRequest} GuildCreateRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        GuildCreateRequest.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a GuildCreateRequest message.
-         * @function verify
-         * @memberof hbonline.GuildCreateRequest
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        GuildCreateRequest.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            return null;
-        };
-
-        /**
-         * Creates a GuildCreateRequest message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.GuildCreateRequest
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.GuildCreateRequest} GuildCreateRequest
-         */
-        GuildCreateRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.GuildCreateRequest)
-                return object;
-            let message = new $root.hbonline.GuildCreateRequest();
-            if (object.name != null)
-                message.name = String(object.name);
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a GuildCreateRequest message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.GuildCreateRequest
-         * @static
-         * @param {hbonline.GuildCreateRequest} message GuildCreateRequest
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        GuildCreateRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults)
-                object.name = "";
-            if (message.name != null && message.hasOwnProperty("name"))
-                object.name = message.name;
-            return object;
-        };
-
-        /**
-         * Converts this GuildCreateRequest to JSON.
-         * @function toJSON
-         * @memberof hbonline.GuildCreateRequest
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        GuildCreateRequest.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -20237,19 +11468,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified GuildActionRequest message, length delimited. Does not implicitly {@link hbonline.GuildActionRequest.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.GuildActionRequest
-         * @static
-         * @param {hbonline.IGuildActionRequest} message GuildActionRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        GuildActionRequest.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a GuildActionRequest message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.GuildActionRequest
@@ -20283,96 +11501,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a GuildActionRequest message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.GuildActionRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.GuildActionRequest} GuildActionRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        GuildActionRequest.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a GuildActionRequest message.
-         * @function verify
-         * @memberof hbonline.GuildActionRequest
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        GuildActionRequest.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.action != null && message.hasOwnProperty("action"))
-                if (!$util.isInteger(message.action))
-                    return "action: integer expected";
-            if (message.targetName != null && message.hasOwnProperty("targetName"))
-                if (!$util.isString(message.targetName))
-                    return "targetName: string expected";
-            return null;
-        };
-
-        /**
-         * Creates a GuildActionRequest message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.GuildActionRequest
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.GuildActionRequest} GuildActionRequest
-         */
-        GuildActionRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.GuildActionRequest)
-                return object;
-            let message = new $root.hbonline.GuildActionRequest();
-            if (object.action != null)
-                message.action = object.action | 0;
-            if (object.targetName != null)
-                message.targetName = String(object.targetName);
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a GuildActionRequest message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.GuildActionRequest
-         * @static
-         * @param {hbonline.GuildActionRequest} message GuildActionRequest
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        GuildActionRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.action = 0;
-                object.targetName = "";
-            }
-            if (message.action != null && message.hasOwnProperty("action"))
-                object.action = message.action;
-            if (message.targetName != null && message.hasOwnProperty("targetName"))
-                object.targetName = message.targetName;
-            return object;
-        };
-
-        /**
-         * Converts this GuildActionRequest to JSON.
-         * @function toJSON
-         * @memberof hbonline.GuildActionRequest
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        GuildActionRequest.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -20501,19 +11629,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified GuildInfo message, length delimited. Does not implicitly {@link hbonline.GuildInfo.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.GuildInfo
-         * @static
-         * @param {hbonline.IGuildInfo} message GuildInfo message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        GuildInfo.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a GuildInfo message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.GuildInfo
@@ -20561,138 +11676,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a GuildInfo message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.GuildInfo
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.GuildInfo} GuildInfo
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        GuildInfo.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a GuildInfo message.
-         * @function verify
-         * @memberof hbonline.GuildInfo
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        GuildInfo.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.guildId != null && message.hasOwnProperty("guildId"))
-                if (!$util.isInteger(message.guildId))
-                    return "guildId: integer expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.side != null && message.hasOwnProperty("side"))
-                if (!$util.isInteger(message.side))
-                    return "side: integer expected";
-            if (message.members != null && message.hasOwnProperty("members")) {
-                if (!Array.isArray(message.members))
-                    return "members: array expected";
-                for (let i = 0; i < message.members.length; ++i) {
-                    let error = $root.hbonline.GuildMemberInfo.verify(message.members[i]);
-                    if (error)
-                        return "members." + error;
-                }
-            }
-            if (message.masterName != null && message.hasOwnProperty("masterName"))
-                if (!$util.isString(message.masterName))
-                    return "masterName: string expected";
-            return null;
-        };
-
-        /**
-         * Creates a GuildInfo message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.GuildInfo
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.GuildInfo} GuildInfo
-         */
-        GuildInfo.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.GuildInfo)
-                return object;
-            let message = new $root.hbonline.GuildInfo();
-            if (object.guildId != null)
-                message.guildId = object.guildId | 0;
-            if (object.name != null)
-                message.name = String(object.name);
-            if (object.side != null)
-                message.side = object.side | 0;
-            if (object.members) {
-                if (!Array.isArray(object.members))
-                    throw TypeError(".hbonline.GuildInfo.members: array expected");
-                message.members = [];
-                for (let i = 0; i < object.members.length; ++i) {
-                    if (typeof object.members[i] !== "object")
-                        throw TypeError(".hbonline.GuildInfo.members: object expected");
-                    message.members[i] = $root.hbonline.GuildMemberInfo.fromObject(object.members[i]);
-                }
-            }
-            if (object.masterName != null)
-                message.masterName = String(object.masterName);
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a GuildInfo message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.GuildInfo
-         * @static
-         * @param {hbonline.GuildInfo} message GuildInfo
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        GuildInfo.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.arrays || options.defaults)
-                object.members = [];
-            if (options.defaults) {
-                object.guildId = 0;
-                object.name = "";
-                object.side = 0;
-                object.masterName = "";
-            }
-            if (message.guildId != null && message.hasOwnProperty("guildId"))
-                object.guildId = message.guildId;
-            if (message.name != null && message.hasOwnProperty("name"))
-                object.name = message.name;
-            if (message.side != null && message.hasOwnProperty("side"))
-                object.side = message.side;
-            if (message.members && message.members.length) {
-                object.members = [];
-                for (let j = 0; j < message.members.length; ++j)
-                    object.members[j] = $root.hbonline.GuildMemberInfo.toObject(message.members[j], options);
-            }
-            if (message.masterName != null && message.hasOwnProperty("masterName"))
-                object.masterName = message.masterName;
-            return object;
-        };
-
-        /**
-         * Converts this GuildInfo to JSON.
-         * @function toJSON
-         * @memberof hbonline.GuildInfo
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        GuildInfo.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -20808,19 +11791,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified GuildMemberInfo message, length delimited. Does not implicitly {@link hbonline.GuildMemberInfo.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.GuildMemberInfo
-         * @static
-         * @param {hbonline.IGuildMemberInfo} message GuildMemberInfo message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        GuildMemberInfo.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a GuildMemberInfo message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.GuildMemberInfo
@@ -20862,112 +11832,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a GuildMemberInfo message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.GuildMemberInfo
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.GuildMemberInfo} GuildMemberInfo
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        GuildMemberInfo.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a GuildMemberInfo message.
-         * @function verify
-         * @memberof hbonline.GuildMemberInfo
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        GuildMemberInfo.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.rank != null && message.hasOwnProperty("rank"))
-                if (!$util.isInteger(message.rank))
-                    return "rank: integer expected";
-            if (message.level != null && message.hasOwnProperty("level"))
-                if (!$util.isInteger(message.level))
-                    return "level: integer expected";
-            if (message.online != null && message.hasOwnProperty("online"))
-                if (typeof message.online !== "boolean")
-                    return "online: boolean expected";
-            return null;
-        };
-
-        /**
-         * Creates a GuildMemberInfo message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.GuildMemberInfo
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.GuildMemberInfo} GuildMemberInfo
-         */
-        GuildMemberInfo.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.GuildMemberInfo)
-                return object;
-            let message = new $root.hbonline.GuildMemberInfo();
-            if (object.name != null)
-                message.name = String(object.name);
-            if (object.rank != null)
-                message.rank = object.rank | 0;
-            if (object.level != null)
-                message.level = object.level | 0;
-            if (object.online != null)
-                message.online = Boolean(object.online);
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a GuildMemberInfo message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.GuildMemberInfo
-         * @static
-         * @param {hbonline.GuildMemberInfo} message GuildMemberInfo
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        GuildMemberInfo.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.name = "";
-                object.rank = 0;
-                object.level = 0;
-                object.online = false;
-            }
-            if (message.name != null && message.hasOwnProperty("name"))
-                object.name = message.name;
-            if (message.rank != null && message.hasOwnProperty("rank"))
-                object.rank = message.rank;
-            if (message.level != null && message.hasOwnProperty("level"))
-                object.level = message.level;
-            if (message.online != null && message.hasOwnProperty("online"))
-                object.online = message.online;
-            return object;
-        };
-
-        /**
-         * Converts this GuildMemberInfo to JSON.
-         * @function toJSON
-         * @memberof hbonline.GuildMemberInfo
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        GuildMemberInfo.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -21061,19 +11925,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified GuildActionResponse message, length delimited. Does not implicitly {@link hbonline.GuildActionResponse.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.GuildActionResponse
-         * @static
-         * @param {hbonline.IGuildActionResponse} message GuildActionResponse message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        GuildActionResponse.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a GuildActionResponse message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.GuildActionResponse
@@ -21107,96 +11958,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a GuildActionResponse message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.GuildActionResponse
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.GuildActionResponse} GuildActionResponse
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        GuildActionResponse.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a GuildActionResponse message.
-         * @function verify
-         * @memberof hbonline.GuildActionResponse
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        GuildActionResponse.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.success != null && message.hasOwnProperty("success"))
-                if (typeof message.success !== "boolean")
-                    return "success: boolean expected";
-            if (message.message != null && message.hasOwnProperty("message"))
-                if (!$util.isString(message.message))
-                    return "message: string expected";
-            return null;
-        };
-
-        /**
-         * Creates a GuildActionResponse message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.GuildActionResponse
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.GuildActionResponse} GuildActionResponse
-         */
-        GuildActionResponse.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.GuildActionResponse)
-                return object;
-            let message = new $root.hbonline.GuildActionResponse();
-            if (object.success != null)
-                message.success = Boolean(object.success);
-            if (object.message != null)
-                message.message = String(object.message);
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a GuildActionResponse message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.GuildActionResponse
-         * @static
-         * @param {hbonline.GuildActionResponse} message GuildActionResponse
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        GuildActionResponse.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.success = false;
-                object.message = "";
-            }
-            if (message.success != null && message.hasOwnProperty("success"))
-                object.success = message.success;
-            if (message.message != null && message.hasOwnProperty("message"))
-                object.message = message.message;
-            return object;
-        };
-
-        /**
-         * Converts this GuildActionResponse to JSON.
-         * @function toJSON
-         * @memberof hbonline.GuildActionResponse
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        GuildActionResponse.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -21290,19 +12051,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified PartyActionRequest message, length delimited. Does not implicitly {@link hbonline.PartyActionRequest.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.PartyActionRequest
-         * @static
-         * @param {hbonline.IPartyActionRequest} message PartyActionRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        PartyActionRequest.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a PartyActionRequest message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.PartyActionRequest
@@ -21336,96 +12084,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a PartyActionRequest message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.PartyActionRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.PartyActionRequest} PartyActionRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        PartyActionRequest.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a PartyActionRequest message.
-         * @function verify
-         * @memberof hbonline.PartyActionRequest
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        PartyActionRequest.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.action != null && message.hasOwnProperty("action"))
-                if (!$util.isInteger(message.action))
-                    return "action: integer expected";
-            if (message.targetName != null && message.hasOwnProperty("targetName"))
-                if (!$util.isString(message.targetName))
-                    return "targetName: string expected";
-            return null;
-        };
-
-        /**
-         * Creates a PartyActionRequest message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.PartyActionRequest
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.PartyActionRequest} PartyActionRequest
-         */
-        PartyActionRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.PartyActionRequest)
-                return object;
-            let message = new $root.hbonline.PartyActionRequest();
-            if (object.action != null)
-                message.action = object.action | 0;
-            if (object.targetName != null)
-                message.targetName = String(object.targetName);
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a PartyActionRequest message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.PartyActionRequest
-         * @static
-         * @param {hbonline.PartyActionRequest} message PartyActionRequest
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        PartyActionRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.action = 0;
-                object.targetName = "";
-            }
-            if (message.action != null && message.hasOwnProperty("action"))
-                object.action = message.action;
-            if (message.targetName != null && message.hasOwnProperty("targetName"))
-                object.targetName = message.targetName;
-            return object;
-        };
-
-        /**
-         * Converts this PartyActionRequest to JSON.
-         * @function toJSON
-         * @memberof hbonline.PartyActionRequest
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        PartyActionRequest.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -21519,19 +12177,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified PartyActionResponse message, length delimited. Does not implicitly {@link hbonline.PartyActionResponse.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.PartyActionResponse
-         * @static
-         * @param {hbonline.IPartyActionResponse} message PartyActionResponse message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        PartyActionResponse.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a PartyActionResponse message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.PartyActionResponse
@@ -21565,96 +12210,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a PartyActionResponse message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.PartyActionResponse
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.PartyActionResponse} PartyActionResponse
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        PartyActionResponse.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a PartyActionResponse message.
-         * @function verify
-         * @memberof hbonline.PartyActionResponse
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        PartyActionResponse.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.success != null && message.hasOwnProperty("success"))
-                if (typeof message.success !== "boolean")
-                    return "success: boolean expected";
-            if (message.message != null && message.hasOwnProperty("message"))
-                if (!$util.isString(message.message))
-                    return "message: string expected";
-            return null;
-        };
-
-        /**
-         * Creates a PartyActionResponse message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.PartyActionResponse
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.PartyActionResponse} PartyActionResponse
-         */
-        PartyActionResponse.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.PartyActionResponse)
-                return object;
-            let message = new $root.hbonline.PartyActionResponse();
-            if (object.success != null)
-                message.success = Boolean(object.success);
-            if (object.message != null)
-                message.message = String(object.message);
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a PartyActionResponse message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.PartyActionResponse
-         * @static
-         * @param {hbonline.PartyActionResponse} message PartyActionResponse
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        PartyActionResponse.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.success = false;
-                object.message = "";
-            }
-            if (message.success != null && message.hasOwnProperty("success"))
-                object.success = message.success;
-            if (message.message != null && message.hasOwnProperty("message"))
-                object.message = message.message;
-            return object;
-        };
-
-        /**
-         * Converts this PartyActionResponse to JSON.
-         * @function toJSON
-         * @memberof hbonline.PartyActionResponse
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        PartyActionResponse.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -21750,19 +12305,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified PartyUpdate message, length delimited. Does not implicitly {@link hbonline.PartyUpdate.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.PartyUpdate
-         * @static
-         * @param {hbonline.IPartyUpdate} message PartyUpdate message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        PartyUpdate.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a PartyUpdate message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.PartyUpdate
@@ -21798,113 +12340,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a PartyUpdate message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.PartyUpdate
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.PartyUpdate} PartyUpdate
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        PartyUpdate.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a PartyUpdate message.
-         * @function verify
-         * @memberof hbonline.PartyUpdate
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        PartyUpdate.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.members != null && message.hasOwnProperty("members")) {
-                if (!Array.isArray(message.members))
-                    return "members: array expected";
-                for (let i = 0; i < message.members.length; ++i) {
-                    let error = $root.hbonline.PartyMemberInfo.verify(message.members[i]);
-                    if (error)
-                        return "members." + error;
-                }
-            }
-            if (message.leaderObjectId != null && message.hasOwnProperty("leaderObjectId"))
-                if (!$util.isInteger(message.leaderObjectId))
-                    return "leaderObjectId: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a PartyUpdate message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.PartyUpdate
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.PartyUpdate} PartyUpdate
-         */
-        PartyUpdate.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.PartyUpdate)
-                return object;
-            let message = new $root.hbonline.PartyUpdate();
-            if (object.members) {
-                if (!Array.isArray(object.members))
-                    throw TypeError(".hbonline.PartyUpdate.members: array expected");
-                message.members = [];
-                for (let i = 0; i < object.members.length; ++i) {
-                    if (typeof object.members[i] !== "object")
-                        throw TypeError(".hbonline.PartyUpdate.members: object expected");
-                    message.members[i] = $root.hbonline.PartyMemberInfo.fromObject(object.members[i]);
-                }
-            }
-            if (object.leaderObjectId != null)
-                message.leaderObjectId = object.leaderObjectId | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a PartyUpdate message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.PartyUpdate
-         * @static
-         * @param {hbonline.PartyUpdate} message PartyUpdate
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        PartyUpdate.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.arrays || options.defaults)
-                object.members = [];
-            if (options.defaults)
-                object.leaderObjectId = 0;
-            if (message.members && message.members.length) {
-                object.members = [];
-                for (let j = 0; j < message.members.length; ++j)
-                    object.members[j] = $root.hbonline.PartyMemberInfo.toObject(message.members[j], options);
-            }
-            if (message.leaderObjectId != null && message.hasOwnProperty("leaderObjectId"))
-                object.leaderObjectId = message.leaderObjectId;
-            return object;
-        };
-
-        /**
-         * Converts this PartyUpdate to JSON.
-         * @function toJSON
-         * @memberof hbonline.PartyUpdate
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        PartyUpdate.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -22031,19 +12466,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified PartyMemberInfo message, length delimited. Does not implicitly {@link hbonline.PartyMemberInfo.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.PartyMemberInfo
-         * @static
-         * @param {hbonline.IPartyMemberInfo} message PartyMemberInfo message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        PartyMemberInfo.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a PartyMemberInfo message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.PartyMemberInfo
@@ -22089,120 +12511,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a PartyMemberInfo message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.PartyMemberInfo
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.PartyMemberInfo} PartyMemberInfo
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        PartyMemberInfo.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a PartyMemberInfo message.
-         * @function verify
-         * @memberof hbonline.PartyMemberInfo
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        PartyMemberInfo.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.objectId != null && message.hasOwnProperty("objectId"))
-                if (!$util.isInteger(message.objectId))
-                    return "objectId: integer expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.hp != null && message.hasOwnProperty("hp"))
-                if (!$util.isInteger(message.hp))
-                    return "hp: integer expected";
-            if (message.maxHp != null && message.hasOwnProperty("maxHp"))
-                if (!$util.isInteger(message.maxHp))
-                    return "maxHp: integer expected";
-            if (message.level != null && message.hasOwnProperty("level"))
-                if (!$util.isInteger(message.level))
-                    return "level: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a PartyMemberInfo message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.PartyMemberInfo
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.PartyMemberInfo} PartyMemberInfo
-         */
-        PartyMemberInfo.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.PartyMemberInfo)
-                return object;
-            let message = new $root.hbonline.PartyMemberInfo();
-            if (object.objectId != null)
-                message.objectId = object.objectId | 0;
-            if (object.name != null)
-                message.name = String(object.name);
-            if (object.hp != null)
-                message.hp = object.hp | 0;
-            if (object.maxHp != null)
-                message.maxHp = object.maxHp | 0;
-            if (object.level != null)
-                message.level = object.level | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a PartyMemberInfo message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.PartyMemberInfo
-         * @static
-         * @param {hbonline.PartyMemberInfo} message PartyMemberInfo
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        PartyMemberInfo.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.objectId = 0;
-                object.name = "";
-                object.hp = 0;
-                object.maxHp = 0;
-                object.level = 0;
-            }
-            if (message.objectId != null && message.hasOwnProperty("objectId"))
-                object.objectId = message.objectId;
-            if (message.name != null && message.hasOwnProperty("name"))
-                object.name = message.name;
-            if (message.hp != null && message.hasOwnProperty("hp"))
-                object.hp = message.hp;
-            if (message.maxHp != null && message.hasOwnProperty("maxHp"))
-                object.maxHp = message.maxHp;
-            if (message.level != null && message.hasOwnProperty("level"))
-                object.level = message.level;
-            return object;
-        };
-
-        /**
-         * Converts this PartyMemberInfo to JSON.
-         * @function toJSON
-         * @memberof hbonline.PartyMemberInfo
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        PartyMemberInfo.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -22296,19 +12604,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified PartyInvite message, length delimited. Does not implicitly {@link hbonline.PartyInvite.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.PartyInvite
-         * @static
-         * @param {hbonline.IPartyInvite} message PartyInvite message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        PartyInvite.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a PartyInvite message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.PartyInvite
@@ -22342,96 +12637,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a PartyInvite message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.PartyInvite
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.PartyInvite} PartyInvite
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        PartyInvite.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a PartyInvite message.
-         * @function verify
-         * @memberof hbonline.PartyInvite
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        PartyInvite.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.inviterObjectId != null && message.hasOwnProperty("inviterObjectId"))
-                if (!$util.isInteger(message.inviterObjectId))
-                    return "inviterObjectId: integer expected";
-            if (message.inviterName != null && message.hasOwnProperty("inviterName"))
-                if (!$util.isString(message.inviterName))
-                    return "inviterName: string expected";
-            return null;
-        };
-
-        /**
-         * Creates a PartyInvite message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.PartyInvite
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.PartyInvite} PartyInvite
-         */
-        PartyInvite.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.PartyInvite)
-                return object;
-            let message = new $root.hbonline.PartyInvite();
-            if (object.inviterObjectId != null)
-                message.inviterObjectId = object.inviterObjectId | 0;
-            if (object.inviterName != null)
-                message.inviterName = String(object.inviterName);
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a PartyInvite message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.PartyInvite
-         * @static
-         * @param {hbonline.PartyInvite} message PartyInvite
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        PartyInvite.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.inviterObjectId = 0;
-                object.inviterName = "";
-            }
-            if (message.inviterObjectId != null && message.hasOwnProperty("inviterObjectId"))
-                object.inviterObjectId = message.inviterObjectId;
-            if (message.inviterName != null && message.hasOwnProperty("inviterName"))
-                object.inviterName = message.inviterName;
-            return object;
-        };
-
-        /**
-         * Converts this PartyInvite to JSON.
-         * @function toJSON
-         * @memberof hbonline.PartyInvite
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        PartyInvite.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -22514,19 +12719,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified PartyInviteResponse message, length delimited. Does not implicitly {@link hbonline.PartyInviteResponse.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.PartyInviteResponse
-         * @static
-         * @param {hbonline.IPartyInviteResponse} message PartyInviteResponse message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        PartyInviteResponse.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a PartyInviteResponse message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.PartyInviteResponse
@@ -22556,87 +12748,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a PartyInviteResponse message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.PartyInviteResponse
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.PartyInviteResponse} PartyInviteResponse
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        PartyInviteResponse.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a PartyInviteResponse message.
-         * @function verify
-         * @memberof hbonline.PartyInviteResponse
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        PartyInviteResponse.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.accept != null && message.hasOwnProperty("accept"))
-                if (typeof message.accept !== "boolean")
-                    return "accept: boolean expected";
-            return null;
-        };
-
-        /**
-         * Creates a PartyInviteResponse message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.PartyInviteResponse
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.PartyInviteResponse} PartyInviteResponse
-         */
-        PartyInviteResponse.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.PartyInviteResponse)
-                return object;
-            let message = new $root.hbonline.PartyInviteResponse();
-            if (object.accept != null)
-                message.accept = Boolean(object.accept);
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a PartyInviteResponse message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.PartyInviteResponse
-         * @static
-         * @param {hbonline.PartyInviteResponse} message PartyInviteResponse
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        PartyInviteResponse.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults)
-                object.accept = false;
-            if (message.accept != null && message.hasOwnProperty("accept"))
-                object.accept = message.accept;
-            return object;
-        };
-
-        /**
-         * Converts this PartyInviteResponse to JSON.
-         * @function toJSON
-         * @memberof hbonline.PartyInviteResponse
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        PartyInviteResponse.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -22719,19 +12830,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified TradeRequest message, length delimited. Does not implicitly {@link hbonline.TradeRequest.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.TradeRequest
-         * @static
-         * @param {hbonline.ITradeRequest} message TradeRequest message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        TradeRequest.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a TradeRequest message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.TradeRequest
@@ -22761,87 +12859,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a TradeRequest message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.TradeRequest
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.TradeRequest} TradeRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        TradeRequest.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a TradeRequest message.
-         * @function verify
-         * @memberof hbonline.TradeRequest
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        TradeRequest.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.targetId != null && message.hasOwnProperty("targetId"))
-                if (!$util.isInteger(message.targetId))
-                    return "targetId: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a TradeRequest message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.TradeRequest
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.TradeRequest} TradeRequest
-         */
-        TradeRequest.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.TradeRequest)
-                return object;
-            let message = new $root.hbonline.TradeRequest();
-            if (object.targetId != null)
-                message.targetId = object.targetId | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a TradeRequest message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.TradeRequest
-         * @static
-         * @param {hbonline.TradeRequest} message TradeRequest
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        TradeRequest.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults)
-                object.targetId = 0;
-            if (message.targetId != null && message.hasOwnProperty("targetId"))
-                object.targetId = message.targetId;
-            return object;
-        };
-
-        /**
-         * Converts this TradeRequest to JSON.
-         * @function toJSON
-         * @memberof hbonline.TradeRequest
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        TradeRequest.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -22935,19 +12952,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified TradeIncoming message, length delimited. Does not implicitly {@link hbonline.TradeIncoming.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.TradeIncoming
-         * @static
-         * @param {hbonline.ITradeIncoming} message TradeIncoming message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        TradeIncoming.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a TradeIncoming message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.TradeIncoming
@@ -22981,96 +12985,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a TradeIncoming message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.TradeIncoming
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.TradeIncoming} TradeIncoming
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        TradeIncoming.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a TradeIncoming message.
-         * @function verify
-         * @memberof hbonline.TradeIncoming
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        TradeIncoming.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.requesterId != null && message.hasOwnProperty("requesterId"))
-                if (!$util.isInteger(message.requesterId))
-                    return "requesterId: integer expected";
-            if (message.requesterName != null && message.hasOwnProperty("requesterName"))
-                if (!$util.isString(message.requesterName))
-                    return "requesterName: string expected";
-            return null;
-        };
-
-        /**
-         * Creates a TradeIncoming message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.TradeIncoming
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.TradeIncoming} TradeIncoming
-         */
-        TradeIncoming.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.TradeIncoming)
-                return object;
-            let message = new $root.hbonline.TradeIncoming();
-            if (object.requesterId != null)
-                message.requesterId = object.requesterId | 0;
-            if (object.requesterName != null)
-                message.requesterName = String(object.requesterName);
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a TradeIncoming message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.TradeIncoming
-         * @static
-         * @param {hbonline.TradeIncoming} message TradeIncoming
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        TradeIncoming.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.requesterId = 0;
-                object.requesterName = "";
-            }
-            if (message.requesterId != null && message.hasOwnProperty("requesterId"))
-                object.requesterId = message.requesterId;
-            if (message.requesterName != null && message.hasOwnProperty("requesterName"))
-                object.requesterName = message.requesterName;
-            return object;
-        };
-
-        /**
-         * Converts this TradeIncoming to JSON.
-         * @function toJSON
-         * @memberof hbonline.TradeIncoming
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        TradeIncoming.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -23153,19 +13067,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified TradeResponse message, length delimited. Does not implicitly {@link hbonline.TradeResponse.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.TradeResponse
-         * @static
-         * @param {hbonline.ITradeResponse} message TradeResponse message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        TradeResponse.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a TradeResponse message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.TradeResponse
@@ -23195,87 +13096,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a TradeResponse message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.TradeResponse
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.TradeResponse} TradeResponse
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        TradeResponse.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a TradeResponse message.
-         * @function verify
-         * @memberof hbonline.TradeResponse
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        TradeResponse.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.accept != null && message.hasOwnProperty("accept"))
-                if (typeof message.accept !== "boolean")
-                    return "accept: boolean expected";
-            return null;
-        };
-
-        /**
-         * Creates a TradeResponse message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.TradeResponse
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.TradeResponse} TradeResponse
-         */
-        TradeResponse.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.TradeResponse)
-                return object;
-            let message = new $root.hbonline.TradeResponse();
-            if (object.accept != null)
-                message.accept = Boolean(object.accept);
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a TradeResponse message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.TradeResponse
-         * @static
-         * @param {hbonline.TradeResponse} message TradeResponse
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        TradeResponse.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults)
-                object.accept = false;
-            if (message.accept != null && message.hasOwnProperty("accept"))
-                object.accept = message.accept;
-            return object;
-        };
-
-        /**
-         * Converts this TradeResponse to JSON.
-         * @function toJSON
-         * @memberof hbonline.TradeResponse
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        TradeResponse.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -23369,19 +13189,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified TradeSetItem message, length delimited. Does not implicitly {@link hbonline.TradeSetItem.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.TradeSetItem
-         * @static
-         * @param {hbonline.ITradeSetItem} message TradeSetItem message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        TradeSetItem.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a TradeSetItem message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.TradeSetItem
@@ -23415,96 +13222,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a TradeSetItem message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.TradeSetItem
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.TradeSetItem} TradeSetItem
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        TradeSetItem.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a TradeSetItem message.
-         * @function verify
-         * @memberof hbonline.TradeSetItem
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        TradeSetItem.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.inventorySlot != null && message.hasOwnProperty("inventorySlot"))
-                if (!$util.isInteger(message.inventorySlot))
-                    return "inventorySlot: integer expected";
-            if (message.count != null && message.hasOwnProperty("count"))
-                if (!$util.isInteger(message.count))
-                    return "count: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a TradeSetItem message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.TradeSetItem
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.TradeSetItem} TradeSetItem
-         */
-        TradeSetItem.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.TradeSetItem)
-                return object;
-            let message = new $root.hbonline.TradeSetItem();
-            if (object.inventorySlot != null)
-                message.inventorySlot = object.inventorySlot | 0;
-            if (object.count != null)
-                message.count = object.count | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a TradeSetItem message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.TradeSetItem
-         * @static
-         * @param {hbonline.TradeSetItem} message TradeSetItem
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        TradeSetItem.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.inventorySlot = 0;
-                object.count = 0;
-            }
-            if (message.inventorySlot != null && message.hasOwnProperty("inventorySlot"))
-                object.inventorySlot = message.inventorySlot;
-            if (message.count != null && message.hasOwnProperty("count"))
-                object.count = message.count;
-            return object;
-        };
-
-        /**
-         * Converts this TradeSetItem to JSON.
-         * @function toJSON
-         * @memberof hbonline.TradeSetItem
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        TradeSetItem.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -23587,19 +13304,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified TradeSetGold message, length delimited. Does not implicitly {@link hbonline.TradeSetGold.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.TradeSetGold
-         * @static
-         * @param {hbonline.ITradeSetGold} message TradeSetGold message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        TradeSetGold.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a TradeSetGold message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.TradeSetGold
@@ -23629,101 +13333,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a TradeSetGold message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.TradeSetGold
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.TradeSetGold} TradeSetGold
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        TradeSetGold.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a TradeSetGold message.
-         * @function verify
-         * @memberof hbonline.TradeSetGold
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        TradeSetGold.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.gold != null && message.hasOwnProperty("gold"))
-                if (!$util.isInteger(message.gold) && !(message.gold && $util.isInteger(message.gold.low) && $util.isInteger(message.gold.high)))
-                    return "gold: integer|Long expected";
-            return null;
-        };
-
-        /**
-         * Creates a TradeSetGold message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.TradeSetGold
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.TradeSetGold} TradeSetGold
-         */
-        TradeSetGold.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.TradeSetGold)
-                return object;
-            let message = new $root.hbonline.TradeSetGold();
-            if (object.gold != null)
-                if ($util.Long)
-                    (message.gold = $util.Long.fromValue(object.gold)).unsigned = false;
-                else if (typeof object.gold === "string")
-                    message.gold = parseInt(object.gold, 10);
-                else if (typeof object.gold === "number")
-                    message.gold = object.gold;
-                else if (typeof object.gold === "object")
-                    message.gold = new $util.LongBits(object.gold.low >>> 0, object.gold.high >>> 0).toNumber();
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a TradeSetGold message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.TradeSetGold
-         * @static
-         * @param {hbonline.TradeSetGold} message TradeSetGold
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        TradeSetGold.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults)
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
-                    object.gold = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.gold = options.longs === String ? "0" : 0;
-            if (message.gold != null && message.hasOwnProperty("gold"))
-                if (typeof message.gold === "number")
-                    object.gold = options.longs === String ? String(message.gold) : message.gold;
-                else
-                    object.gold = options.longs === String ? $util.Long.prototype.toString.call(message.gold) : options.longs === Number ? new $util.LongBits(message.gold.low >>> 0, message.gold.high >>> 0).toNumber() : message.gold;
-            return object;
-        };
-
-        /**
-         * Converts this TradeSetGold to JSON.
-         * @function toJSON
-         * @memberof hbonline.TradeSetGold
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        TradeSetGold.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -23806,19 +13415,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified TradeConfirm message, length delimited. Does not implicitly {@link hbonline.TradeConfirm.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.TradeConfirm
-         * @static
-         * @param {hbonline.ITradeConfirm} message TradeConfirm message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        TradeConfirm.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a TradeConfirm message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.TradeConfirm
@@ -23848,87 +13444,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a TradeConfirm message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.TradeConfirm
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.TradeConfirm} TradeConfirm
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        TradeConfirm.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a TradeConfirm message.
-         * @function verify
-         * @memberof hbonline.TradeConfirm
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        TradeConfirm.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.confirmed != null && message.hasOwnProperty("confirmed"))
-                if (typeof message.confirmed !== "boolean")
-                    return "confirmed: boolean expected";
-            return null;
-        };
-
-        /**
-         * Creates a TradeConfirm message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.TradeConfirm
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.TradeConfirm} TradeConfirm
-         */
-        TradeConfirm.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.TradeConfirm)
-                return object;
-            let message = new $root.hbonline.TradeConfirm();
-            if (object.confirmed != null)
-                message.confirmed = Boolean(object.confirmed);
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a TradeConfirm message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.TradeConfirm
-         * @static
-         * @param {hbonline.TradeConfirm} message TradeConfirm
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        TradeConfirm.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults)
-                object.confirmed = false;
-            if (message.confirmed != null && message.hasOwnProperty("confirmed"))
-                object.confirmed = message.confirmed;
-            return object;
-        };
-
-        /**
-         * Converts this TradeConfirm to JSON.
-         * @function toJSON
-         * @memberof hbonline.TradeConfirm
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        TradeConfirm.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -24070,19 +13585,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified TradeUpdate message, length delimited. Does not implicitly {@link hbonline.TradeUpdate.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.TradeUpdate
-         * @static
-         * @param {hbonline.ITradeUpdate} message TradeUpdate message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        TradeUpdate.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a TradeUpdate message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.TradeUpdate
@@ -24136,192 +13638,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a TradeUpdate message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.TradeUpdate
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.TradeUpdate} TradeUpdate
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        TradeUpdate.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a TradeUpdate message.
-         * @function verify
-         * @memberof hbonline.TradeUpdate
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        TradeUpdate.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.myItems != null && message.hasOwnProperty("myItems")) {
-                if (!Array.isArray(message.myItems))
-                    return "myItems: array expected";
-                for (let i = 0; i < message.myItems.length; ++i) {
-                    let error = $root.hbonline.TradeSlot.verify(message.myItems[i]);
-                    if (error)
-                        return "myItems." + error;
-                }
-            }
-            if (message.theirItems != null && message.hasOwnProperty("theirItems")) {
-                if (!Array.isArray(message.theirItems))
-                    return "theirItems: array expected";
-                for (let i = 0; i < message.theirItems.length; ++i) {
-                    let error = $root.hbonline.TradeSlot.verify(message.theirItems[i]);
-                    if (error)
-                        return "theirItems." + error;
-                }
-            }
-            if (message.myGold != null && message.hasOwnProperty("myGold"))
-                if (!$util.isInteger(message.myGold) && !(message.myGold && $util.isInteger(message.myGold.low) && $util.isInteger(message.myGold.high)))
-                    return "myGold: integer|Long expected";
-            if (message.theirGold != null && message.hasOwnProperty("theirGold"))
-                if (!$util.isInteger(message.theirGold) && !(message.theirGold && $util.isInteger(message.theirGold.low) && $util.isInteger(message.theirGold.high)))
-                    return "theirGold: integer|Long expected";
-            if (message.myConfirmed != null && message.hasOwnProperty("myConfirmed"))
-                if (typeof message.myConfirmed !== "boolean")
-                    return "myConfirmed: boolean expected";
-            if (message.theirConfirmed != null && message.hasOwnProperty("theirConfirmed"))
-                if (typeof message.theirConfirmed !== "boolean")
-                    return "theirConfirmed: boolean expected";
-            return null;
-        };
-
-        /**
-         * Creates a TradeUpdate message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.TradeUpdate
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.TradeUpdate} TradeUpdate
-         */
-        TradeUpdate.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.TradeUpdate)
-                return object;
-            let message = new $root.hbonline.TradeUpdate();
-            if (object.myItems) {
-                if (!Array.isArray(object.myItems))
-                    throw TypeError(".hbonline.TradeUpdate.myItems: array expected");
-                message.myItems = [];
-                for (let i = 0; i < object.myItems.length; ++i) {
-                    if (typeof object.myItems[i] !== "object")
-                        throw TypeError(".hbonline.TradeUpdate.myItems: object expected");
-                    message.myItems[i] = $root.hbonline.TradeSlot.fromObject(object.myItems[i]);
-                }
-            }
-            if (object.theirItems) {
-                if (!Array.isArray(object.theirItems))
-                    throw TypeError(".hbonline.TradeUpdate.theirItems: array expected");
-                message.theirItems = [];
-                for (let i = 0; i < object.theirItems.length; ++i) {
-                    if (typeof object.theirItems[i] !== "object")
-                        throw TypeError(".hbonline.TradeUpdate.theirItems: object expected");
-                    message.theirItems[i] = $root.hbonline.TradeSlot.fromObject(object.theirItems[i]);
-                }
-            }
-            if (object.myGold != null)
-                if ($util.Long)
-                    (message.myGold = $util.Long.fromValue(object.myGold)).unsigned = false;
-                else if (typeof object.myGold === "string")
-                    message.myGold = parseInt(object.myGold, 10);
-                else if (typeof object.myGold === "number")
-                    message.myGold = object.myGold;
-                else if (typeof object.myGold === "object")
-                    message.myGold = new $util.LongBits(object.myGold.low >>> 0, object.myGold.high >>> 0).toNumber();
-            if (object.theirGold != null)
-                if ($util.Long)
-                    (message.theirGold = $util.Long.fromValue(object.theirGold)).unsigned = false;
-                else if (typeof object.theirGold === "string")
-                    message.theirGold = parseInt(object.theirGold, 10);
-                else if (typeof object.theirGold === "number")
-                    message.theirGold = object.theirGold;
-                else if (typeof object.theirGold === "object")
-                    message.theirGold = new $util.LongBits(object.theirGold.low >>> 0, object.theirGold.high >>> 0).toNumber();
-            if (object.myConfirmed != null)
-                message.myConfirmed = Boolean(object.myConfirmed);
-            if (object.theirConfirmed != null)
-                message.theirConfirmed = Boolean(object.theirConfirmed);
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a TradeUpdate message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.TradeUpdate
-         * @static
-         * @param {hbonline.TradeUpdate} message TradeUpdate
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        TradeUpdate.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.arrays || options.defaults) {
-                object.myItems = [];
-                object.theirItems = [];
-            }
-            if (options.defaults) {
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
-                    object.myGold = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.myGold = options.longs === String ? "0" : 0;
-                if ($util.Long) {
-                    let long = new $util.Long(0, 0, false);
-                    object.theirGold = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
-                } else
-                    object.theirGold = options.longs === String ? "0" : 0;
-                object.myConfirmed = false;
-                object.theirConfirmed = false;
-            }
-            if (message.myItems && message.myItems.length) {
-                object.myItems = [];
-                for (let j = 0; j < message.myItems.length; ++j)
-                    object.myItems[j] = $root.hbonline.TradeSlot.toObject(message.myItems[j], options);
-            }
-            if (message.theirItems && message.theirItems.length) {
-                object.theirItems = [];
-                for (let j = 0; j < message.theirItems.length; ++j)
-                    object.theirItems[j] = $root.hbonline.TradeSlot.toObject(message.theirItems[j], options);
-            }
-            if (message.myGold != null && message.hasOwnProperty("myGold"))
-                if (typeof message.myGold === "number")
-                    object.myGold = options.longs === String ? String(message.myGold) : message.myGold;
-                else
-                    object.myGold = options.longs === String ? $util.Long.prototype.toString.call(message.myGold) : options.longs === Number ? new $util.LongBits(message.myGold.low >>> 0, message.myGold.high >>> 0).toNumber() : message.myGold;
-            if (message.theirGold != null && message.hasOwnProperty("theirGold"))
-                if (typeof message.theirGold === "number")
-                    object.theirGold = options.longs === String ? String(message.theirGold) : message.theirGold;
-                else
-                    object.theirGold = options.longs === String ? $util.Long.prototype.toString.call(message.theirGold) : options.longs === Number ? new $util.LongBits(message.theirGold.low >>> 0, message.theirGold.high >>> 0).toNumber() : message.theirGold;
-            if (message.myConfirmed != null && message.hasOwnProperty("myConfirmed"))
-                object.myConfirmed = message.myConfirmed;
-            if (message.theirConfirmed != null && message.hasOwnProperty("theirConfirmed"))
-                object.theirConfirmed = message.theirConfirmed;
-            return object;
-        };
-
-        /**
-         * Converts this TradeUpdate to JSON.
-         * @function toJSON
-         * @memberof hbonline.TradeUpdate
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        TradeUpdate.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -24437,19 +13753,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified TradeSlot message, length delimited. Does not implicitly {@link hbonline.TradeSlot.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.TradeSlot
-         * @static
-         * @param {hbonline.ITradeSlot} message TradeSlot message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        TradeSlot.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a TradeSlot message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.TradeSlot
@@ -24491,112 +13794,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a TradeSlot message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.TradeSlot
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.TradeSlot} TradeSlot
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        TradeSlot.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a TradeSlot message.
-         * @function verify
-         * @memberof hbonline.TradeSlot
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        TradeSlot.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.itemId != null && message.hasOwnProperty("itemId"))
-                if (!$util.isInteger(message.itemId))
-                    return "itemId: integer expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.count != null && message.hasOwnProperty("count"))
-                if (!$util.isInteger(message.count))
-                    return "count: integer expected";
-            if (message.slotIndex != null && message.hasOwnProperty("slotIndex"))
-                if (!$util.isInteger(message.slotIndex))
-                    return "slotIndex: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a TradeSlot message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.TradeSlot
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.TradeSlot} TradeSlot
-         */
-        TradeSlot.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.TradeSlot)
-                return object;
-            let message = new $root.hbonline.TradeSlot();
-            if (object.itemId != null)
-                message.itemId = object.itemId | 0;
-            if (object.name != null)
-                message.name = String(object.name);
-            if (object.count != null)
-                message.count = object.count | 0;
-            if (object.slotIndex != null)
-                message.slotIndex = object.slotIndex | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a TradeSlot message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.TradeSlot
-         * @static
-         * @param {hbonline.TradeSlot} message TradeSlot
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        TradeSlot.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.itemId = 0;
-                object.name = "";
-                object.count = 0;
-                object.slotIndex = 0;
-            }
-            if (message.itemId != null && message.hasOwnProperty("itemId"))
-                object.itemId = message.itemId;
-            if (message.name != null && message.hasOwnProperty("name"))
-                object.name = message.name;
-            if (message.count != null && message.hasOwnProperty("count"))
-                object.count = message.count;
-            if (message.slotIndex != null && message.hasOwnProperty("slotIndex"))
-                object.slotIndex = message.slotIndex;
-            return object;
-        };
-
-        /**
-         * Converts this TradeSlot to JSON.
-         * @function toJSON
-         * @memberof hbonline.TradeSlot
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        TradeSlot.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -24690,19 +13887,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified TradeComplete message, length delimited. Does not implicitly {@link hbonline.TradeComplete.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.TradeComplete
-         * @static
-         * @param {hbonline.ITradeComplete} message TradeComplete message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        TradeComplete.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a TradeComplete message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.TradeComplete
@@ -24736,96 +13920,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a TradeComplete message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.TradeComplete
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.TradeComplete} TradeComplete
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        TradeComplete.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a TradeComplete message.
-         * @function verify
-         * @memberof hbonline.TradeComplete
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        TradeComplete.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.success != null && message.hasOwnProperty("success"))
-                if (typeof message.success !== "boolean")
-                    return "success: boolean expected";
-            if (message.message != null && message.hasOwnProperty("message"))
-                if (!$util.isString(message.message))
-                    return "message: string expected";
-            return null;
-        };
-
-        /**
-         * Creates a TradeComplete message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.TradeComplete
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.TradeComplete} TradeComplete
-         */
-        TradeComplete.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.TradeComplete)
-                return object;
-            let message = new $root.hbonline.TradeComplete();
-            if (object.success != null)
-                message.success = Boolean(object.success);
-            if (object.message != null)
-                message.message = String(object.message);
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a TradeComplete message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.TradeComplete
-         * @static
-         * @param {hbonline.TradeComplete} message TradeComplete
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        TradeComplete.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.success = false;
-                object.message = "";
-            }
-            if (message.success != null && message.hasOwnProperty("success"))
-                object.success = message.success;
-            if (message.message != null && message.hasOwnProperty("message"))
-                object.message = message.message;
-            return object;
-        };
-
-        /**
-         * Converts this TradeComplete to JSON.
-         * @function toJSON
-         * @memberof hbonline.TradeComplete
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        TradeComplete.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**
@@ -24941,19 +14035,6 @@ export const hbonline = $root.hbonline = (() => {
         };
 
         /**
-         * Encodes the specified PKStatusUpdate message, length delimited. Does not implicitly {@link hbonline.PKStatusUpdate.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof hbonline.PKStatusUpdate
-         * @static
-         * @param {hbonline.IPKStatusUpdate} message PKStatusUpdate message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        PKStatusUpdate.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
          * Decodes a PKStatusUpdate message from the specified reader or buffer.
          * @function decode
          * @memberof hbonline.PKStatusUpdate
@@ -24995,112 +14076,6 @@ export const hbonline = $root.hbonline = (() => {
                 }
             }
             return message;
-        };
-
-        /**
-         * Decodes a PKStatusUpdate message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof hbonline.PKStatusUpdate
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {hbonline.PKStatusUpdate} PKStatusUpdate
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        PKStatusUpdate.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a PKStatusUpdate message.
-         * @function verify
-         * @memberof hbonline.PKStatusUpdate
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        PKStatusUpdate.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.pkCount != null && message.hasOwnProperty("pkCount"))
-                if (!$util.isInteger(message.pkCount))
-                    return "pkCount: integer expected";
-            if (message.ekCount != null && message.hasOwnProperty("ekCount"))
-                if (!$util.isInteger(message.ekCount))
-                    return "ekCount: integer expected";
-            if (message.criminal != null && message.hasOwnProperty("criminal"))
-                if (typeof message.criminal !== "boolean")
-                    return "criminal: boolean expected";
-            if (message.criminalTimer != null && message.hasOwnProperty("criminalTimer"))
-                if (!$util.isInteger(message.criminalTimer))
-                    return "criminalTimer: integer expected";
-            return null;
-        };
-
-        /**
-         * Creates a PKStatusUpdate message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof hbonline.PKStatusUpdate
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {hbonline.PKStatusUpdate} PKStatusUpdate
-         */
-        PKStatusUpdate.fromObject = function fromObject(object) {
-            if (object instanceof $root.hbonline.PKStatusUpdate)
-                return object;
-            let message = new $root.hbonline.PKStatusUpdate();
-            if (object.pkCount != null)
-                message.pkCount = object.pkCount | 0;
-            if (object.ekCount != null)
-                message.ekCount = object.ekCount | 0;
-            if (object.criminal != null)
-                message.criminal = Boolean(object.criminal);
-            if (object.criminalTimer != null)
-                message.criminalTimer = object.criminalTimer | 0;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a PKStatusUpdate message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof hbonline.PKStatusUpdate
-         * @static
-         * @param {hbonline.PKStatusUpdate} message PKStatusUpdate
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        PKStatusUpdate.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            let object = {};
-            if (options.defaults) {
-                object.pkCount = 0;
-                object.ekCount = 0;
-                object.criminal = false;
-                object.criminalTimer = 0;
-            }
-            if (message.pkCount != null && message.hasOwnProperty("pkCount"))
-                object.pkCount = message.pkCount;
-            if (message.ekCount != null && message.hasOwnProperty("ekCount"))
-                object.ekCount = message.ekCount;
-            if (message.criminal != null && message.hasOwnProperty("criminal"))
-                object.criminal = message.criminal;
-            if (message.criminalTimer != null && message.hasOwnProperty("criminalTimer"))
-                object.criminalTimer = message.criminalTimer;
-            return object;
-        };
-
-        /**
-         * Converts this PKStatusUpdate to JSON.
-         * @function toJSON
-         * @memberof hbonline.PKStatusUpdate
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        PKStatusUpdate.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
         /**

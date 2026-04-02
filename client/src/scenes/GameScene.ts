@@ -686,6 +686,11 @@ export class GameScene extends Phaser.Scene {
     // Custom cursor: hide browser cursor and create a sprite that follows the mouse
     this.input.setDefaultCursor('none');
     this.initCursor();
+
+    // Show welcome intro modal on first login
+    if (!pd.introShown) {
+      this.showWelcomeModal();
+    }
   }
 
   /**
@@ -3155,6 +3160,48 @@ export class GameScene extends Phaser.Scene {
     }
   }
 
+  private showWelcomeModal(): void {
+    const overlay = document.createElement('div');
+    overlay.id = 'welcome-overlay';
+    overlay.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:399;';
+
+    const div = document.createElement('div');
+    div.id = 'welcome-modal';
+    div.style.cssText = 'position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); z-index:400; background:rgba(15,15,25,0.97); color:#ccc; padding:24px 32px; border:1px solid #555; border-radius:8px; font-family:"Segoe UI",Arial,sans-serif; font-size:13px; max-width:560px; max-height:80vh; overflow-y:auto; text-align:center;';
+
+    div.innerHTML = `
+      <div style="margin-bottom:16px;">
+        <strong style="color:#FFD700; font-size:18px;">Welcome to Helbreath Online</strong>
+      </div>
+      <div style="text-align:left; line-height:1.8; margin-bottom:20px; color:#bbb;">
+        <p style="margin:0 0 12px;">Welcome, brave adventurer! You have entered the world of Helbreath — a land of war, magic, and glory.</p>
+        <p style="margin:0 0 12px;">This is a web-based reimagination of the classic Helbreath MMORPG. The game is still in active development, so expect new features and content to be added regularly.</p>
+        <p style="margin:0 0 12px;">Here are some quick tips to get you started:</p>
+        <ul style="margin:0 0 12px; padding-left:20px;">
+          <li><strong style="color:#f39c12;">Left Click</strong> to move or attack</li>
+          <li><strong style="color:#f39c12;">I</strong> to open your Inventory</li>
+          <li><strong style="color:#f39c12;">C</strong> to view your Character Stats</li>
+          <li><strong style="color:#f39c12;">Ctrl+/</strong> to see all Hotkeys</li>
+          <li>Type in the chat bar to talk to nearby players</li>
+        </ul>
+        <p style="margin:0; color:#888;">Good luck out there!</p>
+      </div>
+      <button id="welcome-close" style="cursor:pointer; background:#f39c12; color:#000; border:none; border-radius:4px; padding:8px 32px; font-size:14px; font-weight:bold;">Enter the World</button>
+    `;
+
+    document.body.appendChild(overlay);
+    document.body.appendChild(div);
+
+    const close = () => {
+      overlay.remove();
+      div.remove();
+      this.msgHandler.sendMessage(Proto.MSG_DISMISS_INTRO_REQUEST, {});
+    };
+
+    div.querySelector('#welcome-close')?.addEventListener('click', close);
+    this.events.on('shutdown', () => { overlay.remove(); div.remove(); });
+  }
+
   private helpModalOpen = false;
 
   private toggleHelpModal(): void {
@@ -3906,8 +3953,16 @@ export class GameScene extends Phaser.Scene {
 
     if (this.textures.exists('item-ground') && this.textures.get('item-ground').has(frameName)) {
       const img = this.add.image(worldX, worldY, 'item-ground', frameName)
-        .setDepth(depthBase)
-        .setInteractive({ useHandCursor: true });
+        .setDepth(depthBase);
+      // Ensure a minimum 32x32 hit area so small sprites are easy to click
+      const minHit = 32;
+      const hitW = Math.max(img.width, minHit);
+      const hitH = Math.max(img.height, minHit);
+      img.setInteractive(
+        new Phaser.Geom.Rectangle((img.width - hitW) / 2, (img.height - hitH) / 2, hitW, hitH),
+        Phaser.Geom.Rectangle.Contains,
+      );
+      img.input!.cursor = 'pointer';
       sprite = img;
     } else {
       // Fallback: colored circle for items without atlas frames
@@ -3939,7 +3994,7 @@ export class GameScene extends Phaser.Scene {
     const pickupHandler = () => {
       const dx = Math.abs(this.tileX - data.position.x);
       const dy = Math.abs(this.tileY - data.position.y);
-      if (Math.max(dx, dy) > 1) {
+      if (dx > 2 || dy > 2) {
         this.onNotification({ message: 'Too far to pick up', type: 2 });
         return;
       }
@@ -3959,6 +4014,7 @@ export class GameScene extends Phaser.Scene {
       this.msgHandler.sendMessage(Proto.MSG_ITEM_PICKUP_REQUEST, { groundId: data.groundId });
     };
     sprite.on('pointerdown', pickupHandler);
+    label.setInteractive({ useHandCursor: true }).on('pointerdown', pickupHandler);
 
     this.groundItems.set(data.groundId, {
       groundId: data.groundId,

@@ -1078,6 +1078,8 @@ func (e *Engine) OnMessage(client *network.Client, msgType byte, rawData []byte)
 		e.handleQuestTurnIn(client, msg.(*pb.QuestTurnInRequest))
 	case network.MsgLogoutRequest:
 		e.handleLogout(client, msg.(*pb.LogoutRequest))
+	case network.MsgDismissIntroRequest:
+		e.handleDismissIntro(client)
 	}
 }
 
@@ -1358,6 +1360,25 @@ func (e *Engine) handleEnterGame(client *network.Client, req *pb.EnterGameReques
 	e.sendNearbyGroundItems(p, gm)
 
 	log.Printf("Player %s entered game on map %s at (%d,%d)", p.Name, p.MapName, p.X, p.Y)
+}
+
+func (e *Engine) handleDismissIntro(client *network.Client) {
+	if client.ObjectID == 0 {
+		return
+	}
+	val, ok := e.players.Load(client.ObjectID)
+	if !ok {
+		return
+	}
+	p := val.(*player.Player)
+	if p.IntroShown {
+		return
+	}
+	p.IntroShown = true
+	ctx := context.Background()
+	if err := e.store.MarkIntroShown(ctx, p.CharacterID); err != nil {
+		log.Printf("Failed to mark intro shown for %s: %v", p.Name, err)
+	}
 }
 
 func (e *Engine) handleMotion(client *network.Client, req *pb.MotionRequest) {
@@ -1869,26 +1890,8 @@ func (e *Engine) handleNPCDeath(n *npc.NPC, killer *player.Player, gm *mapdata.G
 	goldDrop := items.RollGoldDrop(n.Type.XP)
 	killer.Gold += goldDrop
 
-	// Roll loot based on NPC type
-	lootDrops := items.RollMultiTierLoot(n.Type.ID, n.Type.XP)
-
-	// Apply random attributes to equipment drops (4.6)
-	for _, drop := range lootDrops {
-		def := drop.Def()
-		if def == nil {
-			continue
-		}
-		// Only equipment (weapons + armor, not potions/materials) can get attributes
-		if def.Type >= items.ItemTypeWeapon && def.Type <= items.ItemTypeCape {
-			roll := rand.Float64()
-			switch {
-			case roll < 0.01: // 1% Ancient
-				drop.Attribute = uint32(items.AttrAncient) << 20
-			case roll < 0.06: // 5% Sharp (cumulative: 1%+5%=6% total, but 5% of the remaining)
-				drop.Attribute = uint32(items.AttrSharp) << 20
-			}
-		}
-	}
+	// Roll loot based on NPC type (C++ NpcDeadItemGenerator port — attributes applied internally)
+	lootDrops := items.NpcDeadItemGenerator(n.Type.ID, n.Type.XP, n.Type.BossType > 0)
 
 	for _, drop := range lootDrops {
 		e.dropGroundItem(drop, n.MapName, n.X, n.Y, gm)

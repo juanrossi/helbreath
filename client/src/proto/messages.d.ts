@@ -50,14 +50,6 @@ export namespace hbonline {
         public static encode(message: hbonline.ILoginRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified LoginRequest message, length delimited. Does not implicitly {@link hbonline.LoginRequest.verify|verify} messages.
-         * @param message LoginRequest message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.ILoginRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a LoginRequest message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -66,43 +58,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.LoginRequest;
-
-        /**
-         * Decodes a LoginRequest message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns LoginRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.LoginRequest;
-
-        /**
-         * Verifies a LoginRequest message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a LoginRequest message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns LoginRequest
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.LoginRequest;
-
-        /**
-         * Creates a plain object from a LoginRequest message. Also converts values to other types if specified.
-         * @param message LoginRequest
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.LoginRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this LoginRequest to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for LoginRequest
@@ -165,14 +120,6 @@ export namespace hbonline {
         public static encode(message: hbonline.ILoginResponse, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified LoginResponse message, length delimited. Does not implicitly {@link hbonline.LoginResponse.verify|verify} messages.
-         * @param message LoginResponse message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.ILoginResponse, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a LoginResponse message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -181,43 +128,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.LoginResponse;
-
-        /**
-         * Decodes a LoginResponse message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns LoginResponse
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.LoginResponse;
-
-        /**
-         * Verifies a LoginResponse message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a LoginResponse message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns LoginResponse
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.LoginResponse;
-
-        /**
-         * Creates a plain object from a LoginResponse message. Also converts values to other types if specified.
-         * @param message LoginResponse
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.LoginResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this LoginResponse to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for LoginResponse
@@ -298,14 +208,6 @@ export namespace hbonline {
         public static encode(message: hbonline.ICharacterSummary, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified CharacterSummary message, length delimited. Does not implicitly {@link hbonline.CharacterSummary.verify|verify} messages.
-         * @param message CharacterSummary message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.ICharacterSummary, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a CharacterSummary message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -314,43 +216,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.CharacterSummary;
-
-        /**
-         * Decodes a CharacterSummary message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns CharacterSummary
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.CharacterSummary;
-
-        /**
-         * Verifies a CharacterSummary message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a CharacterSummary message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns CharacterSummary
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.CharacterSummary;
-
-        /**
-         * Creates a plain object from a CharacterSummary message. Also converts values to other types if specified.
-         * @param message CharacterSummary
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.CharacterSummary, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this CharacterSummary to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for CharacterSummary
@@ -461,14 +326,6 @@ export namespace hbonline {
         public static encode(message: hbonline.ICreateCharacterRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified CreateCharacterRequest message, length delimited. Does not implicitly {@link hbonline.CreateCharacterRequest.verify|verify} messages.
-         * @param message CreateCharacterRequest message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.ICreateCharacterRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a CreateCharacterRequest message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -477,43 +334,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.CreateCharacterRequest;
-
-        /**
-         * Decodes a CreateCharacterRequest message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns CreateCharacterRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.CreateCharacterRequest;
-
-        /**
-         * Verifies a CreateCharacterRequest message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a CreateCharacterRequest message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns CreateCharacterRequest
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.CreateCharacterRequest;
-
-        /**
-         * Creates a plain object from a CreateCharacterRequest message. Also converts values to other types if specified.
-         * @param message CreateCharacterRequest
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.CreateCharacterRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this CreateCharacterRequest to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for CreateCharacterRequest
@@ -570,14 +390,6 @@ export namespace hbonline {
         public static encode(message: hbonline.ICreateCharacterResponse, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified CreateCharacterResponse message, length delimited. Does not implicitly {@link hbonline.CreateCharacterResponse.verify|verify} messages.
-         * @param message CreateCharacterResponse message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.ICreateCharacterResponse, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a CreateCharacterResponse message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -586,43 +398,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.CreateCharacterResponse;
-
-        /**
-         * Decodes a CreateCharacterResponse message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns CreateCharacterResponse
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.CreateCharacterResponse;
-
-        /**
-         * Verifies a CreateCharacterResponse message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a CreateCharacterResponse message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns CreateCharacterResponse
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.CreateCharacterResponse;
-
-        /**
-         * Creates a plain object from a CreateCharacterResponse message. Also converts values to other types if specified.
-         * @param message CreateCharacterResponse
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.CreateCharacterResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this CreateCharacterResponse to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for CreateCharacterResponse
@@ -667,14 +442,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IEnterGameRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified EnterGameRequest message, length delimited. Does not implicitly {@link hbonline.EnterGameRequest.verify|verify} messages.
-         * @param message EnterGameRequest message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IEnterGameRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes an EnterGameRequest message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -683,43 +450,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.EnterGameRequest;
-
-        /**
-         * Decodes an EnterGameRequest message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns EnterGameRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.EnterGameRequest;
-
-        /**
-         * Verifies an EnterGameRequest message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates an EnterGameRequest message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns EnterGameRequest
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.EnterGameRequest;
-
-        /**
-         * Creates a plain object from an EnterGameRequest message. Also converts values to other types if specified.
-         * @param message EnterGameRequest
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.EnterGameRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this EnterGameRequest to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for EnterGameRequest
@@ -764,14 +494,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IDeleteCharacterRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified DeleteCharacterRequest message, length delimited. Does not implicitly {@link hbonline.DeleteCharacterRequest.verify|verify} messages.
-         * @param message DeleteCharacterRequest message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IDeleteCharacterRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a DeleteCharacterRequest message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -780,43 +502,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.DeleteCharacterRequest;
-
-        /**
-         * Decodes a DeleteCharacterRequest message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns DeleteCharacterRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.DeleteCharacterRequest;
-
-        /**
-         * Verifies a DeleteCharacterRequest message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a DeleteCharacterRequest message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns DeleteCharacterRequest
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.DeleteCharacterRequest;
-
-        /**
-         * Creates a plain object from a DeleteCharacterRequest message. Also converts values to other types if specified.
-         * @param message DeleteCharacterRequest
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.DeleteCharacterRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this DeleteCharacterRequest to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for DeleteCharacterRequest
@@ -873,14 +558,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IDeleteCharacterResponse, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified DeleteCharacterResponse message, length delimited. Does not implicitly {@link hbonline.DeleteCharacterResponse.verify|verify} messages.
-         * @param message DeleteCharacterResponse message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IDeleteCharacterResponse, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a DeleteCharacterResponse message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -889,43 +566,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.DeleteCharacterResponse;
-
-        /**
-         * Decodes a DeleteCharacterResponse message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns DeleteCharacterResponse
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.DeleteCharacterResponse;
-
-        /**
-         * Verifies a DeleteCharacterResponse message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a DeleteCharacterResponse message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns DeleteCharacterResponse
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.DeleteCharacterResponse;
-
-        /**
-         * Creates a plain object from a DeleteCharacterResponse message. Also converts values to other types if specified.
-         * @param message DeleteCharacterResponse
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.DeleteCharacterResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this DeleteCharacterResponse to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for DeleteCharacterResponse
@@ -976,14 +616,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IVec2, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified Vec2 message, length delimited. Does not implicitly {@link hbonline.Vec2.verify|verify} messages.
-         * @param message Vec2 message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IVec2, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a Vec2 message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -992,43 +624,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.Vec2;
-
-        /**
-         * Decodes a Vec2 message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns Vec2
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.Vec2;
-
-        /**
-         * Verifies a Vec2 message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a Vec2 message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns Vec2
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.Vec2;
-
-        /**
-         * Creates a plain object from a Vec2 message. Also converts values to other types if specified.
-         * @param message Vec2
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.Vec2, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this Vec2 to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for Vec2
@@ -1151,14 +746,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IAppearance, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified Appearance message, length delimited. Does not implicitly {@link hbonline.Appearance.verify|verify} messages.
-         * @param message Appearance message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IAppearance, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes an Appearance message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -1167,43 +754,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.Appearance;
-
-        /**
-         * Decodes an Appearance message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns Appearance
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.Appearance;
-
-        /**
-         * Verifies an Appearance message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates an Appearance message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns Appearance
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.Appearance;
-
-        /**
-         * Creates a plain object from an Appearance message. Also converts values to other types if specified.
-         * @param message Appearance
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.Appearance, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this Appearance to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for Appearance
@@ -1260,14 +810,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IChatRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified ChatRequest message, length delimited. Does not implicitly {@link hbonline.ChatRequest.verify|verify} messages.
-         * @param message ChatRequest message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IChatRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a ChatRequest message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -1276,43 +818,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.ChatRequest;
-
-        /**
-         * Decodes a ChatRequest message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns ChatRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.ChatRequest;
-
-        /**
-         * Verifies a ChatRequest message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a ChatRequest message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns ChatRequest
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.ChatRequest;
-
-        /**
-         * Creates a plain object from a ChatRequest message. Also converts values to other types if specified.
-         * @param message ChatRequest
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.ChatRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this ChatRequest to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for ChatRequest
@@ -1381,14 +886,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IChatMessage, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified ChatMessage message, length delimited. Does not implicitly {@link hbonline.ChatMessage.verify|verify} messages.
-         * @param message ChatMessage message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IChatMessage, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a ChatMessage message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -1397,43 +894,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.ChatMessage;
-
-        /**
-         * Decodes a ChatMessage message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns ChatMessage
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.ChatMessage;
-
-        /**
-         * Verifies a ChatMessage message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a ChatMessage message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns ChatMessage
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.ChatMessage;
-
-        /**
-         * Creates a plain object from a ChatMessage message. Also converts values to other types if specified.
-         * @param message ChatMessage
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.ChatMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this ChatMessage to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for ChatMessage
@@ -1496,14 +956,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IEnterGameResponse, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified EnterGameResponse message, length delimited. Does not implicitly {@link hbonline.EnterGameResponse.verify|verify} messages.
-         * @param message EnterGameResponse message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IEnterGameResponse, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes an EnterGameResponse message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -1512,43 +964,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.EnterGameResponse;
-
-        /**
-         * Decodes an EnterGameResponse message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns EnterGameResponse
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.EnterGameResponse;
-
-        /**
-         * Verifies an EnterGameResponse message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates an EnterGameResponse message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns EnterGameResponse
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.EnterGameResponse;
-
-        /**
-         * Creates a plain object from an EnterGameResponse message. Also converts values to other types if specified.
-         * @param message EnterGameResponse
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.EnterGameResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this EnterGameResponse to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for EnterGameResponse
@@ -1641,6 +1056,9 @@ export namespace hbonline {
 
         /** PlayerContents adminLevel */
         adminLevel?: (number|null);
+
+        /** PlayerContents introShown */
+        introShown?: (boolean|null);
     }
 
     /** Represents a PlayerContents. */
@@ -1733,6 +1151,9 @@ export namespace hbonline {
         /** PlayerContents adminLevel. */
         public adminLevel: number;
 
+        /** PlayerContents introShown. */
+        public introShown: boolean;
+
         /**
          * Creates a new PlayerContents instance using the specified properties.
          * @param [properties] Properties to set
@@ -1749,14 +1170,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IPlayerContents, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified PlayerContents message, length delimited. Does not implicitly {@link hbonline.PlayerContents.verify|verify} messages.
-         * @param message PlayerContents message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IPlayerContents, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a PlayerContents message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -1765,43 +1178,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.PlayerContents;
-
-        /**
-         * Decodes a PlayerContents message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns PlayerContents
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.PlayerContents;
-
-        /**
-         * Verifies a PlayerContents message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a PlayerContents message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns PlayerContents
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.PlayerContents;
-
-        /**
-         * Creates a plain object from a PlayerContents message. Also converts values to other types if specified.
-         * @param message PlayerContents
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.PlayerContents, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this PlayerContents to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for PlayerContents
@@ -1864,14 +1240,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IMapInfo, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified MapInfo message, length delimited. Does not implicitly {@link hbonline.MapInfo.verify|verify} messages.
-         * @param message MapInfo message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IMapInfo, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a MapInfo message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -1880,43 +1248,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.MapInfo;
-
-        /**
-         * Decodes a MapInfo message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns MapInfo
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.MapInfo;
-
-        /**
-         * Verifies a MapInfo message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a MapInfo message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns MapInfo
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.MapInfo;
-
-        /**
-         * Creates a plain object from a MapInfo message. Also converts values to other types if specified.
-         * @param message MapInfo
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.MapInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this MapInfo to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for MapInfo
@@ -1985,14 +1316,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IMotionRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified MotionRequest message, length delimited. Does not implicitly {@link hbonline.MotionRequest.verify|verify} messages.
-         * @param message MotionRequest message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IMotionRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a MotionRequest message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -2001,43 +1324,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.MotionRequest;
-
-        /**
-         * Decodes a MotionRequest message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns MotionRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.MotionRequest;
-
-        /**
-         * Verifies a MotionRequest message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a MotionRequest message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns MotionRequest
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.MotionRequest;
-
-        /**
-         * Creates a plain object from a MotionRequest message. Also converts values to other types if specified.
-         * @param message MotionRequest
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.MotionRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this MotionRequest to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for MotionRequest
@@ -2136,14 +1422,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IMotionEvent, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified MotionEvent message, length delimited. Does not implicitly {@link hbonline.MotionEvent.verify|verify} messages.
-         * @param message MotionEvent message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IMotionEvent, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a MotionEvent message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -2152,43 +1430,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.MotionEvent;
-
-        /**
-         * Decodes a MotionEvent message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns MotionEvent
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.MotionEvent;
-
-        /**
-         * Verifies a MotionEvent message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a MotionEvent message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns MotionEvent
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.MotionEvent;
-
-        /**
-         * Creates a plain object from a MotionEvent message. Also converts values to other types if specified.
-         * @param message MotionEvent
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.MotionEvent, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this MotionEvent to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for MotionEvent
@@ -2287,14 +1528,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IPlayerAppear, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified PlayerAppear message, length delimited. Does not implicitly {@link hbonline.PlayerAppear.verify|verify} messages.
-         * @param message PlayerAppear message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IPlayerAppear, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a PlayerAppear message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -2303,43 +1536,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.PlayerAppear;
-
-        /**
-         * Decodes a PlayerAppear message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns PlayerAppear
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.PlayerAppear;
-
-        /**
-         * Verifies a PlayerAppear message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a PlayerAppear message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns PlayerAppear
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.PlayerAppear;
-
-        /**
-         * Creates a plain object from a PlayerAppear message. Also converts values to other types if specified.
-         * @param message PlayerAppear
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.PlayerAppear, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this PlayerAppear to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for PlayerAppear
@@ -2384,14 +1580,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IPlayerDisappear, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified PlayerDisappear message, length delimited. Does not implicitly {@link hbonline.PlayerDisappear.verify|verify} messages.
-         * @param message PlayerDisappear message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IPlayerDisappear, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a PlayerDisappear message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -2400,43 +1588,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.PlayerDisappear;
-
-        /**
-         * Decodes a PlayerDisappear message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns PlayerDisappear
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.PlayerDisappear;
-
-        /**
-         * Verifies a PlayerDisappear message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a PlayerDisappear message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns PlayerDisappear
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.PlayerDisappear;
-
-        /**
-         * Creates a plain object from a PlayerDisappear message. Also converts values to other types if specified.
-         * @param message PlayerDisappear
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.PlayerDisappear, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this PlayerDisappear to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for PlayerDisappear
@@ -2517,14 +1668,6 @@ export namespace hbonline {
         public static encode(message: hbonline.INpcAppear, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified NpcAppear message, length delimited. Does not implicitly {@link hbonline.NpcAppear.verify|verify} messages.
-         * @param message NpcAppear message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.INpcAppear, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a NpcAppear message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -2533,43 +1676,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.NpcAppear;
-
-        /**
-         * Decodes a NpcAppear message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns NpcAppear
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.NpcAppear;
-
-        /**
-         * Verifies a NpcAppear message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a NpcAppear message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns NpcAppear
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.NpcAppear;
-
-        /**
-         * Creates a plain object from a NpcAppear message. Also converts values to other types if specified.
-         * @param message NpcAppear
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.NpcAppear, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this NpcAppear to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for NpcAppear
@@ -2614,14 +1720,6 @@ export namespace hbonline {
         public static encode(message: hbonline.INpcDisappear, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified NpcDisappear message, length delimited. Does not implicitly {@link hbonline.NpcDisappear.verify|verify} messages.
-         * @param message NpcDisappear message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.INpcDisappear, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a NpcDisappear message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -2630,43 +1728,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.NpcDisappear;
-
-        /**
-         * Decodes a NpcDisappear message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns NpcDisappear
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.NpcDisappear;
-
-        /**
-         * Verifies a NpcDisappear message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a NpcDisappear message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns NpcDisappear
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.NpcDisappear;
-
-        /**
-         * Creates a plain object from a NpcDisappear message. Also converts values to other types if specified.
-         * @param message NpcDisappear
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.NpcDisappear, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this NpcDisappear to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for NpcDisappear
@@ -2753,14 +1814,6 @@ export namespace hbonline {
         public static encode(message: hbonline.INpcMotion, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified NpcMotion message, length delimited. Does not implicitly {@link hbonline.NpcMotion.verify|verify} messages.
-         * @param message NpcMotion message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.INpcMotion, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a NpcMotion message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -2769,43 +1822,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.NpcMotion;
-
-        /**
-         * Decodes a NpcMotion message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns NpcMotion
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.NpcMotion;
-
-        /**
-         * Verifies a NpcMotion message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a NpcMotion message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns NpcMotion
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.NpcMotion;
-
-        /**
-         * Creates a plain object from a NpcMotion message. Also converts values to other types if specified.
-         * @param message NpcMotion
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.NpcMotion, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this NpcMotion to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for NpcMotion
@@ -2856,14 +1872,6 @@ export namespace hbonline {
         public static encode(message: hbonline.INotification, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified Notification message, length delimited. Does not implicitly {@link hbonline.Notification.verify|verify} messages.
-         * @param message Notification message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.INotification, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a Notification message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -2872,43 +1880,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.Notification;
-
-        /**
-         * Decodes a Notification message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns Notification
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.Notification;
-
-        /**
-         * Verifies a Notification message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a Notification message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns Notification
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.Notification;
-
-        /**
-         * Creates a plain object from a Notification message. Also converts values to other types if specified.
-         * @param message Notification
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.Notification, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this Notification to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for Notification
@@ -2965,14 +1936,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IMapChangeResponse, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified MapChangeResponse message, length delimited. Does not implicitly {@link hbonline.MapChangeResponse.verify|verify} messages.
-         * @param message MapChangeResponse message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IMapChangeResponse, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a MapChangeResponse message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -2981,43 +1944,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.MapChangeResponse;
-
-        /**
-         * Decodes a MapChangeResponse message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns MapChangeResponse
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.MapChangeResponse;
-
-        /**
-         * Verifies a MapChangeResponse message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a MapChangeResponse message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns MapChangeResponse
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.MapChangeResponse;
-
-        /**
-         * Creates a plain object from a MapChangeResponse message. Also converts values to other types if specified.
-         * @param message MapChangeResponse
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.MapChangeResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this MapChangeResponse to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for MapChangeResponse
@@ -3104,14 +2030,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IDamageEvent, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified DamageEvent message, length delimited. Does not implicitly {@link hbonline.DamageEvent.verify|verify} messages.
-         * @param message DamageEvent message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IDamageEvent, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a DamageEvent message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -3120,43 +2038,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.DamageEvent;
-
-        /**
-         * Decodes a DamageEvent message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns DamageEvent
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.DamageEvent;
-
-        /**
-         * Verifies a DamageEvent message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a DamageEvent message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns DamageEvent
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.DamageEvent;
-
-        /**
-         * Creates a plain object from a DamageEvent message. Also converts values to other types if specified.
-         * @param message DamageEvent
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.DamageEvent, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this DamageEvent to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for DamageEvent
@@ -3291,14 +2172,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IStatUpdate, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified StatUpdate message, length delimited. Does not implicitly {@link hbonline.StatUpdate.verify|verify} messages.
-         * @param message StatUpdate message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IStatUpdate, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a StatUpdate message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -3307,43 +2180,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.StatUpdate;
-
-        /**
-         * Decodes a StatUpdate message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns StatUpdate
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.StatUpdate;
-
-        /**
-         * Verifies a StatUpdate message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a StatUpdate message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns StatUpdate
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.StatUpdate;
-
-        /**
-         * Creates a plain object from a StatUpdate message. Also converts values to other types if specified.
-         * @param message StatUpdate
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.StatUpdate, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this StatUpdate to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for StatUpdate
@@ -3412,14 +2248,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IDeathEvent, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified DeathEvent message, length delimited. Does not implicitly {@link hbonline.DeathEvent.verify|verify} messages.
-         * @param message DeathEvent message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IDeathEvent, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a DeathEvent message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -3428,43 +2256,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.DeathEvent;
-
-        /**
-         * Decodes a DeathEvent message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns DeathEvent
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.DeathEvent;
-
-        /**
-         * Verifies a DeathEvent message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a DeathEvent message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns DeathEvent
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.DeathEvent;
-
-        /**
-         * Creates a plain object from a DeathEvent message. Also converts values to other types if specified.
-         * @param message DeathEvent
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.DeathEvent, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this DeathEvent to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for DeathEvent
@@ -3539,14 +2330,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IRespawnEvent, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified RespawnEvent message, length delimited. Does not implicitly {@link hbonline.RespawnEvent.verify|verify} messages.
-         * @param message RespawnEvent message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IRespawnEvent, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a RespawnEvent message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -3555,43 +2338,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.RespawnEvent;
-
-        /**
-         * Decodes a RespawnEvent message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns RespawnEvent
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.RespawnEvent;
-
-        /**
-         * Verifies a RespawnEvent message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a RespawnEvent message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns RespawnEvent
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.RespawnEvent;
-
-        /**
-         * Creates a plain object from a RespawnEvent message. Also converts values to other types if specified.
-         * @param message RespawnEvent
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.RespawnEvent, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this RespawnEvent to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for RespawnEvent
@@ -3636,14 +2382,6 @@ export namespace hbonline {
         public static encode(message: hbonline.ILogoutRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified LogoutRequest message, length delimited. Does not implicitly {@link hbonline.LogoutRequest.verify|verify} messages.
-         * @param message LogoutRequest message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.ILogoutRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a LogoutRequest message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -3652,43 +2390,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.LogoutRequest;
-
-        /**
-         * Decodes a LogoutRequest message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns LogoutRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.LogoutRequest;
-
-        /**
-         * Verifies a LogoutRequest message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a LogoutRequest message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns LogoutRequest
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.LogoutRequest;
-
-        /**
-         * Creates a plain object from a LogoutRequest message. Also converts values to other types if specified.
-         * @param message LogoutRequest
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.LogoutRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this LogoutRequest to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for LogoutRequest
@@ -3745,14 +2446,6 @@ export namespace hbonline {
         public static encode(message: hbonline.ILogoutResponse, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified LogoutResponse message, length delimited. Does not implicitly {@link hbonline.LogoutResponse.verify|verify} messages.
-         * @param message LogoutResponse message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.ILogoutResponse, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a LogoutResponse message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -3763,44 +2456,53 @@ export namespace hbonline {
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.LogoutResponse;
 
         /**
-         * Decodes a LogoutResponse message from the specified reader or buffer, length delimited.
+         * Gets the default type url for LogoutResponse
+         * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+         * @returns The default type url
+         */
+        public static getTypeUrl(typeUrlPrefix?: string): string;
+    }
+
+    /** Properties of a DismissIntroRequest. */
+    interface IDismissIntroRequest {
+    }
+
+    /** Represents a DismissIntroRequest. */
+    class DismissIntroRequest implements IDismissIntroRequest {
+
+        /**
+         * Constructs a new DismissIntroRequest.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: hbonline.IDismissIntroRequest);
+
+        /**
+         * Creates a new DismissIntroRequest instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns DismissIntroRequest instance
+         */
+        public static create(properties?: hbonline.IDismissIntroRequest): hbonline.DismissIntroRequest;
+
+        /**
+         * Encodes the specified DismissIntroRequest message. Does not implicitly {@link hbonline.DismissIntroRequest.verify|verify} messages.
+         * @param message DismissIntroRequest message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: hbonline.IDismissIntroRequest, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a DismissIntroRequest message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
-         * @returns LogoutResponse
+         * @param [length] Message length if known beforehand
+         * @returns DismissIntroRequest
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.LogoutResponse;
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.DismissIntroRequest;
 
         /**
-         * Verifies a LogoutResponse message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a LogoutResponse message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns LogoutResponse
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.LogoutResponse;
-
-        /**
-         * Creates a plain object from a LogoutResponse message. Also converts values to other types if specified.
-         * @param message LogoutResponse
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.LogoutResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this LogoutResponse to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
-
-        /**
-         * Gets the default type url for LogoutResponse
+         * Gets the default type url for DismissIntroRequest
          * @param [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
          * @returns The default type url
          */
@@ -3902,14 +2604,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IEntityInfo, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified EntityInfo message, length delimited. Does not implicitly {@link hbonline.EntityInfo.verify|verify} messages.
-         * @param message EntityInfo message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IEntityInfo, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes an EntityInfo message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -3918,43 +2612,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.EntityInfo;
-
-        /**
-         * Decodes an EntityInfo message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns EntityInfo
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.EntityInfo;
-
-        /**
-         * Verifies an EntityInfo message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates an EntityInfo message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns EntityInfo
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.EntityInfo;
-
-        /**
-         * Creates a plain object from an EntityInfo message. Also converts values to other types if specified.
-         * @param message EntityInfo
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.EntityInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this EntityInfo to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for EntityInfo
@@ -4029,14 +2686,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IItemInstance, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified ItemInstance message, length delimited. Does not implicitly {@link hbonline.ItemInstance.verify|verify} messages.
-         * @param message ItemInstance message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IItemInstance, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes an ItemInstance message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -4045,43 +2694,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.ItemInstance;
-
-        /**
-         * Decodes an ItemInstance message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns ItemInstance
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.ItemInstance;
-
-        /**
-         * Verifies an ItemInstance message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates an ItemInstance message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns ItemInstance
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.ItemInstance;
-
-        /**
-         * Creates a plain object from an ItemInstance message. Also converts values to other types if specified.
-         * @param message ItemInstance
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.ItemInstance, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this ItemInstance to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for ItemInstance
@@ -4138,14 +2750,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IInventoryUpdate, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified InventoryUpdate message, length delimited. Does not implicitly {@link hbonline.InventoryUpdate.verify|verify} messages.
-         * @param message InventoryUpdate message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IInventoryUpdate, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes an InventoryUpdate message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -4154,43 +2758,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.InventoryUpdate;
-
-        /**
-         * Decodes an InventoryUpdate message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns InventoryUpdate
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.InventoryUpdate;
-
-        /**
-         * Verifies an InventoryUpdate message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates an InventoryUpdate message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns InventoryUpdate
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.InventoryUpdate;
-
-        /**
-         * Creates a plain object from an InventoryUpdate message. Also converts values to other types if specified.
-         * @param message InventoryUpdate
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.InventoryUpdate, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this InventoryUpdate to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for InventoryUpdate
@@ -4259,14 +2826,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IGroundItemAppear, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified GroundItemAppear message, length delimited. Does not implicitly {@link hbonline.GroundItemAppear.verify|verify} messages.
-         * @param message GroundItemAppear message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IGroundItemAppear, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a GroundItemAppear message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -4275,43 +2834,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.GroundItemAppear;
-
-        /**
-         * Decodes a GroundItemAppear message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns GroundItemAppear
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.GroundItemAppear;
-
-        /**
-         * Verifies a GroundItemAppear message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a GroundItemAppear message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns GroundItemAppear
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.GroundItemAppear;
-
-        /**
-         * Creates a plain object from a GroundItemAppear message. Also converts values to other types if specified.
-         * @param message GroundItemAppear
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.GroundItemAppear, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this GroundItemAppear to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for GroundItemAppear
@@ -4356,14 +2878,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IGroundItemDisappear, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified GroundItemDisappear message, length delimited. Does not implicitly {@link hbonline.GroundItemDisappear.verify|verify} messages.
-         * @param message GroundItemDisappear message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IGroundItemDisappear, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a GroundItemDisappear message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -4372,43 +2886,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.GroundItemDisappear;
-
-        /**
-         * Decodes a GroundItemDisappear message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns GroundItemDisappear
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.GroundItemDisappear;
-
-        /**
-         * Verifies a GroundItemDisappear message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a GroundItemDisappear message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns GroundItemDisappear
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.GroundItemDisappear;
-
-        /**
-         * Creates a plain object from a GroundItemDisappear message. Also converts values to other types if specified.
-         * @param message GroundItemDisappear
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.GroundItemDisappear, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this GroundItemDisappear to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for GroundItemDisappear
@@ -4453,14 +2930,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IItemPickupRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified ItemPickupRequest message, length delimited. Does not implicitly {@link hbonline.ItemPickupRequest.verify|verify} messages.
-         * @param message ItemPickupRequest message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IItemPickupRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes an ItemPickupRequest message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -4469,43 +2938,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.ItemPickupRequest;
-
-        /**
-         * Decodes an ItemPickupRequest message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns ItemPickupRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.ItemPickupRequest;
-
-        /**
-         * Verifies an ItemPickupRequest message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates an ItemPickupRequest message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns ItemPickupRequest
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.ItemPickupRequest;
-
-        /**
-         * Creates a plain object from an ItemPickupRequest message. Also converts values to other types if specified.
-         * @param message ItemPickupRequest
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.ItemPickupRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this ItemPickupRequest to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for ItemPickupRequest
@@ -4550,14 +2982,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IItemUseRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified ItemUseRequest message, length delimited. Does not implicitly {@link hbonline.ItemUseRequest.verify|verify} messages.
-         * @param message ItemUseRequest message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IItemUseRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes an ItemUseRequest message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -4566,43 +2990,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.ItemUseRequest;
-
-        /**
-         * Decodes an ItemUseRequest message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns ItemUseRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.ItemUseRequest;
-
-        /**
-         * Verifies an ItemUseRequest message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates an ItemUseRequest message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns ItemUseRequest
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.ItemUseRequest;
-
-        /**
-         * Creates a plain object from an ItemUseRequest message. Also converts values to other types if specified.
-         * @param message ItemUseRequest
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.ItemUseRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this ItemUseRequest to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for ItemUseRequest
@@ -4653,14 +3040,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IItemEquipRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified ItemEquipRequest message, length delimited. Does not implicitly {@link hbonline.ItemEquipRequest.verify|verify} messages.
-         * @param message ItemEquipRequest message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IItemEquipRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes an ItemEquipRequest message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -4669,43 +3048,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.ItemEquipRequest;
-
-        /**
-         * Decodes an ItemEquipRequest message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns ItemEquipRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.ItemEquipRequest;
-
-        /**
-         * Verifies an ItemEquipRequest message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates an ItemEquipRequest message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns ItemEquipRequest
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.ItemEquipRequest;
-
-        /**
-         * Creates a plain object from an ItemEquipRequest message. Also converts values to other types if specified.
-         * @param message ItemEquipRequest
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.ItemEquipRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this ItemEquipRequest to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for ItemEquipRequest
@@ -4756,14 +3098,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IItemDropRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified ItemDropRequest message, length delimited. Does not implicitly {@link hbonline.ItemDropRequest.verify|verify} messages.
-         * @param message ItemDropRequest message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IItemDropRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes an ItemDropRequest message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -4772,43 +3106,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.ItemDropRequest;
-
-        /**
-         * Decodes an ItemDropRequest message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns ItemDropRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.ItemDropRequest;
-
-        /**
-         * Verifies an ItemDropRequest message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates an ItemDropRequest message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns ItemDropRequest
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.ItemDropRequest;
-
-        /**
-         * Creates a plain object from an ItemDropRequest message. Also converts values to other types if specified.
-         * @param message ItemDropRequest
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.ItemDropRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this ItemDropRequest to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for ItemDropRequest
@@ -4859,14 +3156,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IStatAllocRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified StatAllocRequest message, length delimited. Does not implicitly {@link hbonline.StatAllocRequest.verify|verify} messages.
-         * @param message StatAllocRequest message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IStatAllocRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a StatAllocRequest message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -4875,43 +3164,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.StatAllocRequest;
-
-        /**
-         * Decodes a StatAllocRequest message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns StatAllocRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.StatAllocRequest;
-
-        /**
-         * Verifies a StatAllocRequest message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a StatAllocRequest message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns StatAllocRequest
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.StatAllocRequest;
-
-        /**
-         * Creates a plain object from a StatAllocRequest message. Also converts values to other types if specified.
-         * @param message StatAllocRequest
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.StatAllocRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this StatAllocRequest to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for StatAllocRequest
@@ -4968,14 +3220,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IShopOpen, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified ShopOpen message, length delimited. Does not implicitly {@link hbonline.ShopOpen.verify|verify} messages.
-         * @param message ShopOpen message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IShopOpen, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a ShopOpen message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -4984,43 +3228,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.ShopOpen;
-
-        /**
-         * Decodes a ShopOpen message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns ShopOpen
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.ShopOpen;
-
-        /**
-         * Verifies a ShopOpen message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a ShopOpen message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns ShopOpen
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.ShopOpen;
-
-        /**
-         * Creates a plain object from a ShopOpen message. Also converts values to other types if specified.
-         * @param message ShopOpen
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.ShopOpen, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this ShopOpen to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for ShopOpen
@@ -5083,14 +3290,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IShopItem, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified ShopItem message, length delimited. Does not implicitly {@link hbonline.ShopItem.verify|verify} messages.
-         * @param message ShopItem message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IShopItem, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a ShopItem message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -5099,43 +3298,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.ShopItem;
-
-        /**
-         * Decodes a ShopItem message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns ShopItem
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.ShopItem;
-
-        /**
-         * Verifies a ShopItem message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a ShopItem message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns ShopItem
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.ShopItem;
-
-        /**
-         * Creates a plain object from a ShopItem message. Also converts values to other types if specified.
-         * @param message ShopItem
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.ShopItem, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this ShopItem to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for ShopItem
@@ -5192,14 +3354,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IShopBuyRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified ShopBuyRequest message, length delimited. Does not implicitly {@link hbonline.ShopBuyRequest.verify|verify} messages.
-         * @param message ShopBuyRequest message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IShopBuyRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a ShopBuyRequest message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -5208,43 +3362,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.ShopBuyRequest;
-
-        /**
-         * Decodes a ShopBuyRequest message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns ShopBuyRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.ShopBuyRequest;
-
-        /**
-         * Verifies a ShopBuyRequest message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a ShopBuyRequest message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns ShopBuyRequest
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.ShopBuyRequest;
-
-        /**
-         * Creates a plain object from a ShopBuyRequest message. Also converts values to other types if specified.
-         * @param message ShopBuyRequest
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.ShopBuyRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this ShopBuyRequest to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for ShopBuyRequest
@@ -5301,14 +3418,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IShopSellRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified ShopSellRequest message, length delimited. Does not implicitly {@link hbonline.ShopSellRequest.verify|verify} messages.
-         * @param message ShopSellRequest message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IShopSellRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a ShopSellRequest message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -5317,43 +3426,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.ShopSellRequest;
-
-        /**
-         * Decodes a ShopSellRequest message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns ShopSellRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.ShopSellRequest;
-
-        /**
-         * Verifies a ShopSellRequest message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a ShopSellRequest message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns ShopSellRequest
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.ShopSellRequest;
-
-        /**
-         * Creates a plain object from a ShopSellRequest message. Also converts values to other types if specified.
-         * @param message ShopSellRequest
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.ShopSellRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this ShopSellRequest to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for ShopSellRequest
@@ -5404,14 +3476,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IShopResponse, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified ShopResponse message, length delimited. Does not implicitly {@link hbonline.ShopResponse.verify|verify} messages.
-         * @param message ShopResponse message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IShopResponse, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a ShopResponse message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -5420,43 +3484,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.ShopResponse;
-
-        /**
-         * Decodes a ShopResponse message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns ShopResponse
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.ShopResponse;
-
-        /**
-         * Verifies a ShopResponse message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a ShopResponse message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns ShopResponse
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.ShopResponse;
-
-        /**
-         * Creates a plain object from a ShopResponse message. Also converts values to other types if specified.
-         * @param message ShopResponse
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.ShopResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this ShopResponse to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for ShopResponse
@@ -5513,14 +3540,6 @@ export namespace hbonline {
         public static encode(message: hbonline.ISpellCastRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified SpellCastRequest message, length delimited. Does not implicitly {@link hbonline.SpellCastRequest.verify|verify} messages.
-         * @param message SpellCastRequest message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.ISpellCastRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a SpellCastRequest message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -5529,43 +3548,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.SpellCastRequest;
-
-        /**
-         * Decodes a SpellCastRequest message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns SpellCastRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.SpellCastRequest;
-
-        /**
-         * Verifies a SpellCastRequest message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a SpellCastRequest message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns SpellCastRequest
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.SpellCastRequest;
-
-        /**
-         * Creates a plain object from a SpellCastRequest message. Also converts values to other types if specified.
-         * @param message SpellCastRequest
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.SpellCastRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this SpellCastRequest to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for SpellCastRequest
@@ -5664,14 +3646,6 @@ export namespace hbonline {
         public static encode(message: hbonline.ISpellEffectEvent, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified SpellEffectEvent message, length delimited. Does not implicitly {@link hbonline.SpellEffectEvent.verify|verify} messages.
-         * @param message SpellEffectEvent message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.ISpellEffectEvent, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a SpellEffectEvent message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -5680,43 +3654,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.SpellEffectEvent;
-
-        /**
-         * Decodes a SpellEffectEvent message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns SpellEffectEvent
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.SpellEffectEvent;
-
-        /**
-         * Verifies a SpellEffectEvent message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a SpellEffectEvent message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns SpellEffectEvent
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.SpellEffectEvent;
-
-        /**
-         * Creates a plain object from a SpellEffectEvent message. Also converts values to other types if specified.
-         * @param message SpellEffectEvent
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.SpellEffectEvent, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this SpellEffectEvent to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for SpellEffectEvent
@@ -5797,14 +3734,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IBuffUpdate, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified BuffUpdate message, length delimited. Does not implicitly {@link hbonline.BuffUpdate.verify|verify} messages.
-         * @param message BuffUpdate message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IBuffUpdate, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a BuffUpdate message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -5813,43 +3742,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.BuffUpdate;
-
-        /**
-         * Decodes a BuffUpdate message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns BuffUpdate
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.BuffUpdate;
-
-        /**
-         * Verifies a BuffUpdate message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a BuffUpdate message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns BuffUpdate
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.BuffUpdate;
-
-        /**
-         * Creates a plain object from a BuffUpdate message. Also converts values to other types if specified.
-         * @param message BuffUpdate
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.BuffUpdate, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this BuffUpdate to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for BuffUpdate
@@ -5894,14 +3786,6 @@ export namespace hbonline {
         public static encode(message: hbonline.ISpellListUpdate, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified SpellListUpdate message, length delimited. Does not implicitly {@link hbonline.SpellListUpdate.verify|verify} messages.
-         * @param message SpellListUpdate message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.ISpellListUpdate, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a SpellListUpdate message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -5910,43 +3794,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.SpellListUpdate;
-
-        /**
-         * Decodes a SpellListUpdate message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns SpellListUpdate
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.SpellListUpdate;
-
-        /**
-         * Verifies a SpellListUpdate message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a SpellListUpdate message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns SpellListUpdate
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.SpellListUpdate;
-
-        /**
-         * Creates a plain object from a SpellListUpdate message. Also converts values to other types if specified.
-         * @param message SpellListUpdate
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.SpellListUpdate, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this SpellListUpdate to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for SpellListUpdate
@@ -6021,14 +3868,6 @@ export namespace hbonline {
         public static encode(message: hbonline.ILearnedSpell, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified LearnedSpell message, length delimited. Does not implicitly {@link hbonline.LearnedSpell.verify|verify} messages.
-         * @param message LearnedSpell message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.ILearnedSpell, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a LearnedSpell message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -6037,43 +3876,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.LearnedSpell;
-
-        /**
-         * Decodes a LearnedSpell message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns LearnedSpell
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.LearnedSpell;
-
-        /**
-         * Verifies a LearnedSpell message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a LearnedSpell message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns LearnedSpell
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.LearnedSpell;
-
-        /**
-         * Creates a plain object from a LearnedSpell message. Also converts values to other types if specified.
-         * @param message LearnedSpell
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.LearnedSpell, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this LearnedSpell to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for LearnedSpell
@@ -6118,14 +3920,6 @@ export namespace hbonline {
         public static encode(message: hbonline.ISpellCatalog, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified SpellCatalog message, length delimited. Does not implicitly {@link hbonline.SpellCatalog.verify|verify} messages.
-         * @param message SpellCatalog message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.ISpellCatalog, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a SpellCatalog message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -6134,43 +3928,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.SpellCatalog;
-
-        /**
-         * Decodes a SpellCatalog message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns SpellCatalog
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.SpellCatalog;
-
-        /**
-         * Verifies a SpellCatalog message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a SpellCatalog message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns SpellCatalog
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.SpellCatalog;
-
-        /**
-         * Creates a plain object from a SpellCatalog message. Also converts values to other types if specified.
-         * @param message SpellCatalog
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.SpellCatalog, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this SpellCatalog to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for SpellCatalog
@@ -6257,14 +4014,6 @@ export namespace hbonline {
         public static encode(message: hbonline.ISpellCatalogEntry, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified SpellCatalogEntry message, length delimited. Does not implicitly {@link hbonline.SpellCatalogEntry.verify|verify} messages.
-         * @param message SpellCatalogEntry message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.ISpellCatalogEntry, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a SpellCatalogEntry message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -6273,43 +4022,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.SpellCatalogEntry;
-
-        /**
-         * Decodes a SpellCatalogEntry message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns SpellCatalogEntry
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.SpellCatalogEntry;
-
-        /**
-         * Verifies a SpellCatalogEntry message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a SpellCatalogEntry message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns SpellCatalogEntry
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.SpellCatalogEntry;
-
-        /**
-         * Creates a plain object from a SpellCatalogEntry message. Also converts values to other types if specified.
-         * @param message SpellCatalogEntry
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.SpellCatalogEntry, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this SpellCatalogEntry to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for SpellCatalogEntry
@@ -6354,14 +4066,6 @@ export namespace hbonline {
         public static encode(message: hbonline.ILearnSpellRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified LearnSpellRequest message, length delimited. Does not implicitly {@link hbonline.LearnSpellRequest.verify|verify} messages.
-         * @param message LearnSpellRequest message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.ILearnSpellRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a LearnSpellRequest message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -6370,43 +4074,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.LearnSpellRequest;
-
-        /**
-         * Decodes a LearnSpellRequest message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns LearnSpellRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.LearnSpellRequest;
-
-        /**
-         * Verifies a LearnSpellRequest message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a LearnSpellRequest message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns LearnSpellRequest
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.LearnSpellRequest;
-
-        /**
-         * Creates a plain object from a LearnSpellRequest message. Also converts values to other types if specified.
-         * @param message LearnSpellRequest
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.LearnSpellRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this LearnSpellRequest to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for LearnSpellRequest
@@ -6463,14 +4130,6 @@ export namespace hbonline {
         public static encode(message: hbonline.ISkillListUpdate, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified SkillListUpdate message, length delimited. Does not implicitly {@link hbonline.SkillListUpdate.verify|verify} messages.
-         * @param message SkillListUpdate message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.ISkillListUpdate, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a SkillListUpdate message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -6479,43 +4138,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.SkillListUpdate;
-
-        /**
-         * Decodes a SkillListUpdate message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns SkillListUpdate
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.SkillListUpdate;
-
-        /**
-         * Verifies a SkillListUpdate message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a SkillListUpdate message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns SkillListUpdate
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.SkillListUpdate;
-
-        /**
-         * Creates a plain object from a SkillListUpdate message. Also converts values to other types if specified.
-         * @param message SkillListUpdate
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.SkillListUpdate, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this SkillListUpdate to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for SkillListUpdate
@@ -6572,14 +4194,6 @@ export namespace hbonline {
         public static encode(message: hbonline.ISkillEntry, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified SkillEntry message, length delimited. Does not implicitly {@link hbonline.SkillEntry.verify|verify} messages.
-         * @param message SkillEntry message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.ISkillEntry, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a SkillEntry message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -6588,43 +4202,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.SkillEntry;
-
-        /**
-         * Decodes a SkillEntry message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns SkillEntry
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.SkillEntry;
-
-        /**
-         * Verifies a SkillEntry message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a SkillEntry message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns SkillEntry
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.SkillEntry;
-
-        /**
-         * Creates a plain object from a SkillEntry message. Also converts values to other types if specified.
-         * @param message SkillEntry
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.SkillEntry, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this SkillEntry to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for SkillEntry
@@ -6681,14 +4258,6 @@ export namespace hbonline {
         public static encode(message: hbonline.ISkillUseRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified SkillUseRequest message, length delimited. Does not implicitly {@link hbonline.SkillUseRequest.verify|verify} messages.
-         * @param message SkillUseRequest message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.ISkillUseRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a SkillUseRequest message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -6697,43 +4266,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.SkillUseRequest;
-
-        /**
-         * Decodes a SkillUseRequest message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns SkillUseRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.SkillUseRequest;
-
-        /**
-         * Verifies a SkillUseRequest message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a SkillUseRequest message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns SkillUseRequest
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.SkillUseRequest;
-
-        /**
-         * Creates a plain object from a SkillUseRequest message. Also converts values to other types if specified.
-         * @param message SkillUseRequest
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.SkillUseRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this SkillUseRequest to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for SkillUseRequest
@@ -6802,14 +4334,6 @@ export namespace hbonline {
         public static encode(message: hbonline.ISkillResultEvent, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified SkillResultEvent message, length delimited. Does not implicitly {@link hbonline.SkillResultEvent.verify|verify} messages.
-         * @param message SkillResultEvent message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.ISkillResultEvent, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a SkillResultEvent message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -6818,43 +4342,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.SkillResultEvent;
-
-        /**
-         * Decodes a SkillResultEvent message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns SkillResultEvent
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.SkillResultEvent;
-
-        /**
-         * Verifies a SkillResultEvent message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a SkillResultEvent message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns SkillResultEvent
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.SkillResultEvent;
-
-        /**
-         * Creates a plain object from a SkillResultEvent message. Also converts values to other types if specified.
-         * @param message SkillResultEvent
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.SkillResultEvent, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this SkillResultEvent to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for SkillResultEvent
@@ -6899,14 +4386,6 @@ export namespace hbonline {
         public static encode(message: hbonline.ICraftRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified CraftRequest message, length delimited. Does not implicitly {@link hbonline.CraftRequest.verify|verify} messages.
-         * @param message CraftRequest message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.ICraftRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a CraftRequest message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -6915,43 +4394,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.CraftRequest;
-
-        /**
-         * Decodes a CraftRequest message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns CraftRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.CraftRequest;
-
-        /**
-         * Verifies a CraftRequest message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a CraftRequest message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns CraftRequest
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.CraftRequest;
-
-        /**
-         * Creates a plain object from a CraftRequest message. Also converts values to other types if specified.
-         * @param message CraftRequest
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.CraftRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this CraftRequest to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for CraftRequest
@@ -7014,14 +4456,6 @@ export namespace hbonline {
         public static encode(message: hbonline.ICraftResult, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified CraftResult message, length delimited. Does not implicitly {@link hbonline.CraftResult.verify|verify} messages.
-         * @param message CraftResult message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.ICraftResult, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a CraftResult message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -7030,43 +4464,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.CraftResult;
-
-        /**
-         * Decodes a CraftResult message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns CraftResult
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.CraftResult;
-
-        /**
-         * Verifies a CraftResult message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a CraftResult message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns CraftResult
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.CraftResult;
-
-        /**
-         * Creates a plain object from a CraftResult message. Also converts values to other types if specified.
-         * @param message CraftResult
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.CraftResult, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this CraftResult to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for CraftResult
@@ -7111,14 +4508,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IQuestAcceptRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified QuestAcceptRequest message, length delimited. Does not implicitly {@link hbonline.QuestAcceptRequest.verify|verify} messages.
-         * @param message QuestAcceptRequest message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IQuestAcceptRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a QuestAcceptRequest message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -7127,43 +4516,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.QuestAcceptRequest;
-
-        /**
-         * Decodes a QuestAcceptRequest message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns QuestAcceptRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.QuestAcceptRequest;
-
-        /**
-         * Verifies a QuestAcceptRequest message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a QuestAcceptRequest message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns QuestAcceptRequest
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.QuestAcceptRequest;
-
-        /**
-         * Creates a plain object from a QuestAcceptRequest message. Also converts values to other types if specified.
-         * @param message QuestAcceptRequest
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.QuestAcceptRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this QuestAcceptRequest to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for QuestAcceptRequest
@@ -7208,14 +4560,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IQuestTurnInRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified QuestTurnInRequest message, length delimited. Does not implicitly {@link hbonline.QuestTurnInRequest.verify|verify} messages.
-         * @param message QuestTurnInRequest message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IQuestTurnInRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a QuestTurnInRequest message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -7224,43 +4568,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.QuestTurnInRequest;
-
-        /**
-         * Decodes a QuestTurnInRequest message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns QuestTurnInRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.QuestTurnInRequest;
-
-        /**
-         * Verifies a QuestTurnInRequest message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a QuestTurnInRequest message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns QuestTurnInRequest
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.QuestTurnInRequest;
-
-        /**
-         * Creates a plain object from a QuestTurnInRequest message. Also converts values to other types if specified.
-         * @param message QuestTurnInRequest
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.QuestTurnInRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this QuestTurnInRequest to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for QuestTurnInRequest
@@ -7311,14 +4618,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IQuestListUpdate, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified QuestListUpdate message, length delimited. Does not implicitly {@link hbonline.QuestListUpdate.verify|verify} messages.
-         * @param message QuestListUpdate message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IQuestListUpdate, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a QuestListUpdate message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -7327,43 +4626,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.QuestListUpdate;
-
-        /**
-         * Decodes a QuestListUpdate message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns QuestListUpdate
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.QuestListUpdate;
-
-        /**
-         * Verifies a QuestListUpdate message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a QuestListUpdate message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns QuestListUpdate
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.QuestListUpdate;
-
-        /**
-         * Creates a plain object from a QuestListUpdate message. Also converts values to other types if specified.
-         * @param message QuestListUpdate
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.QuestListUpdate, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this QuestListUpdate to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for QuestListUpdate
@@ -7456,14 +4718,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IQuestEntry, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified QuestEntry message, length delimited. Does not implicitly {@link hbonline.QuestEntry.verify|verify} messages.
-         * @param message QuestEntry message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IQuestEntry, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a QuestEntry message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -7472,43 +4726,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.QuestEntry;
-
-        /**
-         * Decodes a QuestEntry message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns QuestEntry
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.QuestEntry;
-
-        /**
-         * Verifies a QuestEntry message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a QuestEntry message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns QuestEntry
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.QuestEntry;
-
-        /**
-         * Creates a plain object from a QuestEntry message. Also converts values to other types if specified.
-         * @param message QuestEntry
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.QuestEntry, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this QuestEntry to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for QuestEntry
@@ -7571,14 +4788,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IQuestProgressUpdate, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified QuestProgressUpdate message, length delimited. Does not implicitly {@link hbonline.QuestProgressUpdate.verify|verify} messages.
-         * @param message QuestProgressUpdate message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IQuestProgressUpdate, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a QuestProgressUpdate message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -7587,43 +4796,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.QuestProgressUpdate;
-
-        /**
-         * Decodes a QuestProgressUpdate message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns QuestProgressUpdate
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.QuestProgressUpdate;
-
-        /**
-         * Verifies a QuestProgressUpdate message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a QuestProgressUpdate message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns QuestProgressUpdate
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.QuestProgressUpdate;
-
-        /**
-         * Creates a plain object from a QuestProgressUpdate message. Also converts values to other types if specified.
-         * @param message QuestProgressUpdate
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.QuestProgressUpdate, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this QuestProgressUpdate to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for QuestProgressUpdate
@@ -7698,14 +4870,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IQuestRewardNotification, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified QuestRewardNotification message, length delimited. Does not implicitly {@link hbonline.QuestRewardNotification.verify|verify} messages.
-         * @param message QuestRewardNotification message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IQuestRewardNotification, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a QuestRewardNotification message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -7714,43 +4878,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.QuestRewardNotification;
-
-        /**
-         * Decodes a QuestRewardNotification message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns QuestRewardNotification
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.QuestRewardNotification;
-
-        /**
-         * Verifies a QuestRewardNotification message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a QuestRewardNotification message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns QuestRewardNotification
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.QuestRewardNotification;
-
-        /**
-         * Creates a plain object from a QuestRewardNotification message. Also converts values to other types if specified.
-         * @param message QuestRewardNotification
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.QuestRewardNotification, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this QuestRewardNotification to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for QuestRewardNotification
@@ -7795,14 +4922,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IFactionSelectRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified FactionSelectRequest message, length delimited. Does not implicitly {@link hbonline.FactionSelectRequest.verify|verify} messages.
-         * @param message FactionSelectRequest message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IFactionSelectRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a FactionSelectRequest message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -7811,43 +4930,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.FactionSelectRequest;
-
-        /**
-         * Decodes a FactionSelectRequest message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns FactionSelectRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.FactionSelectRequest;
-
-        /**
-         * Verifies a FactionSelectRequest message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a FactionSelectRequest message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns FactionSelectRequest
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.FactionSelectRequest;
-
-        /**
-         * Creates a plain object from a FactionSelectRequest message. Also converts values to other types if specified.
-         * @param message FactionSelectRequest
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.FactionSelectRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this FactionSelectRequest to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for FactionSelectRequest
@@ -7904,14 +4986,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IFactionSelectResponse, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified FactionSelectResponse message, length delimited. Does not implicitly {@link hbonline.FactionSelectResponse.verify|verify} messages.
-         * @param message FactionSelectResponse message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IFactionSelectResponse, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a FactionSelectResponse message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -7920,43 +4994,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.FactionSelectResponse;
-
-        /**
-         * Decodes a FactionSelectResponse message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns FactionSelectResponse
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.FactionSelectResponse;
-
-        /**
-         * Verifies a FactionSelectResponse message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a FactionSelectResponse message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns FactionSelectResponse
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.FactionSelectResponse;
-
-        /**
-         * Creates a plain object from a FactionSelectResponse message. Also converts values to other types if specified.
-         * @param message FactionSelectResponse
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.FactionSelectResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this FactionSelectResponse to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for FactionSelectResponse
@@ -8001,14 +5038,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IGuildCreateRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified GuildCreateRequest message, length delimited. Does not implicitly {@link hbonline.GuildCreateRequest.verify|verify} messages.
-         * @param message GuildCreateRequest message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IGuildCreateRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a GuildCreateRequest message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -8017,43 +5046,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.GuildCreateRequest;
-
-        /**
-         * Decodes a GuildCreateRequest message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns GuildCreateRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.GuildCreateRequest;
-
-        /**
-         * Verifies a GuildCreateRequest message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a GuildCreateRequest message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns GuildCreateRequest
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.GuildCreateRequest;
-
-        /**
-         * Creates a plain object from a GuildCreateRequest message. Also converts values to other types if specified.
-         * @param message GuildCreateRequest
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.GuildCreateRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this GuildCreateRequest to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for GuildCreateRequest
@@ -8104,14 +5096,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IGuildActionRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified GuildActionRequest message, length delimited. Does not implicitly {@link hbonline.GuildActionRequest.verify|verify} messages.
-         * @param message GuildActionRequest message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IGuildActionRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a GuildActionRequest message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -8120,43 +5104,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.GuildActionRequest;
-
-        /**
-         * Decodes a GuildActionRequest message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns GuildActionRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.GuildActionRequest;
-
-        /**
-         * Verifies a GuildActionRequest message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a GuildActionRequest message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns GuildActionRequest
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.GuildActionRequest;
-
-        /**
-         * Creates a plain object from a GuildActionRequest message. Also converts values to other types if specified.
-         * @param message GuildActionRequest
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.GuildActionRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this GuildActionRequest to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for GuildActionRequest
@@ -8225,14 +5172,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IGuildInfo, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified GuildInfo message, length delimited. Does not implicitly {@link hbonline.GuildInfo.verify|verify} messages.
-         * @param message GuildInfo message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IGuildInfo, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a GuildInfo message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -8241,43 +5180,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.GuildInfo;
-
-        /**
-         * Decodes a GuildInfo message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns GuildInfo
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.GuildInfo;
-
-        /**
-         * Verifies a GuildInfo message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a GuildInfo message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns GuildInfo
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.GuildInfo;
-
-        /**
-         * Creates a plain object from a GuildInfo message. Also converts values to other types if specified.
-         * @param message GuildInfo
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.GuildInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this GuildInfo to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for GuildInfo
@@ -8340,14 +5242,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IGuildMemberInfo, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified GuildMemberInfo message, length delimited. Does not implicitly {@link hbonline.GuildMemberInfo.verify|verify} messages.
-         * @param message GuildMemberInfo message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IGuildMemberInfo, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a GuildMemberInfo message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -8356,43 +5250,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.GuildMemberInfo;
-
-        /**
-         * Decodes a GuildMemberInfo message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns GuildMemberInfo
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.GuildMemberInfo;
-
-        /**
-         * Verifies a GuildMemberInfo message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a GuildMemberInfo message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns GuildMemberInfo
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.GuildMemberInfo;
-
-        /**
-         * Creates a plain object from a GuildMemberInfo message. Also converts values to other types if specified.
-         * @param message GuildMemberInfo
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.GuildMemberInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this GuildMemberInfo to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for GuildMemberInfo
@@ -8443,14 +5300,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IGuildActionResponse, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified GuildActionResponse message, length delimited. Does not implicitly {@link hbonline.GuildActionResponse.verify|verify} messages.
-         * @param message GuildActionResponse message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IGuildActionResponse, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a GuildActionResponse message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -8459,43 +5308,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.GuildActionResponse;
-
-        /**
-         * Decodes a GuildActionResponse message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns GuildActionResponse
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.GuildActionResponse;
-
-        /**
-         * Verifies a GuildActionResponse message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a GuildActionResponse message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns GuildActionResponse
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.GuildActionResponse;
-
-        /**
-         * Creates a plain object from a GuildActionResponse message. Also converts values to other types if specified.
-         * @param message GuildActionResponse
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.GuildActionResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this GuildActionResponse to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for GuildActionResponse
@@ -8546,14 +5358,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IPartyActionRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified PartyActionRequest message, length delimited. Does not implicitly {@link hbonline.PartyActionRequest.verify|verify} messages.
-         * @param message PartyActionRequest message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IPartyActionRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a PartyActionRequest message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -8562,43 +5366,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.PartyActionRequest;
-
-        /**
-         * Decodes a PartyActionRequest message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns PartyActionRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.PartyActionRequest;
-
-        /**
-         * Verifies a PartyActionRequest message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a PartyActionRequest message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns PartyActionRequest
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.PartyActionRequest;
-
-        /**
-         * Creates a plain object from a PartyActionRequest message. Also converts values to other types if specified.
-         * @param message PartyActionRequest
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.PartyActionRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this PartyActionRequest to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for PartyActionRequest
@@ -8649,14 +5416,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IPartyActionResponse, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified PartyActionResponse message, length delimited. Does not implicitly {@link hbonline.PartyActionResponse.verify|verify} messages.
-         * @param message PartyActionResponse message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IPartyActionResponse, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a PartyActionResponse message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -8665,43 +5424,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.PartyActionResponse;
-
-        /**
-         * Decodes a PartyActionResponse message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns PartyActionResponse
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.PartyActionResponse;
-
-        /**
-         * Verifies a PartyActionResponse message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a PartyActionResponse message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns PartyActionResponse
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.PartyActionResponse;
-
-        /**
-         * Creates a plain object from a PartyActionResponse message. Also converts values to other types if specified.
-         * @param message PartyActionResponse
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.PartyActionResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this PartyActionResponse to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for PartyActionResponse
@@ -8752,14 +5474,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IPartyUpdate, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified PartyUpdate message, length delimited. Does not implicitly {@link hbonline.PartyUpdate.verify|verify} messages.
-         * @param message PartyUpdate message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IPartyUpdate, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a PartyUpdate message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -8768,43 +5482,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.PartyUpdate;
-
-        /**
-         * Decodes a PartyUpdate message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns PartyUpdate
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.PartyUpdate;
-
-        /**
-         * Verifies a PartyUpdate message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a PartyUpdate message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns PartyUpdate
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.PartyUpdate;
-
-        /**
-         * Creates a plain object from a PartyUpdate message. Also converts values to other types if specified.
-         * @param message PartyUpdate
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.PartyUpdate, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this PartyUpdate to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for PartyUpdate
@@ -8873,14 +5550,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IPartyMemberInfo, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified PartyMemberInfo message, length delimited. Does not implicitly {@link hbonline.PartyMemberInfo.verify|verify} messages.
-         * @param message PartyMemberInfo message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IPartyMemberInfo, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a PartyMemberInfo message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -8889,43 +5558,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.PartyMemberInfo;
-
-        /**
-         * Decodes a PartyMemberInfo message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns PartyMemberInfo
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.PartyMemberInfo;
-
-        /**
-         * Verifies a PartyMemberInfo message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a PartyMemberInfo message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns PartyMemberInfo
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.PartyMemberInfo;
-
-        /**
-         * Creates a plain object from a PartyMemberInfo message. Also converts values to other types if specified.
-         * @param message PartyMemberInfo
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.PartyMemberInfo, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this PartyMemberInfo to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for PartyMemberInfo
@@ -8976,14 +5608,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IPartyInvite, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified PartyInvite message, length delimited. Does not implicitly {@link hbonline.PartyInvite.verify|verify} messages.
-         * @param message PartyInvite message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IPartyInvite, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a PartyInvite message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -8992,43 +5616,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.PartyInvite;
-
-        /**
-         * Decodes a PartyInvite message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns PartyInvite
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.PartyInvite;
-
-        /**
-         * Verifies a PartyInvite message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a PartyInvite message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns PartyInvite
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.PartyInvite;
-
-        /**
-         * Creates a plain object from a PartyInvite message. Also converts values to other types if specified.
-         * @param message PartyInvite
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.PartyInvite, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this PartyInvite to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for PartyInvite
@@ -9073,14 +5660,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IPartyInviteResponse, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified PartyInviteResponse message, length delimited. Does not implicitly {@link hbonline.PartyInviteResponse.verify|verify} messages.
-         * @param message PartyInviteResponse message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IPartyInviteResponse, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a PartyInviteResponse message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -9089,43 +5668,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.PartyInviteResponse;
-
-        /**
-         * Decodes a PartyInviteResponse message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns PartyInviteResponse
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.PartyInviteResponse;
-
-        /**
-         * Verifies a PartyInviteResponse message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a PartyInviteResponse message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns PartyInviteResponse
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.PartyInviteResponse;
-
-        /**
-         * Creates a plain object from a PartyInviteResponse message. Also converts values to other types if specified.
-         * @param message PartyInviteResponse
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.PartyInviteResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this PartyInviteResponse to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for PartyInviteResponse
@@ -9170,14 +5712,6 @@ export namespace hbonline {
         public static encode(message: hbonline.ITradeRequest, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified TradeRequest message, length delimited. Does not implicitly {@link hbonline.TradeRequest.verify|verify} messages.
-         * @param message TradeRequest message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.ITradeRequest, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a TradeRequest message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -9186,43 +5720,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.TradeRequest;
-
-        /**
-         * Decodes a TradeRequest message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns TradeRequest
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.TradeRequest;
-
-        /**
-         * Verifies a TradeRequest message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a TradeRequest message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns TradeRequest
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.TradeRequest;
-
-        /**
-         * Creates a plain object from a TradeRequest message. Also converts values to other types if specified.
-         * @param message TradeRequest
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.TradeRequest, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this TradeRequest to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for TradeRequest
@@ -9273,14 +5770,6 @@ export namespace hbonline {
         public static encode(message: hbonline.ITradeIncoming, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified TradeIncoming message, length delimited. Does not implicitly {@link hbonline.TradeIncoming.verify|verify} messages.
-         * @param message TradeIncoming message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.ITradeIncoming, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a TradeIncoming message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -9289,43 +5778,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.TradeIncoming;
-
-        /**
-         * Decodes a TradeIncoming message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns TradeIncoming
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.TradeIncoming;
-
-        /**
-         * Verifies a TradeIncoming message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a TradeIncoming message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns TradeIncoming
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.TradeIncoming;
-
-        /**
-         * Creates a plain object from a TradeIncoming message. Also converts values to other types if specified.
-         * @param message TradeIncoming
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.TradeIncoming, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this TradeIncoming to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for TradeIncoming
@@ -9370,14 +5822,6 @@ export namespace hbonline {
         public static encode(message: hbonline.ITradeResponse, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified TradeResponse message, length delimited. Does not implicitly {@link hbonline.TradeResponse.verify|verify} messages.
-         * @param message TradeResponse message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.ITradeResponse, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a TradeResponse message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -9386,43 +5830,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.TradeResponse;
-
-        /**
-         * Decodes a TradeResponse message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns TradeResponse
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.TradeResponse;
-
-        /**
-         * Verifies a TradeResponse message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a TradeResponse message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns TradeResponse
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.TradeResponse;
-
-        /**
-         * Creates a plain object from a TradeResponse message. Also converts values to other types if specified.
-         * @param message TradeResponse
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.TradeResponse, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this TradeResponse to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for TradeResponse
@@ -9473,14 +5880,6 @@ export namespace hbonline {
         public static encode(message: hbonline.ITradeSetItem, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified TradeSetItem message, length delimited. Does not implicitly {@link hbonline.TradeSetItem.verify|verify} messages.
-         * @param message TradeSetItem message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.ITradeSetItem, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a TradeSetItem message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -9489,43 +5888,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.TradeSetItem;
-
-        /**
-         * Decodes a TradeSetItem message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns TradeSetItem
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.TradeSetItem;
-
-        /**
-         * Verifies a TradeSetItem message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a TradeSetItem message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns TradeSetItem
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.TradeSetItem;
-
-        /**
-         * Creates a plain object from a TradeSetItem message. Also converts values to other types if specified.
-         * @param message TradeSetItem
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.TradeSetItem, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this TradeSetItem to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for TradeSetItem
@@ -9570,14 +5932,6 @@ export namespace hbonline {
         public static encode(message: hbonline.ITradeSetGold, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified TradeSetGold message, length delimited. Does not implicitly {@link hbonline.TradeSetGold.verify|verify} messages.
-         * @param message TradeSetGold message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.ITradeSetGold, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a TradeSetGold message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -9586,43 +5940,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.TradeSetGold;
-
-        /**
-         * Decodes a TradeSetGold message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns TradeSetGold
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.TradeSetGold;
-
-        /**
-         * Verifies a TradeSetGold message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a TradeSetGold message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns TradeSetGold
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.TradeSetGold;
-
-        /**
-         * Creates a plain object from a TradeSetGold message. Also converts values to other types if specified.
-         * @param message TradeSetGold
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.TradeSetGold, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this TradeSetGold to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for TradeSetGold
@@ -9667,14 +5984,6 @@ export namespace hbonline {
         public static encode(message: hbonline.ITradeConfirm, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified TradeConfirm message, length delimited. Does not implicitly {@link hbonline.TradeConfirm.verify|verify} messages.
-         * @param message TradeConfirm message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.ITradeConfirm, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a TradeConfirm message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -9683,43 +5992,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.TradeConfirm;
-
-        /**
-         * Decodes a TradeConfirm message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns TradeConfirm
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.TradeConfirm;
-
-        /**
-         * Verifies a TradeConfirm message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a TradeConfirm message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns TradeConfirm
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.TradeConfirm;
-
-        /**
-         * Creates a plain object from a TradeConfirm message. Also converts values to other types if specified.
-         * @param message TradeConfirm
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.TradeConfirm, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this TradeConfirm to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for TradeConfirm
@@ -9794,14 +6066,6 @@ export namespace hbonline {
         public static encode(message: hbonline.ITradeUpdate, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified TradeUpdate message, length delimited. Does not implicitly {@link hbonline.TradeUpdate.verify|verify} messages.
-         * @param message TradeUpdate message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.ITradeUpdate, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a TradeUpdate message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -9810,43 +6074,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.TradeUpdate;
-
-        /**
-         * Decodes a TradeUpdate message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns TradeUpdate
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.TradeUpdate;
-
-        /**
-         * Verifies a TradeUpdate message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a TradeUpdate message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns TradeUpdate
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.TradeUpdate;
-
-        /**
-         * Creates a plain object from a TradeUpdate message. Also converts values to other types if specified.
-         * @param message TradeUpdate
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.TradeUpdate, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this TradeUpdate to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for TradeUpdate
@@ -9909,14 +6136,6 @@ export namespace hbonline {
         public static encode(message: hbonline.ITradeSlot, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified TradeSlot message, length delimited. Does not implicitly {@link hbonline.TradeSlot.verify|verify} messages.
-         * @param message TradeSlot message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.ITradeSlot, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a TradeSlot message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -9925,43 +6144,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.TradeSlot;
-
-        /**
-         * Decodes a TradeSlot message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns TradeSlot
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.TradeSlot;
-
-        /**
-         * Verifies a TradeSlot message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a TradeSlot message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns TradeSlot
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.TradeSlot;
-
-        /**
-         * Creates a plain object from a TradeSlot message. Also converts values to other types if specified.
-         * @param message TradeSlot
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.TradeSlot, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this TradeSlot to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for TradeSlot
@@ -10012,14 +6194,6 @@ export namespace hbonline {
         public static encode(message: hbonline.ITradeComplete, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified TradeComplete message, length delimited. Does not implicitly {@link hbonline.TradeComplete.verify|verify} messages.
-         * @param message TradeComplete message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.ITradeComplete, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a TradeComplete message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -10028,43 +6202,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.TradeComplete;
-
-        /**
-         * Decodes a TradeComplete message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns TradeComplete
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.TradeComplete;
-
-        /**
-         * Verifies a TradeComplete message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a TradeComplete message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns TradeComplete
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.TradeComplete;
-
-        /**
-         * Creates a plain object from a TradeComplete message. Also converts values to other types if specified.
-         * @param message TradeComplete
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.TradeComplete, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this TradeComplete to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for TradeComplete
@@ -10127,14 +6264,6 @@ export namespace hbonline {
         public static encode(message: hbonline.IPKStatusUpdate, writer?: $protobuf.Writer): $protobuf.Writer;
 
         /**
-         * Encodes the specified PKStatusUpdate message, length delimited. Does not implicitly {@link hbonline.PKStatusUpdate.verify|verify} messages.
-         * @param message PKStatusUpdate message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: hbonline.IPKStatusUpdate, writer?: $protobuf.Writer): $protobuf.Writer;
-
-        /**
          * Decodes a PKStatusUpdate message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
@@ -10143,43 +6272,6 @@ export namespace hbonline {
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
         public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): hbonline.PKStatusUpdate;
-
-        /**
-         * Decodes a PKStatusUpdate message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns PKStatusUpdate
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): hbonline.PKStatusUpdate;
-
-        /**
-         * Verifies a PKStatusUpdate message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-
-        /**
-         * Creates a PKStatusUpdate message from a plain object. Also converts values to their respective internal types.
-         * @param object Plain object
-         * @returns PKStatusUpdate
-         */
-        public static fromObject(object: { [k: string]: any }): hbonline.PKStatusUpdate;
-
-        /**
-         * Creates a plain object from a PKStatusUpdate message. Also converts values to other types if specified.
-         * @param message PKStatusUpdate
-         * @param [options] Conversion options
-         * @returns Plain object
-         */
-        public static toObject(message: hbonline.PKStatusUpdate, options?: $protobuf.IConversionOptions): { [k: string]: any };
-
-        /**
-         * Converts this PKStatusUpdate to JSON.
-         * @returns JSON object
-         */
-        public toJSON(): { [k: string]: any };
 
         /**
          * Gets the default type url for PKStatusUpdate

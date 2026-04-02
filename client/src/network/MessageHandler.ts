@@ -62,6 +62,7 @@ export interface PlayerContents {
   ekCount: number;
   hunger: number;
   adminLevel: number;
+  introShown: boolean;
 }
 
 export interface MotionEvent {
@@ -520,6 +521,7 @@ const encoderMap: Record<number, { create: (data: any) => any; encode: (msg: any
   [Proto.MSG_QUEST_ACCEPT_REQUEST]: hbonline.QuestAcceptRequest,
   [Proto.MSG_QUEST_TURNIN_REQUEST]: hbonline.QuestTurnInRequest,
   [Proto.MSG_LOGOUT_REQUEST]: hbonline.LogoutRequest,
+  [Proto.MSG_DISMISS_INTRO_REQUEST]: hbonline.DismissIntroRequest,
 };
 
 export class MessageHandler {

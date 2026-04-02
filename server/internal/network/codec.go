@@ -40,6 +40,7 @@ const (
 	MsgQuestAcceptRequest     byte = 0x1D
 	MsgQuestTurnInRequest     byte = 0x1E
 	MsgLogoutRequest          byte = 0x1F
+	MsgDismissIntroRequest    byte = 0x20
 )
 
 // Message type IDs (server -> client)
@@ -176,6 +177,8 @@ func Decode(data []byte) (byte, proto.Message, error) {
 		msg = &pb.QuestTurnInRequest{}
 	case MsgLogoutRequest:
 		msg = &pb.LogoutRequest{}
+	case MsgDismissIntroRequest:
+		msg = &pb.DismissIntroRequest{}
 	default:
 		return msgType, nil, fmt.Errorf("unknown message type: 0x%02x", msgType)
 	}

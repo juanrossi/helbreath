@@ -47,6 +47,7 @@ message PlayerContents {
   int32 ek_count = 25;
   int32 hunger = 26;
   int32 admin_level = 27;
+  bool intro_shown = 28;
 }
 
 // Map metadata sent to client
@@ -203,6 +204,9 @@ message LogoutResponse {
   bool cancelled = 2;           // true = countdown was interrupted
   string reason = 3;            // why it was cancelled (e.g. "You were attacked!")
 }
+
+// Client -> Server: Mark intro modal as dismissed
+message DismissIntroRequest {}
 
 // Entity info for initial world state
 message EntityInfo {

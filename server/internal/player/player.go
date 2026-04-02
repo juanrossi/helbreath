@@ -56,6 +56,7 @@ type Player struct {
 	EKCount    int
 	Hunger     int
 	AdminLevel int
+	IntroShown bool      // whether the player has seen the welcome intro modal
 	GodMode    bool      // admin god mode: invulnerable + max damage
 	MutedUntil time.Time // chat mute expiry (zero = not muted)
 
@@ -146,6 +147,7 @@ func FromDB(row *db.CharacterRow, objectID int32, client *network.Client) *Playe
 		EKCount:        row.EKCount,
 		Hunger:         row.Hunger,
 		AdminLevel:     row.AdminLevel,
+		IntroShown:     row.IntroShown,
 		Inventory:      items.NewInventory(),
 		Skills:         skills.NewPlayerSkills(),
 		LearnedSpells:  make(map[int]bool),
@@ -276,6 +278,7 @@ func (p *Player) ToContents() *pb.PlayerContents {
 		EkCount:    int32(p.EKCount),
 		Hunger:     int32(p.Hunger),
 		AdminLevel: int32(p.AdminLevel),
+		IntroShown: p.IntroShown,
 	}
 }
 

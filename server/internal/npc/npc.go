@@ -240,19 +240,19 @@ var NpcTypes = map[int]*NpcType{
 	// ================================================================
 	49: {ID: 49, Name: "Hellclaw", SpriteType: 49, HP: 12500, MinDamage: 15, MaxDamage: 210, Defense: 450, DEX: 1000, XP: 30000,
 		AggroRange: 7, MoveSpeed: 600, AttackSpeed: 600, WanderRange: 8,
-		DiceThrow: 15, DiceRange: 14, Size: SizeLarge, Side: SideMonster, INT: 70, AttackRange: 5, RespawnDelay: 60 * time.Second},
+		DiceThrow: 15, DiceRange: 14, Size: SizeLarge, Side: SideMonster, INT: 70, AttackRange: 5, RespawnDelay: 60 * time.Second, BossType: 1},
 	50: {ID: 50, Name: "Tigerworm", SpriteType: 50, HP: 20000, MinDamage: 18, MaxDamage: 306, Defense: 550, DEX: 1200, XP: 75000,
 		AggroRange: 7, MoveSpeed: 600, AttackSpeed: 600, WanderRange: 8,
-		DiceThrow: 18, DiceRange: 17, Size: SizeLarge, Side: SideMonster, INT: 90, MaxMana: 16000, MagicHitRatio: 250, AttackRange: 6, RespawnDelay: 60 * time.Second},
+		DiceThrow: 18, DiceRange: 17, Size: SizeLarge, Side: SideMonster, INT: 90, MaxMana: 16000, MagicHitRatio: 250, AttackRange: 6, RespawnDelay: 60 * time.Second, BossType: 1},
 	66: {ID: 66, Name: "Wyvern", SpriteType: 66, HP: 25000, MinDamage: 20, MaxDamage: 360, Defense: 450, DEX: 1000, XP: 45000,
 		AggroRange: 8, MoveSpeed: 600, AttackSpeed: 600, WanderRange: 8,
-		DiceThrow: 20, DiceRange: 18, Size: SizeLarge, Side: SideMonster, INT: 120, MaxMana: 16000, MagicHitRatio: 250, AttackRange: 7, RespawnDelay: 60 * time.Second},
+		DiceThrow: 20, DiceRange: 18, Size: SizeLarge, Side: SideMonster, INT: 120, MaxMana: 16000, MagicHitRatio: 250, AttackRange: 7, RespawnDelay: 60 * time.Second, BossType: 1},
 	73: {ID: 73, Name: "Fire-Wyvern", SpriteType: 73, HP: 30000, MinDamage: 20, MaxDamage: 360, Defense: 450, DEX: 1000, XP: 225000,
 		AggroRange: 8, MoveSpeed: 600, AttackSpeed: 600, WanderRange: 8,
-		DiceThrow: 20, DiceRange: 18, Size: SizeLarge, Side: SideMonster, INT: 70, MaxMana: 16000, MagicHitRatio: 250, AttackRange: 7, RespawnDelay: 60 * time.Second},
+		DiceThrow: 20, DiceRange: 18, Size: SizeLarge, Side: SideMonster, INT: 70, MaxMana: 16000, MagicHitRatio: 250, AttackRange: 7, RespawnDelay: 60 * time.Second, BossType: 1},
 	81: {ID: 81, Name: "Abaddon", SpriteType: 81, HP: 150000, MinDamage: 20, MaxDamage: 400, Defense: 999, DEX: 999, XP: 999500,
 		AggroRange: 8, MoveSpeed: 500, AttackSpeed: 500, WanderRange: 8,
-		DiceThrow: 20, DiceRange: 20, Size: SizeLarge, Side: SideMonster, INT: 130, MaxMana: 20000, MagicHitRatio: 300, AttackRange: 7, RespawnDelay: 60 * time.Second},
+		DiceThrow: 20, DiceRange: 20, Size: SizeLarge, Side: SideMonster, INT: 130, MaxMana: 20000, MagicHitRatio: 300, AttackRange: 7, RespawnDelay: 60 * time.Second, BossType: 1},
 
 	// ================================================================
 	// Town NPCs (stationary, non-aggressive)

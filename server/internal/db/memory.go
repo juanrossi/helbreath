@@ -157,6 +157,18 @@ func (m *MemoryStore) CreateCharacter(_ context.Context, accountID int, name str
 	return id, nil
 }
 
+func (m *MemoryStore) MarkIntroShown(_ context.Context, charID int) error {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+
+	c, ok := m.characters[charID]
+	if !ok {
+		return fmt.Errorf("character not found")
+	}
+	c.IntroShown = true
+	return nil
+}
+
 func (m *MemoryStore) DeleteCharacter(_ context.Context, charID, accountID int) error {
 	m.mu.Lock()
 	defer m.mu.Unlock()
