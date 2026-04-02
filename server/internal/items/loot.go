@@ -3,8 +3,8 @@ package items
 import "math/rand"
 
 // LootDropMultiplier scales all item drop chances. Set by the game engine's difficulty config.
-// Default 3.0 = 3x more likely to drop items.
-var LootDropMultiplier = 3.0
+// Medium drop rate: 2x base.
+var LootDropMultiplier = 2.0
 
 // -----------------------------------------------------------------------
 // Attribute type constants for item generation (C++ NpcDeadItemGenerator)

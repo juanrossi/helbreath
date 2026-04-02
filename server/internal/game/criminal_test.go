@@ -84,23 +84,23 @@ func TestIsCriminalThreshold(t *testing.T) {
 
 func TestMaxLevelCap(t *testing.T) {
 	p := makeTestPlayer()
-	p.Level = 99
+	p.Level = MaxLevel - 1
 	p.LUPool = 0
-	p.Experience = XPForLevel(100) + 1000
+	p.Experience = XPForLevel(MaxLevel) + 1000
 
 	changed := CheckLevelUp(p)
 	if !changed {
-		t.Error("Should have leveled up to 100")
+		t.Error("Should have leveled up to MaxLevel")
 	}
-	if p.Level != 100 {
-		t.Errorf("Expected level 100, got %d", p.Level)
+	if p.Level != MaxLevel {
+		t.Errorf("Expected level %d, got %d", MaxLevel, p.Level)
 	}
 
-	// Give more XP - should NOT level past 100
-	p.Experience = XPForLevel(100) + XPForLevel(101) + 999999
+	// Give more XP - should NOT level past MaxLevel
+	p.Experience = XPForLevel(MaxLevel) + XPForLevel(MaxLevel+1) + 999999
 	changed = CheckLevelUp(p)
-	if p.Level != 100 {
-		t.Errorf("Should not exceed level 100, got %d", p.Level)
+	if p.Level != MaxLevel {
+		t.Errorf("Should not exceed level %d, got %d", MaxLevel, p.Level)
 	}
 }
 
@@ -159,8 +159,8 @@ func TestGizonPointAccumulation(t *testing.T) {
 }
 
 func TestStatCapMaxValue(t *testing.T) {
-	if MaxStatValue != 100 {
-		t.Errorf("MaxStatValue should be 100, got %d", MaxStatValue)
+	if MaxStatValue != 200 {
+		t.Errorf("MaxStatValue should be 200, got %d", MaxStatValue)
 	}
 }
 

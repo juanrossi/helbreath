@@ -364,7 +364,7 @@ func XPForLevel(level int) int64 {
 }
 
 // MaxLevel is the maximum player level. Once reached, excess XP converts to Gizon points.
-const MaxLevel = 100
+const MaxLevel = 180
 
 // GizonXPRate is the amount of excess XP required per 1 Gizon point.
 const GizonXPRate = 10000
@@ -415,7 +415,7 @@ func CheckLevelUp(p *player.Player) bool {
 }
 
 // MaxStatValue is the cap for each individual stat (STR, VIT, DEX, INT, MAG, CHR).
-const MaxStatValue = 100
+const MaxStatValue = 200
 
 // CalcDayNightBonus returns the bonus damage for a player's equipped weapon
 // based on the current world phase. Weapons with DayBonus get +bonus during day,

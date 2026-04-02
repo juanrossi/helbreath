@@ -5,22 +5,25 @@ package game
 // A value of 1.0 = original C++ difficulty. Higher = easier for players.
 var (
 	// HitBonus is added to hit chance percentage (0 = no bonus).
-	// At 3x easier: +30 hit chance makes most attacks land.
 	HitBonus = 50
 
 	// DamageMultiplier scales player damage output.
-	// At 3x easier: players deal 4x damage.
 	DamageMultiplier = 4
 
 	// DropRateMultiplier scales loot drop chances.
-	// At 3x easier: 3x more likely to get item drops.
-	DropRateMultiplier = 3.0
+	// Medium drop rate: 2x base.
+	DropRateMultiplier = 2.0
 
 	// XPMultiplier scales experience gained from kills.
-	// At 3x easier: 3x faster leveling.
-	XPMultiplier = 3.0
+	// High XP rate: 5x base for faster leveling to 180 cap.
+	XPMultiplier = 5.0
 
 	// NPCDamageReduction reduces damage NPCs deal to players.
-	// At 3x easier: NPCs deal 1/3 damage.
 	NPCDamageReduction = 3
+
+	// EKMultiplier scales Enemy Kill point rewards.
+	// Tiered: x10 base, x20 in crusade, x30 in special events.
+	EKMultiplierBase    = 10
+	EKMultiplierCrusade = 20
+	EKMultiplierEvent   = 30
 )
