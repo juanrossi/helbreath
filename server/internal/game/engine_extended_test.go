@@ -4311,7 +4311,7 @@ func TestHandlePlayerDeathNoMap(t *testing.T) {
 	p.MapName = "nonexistent"
 	addPlayerToEngine(e, p)
 
-	e.handlePlayerDeath(p, 0, "")
+	e.handlePlayerDeath(p, 0, "", false)
 }
 
 // dropGroundItem on tile

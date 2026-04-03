@@ -267,7 +267,7 @@ func (e *Engine) adminKill(p *player.Player, args []string) {
 
 	target.HP = 0
 	e.sendStatUpdate(target)
-	e.handlePlayerDeath(target, p.ObjectID, p.Name)
+	e.handlePlayerDeath(target, p.ObjectID, p.Name, false)
 	e.sendNotification(p, fmt.Sprintf("Killed %s", target.Name), 1)
 	e.sendNotification(target, "You were killed by a GM", 2)
 }

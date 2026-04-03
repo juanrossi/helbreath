@@ -861,7 +861,7 @@ func (e *Engine) handlePvPAttack(attacker, target *player.Player) {
 		}
 
 		e.sendPKStatus(attacker)
-		e.handlePlayerDeath(target, attacker.ObjectID, attacker.Name)
+		e.handlePlayerDeath(target, attacker.ObjectID, attacker.Name, false)
 	}
 
 	// SP cost

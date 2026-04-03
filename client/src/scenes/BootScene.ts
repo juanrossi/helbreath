@@ -81,6 +81,10 @@ export class BootScene extends Phaser.Scene {
     // Load item-ground sprite atlases (pre-packed PNG + JSON)
     this.load.atlas('item-ground', `${ASSET_BASE}/assets/spritesheets/item-ground.png`, `${ASSET_BASE}/assets/spritesheets/item-ground.json`);
     this.load.atlas('item2-ground', `${ASSET_BASE}/assets/spritesheets/item2-ground.png`, `${ASSET_BASE}/assets/spritesheets/item2-ground.json`);
+    // Load item-pack atlases for inventory UI (male, female, overflow)
+    this.load.atlas('item-pack', `${ASSET_BASE}/assets/spritesheets/item-pack.png`, `${ASSET_BASE}/assets/spritesheets/item-pack.json`);
+    this.load.atlas('item-packb', `${ASSET_BASE}/assets/spritesheets/item-packb.png`, `${ASSET_BASE}/assets/spritesheets/item-packb.json`);
+    this.load.atlas('item2-pack', `${ASSET_BASE}/assets/spritesheets/item2-pack.png`, `${ASSET_BASE}/assets/spritesheets/item2-pack.json`);
   }
 
   async create(): Promise<void> {

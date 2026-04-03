@@ -4,13 +4,13 @@ import "fmt"
 
 const (
 	MaxInventorySlots = 50
-	MaxEquipSlots     = 7 // 1-7 (weapon, shield, helm, body, leggings, boots, cape)
+	MaxEquipSlots     = 10 // 1-10 (weapon, shield, helm, body, leggings, boots, cape, necklace, ring-left, ring-right)
 )
 
 // Inventory manages a player's items and equipment.
 type Inventory struct {
 	Slots     [MaxInventorySlots]*Item // inventory slots (nil = empty)
-	Equipment [MaxEquipSlots + 1]*Item // equipment slots (index 1-7, 0 unused)
+	Equipment [MaxEquipSlots + 1]*Item // equipment slots (index 1-10, 0 unused)
 }
 
 // NewInventory creates an empty inventory.

@@ -55,6 +55,9 @@ import { showDamageNumber } from '../game/effects/FloatingText';
 import { WeatherManager } from '../game/effects/WeatherManager';
 import { getAssetByKey } from '../constants/Assets';
 import { getItemGroundFrame } from '../constants/ItemGroundSprites';
+import { ItemSpriteExtractor } from '../utils/ItemSpriteExtractor';
+import { InventoryBagPanel } from '../game/ui/InventoryBagPanel';
+import { CharacterInfoPanel, CharacterData } from '../game/ui/CharacterInfoPanel';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -398,6 +401,9 @@ export class GameScene extends Phaser.Scene {
   private equipmentItems: ItemInstanceData[] = [];
   private inventoryOpen = false;
   private inventoryDiv: HTMLDivElement | null = null;
+  private itemExtractor: ItemSpriteExtractor | null = null;
+  private bagPanel: InventoryBagPanel | null = null;
+  private charPanel: CharacterInfoPanel | null = null;
 
   // Ground items
   private groundItems: Map<number, GroundItemDisplay> = new Map();
@@ -546,6 +552,27 @@ export class GameScene extends Phaser.Scene {
 
     // Load and render map
     this.loadMap(enterData.mapInfo.name || pd.mapName);
+
+    // Initialize visual UI panels
+    const female = this.playerGender === 1;
+    this.itemExtractor = new ItemSpriteExtractor(this);
+    this.bagPanel = new InventoryBagPanel(this.itemExtractor, female, {
+      onEquip: (slot) => this.msgHandler.sendMessage(Proto.MSG_ITEM_EQUIP_REQUEST, { slotIndex: slot, equipSlot: 0 }),
+      onUnequip: (equipSlot) => this.msgHandler.sendMessage(Proto.MSG_ITEM_EQUIP_REQUEST, { slotIndex: -1, equipSlot }),
+      onUse: (slot) => this.msgHandler.sendMessage(Proto.MSG_ITEM_USE_REQUEST, { slotIndex: slot }),
+      onDrop: (slot) => this.msgHandler.sendMessage(Proto.MSG_ITEM_DROP_REQUEST, { slotIndex: slot, count: 1 }),
+      onClose: () => this.toggleInventory(),
+    });
+    this.charPanel = new CharacterInfoPanel(this.itemExtractor, female, {
+      onUnequip: (equipSlot) => this.msgHandler.sendMessage(Proto.MSG_ITEM_EQUIP_REQUEST, { slotIndex: -1, equipSlot }),
+      onEquipFromBag: (bagSlot) => this.msgHandler.sendMessage(Proto.MSG_ITEM_EQUIP_REQUEST, { slotIndex: bagSlot, equipSlot: 0 }),
+      onAllocStat: (statType, points) => {
+        this.msgHandler.sendMessage(Proto.MSG_STAT_ALLOC_REQUEST, { statType, points });
+        setTimeout(() => { if (this.charPanel?.visible) this.renderStatsUI(); }, 200);
+      },
+      onClose: () => this.toggleStats(),
+      onRefreshPortrait: (cb) => this.capturePlayerPortrait(cb),
+    });
 
     // Create local player sprites
     this.createLocalPlayer();
@@ -3828,6 +3855,30 @@ export class GameScene extends Phaser.Scene {
   }
 
   // ---------------------------------------------------------------------------
+  // Player portrait capture (for CharacterInfoPanel silhouette)
+  // ---------------------------------------------------------------------------
+
+  /** Snapshots the player's current on-screen appearance into a data URL. */
+  capturePlayerPortrait(cb: (url: string | null) => void): void {
+    if (!this.playerAssets) { cb(null); return; }
+    const cam = this.cameras.main;
+    // Player visual center in canvas (640×480) space
+    const cx = Math.round(this.visualX + TILE_SIZE / 2 - cam.scrollX);
+    const cy = Math.round(this.visualY - cam.scrollY);
+    const pw = 96, ph = 144;
+    const sx = Math.max(0, cx - pw / 2);
+    const sy = Math.max(0, cy - ph);
+    try {
+      (this.renderer as Phaser.Renderer.WebGL.WebGLRenderer | Phaser.Renderer.Canvas.CanvasRenderer)
+        .snapshotArea(sx, sy, pw, ph, (img) => {
+          cb((img as HTMLImageElement).src ?? null);
+        });
+    } catch {
+      cb(null);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
   // Inventory UI
   // ---------------------------------------------------------------------------
 
@@ -3837,6 +3888,8 @@ export class GameScene extends Phaser.Scene {
     if (data.gold !== undefined) this.playerGold = Number(data.gold);
     this.updateHUD();
     if (this.inventoryOpen) this.renderInventoryUI();
+    // Refresh char panel equipment if open
+    if (this.charPanel?.visible) this.renderStatsUI();
   }
 
   private toggleInventory(): void {
@@ -3850,84 +3903,12 @@ export class GameScene extends Phaser.Scene {
   }
 
   private renderInventoryUI(): void {
-    this.closeInventoryUI();
-    const div = document.createElement('div');
-    div.id = 'inventory-panel';
-    div.style.cssText = 'position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); z-index:200; background:rgba(20,20,30,0.95); color:#fff; padding:15px; font-size:12px; min-width:420px; border:1px solid #555; border-radius:4px;';
-
-    let html = '<div style="display:flex; justify-content:space-between; margin-bottom:10px;"><strong>Inventory</strong><button id="inv-close" style="cursor:pointer;">X</button></div>';
-
-    // Equipment section
-    html += '<div style="margin-bottom:10px; padding:8px; background:rgba(0,0,0,0.3); border-radius:3px;"><div style="color:#aaa; margin-bottom:5px;">Equipment</div>';
-    const slotNames = ['', 'Weapon', 'Shield', 'Helm', 'Body', 'Legs', 'Boots', 'Cape'];
-    for (let i = 1; i <= 7; i++) {
-      const eq = this.equipmentItems.find(e => e.slotIndex === i);
-      if (eq) {
-        html += `<div style="display:flex; justify-content:space-between; padding:2px 0;"><span style="color:#3498db;">[${slotNames[i]}] ${eq.name}</span>`;
-        html += `<button class="unequip-btn" data-slot="${i}" style="font-size:10px; cursor:pointer;">Unequip</button></div>`;
-        if (eq.maxDurability > 0) {
-          html += `<div style="font-size:10px; color:#888; padding-left:10px;">Durability: ${eq.durability}/${eq.maxDurability}</div>`;
-        }
-      } else {
-        html += `<div style="color:#555; padding:2px 0;">[${slotNames[i]}] Empty</div>`;
-      }
-    }
-    html += '</div>';
-
-    // Inventory grid
-    html += '<div style="max-height:250px; overflow-y:auto;">';
-    if (this.inventoryItems.length === 0) {
-      html += '<div style="color:#666; text-align:center; padding:20px;">Empty</div>';
-    }
-    for (const item of this.inventoryItems) {
-      html += `<div style="display:flex; justify-content:space-between; align-items:center; padding:3px 5px; border-bottom:1px solid #333;">`;
-      html += `<span>${item.name} ${item.count > 1 ? 'x' + item.count : ''}</span>`;
-      html += `<span style="display:flex; gap:3px;">`;
-      // Show durability for equipment
-      if (item.maxDurability > 0) {
-        html += `<span style="font-size:10px; color:#888;">${item.durability}/${item.maxDurability}</span>`;
-      }
-      html += `<button class="use-btn" data-slot="${item.slotIndex}" style="font-size:10px; cursor:pointer;">Use</button>`;
-      html += `<button class="equip-btn" data-slot="${item.slotIndex}" style="font-size:10px; cursor:pointer;">Equip</button>`;
-      html += `<button class="drop-btn" data-slot="${item.slotIndex}" style="font-size:10px; cursor:pointer;">Drop</button>`;
-      html += `</span></div>`;
-    }
-    html += '</div>';
-    html += `<div style="margin-top:8px; color:#FFD700; font-size:11px;">Gold: ${this.playerGold}</div>`;
-
-    div.innerHTML = html;
-    document.body.appendChild(div);
-    this.inventoryDiv = div;
-
-    // Event handlers
-    div.querySelector('#inv-close')?.addEventListener('click', () => this.toggleInventory());
-    div.querySelectorAll('.use-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const slot = parseInt((btn as HTMLElement).dataset.slot || '0');
-        this.msgHandler.sendMessage(Proto.MSG_ITEM_USE_REQUEST, { slotIndex: slot });
-      });
-    });
-    div.querySelectorAll('.equip-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const slot = parseInt((btn as HTMLElement).dataset.slot || '0');
-        this.msgHandler.sendMessage(Proto.MSG_ITEM_EQUIP_REQUEST, { slotIndex: slot, equipSlot: 0 });
-      });
-    });
-    div.querySelectorAll('.drop-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const slot = parseInt((btn as HTMLElement).dataset.slot || '0');
-        this.msgHandler.sendMessage(Proto.MSG_ITEM_DROP_REQUEST, { slotIndex: slot, count: 1 });
-      });
-    });
-    div.querySelectorAll('.unequip-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const eqSlot = parseInt((btn as HTMLElement).dataset.slot || '0');
-        this.msgHandler.sendMessage(Proto.MSG_ITEM_EQUIP_REQUEST, { slotIndex: -1, equipSlot: eqSlot });
-      });
-    });
+    this.bagPanel?.show(this.inventoryItems, this.equipmentItems, this.playerGold);
   }
 
   private closeInventoryUI(): void {
+    this.bagPanel?.hide();
+    // Legacy div cleanup
     if (this.inventoryDiv) {
       this.inventoryDiv.remove();
       this.inventoryDiv = null;
@@ -4131,94 +4112,30 @@ export class GameScene extends Phaser.Scene {
   // ---------------------------------------------------------------------------
 
   private toggleStats(): void {
-    const existing = document.getElementById('stats-panel');
-    if (existing) {
-      existing.remove();
-      return;
+    if (this.charPanel?.visible) {
+      this.charPanel.hide();
+    } else {
+      this.renderStatsUI();
     }
-    this.renderStatsUI();
   }
 
   private renderStatsUI(): void {
-    const old = document.getElementById('stats-panel');
-    if (old) old.remove();
-
-    const div = document.createElement('div');
-    div.id = 'stats-panel';
-    div.style.cssText = 'position:fixed; top:50%; right:180px; transform:translateY(-50%); z-index:200; background:rgba(20,20,30,0.95); color:#fff; padding:15px; font-size:12px; min-width:260px; border:1px solid #555; border-radius:4px;';
-
-    const stats: { key: number; name: string; val: number; hint: string }[] = [
-      { key: 1, name: 'STR', val: this.playerSTR, hint: 'Melee damage' },
-      { key: 2, name: 'VIT', val: this.playerVIT, hint: '+2 Max HP per pt' },
-      { key: 3, name: 'DEX', val: this.playerDEX, hint: 'Hit & defense ratio' },
-      { key: 4, name: 'INT', val: this.playerINT, hint: 'Spell power' },
-      { key: 5, name: 'MAG', val: this.playerMAG, hint: '+2 Max MP per pt' },
-      { key: 6, name: 'CHR', val: this.playerCHR, hint: 'NPC prices, party bonus' },
-    ];
-
-    // Header
-    let html = '<div style="display:flex; justify-content:space-between; margin-bottom:10px;"><strong style="font-size:13px;">Character Stats</strong><button id="stats-close" style="cursor:pointer; background:none; border:none; color:#aaa; font-size:14px;">X</button></div>';
-
-    // XP progress section
-    const currentLevelXP = this.xpForLevel(this.playerLevel);
-    const nextLevelXP = this.xpForLevel(this.playerLevel + 1);
-    const xpIntoLevel = Number(this.playerExp) - currentLevelXP;
-    const xpNeeded = nextLevelXP - currentLevelXP;
-    const xpPct = xpNeeded > 0 ? Math.min(Math.round((xpIntoLevel / xpNeeded) * 100), 100) : 100;
-
-    html += `<div style="margin-bottom:10px; padding:8px; background:rgba(0,0,0,0.3); border-radius:3px;">`;
-    html += `<div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>Level <strong style="color:#FFD700;">${this.playerLevel}</strong></span><span style="color:#888; font-size:10px;">Total XP: ${this.playerExp}</span></div>`;
-    html += `<div style="height:14px; background:#333; border:1px solid #555; border-radius:2px; position:relative; overflow:hidden; margin-bottom:3px;">`;
-    html += `<div style="height:100%; background:linear-gradient(to right,#e67e22,#f39c12); width:${xpPct}%; transition:width 0.3s;"></div>`;
-    html += `<div style="position:absolute; top:0; left:0; right:0; text-align:center; font-size:9px; line-height:14px; color:#fff; text-shadow:0 0 2px #000;">${xpPct}% &mdash; ${xpIntoLevel} / ${xpNeeded}</div>`;
-    html += `</div></div>`;
-
-    // Stat points banner
-    if (this.playerLUPool > 0) {
-      html += `<div style="margin-bottom:8px; padding:6px 8px; background:rgba(155,89,182,0.15); border:1px solid #9b59b6; border-radius:3px; color:#d4a0ff; text-align:center; font-weight:bold;">`;
-      html += `${this.playerLUPool} Stat Point${this.playerLUPool > 1 ? 's' : ''} Available`;
-      html += `</div>`;
-    }
-
-    // Stat rows
-    const btnStyle = 'font-size:10px; cursor:pointer; padding:1px 6px; border:1px solid #555; border-radius:2px; background:#333; color:#ccc; margin-left:2px;';
-    for (const stat of stats) {
-      html += `<div style="display:flex; justify-content:space-between; align-items:center; padding:4px 0; border-bottom:1px solid #222;">`;
-      html += `<div><span style="color:#aaa; width:32px; display:inline-block;">${stat.name}</span> <strong style="font-size:13px;">${stat.val}</strong> <span style="color:#555; font-size:9px;">${stat.hint}</span></div>`;
-      if (this.playerLUPool > 0) {
-        html += `<div style="display:flex;">`;
-        html += `<button class="stat-alloc-btn" data-stat="${stat.key}" data-pts="1" style="${btnStyle}">+1</button>`;
-        if (this.playerLUPool >= 5) {
-          html += `<button class="stat-alloc-btn" data-stat="${stat.key}" data-pts="5" style="${btnStyle}">+5</button>`;
-        }
-        html += `</div>`;
-      }
-      html += `</div>`;
-    }
-
-    // Derived stats
-    html += `<div style="margin-top:10px; padding:8px; background:rgba(0,0,0,0.3); border-radius:3px; font-size:11px;">`;
-    html += `<div style="color:#aaa; margin-bottom:4px; font-size:10px;">Derived Stats</div>`;
-    html += `<div style="display:flex; justify-content:space-between;"><span style="color:#e74c3c;">HP</span> <span>${this.playerHP}/${this.playerMaxHP}</span></div>`;
-    html += `<div style="display:flex; justify-content:space-between;"><span style="color:#3498db;">MP</span> <span>${this.playerMP}/${this.playerMaxMP}</span></div>`;
-    html += `<div style="display:flex; justify-content:space-between;"><span style="color:#2ecc71;">SP</span> <span>${this.playerSP}/${this.playerMaxSP}</span></div>`;
-    html += `</div>`;
-
-    html += `<style>.stat-alloc-btn:hover{background:#555!important;color:#fff!important;}</style>`;
-    div.innerHTML = html;
-    document.body.appendChild(div);
-
-    div.querySelector('#stats-close')?.addEventListener('click', () => div.remove());
-    div.querySelectorAll('.stat-alloc-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const statType = parseInt((btn as HTMLElement).dataset.stat || '0');
-        const points = parseInt((btn as HTMLElement).dataset.pts || '1');
-        this.msgHandler.sendMessage(Proto.MSG_STAT_ALLOC_REQUEST, { statType, points });
-        setTimeout(() => this.renderStatsUI(), 200);
-      });
-    });
-
-    this.events.on('shutdown', () => div.remove());
+    if (!this.charPanel) return;
+    const data: CharacterData = {
+      name: this.playerName,
+      level: this.playerLevel,
+      exp: Number(this.playerExp),
+      hp: this.playerHP, maxHp: this.playerMaxHP,
+      mp: this.playerMP, maxMp: this.playerMaxMP,
+      sp: this.playerSP, maxSp: this.playerMaxSP,
+      str: this.playerSTR, vit: this.playerVIT, dex: this.playerDEX,
+      int: this.playerINT, mag: this.playerMAG, chr: this.playerCHR,
+      luPool: this.playerLUPool,
+      ekCount: this.ekCount,
+      equipment: this.equipmentItems,
+      xpForLevel: (lvl) => this.xpForLevel(lvl),
+    };
+    this.charPanel.show(data);
   }
 
   // =========================================================================

@@ -1342,7 +1342,7 @@ func TestHandlePlayerDeath(t *testing.T) {
 	addPlayerToEngine(e, p)
 
 	origExp := p.Experience
-	e.handlePlayerDeath(p, 2, "Killer")
+	e.handlePlayerDeath(p, 2, "Killer", false)
 
 	// Innocent (PK 0) should lose 2% of level XP
 	expectedLoss := XPForLevel(10) * 2 / 100
@@ -1381,7 +1381,7 @@ func TestHandlePlayerDeathPKTiers(t *testing.T) {
 			addPlayerToEngine(e, p)
 
 			origExp := p.Experience
-			e.handlePlayerDeath(p, 2, "Killer")
+			e.handlePlayerDeath(p, 2, "Killer", false)
 
 			expectedLoss := XPForLevel(10) * tt.xpPenaltyPct / 100
 			if p.Experience != origExp-expectedLoss {
@@ -1418,7 +1418,7 @@ func TestHandlePlayerDeathClearsEffectsAndBuffs(t *testing.T) {
 		t.Fatalf("Expected 1 effect before death, got %d", p.Effects.Count())
 	}
 
-	e.handlePlayerDeath(p, 2, "Killer")
+	e.handlePlayerDeath(p, 2, "Killer", false)
 
 	if p.Buffs.Count() != 0 {
 		t.Errorf("Expected 0 buffs after death, got %d", p.Buffs.Count())
@@ -1440,7 +1440,7 @@ func TestHandlePlayerDeathSafeZoneNoXPLoss(t *testing.T) {
 	addPlayerToEngine(e, p)
 
 	origExp := p.Experience
-	e.handlePlayerDeath(p, 2, "Killer")
+	e.handlePlayerDeath(p, 2, "Killer", false)
 
 	if p.Experience != origExp {
 		t.Errorf("Expected no XP loss on SafeZone map, got XP=%d (was %d)", p.Experience, origExp)
@@ -1459,7 +1459,7 @@ func TestHandlePlayerDeathArenaNoXPLoss(t *testing.T) {
 	addPlayerToEngine(e, p)
 
 	origExp := p.Experience
-	e.handlePlayerDeath(p, 2, "Killer")
+	e.handlePlayerDeath(p, 2, "Killer", false)
 
 	if p.Experience != origExp {
 		t.Errorf("Expected no XP loss on Arena map, got XP=%d (was %d)", p.Experience, origExp)

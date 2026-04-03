@@ -613,7 +613,7 @@ func (e *Engine) processNPCTick(n *npc.NPC, now time.Time) {
 
 		// Handle player death
 		if result.Killed {
-			e.handlePlayerDeath(target, n.ObjectID, n.Type.Name)
+			e.handlePlayerDeath(target, n.ObjectID, n.Type.Name, true)
 		}
 
 	case npc.StateFlee:
@@ -690,8 +690,8 @@ func (e *Engine) findNearestPlayer(n *npc.NPC, gm *mapdata.GameMap) (*player.Pla
 			continue
 		}
 
-		// Admin immunity: skip players with AdminLevel > 0
-		if p.AdminLevel > 0 {
+		// God mode immunity: skip players in god mode (invulnerable admins)
+		if p.GodMode {
 			continue
 		}
 
@@ -767,7 +767,7 @@ func (e *Engine) sendStatUpdate(p *player.Player) {
 	p.Send(data)
 }
 
-func (e *Engine) handlePlayerDeath(p *player.Player, killerID int32, killerName string) {
+func (e *Engine) handlePlayerDeath(p *player.Player, killerID int32, killerName string, killedByNPC bool) {
 	gm, ok := e.maps[p.MapName]
 	if !ok {
 		return
@@ -796,12 +796,28 @@ func (e *Engine) handlePlayerDeath(p *player.Player, killerID int32, killerName 
 		xpPenaltyPct = 2
 	}
 
-	// Skip XP loss on safe zone and arena maps
+	// Skip XP loss and item drops on safe zone and arena maps
 	if gm.Type == mapdata.MapTypeNormal {
 		xpLoss := XPForLevel(p.Level) * xpPenaltyPct / 100
 		p.Experience -= xpLoss
 		if p.Experience < 0 {
 			p.Experience = 0
+		}
+
+		// Item drops on death (ported from C++ ApplyCombatKilledPenalty / _PenaltyItemDrop)
+		// Neutral players (Side==0, travellers) never drop items.
+		if p.Side != 0 {
+			penaltyLevel := deathPenaltyLevel(p, killedByNPC)
+
+			// Players under level 80 get penalty reduced by 1 (min 1)
+			if p.Level < 80 {
+				penaltyLevel--
+				if penaltyLevel < 1 {
+					penaltyLevel = 1
+				}
+			}
+
+			e.penaltyItemDrop(p, penaltyLevel, gm)
 		}
 	}
 
@@ -821,6 +837,24 @@ func (e *Engine) handlePlayerDeath(p *player.Player, killerID int32, killerName 
 		time.Sleep(3 * time.Second)
 		e.respawnPlayer(p)
 	}()
+}
+
+// deathPenaltyLevel returns the number of items to drop on death.
+// Matches original C++ penalty levels from ClientKilledHandler.
+func deathPenaltyLevel(p *player.Player, killedByNPC bool) int {
+	switch {
+	case p.PKCount >= 12: // slaughterer
+		return 12
+	case p.PKCount >= 4: // murderer
+		return 6
+	case p.PKCount >= 1: // criminal
+		return 3
+	default: // innocent
+		if killedByNPC {
+			return 1
+		}
+		return 2 // killed by enemy player
+	}
 }
 
 func (e *Engine) respawnPlayer(p *player.Player) {

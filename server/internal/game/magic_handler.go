@@ -709,7 +709,7 @@ func (e *Engine) processEffectTicks(now time.Time) {
 
 				// Handle death by poison
 				if p.HP <= 0 {
-					e.handlePlayerDeath(p, 0, "Poison")
+					e.handlePlayerDeath(p, 0, "Poison", true)
 				}
 
 			case magic.EffectEventExpired:

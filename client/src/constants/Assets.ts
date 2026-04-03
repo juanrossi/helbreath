@@ -193,6 +193,9 @@ const CHARACTER_SPRITE_ASSETS: AssetData[] = [
     { key: 'ww', fileName: 'ww.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Human },
     { key: 'yw', fileName: 'yw.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Human },
     { key: 'bw', fileName: 'bw.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Human },
+
+    // UI portraits — sheet 0 has character class portraits (270×376px per frame)
+    { key: 'dialogtext', fileName: 'dialogtext.spr', assetType: AssetType.SPRITE, spriteType: SpriteType.Interface },
 ];
 
 // ---------------------------------------------------------------------------

@@ -13,20 +13,25 @@ const (
 	ItemTypeCape      ItemType = 7
 	ItemTypePotion    ItemType = 8
 	ItemTypeMaterial  ItemType = 9
+	ItemTypeNecklace  ItemType = 10
+	ItemTypeRing      ItemType = 11
 )
 
 // EquipSlot identifies where an item can be equipped.
 type EquipSlot int
 
 const (
-	EquipNone     EquipSlot = 0
-	EquipWeapon   EquipSlot = 1
-	EquipShield   EquipSlot = 2
-	EquipHelm     EquipSlot = 3
-	EquipBody     EquipSlot = 4
-	EquipLeggings EquipSlot = 5
-	EquipBoots    EquipSlot = 6
-	EquipCape     EquipSlot = 7
+	EquipNone      EquipSlot = 0
+	EquipWeapon    EquipSlot = 1
+	EquipShield    EquipSlot = 2
+	EquipHelm      EquipSlot = 3
+	EquipBody      EquipSlot = 4
+	EquipLeggings  EquipSlot = 5
+	EquipBoots     EquipSlot = 6
+	EquipCape      EquipSlot = 7
+	EquipNecklace  EquipSlot = 8
+	EquipRingLeft  EquipSlot = 9
+	EquipRingRight EquipSlot = 10
 )
 
 // Item attribute values (encoded in bits 20-23 of the Attribute field).

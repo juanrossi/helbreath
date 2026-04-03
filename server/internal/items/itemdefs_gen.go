@@ -1735,8 +1735,8 @@ func init() {
 
 	ItemDB[300] = &ItemDef{
 		ID: 300, Name: "MagicNecklaceRM10",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 400, Price: 2250, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 400, Price: 2250, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 30,
 		ApprIndex: -1,
@@ -1744,8 +1744,8 @@ func init() {
 
 	ItemDB[305] = &ItemDef{
 		ID: 305, Name: "MagicNecklaceDM+1",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 400, Price: 39800, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 400, Price: 39800, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 65,
 		ApprIndex: -1,
@@ -1753,8 +1753,8 @@ func init() {
 
 	ItemDB[308] = &ItemDef{
 		ID: 308, Name: "NeckMS10",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 400, Price: 7000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 400, Price: 7000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 50,
 		ApprIndex: -1,
@@ -1762,8 +1762,8 @@ func init() {
 
 	ItemDB[311] = &ItemDef{
 		ID: 311, Name: "MagicNecklaceDF+10",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 400, Price: 19000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 400, Price: 19000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 50,
 		ApprIndex: -1,
@@ -1771,16 +1771,16 @@ func init() {
 
 	ItemDB[315] = &ItemDef{
 		ID: 315, Name: "GoldNecklace",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 300, Price: 1000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 300, Price: 1000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ApprIndex: -1,
 	}
 
 	ItemDB[316] = &ItemDef{
 		ID: 316, Name: "SilverNecklace",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 300, Price: 500, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 300, Price: 500, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ApprIndex: -1,
 	}
@@ -1837,96 +1837,96 @@ func init() {
 
 	ItemDB[327] = &ItemDef{
 		ID: 327, Name: "RingInfame",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 200, Price: 700, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingRight,
+		Weight: 200, Price: 700, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ApprIndex: -1,
 	}
 
 	ItemDB[328] = &ItemDef{
 		ID: 328, Name: "StrangeRing1",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 200, Price: 700, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingRight,
+		Weight: 200, Price: 700, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ApprIndex: -1,
 	}
 
 	ItemDB[329] = &ItemDef{
 		ID: 329, Name: "StrangeRing2",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 200, Price: 700, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingRight,
+		Weight: 200, Price: 700, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ApprIndex: -1,
 	}
 
 	ItemDB[330] = &ItemDef{
 		ID: 330, Name: "StrangeRing3",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 200, Price: 700, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingRight,
+		Weight: 200, Price: 700, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ApprIndex: -1,
 	}
 
 	ItemDB[331] = &ItemDef{
 		ID: 331, Name: "GoldRing",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 200, Price: 700, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingLeft,
+		Weight: 200, Price: 700, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ApprIndex: -1,
 	}
 
 	ItemDB[332] = &ItemDef{
 		ID: 332, Name: "SilverRing",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 200, Price: 350, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingLeft,
+		Weight: 200, Price: 350, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ApprIndex: -1,
 	}
 
 	ItemDB[333] = &ItemDef{
 		ID: 333, Name: "PlatinumRing",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 200, Price: 750, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingLeft,
+		Weight: 200, Price: 750, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ApprIndex: -1,
 	}
 
 	ItemDB[334] = &ItemDef{
 		ID: 334, Name: "LuckyGoldRing",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 200, Price: 2750, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingLeft,
+		Weight: 200, Price: 2750, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ApprIndex: -1,
 	}
 
 	ItemDB[335] = &ItemDef{
 		ID: 335, Name: "EmeraldRing",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 200, Price: 2500, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingLeft,
+		Weight: 200, Price: 2500, MaxStack: 1, Durability: 9000,
 		SpriteID: 16,
 		ApprIndex: -1,
 	}
 
 	ItemDB[336] = &ItemDef{
 		ID: 336, Name: "SapphireRing",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 200, Price: 2450, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingLeft,
+		Weight: 200, Price: 2450, MaxStack: 1, Durability: 5000,
 		SpriteID: 16,
 		ApprIndex: -1,
 	}
 
 	ItemDB[337] = &ItemDef{
 		ID: 337, Name: "RubyRing",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 200, Price: 1800, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingLeft,
+		Weight: 200, Price: 1800, MaxStack: 1, Durability: 5000,
 		SpriteID: 16,
 		ApprIndex: -1,
 	}
 
 	ItemDB[338] = &ItemDef{
 		ID: 338, Name: "MemorialRing",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 200, Price: 1000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingLeft,
+		Weight: 200, Price: 1000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ApprIndex: -1,
 	}
@@ -3460,8 +3460,8 @@ func init() {
 
 	ItemDB[630] = &ItemDef{
 		ID: 630, Name: "RingOfXelima",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 500, Price: 10000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingLeft,
+		Weight: 500, Price: 10000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 100,
 		ApprIndex: -1,
@@ -3469,8 +3469,8 @@ func init() {
 
 	ItemDB[631] = &ItemDef{
 		ID: 631, Name: "RingOfAbaddon",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 500, Price: 19000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingLeft,
+		Weight: 500, Price: 19000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 100,
 		ApprIndex: -1,
@@ -3478,80 +3478,80 @@ func init() {
 
 	ItemDB[632] = &ItemDef{
 		ID: 632, Name: "RingOfOgrePower",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 500, Price: 10000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingLeft,
+		Weight: 500, Price: 10000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ApprIndex: -1,
 	}
 
 	ItemDB[633] = &ItemDef{
 		ID: 633, Name: "RingOfDemonPower",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 500, Price: 10000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingLeft,
+		Weight: 500, Price: 10000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ApprIndex: -1,
 	}
 
 	ItemDB[634] = &ItemDef{
 		ID: 634, Name: "RingOfWizard",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 500, Price: 10000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingLeft,
+		Weight: 500, Price: 10000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ApprIndex: -1,
 	}
 
 	ItemDB[635] = &ItemDef{
 		ID: 635, Name: "RingOfMage",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 500, Price: 10000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingLeft,
+		Weight: 500, Price: 10000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ApprIndex: -1,
 	}
 
 	ItemDB[636] = &ItemDef{
 		ID: 636, Name: "RingOfGrandMage",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 500, Price: 10000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingLeft,
+		Weight: 500, Price: 10000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ApprIndex: -1,
 	}
 
 	ItemDB[637] = &ItemDef{
 		ID: 637, Name: "NecklaceOfLightPro",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 1000, Price: 20000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 1000, Price: 20000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ApprIndex: -1,
 	}
 
 	ItemDB[638] = &ItemDef{
 		ID: 638, Name: "NecklaceOfFirePro",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 1000, Price: 20000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 1000, Price: 20000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ApprIndex: -1,
 	}
 
 	ItemDB[639] = &ItemDef{
 		ID: 639, Name: "NecklaceOfPoisonPro",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 1000, Price: 20000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 1000, Price: 20000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ApprIndex: -1,
 	}
 
 	ItemDB[640] = &ItemDef{
 		ID: 640, Name: "NecklaceOfSufferent",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 1000, Price: 20000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 1000, Price: 20000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ApprIndex: -1,
 	}
 
 	ItemDB[641] = &ItemDef{
 		ID: 641, Name: "NecklaceOfMedusa",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 1000, Price: 20000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 1000, Price: 20000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 100,
 		ApprIndex: -1,
@@ -3559,16 +3559,16 @@ func init() {
 
 	ItemDB[642] = &ItemDef{
 		ID: 642, Name: "NecklaceOfIcePotion",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 1000, Price: 20000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 1000, Price: 20000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ApprIndex: -1,
 	}
 
 	ItemDB[643] = &ItemDef{
 		ID: 643, Name: "NecklaceOfIceEl",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 1000, Price: 20000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 1000, Price: 20000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 100,
 		ApprIndex: -1,
@@ -3576,8 +3576,8 @@ func init() {
 
 	ItemDB[644] = &ItemDef{
 		ID: 644, Name: "NecklaceOfAirEl",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 1000, Price: 20000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 1000, Price: 20000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 100,
 		ApprIndex: -1,
@@ -3585,8 +3585,8 @@ func init() {
 
 	ItemDB[645] = &ItemDef{
 		ID: 645, Name: "NecklaceOfEfreet",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 1000, Price: 20000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 1000, Price: 20000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 100,
 		ApprIndex: -1,
@@ -3594,8 +3594,8 @@ func init() {
 
 	ItemDB[646] = &ItemDef{
 		ID: 646, Name: "NecklaceOfBeholder",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 1000, Price: 40000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 1000, Price: 40000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 100,
 		ApprIndex: -1,
@@ -3603,16 +3603,16 @@ func init() {
 
 	ItemDB[647] = &ItemDef{
 		ID: 647, Name: "NecklaceOfStoneGolem",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 1000, Price: 20000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 1000, Price: 20000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ApprIndex: -1,
 	}
 
 	ItemDB[648] = &ItemDef{
 		ID: 648, Name: "NeckMS15",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 400, Price: 10000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 400, Price: 10000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 100,
 		ApprIndex: -1,
@@ -3904,8 +3904,8 @@ func init() {
 
 	ItemDB[693] = &ItemDef{
 		ID: 693, Name: "GMPowerRing",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 500, Price: 100, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingLeft,
+		Weight: 500, Price: 100, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ApprIndex: -1,
 	}
@@ -4049,8 +4049,8 @@ func init() {
 
 	ItemDB[734] = &ItemDef{
 		ID: 734, Name: "RingOfArchMage",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 500, Price: 10000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingLeft,
+		Weight: 500, Price: 10000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 100,
 		ApprIndex: -1,
@@ -4058,8 +4058,8 @@ func init() {
 
 	ItemDB[735] = &ItemDef{
 		ID: 735, Name: "RingOfDragonPower",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 500, Price: 10000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingLeft,
+		Weight: 500, Price: 10000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ApprIndex: -1,
 	}
@@ -4611,8 +4611,8 @@ func init() {
 
 	ItemDB[858] = &ItemDef{
 		ID: 858, Name: "NecklaceOfMerien",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 1000, Price: 20000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 1000, Price: 20000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 100,
 		ApprIndex: -1,
@@ -4620,8 +4620,8 @@ func init() {
 
 	ItemDB[859] = &ItemDef{
 		ID: 859, Name: "NecklaceOfKloness",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 1000, Price: 20000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 1000, Price: 20000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 100,
 		ApprIndex: -1,
@@ -4629,8 +4629,8 @@ func init() {
 
 	ItemDB[860] = &ItemDef{
 		ID: 860, Name: "NecklaceOfXelima",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 1000, Price: 20000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 1000, Price: 20000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 100,
 		ApprIndex: -1,
@@ -5825,32 +5825,32 @@ func init() {
 
 	ItemDB[1007] = &ItemDef{
 		ID: 1007, Name: "AirRing",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 200, Price: 20000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingLeft,
+		Weight: 200, Price: 20000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ApprIndex: -1,
 	}
 
 	ItemDB[1008] = &ItemDef{
 		ID: 1008, Name: "EarthRing",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 200, Price: 20000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingLeft,
+		Weight: 200, Price: 20000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ApprIndex: -1,
 	}
 
 	ItemDB[1009] = &ItemDef{
 		ID: 1009, Name: "FireRing",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 200, Price: 20000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingLeft,
+		Weight: 200, Price: 20000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ApprIndex: -1,
 	}
 
 	ItemDB[1010] = &ItemDef{
 		ID: 1010, Name: "IceRing",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 200, Price: 20000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingLeft,
+		Weight: 200, Price: 20000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ApprIndex: -1,
 	}
@@ -5865,32 +5865,32 @@ func init() {
 
 	ItemDB[1081] = &ItemDef{
 		ID: 1081, Name: "MagicDiamond",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 200, Price: 8000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingRight,
+		Weight: 200, Price: 8000, MaxStack: 1, Durability: 300,
 		SpriteID: 22,
 		ApprIndex: -1,
 	}
 
 	ItemDB[1082] = &ItemDef{
 		ID: 1082, Name: "MagicRuby",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 200, Price: 5000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingRight,
+		Weight: 200, Price: 5000, MaxStack: 1, Durability: 300,
 		SpriteID: 22,
 		ApprIndex: -1,
 	}
 
 	ItemDB[1083] = &ItemDef{
 		ID: 1083, Name: "MagicEmerald",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 200, Price: 5000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingRight,
+		Weight: 200, Price: 5000, MaxStack: 1, Durability: 300,
 		SpriteID: 22,
 		ApprIndex: -1,
 	}
 
 	ItemDB[1084] = &ItemDef{
 		ID: 1084, Name: "MagicSapphire",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 200, Price: 5000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingRight,
+		Weight: 200, Price: 5000, MaxStack: 1, Durability: 300,
 		SpriteID: 22,
 		ApprIndex: -1,
 	}
@@ -5905,8 +5905,8 @@ func init() {
 
 	ItemDB[1086] = &ItemDef{
 		ID: 1086, Name: "MagicNecklace(DF+15)",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 400, Price: 19000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 400, Price: 19000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 50,
 		ApprIndex: -1,
@@ -5914,8 +5914,8 @@ func init() {
 
 	ItemDB[1087] = &ItemDef{
 		ID: 1087, Name: "MagicNecklace(DF+20)",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 400, Price: 19000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 400, Price: 19000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 50,
 		ApprIndex: -1,
@@ -5923,8 +5923,8 @@ func init() {
 
 	ItemDB[1088] = &ItemDef{
 		ID: 1088, Name: "MagicNecklace(DF+25)",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 400, Price: 19000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 400, Price: 19000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 50,
 		ApprIndex: -1,
@@ -5932,8 +5932,8 @@ func init() {
 
 	ItemDB[1089] = &ItemDef{
 		ID: 1089, Name: "MagicNecklace(DF+30)",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 400, Price: 19000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 400, Price: 19000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 50,
 		ApprIndex: -1,
@@ -5941,8 +5941,8 @@ func init() {
 
 	ItemDB[1090] = &ItemDef{
 		ID: 1090, Name: "MagicNecklace(DM+2)",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 400, Price: 39800, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 400, Price: 39800, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 65,
 		ApprIndex: -1,
@@ -5950,8 +5950,8 @@ func init() {
 
 	ItemDB[1091] = &ItemDef{
 		ID: 1091, Name: "MagicNecklace(DM+3)",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 400, Price: 39800, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 400, Price: 39800, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 65,
 		ApprIndex: -1,
@@ -5959,8 +5959,8 @@ func init() {
 
 	ItemDB[1092] = &ItemDef{
 		ID: 1092, Name: "MagicNecklace(DM+4)",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 400, Price: 39800, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 400, Price: 39800, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 65,
 		ApprIndex: -1,
@@ -5968,8 +5968,8 @@ func init() {
 
 	ItemDB[1093] = &ItemDef{
 		ID: 1093, Name: "MagicNecklace(DM+5)",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 400, Price: 39800, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 400, Price: 39800, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 65,
 		ApprIndex: -1,
@@ -5977,8 +5977,8 @@ func init() {
 
 	ItemDB[1094] = &ItemDef{
 		ID: 1094, Name: "MagicNecklace(MS12)",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 400, Price: 7000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 400, Price: 7000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 50,
 		ApprIndex: -1,
@@ -5986,8 +5986,8 @@ func init() {
 
 	ItemDB[1095] = &ItemDef{
 		ID: 1095, Name: "MagicNecklace(MS14)",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 400, Price: 7000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 400, Price: 7000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 50,
 		ApprIndex: -1,
@@ -5995,8 +5995,8 @@ func init() {
 
 	ItemDB[1096] = &ItemDef{
 		ID: 1096, Name: "MagicNecklace(MS16)",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 400, Price: 7000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 400, Price: 7000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 50,
 		ApprIndex: -1,
@@ -6004,8 +6004,8 @@ func init() {
 
 	ItemDB[1097] = &ItemDef{
 		ID: 1097, Name: "MagicNecklace(MS18)",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 400, Price: 7000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 400, Price: 7000, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 50,
 		ApprIndex: -1,
@@ -6013,8 +6013,8 @@ func init() {
 
 	ItemDB[1098] = &ItemDef{
 		ID: 1098, Name: "MagicNecklace(RM15)",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 400, Price: 2250, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 400, Price: 2250, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 30,
 		ApprIndex: -1,
@@ -6022,8 +6022,8 @@ func init() {
 
 	ItemDB[1099] = &ItemDef{
 		ID: 1099, Name: "MagicNecklace(RM20)",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 400, Price: 2250, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 400, Price: 2250, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 30,
 		ApprIndex: -1,
@@ -6031,8 +6031,8 @@ func init() {
 
 	ItemDB[1100] = &ItemDef{
 		ID: 1100, Name: "MagicNecklace(RM25)",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 400, Price: 2250, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 400, Price: 2250, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 30,
 		ApprIndex: -1,
@@ -6040,8 +6040,8 @@ func init() {
 
 	ItemDB[1101] = &ItemDef{
 		ID: 1101, Name: "MagicNecklace(RM30)",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 400, Price: 2250, MaxStack: 20, Durability: 0,
+		Type: ItemTypeNecklace, EquipSlot: EquipNecklace,
+		Weight: 400, Price: 2250, MaxStack: 1, Durability: 300,
 		SpriteID: 16,
 		ReqLevel: 30,
 		ApprIndex: -1,
@@ -6097,32 +6097,32 @@ func init() {
 
 	ItemDB[1108] = &ItemDef{
 		ID: 1108, Name: "AngelicPandent(STR)",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 200, Price: 3000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingRight,
+		Weight: 200, Price: 3000, MaxStack: 1, Durability: 300,
 		SpriteID: 22,
 		ApprIndex: -1,
 	}
 
 	ItemDB[1109] = &ItemDef{
 		ID: 1109, Name: "AngelicPandent(DEX)",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 200, Price: 3000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingRight,
+		Weight: 200, Price: 3000, MaxStack: 1, Durability: 300,
 		SpriteID: 22,
 		ApprIndex: -1,
 	}
 
 	ItemDB[1110] = &ItemDef{
 		ID: 1110, Name: "AngelicPandent(INT)",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 200, Price: 3000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingRight,
+		Weight: 200, Price: 3000, MaxStack: 1, Durability: 300,
 		SpriteID: 22,
 		ApprIndex: -1,
 	}
 
 	ItemDB[1111] = &ItemDef{
 		ID: 1111, Name: "AngelicPandent(MAG)",
-		Type: ItemTypeMaterial, EquipSlot: EquipNone,
-		Weight: 200, Price: 3000, MaxStack: 20, Durability: 0,
+		Type: ItemTypeRing, EquipSlot: EquipRingRight,
+		Weight: 200, Price: 3000, MaxStack: 1, Durability: 300,
 		SpriteID: 22,
 		ApprIndex: -1,
 	}

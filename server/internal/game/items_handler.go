@@ -2,6 +2,7 @@ package game
 
 import (
 	"log"
+	"math/rand"
 	"time"
 
 	"github.com/juanrossi/hbonline/server/internal/items"
@@ -296,6 +297,129 @@ func (e *Engine) handleItemDrop(client *network.Client, req *pb.ItemDropRequest)
 	}
 
 	e.sendInventoryUpdate(p)
+}
+
+// isProtectedItem returns true if the item should never be dropped on death.
+// Matches original C++ logic: hero armors (398-428 except cape 402) and executor items (700-710).
+func isProtectedItem(defID int) bool {
+	if defID >= 398 && defID <= 428 && defID != 402 {
+		return true
+	}
+	if defID >= 700 && defID <= 710 {
+		return true
+	}
+	return false
+}
+
+// ZemItemID is the Zemstone of Sacrifice — drops instead of gear on death.
+const ZemItemID = 650
+
+// penaltyItemDrop drops items from a player's inventory on death.
+// penaltyLevel determines how many items can drop (1-12).
+// Ported from C++ _PenaltyItemDrop in Game.cpp:27283.
+func (e *Engine) penaltyItemDrop(p *player.Player, penaltyLevel int, gm *mapdata.GameMap) {
+	inv := p.Inventory
+	if inv == nil {
+		return
+	}
+
+	// Priority: Zem (Zemstone of Sacrifice) — if carried, only the Zem drops.
+	// This protects all other items. Matches C++ AlterItemDrop logic.
+	for i := 0; i < items.MaxInventorySlots; i++ {
+		item := inv.Slots[i]
+		if item != nil && item.DefID == ZemItemID {
+			dropItem := &items.Item{
+				DefID:      item.DefID,
+				Count:      1,
+				Durability: item.Durability,
+				Attribute:  item.Attribute,
+			}
+			inv.RemoveItem(i, 1)
+			e.dropGroundItem(dropItem, p.MapName, p.X, p.Y, gm)
+			e.sendInventoryUpdate(p)
+			log.Printf("Player %s death: Zem sacrificed (protected other items)", p.Name)
+			return
+		}
+	}
+
+	// Normal item drop loop — drop up to penaltyLevel items.
+	type dropCandidate struct {
+		invSlot int // 0-49 for inventory, -1 means equipment
+		eqSlot  items.EquipSlot
+		item    *items.Item
+	}
+
+	droppedAny := false
+	for i := 0; i < penaltyLevel; i++ {
+		var eligible []dropCandidate
+
+		// Scan inventory slots
+		for j := 0; j < items.MaxInventorySlots; j++ {
+			item := inv.Slots[j]
+			if item == nil {
+				continue
+			}
+			if isProtectedItem(item.DefID) {
+				continue
+			}
+			eligible = append(eligible, dropCandidate{invSlot: j, eqSlot: 0, item: item})
+		}
+
+		// Scan equipment slots
+		for j := 1; j <= items.MaxEquipSlots; j++ {
+			item := inv.Equipment[j]
+			if item == nil {
+				continue
+			}
+			if isProtectedItem(item.DefID) {
+				continue
+			}
+			eligible = append(eligible, dropCandidate{invSlot: -1, eqSlot: items.EquipSlot(j), item: item})
+		}
+
+		if len(eligible) == 0 {
+			break
+		}
+
+		pick := eligible[rand.Intn(len(eligible))]
+
+		var dropItem *items.Item
+		if pick.invSlot >= 0 {
+			// Inventory item — drop entire stack
+			dropItem = &items.Item{
+				DefID:      pick.item.DefID,
+				Count:      pick.item.Count,
+				Durability: pick.item.Durability,
+				Attribute:  pick.item.Attribute,
+			}
+			inv.Slots[pick.invSlot] = nil
+		} else {
+			// Equipped item — remove from equipment
+			dropItem = &items.Item{
+				DefID:      pick.item.DefID,
+				Count:      1,
+				Durability: pick.item.Durability,
+				Attribute:  pick.item.Attribute,
+			}
+			inv.Equipment[pick.eqSlot] = nil
+		}
+
+		e.dropGroundItem(dropItem, p.MapName, p.X, p.Y, gm)
+		droppedAny = true
+
+		def := dropItem.Def()
+		name := "item"
+		if def != nil {
+			name = def.Name
+		}
+		log.Printf("Player %s death: dropped %s x%d", p.Name, name, dropItem.Count)
+	}
+
+	if droppedAny {
+		p.SyncEquipmentAppearance()
+		p.RecalcCombatStats()
+		e.sendInventoryUpdate(p)
+	}
 }
 
 // handleShopBuy handles buying an item from a shop NPC.

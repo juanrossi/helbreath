@@ -441,11 +441,9 @@ func mapItemType(it rawItem) string {
 		case 13:
 			return "ItemTypeBodyArmor" // full outfit
 		case 6:
-			return "ItemTypeMaterial" // necklace
-		case 10:
-			return "ItemTypeMaterial" // ring
-		case 11:
-			return "ItemTypeMaterial" // accessory
+			return "ItemTypeNecklace"
+		case 10, 11:
+			return "ItemTypeRing"
 		}
 	}
 
@@ -479,6 +477,12 @@ func mapEquipSlot(it rawItem) string {
 		return "EquipCape"
 	case 13:
 		return "EquipBody" // full outfit
+	case 6:
+		return "EquipNecklace"
+	case 10:
+		return "EquipRingLeft"
+	case 11:
+		return "EquipRingRight"
 	default:
 		return "EquipNone"
 	}
