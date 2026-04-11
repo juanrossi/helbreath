@@ -919,6 +919,15 @@ export class GameScene extends Phaser.Scene {
 
     console.log(`Map change: teleporting to ${mapName} (${pos?.x}, ${pos?.y})`);
 
+    // Close any open UI panels so state stays in sync after map transition
+    if (this.inventoryOpen) {
+      this.closeInventoryUI();
+      this.inventoryOpen = false;
+    }
+    if (this.charPanel?.visible) {
+      this.charPanel.hide();
+    }
+
     // Clear weather indoors, restore outdoors
     if (GameScene.INDOOR_MAPS.has(mapName)) {
       this.weatherManager.setWeather('clear');
@@ -3104,7 +3113,7 @@ export class GameScene extends Phaser.Scene {
         }
       } else if (key === 'weather' && value) {
         this.weather = value;
-        if (['clear', 'rain', 'snow', 'fog'].includes(value)) {
+        if (['clear', 'rain', 'fog'].includes(value)) {
           // No weather effects indoors
           if (GameScene.INDOOR_MAPS.has(this.currentMapName)) {
             this.weatherManager.setWeather('clear');
@@ -4164,41 +4173,56 @@ export class GameScene extends Phaser.Scene {
   }
 
   // Maps server spriteId → { effect spr file key, sprite sheet index within that file }
-  // Based on original Helbreath effect file layout.
+  // Derived from original Helbreath Game.cpp MakeEffectSpr layout:
+  //   effect.spr  → EffectSpr[0..9],  effect2.spr → [10..12], effect3.spr → [13..18]
+  //   effect4.spr → [19..23],         effect5.spr → [24..30] (sheets 1-7)
+  //   effect6.spr → [40..44],         effect7.spr → [45..56], effect8.spr → [57..65]
+  //   effect9.spr → [66..86],         effect10.spr → [87..88]
+  // Render cases in DrawEffect use effectType 100+spriteId, e.g. Blizzard spriteId=85 → case 185.
   private static SPELL_EFFECT_MAP: Record<number, { file: string; sheet: number }> = {
-    // Damage spells
-    1:  { file: 'effect', sheet: 0 },   // Energy Bolt
-    2:  { file: 'effect', sheet: 1 },   // Magic Missile
-    3:  { file: 'effect2', sheet: 0 },  // Fireball
-    4:  { file: 'effect2', sheet: 1 },  // Lightning Bolt
-    5:  { file: 'effect3', sheet: 0 },  // Ice Strike
-    // AOE spells
-    10: { file: 'effect4', sheet: 0 },  // Fire Wall
-    11: { file: 'effect5', sheet: 0 },  // Blizzard
-    12: { file: 'effect6', sheet: 0 },  // Meteor Strike
-    // Healing spells
-    20: { file: 'effect7', sheet: 0 },  // Heal
-    21: { file: 'effect7', sheet: 1 },  // Greater Heal
-    22: { file: 'effect7', sheet: 2 },  // Divine Heal
-    // Buff spells
-    30: { file: 'effect8', sheet: 0 },  // Protection
-    31: { file: 'effect8', sheet: 1 },  // Strength
-    32: { file: 'effect8', sheet: 2 },  // Haste
-    // Debuff spells
-    40: { file: 'effect9', sheet: 0 },  // Slow
-    41: { file: 'effect9', sheet: 1 },  // Weaken
-    50: { file: 'effect10', sheet: 0 }, // Poison Cloud
-    51: { file: 'effect10', sheet: 1 }, // Toxic Cloud
-    52: { file: 'effect3', sheet: 1 },  // Freeze
-    53: { file: 'effect3', sheet: 2 },  // Deep Freeze
-    54: { file: 'effect5', sheet: 1 },  // Berserk
-    55: { file: 'effect5', sheet: 2 },  // Greater Berserk
-    56: { file: 'effect6', sheet: 1 },  // Invisibility
-    57: { file: 'effect6', sheet: 2 },  // Silence
-    58: { file: 'effect8', sheet: 3 },  // Defense Shield
-    59: { file: 'effect8', sheet: 4 },  // Greater Defense Shield
-    60: { file: 'effect9', sheet: 2 },  // Magic Protection
-    61: { file: 'effect9', sheet: 3 },  // Greater Magic Protection
+    // Damage — single target
+    0:  { file: 'effect', sheet: 0 },    // Magic Missile (EffectSpr[0] = effect s0)
+    10: { file: 'effect', sheet: 0 },    // Energy Bolt
+    20: { file: 'effect3', sheet: 1 },   // Fire Ball (EffectSpr[14] = effect3 s1, fire explosion)
+    27: { file: 'effect9', sheet: 0 },   // Poison (EffectSpr[66] = effect9 s0)
+    30: { file: 'effect3', sheet: 1 },   // Fire Strike (fire)
+    37: { file: 'effect', sheet: 0 },    // Lightning Arrow
+    43: { file: 'effect2', sheet: 1 },   // Lightning (EffectSpr[11] = effect2 s1)
+    45: { file: 'effect7', sheet: 2 },   // Chill Wind (ice — EffectSpr[47] = effect7 s2)
+    47: { file: 'effect', sheet: 0 },    // Triple Energy Bolt
+    51: { file: 'effect2', sheet: 1 },   // Lightning Bolt
+    55: { file: 'effect7', sheet: 2 },   // Ice Storm (ice)
+    57: { file: 'effect7', sheet: 2 },   // Ice Strike (EffectSpr[47] = effect7 s2, icicles)
+    60: { file: 'effect', sheet: 0 },    // Energy Strike
+    // Healing
+    1:  { file: 'effect7', sheet: 5 },   // Heal (EffectSpr[50] = effect7 s5)
+    21: { file: 'effect7', sheet: 5 },   // Great Heal
+    36: { file: 'effect7', sheet: 5 },   // Cure
+    48: { file: 'effect7', sheet: 5 },   // Critical Heal
+    68: { file: 'effect7', sheet: 5 },   // Mass Heal
+    // Buffs / debuffs
+    13: { file: 'effect8', sheet: 5 },   // Defense Shield (EffectSpr[62] = effect8 s5)
+    32: { file: 'effect7', sheet: 7 },   // Invisibility (EffectSpr[52] = effect7 s7)
+    44: { file: 'effect8', sheet: 6 },   // Great Defense Shield (EffectSpr[63] = effect8 s6)
+    50: { file: 'effect8', sheet: 1 },   // Berserk (EffectSpr[58] = effect8 s1)
+    65: { file: 'effect7', sheet: 8 },   // Absolute Magic Protection (EffectSpr[53] = effect7 s8)
+    80: { file: 'effect8', sheet: 2 },   // Illusion (EffectSpr[59] = effect8 s2)
+    82: { file: 'effect8', sheet: 1 },   // Warrior Spirit (EffectSpr[58] = effect8 s1... approx)
+    // AOE
+    40: { file: 'effect4', sheet: 0 },   // Fire Wall (EffectSpr[19] = effect4 s0)
+    41: { file: 'effect4', sheet: 0 },   // Fire Field
+    46: { file: 'effect9', sheet: 0 },   // Poison Cloud (EffectSpr[66] = effect9 s0)
+    53: { file: 'effect9', sheet: 0 },   // Mass Poison
+    54: { file: 'effect4', sheet: 3 },   // Spike Field (EffectSpr[22] = effect4 s3)
+    // Blizzard — icicle falling sprite: EffectSpr[47] = effect7.spr sheet 2
+    85: { file: 'effect7', sheet: 2 },   // Blizzard (icicles)
+    91: { file: 'effect7', sheet: 2 },   // Mass Blizzard (icicles)
+    // Meteor / fire AOE
+    81: { file: 'effect3', sheet: 0 },   // Meteor Strike (EffectSpr[13] = effect3 s0, ice/blue... actually fire: effect3 s1)
+    97: { file: 'effect3', sheet: 1 },   // Explosion (fire)
+    // Misc
+    66: { file: 'effect7', sheet: 10 },  // Armor Break (EffectSpr[55] = effect7 s10)
+    76: { file: 'effect9', sheet: 11 },  // Cancellation (EffectSpr[90] = effect9... approx)
   };
 
   /** Preload the effect sprite for a spell so it's ready when cast. */

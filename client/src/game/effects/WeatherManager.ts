@@ -3,7 +3,7 @@ import { WEATHER_MAX_PARTICLES } from '../../Config';
 import type { SoundManager } from '../../audio/SoundManager';
 import { RAIN_SOUND } from '../../audio/SoundFileNames';
 
-export type WeatherType = 'clear' | 'rain' | 'snow' | 'fog';
+export type WeatherType = 'clear' | 'rain' | 'fog';
 export type WeatherIntensity = 'light' | 'medium' | 'heavy';
 export type TimeOfDay = 'day' | 'dusk' | 'night' | 'dawn';
 
@@ -48,9 +48,6 @@ export class WeatherManager {
             case 'rain':
                 this.startRain(maxParticles);
                 this.startRainSound();
-                break;
-            case 'snow':
-                this.startSnow(maxParticles);
                 break;
             case 'fog':
                 this.startFog();
@@ -126,55 +123,6 @@ export class WeatherManager {
         ));
         overlay.setScrollFactor(0);
         overlay.setDepth(999980);
-    }
-
-    private startSnow(maxParticles: number): void {
-        if (!this.scene.textures.exists('snow-particle-sm')) {
-            const gfx = this.scene.add.graphics();
-            gfx.fillStyle(0xffffff, 0.8);
-            gfx.fillCircle(1.5, 1.5, 1.5);
-            gfx.generateTexture('snow-particle-sm', 3, 3);
-            gfx.destroy();
-        }
-        if (!this.scene.textures.exists('snow-particle-lg')) {
-            const gfx = this.scene.add.graphics();
-            gfx.fillStyle(0xeeeeff, 0.9);
-            gfx.fillCircle(2.5, 2.5, 2.5);
-            gfx.generateTexture('snow-particle-lg', 5, 5);
-            gfx.destroy();
-        }
-
-        const cam = this.scene.cameras.main;
-
-        // Small fast snowflakes
-        const smEmitter = this.track(this.scene.add.particles(0, 0, 'snow-particle-sm', {
-            x: { min: -50, max: cam.width + 50 },
-            y: -10,
-            lifespan: 4000,
-            speedY: { min: 20, max: 60 },
-            speedX: { min: -15, max: 15 },
-            quantity: Math.ceil(maxParticles / 100),
-            alpha: { start: 0.7, end: 0.1 },
-            scale: { min: 0.6, max: 1.0 },
-            rotate: { min: 0, max: 360 },
-        }));
-        smEmitter.setScrollFactor(0);
-        smEmitter.setDepth(999990);
-
-        // Large slow snowflakes
-        const lgEmitter = this.track(this.scene.add.particles(0, 0, 'snow-particle-lg', {
-            x: { min: -50, max: cam.width + 50 },
-            y: -10,
-            lifespan: 5000,
-            speedY: { min: 15, max: 40 },
-            speedX: { min: -25, max: 25 },
-            quantity: Math.ceil(maxParticles / 200),
-            alpha: { start: 0.9, end: 0.2 },
-            scale: { min: 0.8, max: 1.5 },
-            rotate: { min: 0, max: 360 },
-        }));
-        lgEmitter.setScrollFactor(0);
-        lgEmitter.setDepth(999991);
     }
 
     private startFog(): void {

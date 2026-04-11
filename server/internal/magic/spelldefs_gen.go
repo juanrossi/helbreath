@@ -88,30 +88,6 @@ func init() {
 		}
 	}
 
-	if SpellDB[7] == nil {
-		SpellDB[7] = &SpellDef{
-			ID: 7, Name: "Test Spell7",
-			Type: SpellTypeAOE, Element: ElementNone,
-			ManaCost: 10, CastTime: 500, Cooldown: 4000, Range: 4,
-			Radius: 4,
-			MinDamage: 24, MaxDamage: 59,
-			ReqLevel: 1, ReqMAG: 11, ReqINT: 11,
-			SpriteID: 7, SoundID: 1,
-		}
-	}
-
-	if SpellDB[8] == nil {
-		SpellDB[8] = &SpellDef{
-			ID: 8, Name: "Test Spell8",
-			Type: SpellTypeBuff, Element: ElementNone,
-			ManaCost: 31, CastTime: 700, Cooldown: 10000, Range: 0,
-			Duration: 60,
-			ReqLevel: 1, ReqMAG: 11, ReqINT: 11,
-			SpriteID: 8, SoundID: 1,
-			ApplyEffect: EffectInvisibility, EffectLevel: 3,
-		}
-	}
-
 	if SpellDB[10] == nil {
 		SpellDB[10] = &SpellDef{
 			ID: 10, Name: "Energy Bolt",
@@ -198,16 +174,6 @@ func init() {
 			ReqLevel: 1, ReqMAG: 10, ReqINT: 10,
 			SpriteID: 17, SoundID: 1,
 			ApplyEffect: EffectDefenseShield, EffectLevel: 1,
-		}
-	}
-
-	if SpellDB[18] == nil {
-		SpellDB[18] = &SpellDef{
-			ID: 18, Name: "Test Spell18",
-			Type: SpellTypeDamage, Element: ElementNone,
-			ManaCost: 10, CastTime: 500, Cooldown: 2000, Range: 1,
-			ReqLevel: 35, ReqMAG: 301, ReqINT: 301,
-			SpriteID: 18, SoundID: 1,
 		}
 	}
 
