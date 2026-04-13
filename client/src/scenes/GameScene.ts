@@ -32,6 +32,7 @@ import {
   movementDurationFromSpeed,
   animationFpsFromSpeed,
 } from '../Config';
+import { HudBar } from '../game/ui/HudBar';
 import {
   PlayerState,
   HUMAN_SPRITESHEET_BASE,
@@ -396,6 +397,9 @@ export class GameScene extends Phaser.Scene {
   // Idle timer
   private idleTimer: ReturnType<typeof setTimeout> | null = null;
 
+  // HUD bar (Phaser-rendered, replaces HTML bar)
+  private hudBar!: HudBar;
+
   // Inventory & Equipment
   private inventoryItems: ItemInstanceData[] = [];
   private equipmentItems: ItemInstanceData[] = [];
@@ -599,6 +603,14 @@ export class GameScene extends Phaser.Scene {
     // Right-click: also attacks (legacy)
     this.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
       if (this.isDead) return;
+      // Check HUD bar area — handle button clicks there via coordinate math
+      // (Phaser's interactive hit testing breaks for scrollFactor=0 containers)
+      if (this.hudBar && this.hudBar.isInBarArea(pointer.y)) {
+        if (pointer.leftButtonDown()) {
+          this.hudBar.handleClick(pointer.x, pointer.y);
+        }
+        return;
+      }
       if (pointer.rightButtonDown()) {
         if (GameScene.INDOOR_MAPS.has(this.currentMapName)) return;
         // Right-click: cast spell at range if one is selected, otherwise melee
@@ -617,6 +629,8 @@ export class GameScene extends Phaser.Scene {
     });
     this.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
       if (this.isMouseDown && !this.isDead) {
+        // Stop movement when pointer enters bar area
+        if (this.hudBar && this.hudBar.isInBarArea(pointer.y)) return;
         this.handleMouseMove(pointer);
       }
     });
@@ -703,6 +717,22 @@ export class GameScene extends Phaser.Scene {
     // Chat UI
     this.createChatUI();
     this.createHUD(pd);
+
+    // Load Barra1024 atlas and create Phaser HUD bar
+    this.hudBar = new HudBar(this);
+    this.hudBar.load();
+    this.load.once('complete', () => {
+      this.hudBar.create();
+      this.hudBar.on('character', () => this.toggleStats());
+      this.hudBar.on('inventory', () => this.toggleInventory());
+      this.hudBar.on('magic', () => this.toggleSpellBar());
+      this.hudBar.on('skills', () => this.toggleSkills());
+      this.hudBar.on('chat', () => {}); // Chat log — TODO
+      this.hudBar.on('system', () => this.toggleControlsPanel());
+      this.hudBar.on('combatToggle', () => this.toggleCombatMode());
+      this.updateHUD();
+    });
+    this.load.start();
 
     // Minimap
     this.createMinimap();
@@ -3140,23 +3170,8 @@ export class GameScene extends Phaser.Scene {
   }
 
   private updateCombatModeHUD(): void {
-    const indicator = document.getElementById('hud-mode');
-    const hudBar = document.getElementById('hud-bar');
-    if (indicator) {
-      if (this.combatMode) {
-        indicator.textContent = 'ATTACK';
-        indicator.style.color = '#ff4444';
-        indicator.style.borderColor = '#c0392b';
-        indicator.style.background = 'rgba(192,57,43,0.15)';
-      } else {
-        indicator.textContent = 'REST';
-        indicator.style.color = '#888';
-        indicator.style.borderColor = '#555';
-        indicator.style.background = 'rgba(80,80,80,0.15)';
-      }
-    }
-    if (hudBar) {
-      hudBar.style.borderTopColor = this.combatMode ? '#c0392b' : '#444';
+    if (this.hudBar) {
+      this.hudBar.updateCombatMode(this.combatMode);
     }
   }
 
@@ -3335,21 +3350,26 @@ export class GameScene extends Phaser.Scene {
   }
 
   private updateHUD(): void {
-    // Text values
-    const hpEl = document.getElementById('hud-hp');
-    const mpEl = document.getElementById('hud-mp');
-    const spEl = document.getElementById('hud-sp');
-    const lvlEl = document.getElementById('hud-level');
+    // ── Update Phaser HUD bar (Barra1024) ──────────────────────────
+    if (this.hudBar) {
+      this.hudBar.updateHP(this.playerHP, this.playerMaxHP);
+      this.hudBar.updateMP(this.playerMP, this.playerMaxMP);
+      this.hudBar.updateLevel(this.playerLevel);
+      this.hudBar.updateLocation(this.currentMapName, this.tileX, this.tileY);
+
+      // EXP bar ratio
+      const currentLevelXP = this.xpForLevel(this.playerLevel);
+      const nextLevelXP = this.xpForLevel(this.playerLevel + 1);
+      const xpIntoLevel = Number(this.playerExp) - currentLevelXP;
+      const xpNeeded = nextLevelXP - currentLevelXP;
+      const xpRatio = xpNeeded > 0 ? Math.min(xpIntoLevel / xpNeeded, 1) : 1;
+      this.hudBar.updateEXP(xpRatio);
+    }
+
+    // ── Update legacy HTML HUD (kept for elements not yet migrated) ──
     const goldEl = document.getElementById('hud-gold');
     const luEl = document.getElementById('hud-lupool');
-    const coordsEl = document.getElementById('hud-coords');
-
-    if (hpEl) hpEl.textContent = `${this.playerHP}/${this.playerMaxHP}`;
-    if (mpEl) mpEl.textContent = `${this.playerMP}/${this.playerMaxMP}`;
-    if (spEl) spEl.textContent = `${this.playerSP}/${this.playerMaxSP}`;
-    if (lvlEl) lvlEl.textContent = `Lv.${this.playerLevel}`;
     if (goldEl) goldEl.textContent = `${this.playerGold} G`;
-    if (coordsEl) coordsEl.textContent = `${this.tileX},${this.tileY}`;
     if (luEl) {
       if (this.playerLUPool > 0) {
         luEl.style.display = 'block';
@@ -3357,29 +3377,6 @@ export class GameScene extends Phaser.Scene {
       } else {
         luEl.style.display = 'none';
       }
-    }
-
-    // Bar widths
-    const hpBar = document.getElementById('hud-hp-bar');
-    const mpBar = document.getElementById('hud-mp-bar');
-    const spBar = document.getElementById('hud-sp-bar');
-    if (hpBar) hpBar.style.width = `${this.playerMaxHP > 0 ? Math.round((this.playerHP / this.playerMaxHP) * 100) : 0}%`;
-    if (mpBar) mpBar.style.width = `${this.playerMaxMP > 0 ? Math.round((this.playerMP / this.playerMaxMP) * 100) : 0}%`;
-    if (spBar) spBar.style.width = `${this.playerMaxSP > 0 ? Math.round((this.playerSP / this.playerMaxSP) * 100) : 0}%`;
-
-    // XP bar
-    const xpBar = document.getElementById('hud-xp-bar');
-    const xpEl = document.getElementById('hud-xp');
-    const xpDetailEl = document.getElementById('hud-xp-detail');
-    if (xpBar || xpEl) {
-      const currentLevelXP = this.xpForLevel(this.playerLevel);
-      const nextLevelXP = this.xpForLevel(this.playerLevel + 1);
-      const xpIntoLevel = Number(this.playerExp) - currentLevelXP;
-      const xpNeeded = nextLevelXP - currentLevelXP;
-      const pct = xpNeeded > 0 ? Math.min(Math.round((xpIntoLevel / xpNeeded) * 100), 100) : 100;
-      if (xpBar) xpBar.style.width = `${pct}%`;
-      if (xpEl) xpEl.textContent = `${pct}%`;
-      if (xpDetailEl) xpDetailEl.textContent = `${xpIntoLevel} / ${xpNeeded}`;
     }
   }
 
@@ -3519,133 +3516,30 @@ export class GameScene extends Phaser.Scene {
   // ---------------------------------------------------------------------------
 
   private createHUD(playerData: any): void {
+    // Minimal HTML overlay for gold/stat-points display (not part of the Phaser bar)
     const hudHtml = `
       <div id="hud-bar" style="
         position:fixed; bottom:0; left:0; right:0; z-index:100;
-        height:60px; background:linear-gradient(to bottom, #2a2a2a, #1a1a1a);
-        border-top:2px solid #444; display:flex; align-items:center;
-        padding:0 10px; gap:8px; font-family:'Segoe UI',Arial,sans-serif;
-        user-select:none;
+        height:0; overflow:visible; pointer-events:none;
+        font-family:'Segoe UI',Arial,sans-serif; user-select:none;
       ">
-        <!-- Player info -->
-        <div style="display:flex; flex-direction:column; min-width:100px; margin-right:4px;">
-          <div style="color:#FFD700; font-size:12px; font-weight:bold;">${playerData.name}</div>
-          <div id="hud-level" style="color:#aaa; font-size:10px;">Lv.${playerData.level}</div>
-          <div id="hud-map" style="color:#777; font-size:9px;">Map: ${playerData.mapName}</div>
-        </div>
-
-        <!-- Combat Mode Indicator -->
-        <div id="hud-mode" style="
-          padding:4px 8px; border:1px solid #555; border-radius:3px;
-          font-size:10px; font-weight:bold; color:#888; text-align:center;
-          cursor:pointer; background:rgba(80,80,80,0.15); min-width:48px;
-          letter-spacing:1px;
-        " title="Toggle Attack/Rest mode (A)">REST</div>
-
-        <!-- HP/MP/SP Bars -->
-        <div style="display:flex; flex-direction:column; gap:3px; min-width:180px; flex:1; max-width:280px;">
-          <!-- HP Bar -->
-          <div style="display:flex; align-items:center; gap:4px;">
-            <span style="color:#e74c3c; font-size:10px; font-weight:bold; width:18px;">HP</span>
-            <div style="flex:1; height:12px; background:#333; border:1px solid #555; border-radius:2px; position:relative; overflow:hidden;">
-              <div id="hud-hp-bar" style="height:100%; background:linear-gradient(to bottom,#e74c3c,#c0392b); width:${Math.round((playerData.hp/playerData.maxHp)*100)}%; transition:width 0.3s;"></div>
-            </div>
-            <span id="hud-hp" style="color:#e74c3c; font-size:9px; min-width:55px; text-align:right;">${playerData.hp}/${playerData.maxHp}</span>
-          </div>
-          <!-- MP Bar -->
-          <div style="display:flex; align-items:center; gap:4px;">
-            <span style="color:#3498db; font-size:10px; font-weight:bold; width:18px;">MP</span>
-            <div style="flex:1; height:12px; background:#333; border:1px solid #555; border-radius:2px; position:relative; overflow:hidden;">
-              <div id="hud-mp-bar" style="height:100%; background:linear-gradient(to bottom,#3498db,#2980b9); width:${Math.round((playerData.mp/playerData.maxMp)*100)}%; transition:width 0.3s;"></div>
-            </div>
-            <span id="hud-mp" style="color:#3498db; font-size:9px; min-width:55px; text-align:right;">${playerData.mp}/${playerData.maxMp}</span>
-          </div>
-          <!-- SP Bar -->
-          <div style="display:flex; align-items:center; gap:4px;">
-            <span style="color:#2ecc71; font-size:10px; font-weight:bold; width:18px;">SP</span>
-            <div style="flex:1; height:12px; background:#333; border:1px solid #555; border-radius:2px; position:relative; overflow:hidden;">
-              <div id="hud-sp-bar" style="height:100%; background:linear-gradient(to bottom,#2ecc71,#27ae60); width:${Math.round((playerData.sp/playerData.maxSp)*100)}%; transition:width 0.3s;"></div>
-            </div>
-            <span id="hud-sp" style="color:#2ecc71; font-size:9px; min-width:55px; text-align:right;">${playerData.sp}/${playerData.maxSp}</span>
-          </div>
-        </div>
-
-        <!-- XP Bar -->
-        <div style="display:flex; flex-direction:column; gap:2px; min-width:120px; max-width:180px;">
-          <div style="display:flex; align-items:center; gap:4px;">
-            <span style="color:#f39c12; font-size:10px; font-weight:bold; width:18px;">XP</span>
-            <div style="flex:1; height:12px; background:#333; border:1px solid #555; border-radius:2px; position:relative; overflow:hidden;">
-              <div id="hud-xp-bar" style="height:100%; background:linear-gradient(to bottom,#f39c12,#e67e22); width:0%; transition:width 0.3s;"></div>
-            </div>
-            <span id="hud-xp" style="color:#f39c12; font-size:9px; min-width:40px; text-align:right;">0%</span>
-          </div>
-          <div id="hud-xp-detail" style="color:#888; font-size:8px; text-align:center;"></div>
-        </div>
-
-        <!-- Gold & Stat Points -->
-        <div style="display:flex; flex-direction:column; gap:2px; min-width:70px; margin:0 4px;">
-          <div id="hud-gold" style="color:#FFD700; font-size:11px;">${playerData.gold ?? 0} G</div>
-          <div id="hud-lupool" style="color:#9b59b6; font-size:10px; display:none; cursor:pointer;" title="Click to open Stats">+0 pts</div>
-          <div style="color:#555; font-size:8px;">Coords: <span id="hud-coords">${playerData.posX ?? 0},${playerData.posY ?? 0}</span></div>
-        </div>
-
-        <!-- Action Buttons -->
-        <div style="display:flex; gap:3px; margin-left:auto;">
-          <button id="btn-inventory" class="hud-btn" title="Inventory (I)">
-            <div style="font-size:16px;">&#x1F392;</div><div style="font-size:8px;">Bag</div>
-          </button>
-          <button id="btn-stats" class="hud-btn" title="Stats (C)">
-            <div style="font-size:16px;">&#x1F4CA;</div><div style="font-size:8px;">Stats</div>
-          </button>
-          <button id="btn-spells" class="hud-btn" title="Spells (M)">
-            <div style="font-size:16px;">&#x2728;</div><div style="font-size:8px;">Magic</div>
-          </button>
-          <button id="btn-skills" class="hud-btn" title="Skills (K)">
-            <div style="font-size:16px;">&#x2694;</div><div style="font-size:8px;">Skills</div>
-          </button>
-          <button id="btn-guild" class="hud-btn" title="Guild (G)">
-            <div style="font-size:16px;">&#x1F3F0;</div><div style="font-size:8px;">Guild</div>
-          </button>
-          <button id="btn-party" class="hud-btn" title="Party (P)">
-            <div style="font-size:16px;">&#x1F465;</div><div style="font-size:8px;">Party</div>
-          </button>
-          <button id="btn-controls" class="hud-btn" title="Controls">
-            <div style="font-size:16px;">&#x2699;</div><div style="font-size:8px;">Controls</div>
-          </button>
-          <div style="width:1px; background:#444; margin:4px 2px;"></div>
-          <button id="btn-logout" class="hud-btn" title="Logout" style="background:linear-gradient(to bottom,#5a2a2a,#3a1a1a); border-color:#733;">
-            <div style="font-size:14px;">&#x23FB;</div><div style="font-size:8px;">Logout</div>
-          </button>
+        <!-- Gold & Stat Points — floating above the Phaser bar -->
+        <div style="position:absolute; bottom:4px; left:4px; pointer-events:auto;">
+          <div id="hud-gold" style="color:#FFD700; font-size:10px; text-shadow:1px 1px 2px #000;">${playerData.gold ?? 0} G</div>
+          <div id="hud-lupool" style="color:#9b59b6; font-size:9px; display:none; cursor:pointer; text-shadow:1px 1px 2px #000;" title="Click to open Stats">+0 pts</div>
         </div>
       </div>
-      <style>
-        .hud-btn {
-          width:42px; height:42px; display:flex; flex-direction:column;
-          align-items:center; justify-content:center; cursor:pointer;
-          background:linear-gradient(to bottom,#3a3a3a,#252525);
-          border:1px solid #555; border-radius:4px; color:#ccc;
-          padding:2px; transition:all 0.15s;
-        }
-        .hud-btn:hover { background:linear-gradient(to bottom,#4a4a4a,#353535); color:#fff; border-color:#777; }
-        .hud-btn:active { background:#222; transform:scale(0.95); }
-      </style>
     `;
     const div = document.createElement('div');
     div.innerHTML = hudHtml;
     document.body.appendChild(div);
 
-    document.getElementById('btn-inventory')?.addEventListener('click', () => this.toggleInventory());
-    document.getElementById('btn-stats')?.addEventListener('click', () => this.toggleStats());
-    document.getElementById('btn-spells')?.addEventListener('click', () => this.toggleSpellBar());
-    document.getElementById('btn-skills')?.addEventListener('click', () => this.toggleSkills());
-    document.getElementById('btn-guild')?.addEventListener('click', () => this.toggleGuild());
-    document.getElementById('btn-party')?.addEventListener('click', () => this.toggleParty());
     document.getElementById('hud-lupool')?.addEventListener('click', () => this.toggleStats());
-    document.getElementById('hud-mode')?.addEventListener('click', () => this.toggleCombatMode());
-    document.getElementById('btn-controls')?.addEventListener('click', () => this.toggleControlsPanel());
-    document.getElementById('btn-logout')?.addEventListener('click', () => this.requestLogout());
 
-    this.events.on('shutdown', () => { div.remove(); });
+    this.events.on('shutdown', () => {
+      div.remove();
+      if (this.hudBar) this.hudBar.destroy();
+    });
   }
 
   // ---------------------------------------------------------------------------
